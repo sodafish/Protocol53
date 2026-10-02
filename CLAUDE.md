@@ -30,10 +30,11 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
 - Antwoord Tom kort, in het Nederlands.
 
 ## Statistieken (Kracht → subtab Statistieken)
-Figuur voor/achter + lijst met sets per week per spier. Schakelaar 1 week / 1 maand / 3 maanden
-(`perDays`, keuze onthouden in localStorage `fitlog-stats-per`). `hist` bewaart alles, ook ouder dan
-90 dagen, dus een langere periode toevoegen kan zonder datamigratie. Kleur is relatief
-t.o.v. de best getrainde spier, zodat je de balans ziet, niet een absoluut getal.
+Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
+- Dag = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
+- Maand = laatste 30 dagen, Alles = sinds de eerste afvinking → gemiddeld aantal sets per week.
+Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
+`hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun Nederlandse naam (17 stuks).
@@ -42,9 +43,10 @@ t.o.v. de best getrainde spier, zodat je de balans ziet, niet een absoluut getal
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
   ze staat (Borst, Schouders …) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
-- Kracht heeft twee subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+- Kracht heeft twee subtabs (Training met knoppen 'Start nieuwe training' bovenaan en 'Einde training'
+  onderaan, beide `.reset-chk`: vinkjes leeg; tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
-- Lichaamstekening zit in `drawBody()`: halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
+- Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
   randen; de naden en de buitenomtrek komen van een tweede laag met dikke lijn (`.o`). Een gat tussen
   vlakken wordt dus zichtbaar als achtergrond: altijd randen laten aansluiten.
@@ -54,8 +56,8 @@ t.o.v. de best getrainde spier, zodat je de balans ziet, niet een absoluut getal
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de
   laatste rij van die oefening. De opwarming telt niet mee.
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
-- Score per spier = som van sets × gewicht binnen de gekozen periode, gedeeld door het aantal weken
-  (vanaf de eerste training in die periode, minstens 1).
+- Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
+  weken vanaf de eerste training in die periode, minstens 1).
 - Rij `seed` (eenmalig): tellingen uit `counts` van vóór de statistieken, geteld op hun `last`-datum.
 
 **Oefeningen toevoegen of verwijderen — de geschiedenis blijft kloppen:**

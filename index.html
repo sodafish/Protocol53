@@ -649,6 +649,7 @@ main.wrap{padding-top:0!important;}
 section[role="tabpanel"]{padding-top:1.4rem;}
 
 .reset-chk.reset-top{margin:.2rem 0 1rem;}
+.reset-chk.reset-end{margin:2.4rem 0 0;}
 
 .wu-or{list-style:none;display:flex;align-items:center;gap:.8rem;padding:.35rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:none!important;}
 .wu-or::before,.wu-or::after{content:"";flex:1;height:1px;background:var(--line);}
@@ -772,8 +773,8 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .app-tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;}
 .app-tools button{appearance:none;cursor:pointer;min-height:44px;padding:.7rem 1.1rem;border:1.5px solid var(--line);border-radius:999px;background:transparent;font:600 12px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
 .app-tools button:hover{color:var(--ink);}
-.to-top{position:fixed;z-index:35;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));
-  width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;appearance:none;-webkit-tap-highlight-color:transparent;
+.to-top{position:fixed;z-index:35;right:var(--tt-r,calc(28px + env(safe-area-inset-right,0px)));bottom:calc(22px + env(safe-area-inset-bottom,0px));
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;appearance:none;-webkit-tap-highlight-color:transparent;
   display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--paper);
   box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;transform:translateY(12px) scale(.9);pointer-events:none;
   transition:opacity .25s ease,transform .3s cubic-bezier(.22,.61,.36,1);}
@@ -782,10 +783,12 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 @media(prefers-reduced-motion:reduce){.to-top{transition:opacity .2s ease;transform:none;}}
 
 /* ════════════ STATISTIEKEN: spierbalans ════════════ */
-#p-schema .ksub{position:relative;top:auto;box-shadow:none;margin:0 0 1.2rem;}
+#p-schema .ksub{position:relative;top:auto;box-shadow:none;margin:0 0 1.4rem;border-bottom:1.5px solid var(--line);}
+#p-schema .ksub .seg-b{font-size:18px!important;font-weight:600;min-height:56px;padding:.8rem .4rem!important;letter-spacing:-.005em;}
+#p-schema .ksub .seg-ind{box-shadow:inset 0 -3.5px 0 var(--accent);}
 .ksub .seg-ind{transform:translateX(calc(100% * var(--i,0)));}
 .stats{margin-top:.2rem;}
-.stats-per{display:flex;gap:.4rem;margin:1rem 0 0;}
+.stats-per{display:flex;gap:.35rem;margin:0;}
 .stats-per button{appearance:none;cursor:pointer;flex:1 1 0;min-height:40px;padding:0 .6rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
   font:600 13.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease;}
 .stats-per button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
@@ -888,6 +891,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
+    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3">Einde training</button>
     <label class="sess-note-l" for="sessNote">Notities</label>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
   </div>
@@ -895,7 +899,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
     <section class="stats" aria-label="Statistieken">
       <div class="stats-per" role="group" aria-label="Periode">
-        <button type="button" data-d="7">1 week</button><button type="button" data-d="30">1 maand</button><button type="button" data-d="90">3 maanden</button>
+        <button type="button" data-d="dag">Dag</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Maand</button><button type="button" data-d="alles">Alles</button>
       </div>
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
@@ -1254,9 +1258,17 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   (function(){
     var up=document.createElement('button');
     up.type='button'; up.className='to-top'; up.setAttribute('aria-label','Naar boven');
-    up.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>';
+    up.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>';
     document.body.appendChild(up);
-    function show(){ up.classList.toggle('on', window.scrollY>window.innerHeight*0.6); }
+    var hdr=document.querySelector('header.top');
+    function show(){ up.classList.toggle('on', window.scrollY>(hdr?hdr.offsetHeight:120)); }
+    /* horizontaal gecentreerd op de invulvelden */
+    function place(){
+      var inp=document.querySelector('#s-d3 .exr-in'); if(!inp) return;
+      var r=inp.getBoundingClientRect(); if(!r.width) return;
+      var c=r.left+r.width/2; document.documentElement.style.setProperty('--tt-r',Math.round(window.innerWidth-c-28)+'px');
+    }
+    place(); window.addEventListener('resize',place); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(place);
     show(); window.addEventListener('scroll',show,{passive:true});
     up.addEventListener('click',function(){ window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}); });
   })();
@@ -1451,36 +1463,52 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     });
     return out;
   }
-  var PERKEY='fitlog-stats-per', PERLAB={7:'Laatste week',30:'Laatste maand',90:'Laatste 3 maanden'};
-  var perDays=90; try{ perDays=parseInt(localStorage.getItem(PERKEY),10)||90; }catch(e){}
-  if(!PERLAB[perDays]) perDays=90;
+  var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','alles'];
+  var per='maand'; try{ per=localStorage.getItem(PERKEY)||'maand'; }catch(e){}
+  if(PERS.indexOf(per)<0) per='maand';
   document.querySelectorAll('.stats-per button').forEach(function(b){
-    b.setAttribute('aria-pressed',+b.dataset.d===perDays?'true':'false');
+    b.setAttribute('aria-pressed',b.dataset.d===per?'true':'false');
     b.addEventListener('click',function(){
-      perDays=+b.dataset.d; try{ localStorage.setItem(PERKEY,perDays); }catch(e){}
+      per=b.dataset.d; try{ localStorage.setItem(PERKEY,per); }catch(e){}
       document.querySelectorAll('.stats-per button').forEach(function(x){ x.setAttribute('aria-pressed',x===b?'true':'false'); });
       renderStats();
     });
   });
+  var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'],
+      MAANDEN=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
   function renderStats(){
     var fig=document.getElementById('statsFig'); if(!fig) return;
-    var now=Date.now(), score={}, first=now, days={};
+    var now=Date.now(), score={}, first=now, days={}, evs=events().filter(function(e){ return e.t; }), last=0;
+    evs.forEach(function(e){ if(e.t>last) last=e.t; });
+    var lastDay=last?dayKey(last):null;
+    function inPer(e){
+      if(per==='dag') return dayKey(e.t)===lastDay;
+      if(per==='week') return now-e.t<=7*864e5;
+      if(per==='maand') return now-e.t<=30*864e5;
+      return true;
+    }
     Object.keys(MLAB).forEach(function(m){ score[m]=0; });
-    events().forEach(function(e){
-      if(!e.t||now-e.t>perDays*864e5) return;
-      first=Math.min(first,e.t); var d=new Date(e.t); days[d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()]=1;
+    evs.forEach(function(e){
+      if(!inPer(e)) return;
+      first=Math.min(first,e.t); days[dayKey(e.t)]=1;
       var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in score) score[k]+=s*m[k]; });
     });
-    var weeks=Math.min(perDays/7,Math.max(1,(now-first)/(7*864e5))), max=0;
+    /* Dag en Week: totaal aantal sets. Maand en Alles: gemiddeld per week. */
+    var perWeek=per==='maand'||per==='alles';
+    var weeks=perWeek?Math.max(1,Math.min(per==='maand'?30/7:1e9,(now-first)/(7*864e5))):1, max=0;
     Object.keys(score).forEach(function(k){ score[k]/=weeks; max=Math.max(max,score[k]); });
     fig.querySelectorAll('svg > g:not(.o) .m').forEach(function(p){
       var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
-    var n=Object.keys(days).length, sub=document.getElementById('statsSub');
-    sub.textContent=n
-      ? PERLAB[perDays]+', '+n+(n===1?' trainingsdag':' trainingsdagen')+'. Hoe donkerder, hoe meer sets per week die spier kreeg.'
-      : PERLAB[perDays]+': nog geen gegevens. Vink oefeningen af en de figuur kleurt mee.';
+    var n=Object.keys(days).length, sub=document.getElementById('statsSub'), unit=perWeek?'sets per week':'sets', head;
+    if(per==='dag'){ var d=new Date(last); head=last?'Laatste training, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Laatste training'; }
+    else if(per==='week') head='Laatste 7 dagen, '+n+(n===1?' trainingsdag':' trainingsdagen');
+    else if(per==='maand') head='Laatste 30 dagen, '+n+(n===1?' trainingsdag':' trainingsdagen');
+    else { var f=new Date(first); head='Sinds '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' trainingsdag':' trainingsdagen'); }
+    sub.textContent=n ? head+'. Hoe donkerder, hoe meer '+unit+' die spier kreeg.'
+      : 'Nog geen gegevens in deze periode. Vink oefeningen af en de figuur kleurt mee.';
     var fmt=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+'').replace('.',','); };
     var rows=Object.keys(MLAB).sort(function(a,b){ return score[b]-score[a]; });
     document.getElementById('statsList').innerHTML=rows.map(function(k){
@@ -1491,61 +1519,65 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var B={
   front:{
-    head:'<ellipse cx="100" cy="29" rx="16" ry="22.5" class="n"/>',
+    head:'<ellipse cx="100" cy="33" rx="19" ry="26" class="n"/>',
     parts:[
-      [null,'M88,44 L100,44 L100,75 L93,74 C92,66 91,60 89,52 Z'],
-      ['trap','M89,52 C91,60 92,66 93,74 L74,80 L68,77 C78,72 85,64 89,52 Z'],
-      ['borst','M74,80 L93,74 L100,75 L100,126 C88,128 76,122 70,110 C69,98 71,88 74,80 Z'],
-      ['sz','M68,77 C58,77 50,84 48,96 C47,106 48,116 50,124 L54,122 C55,108 58,94 64,84 Z'],
-      ['sv','M68,77 L74,80 C71,88 69,98 70,110 C68,114 66,116 64,116 L54,122 C55,108 58,94 64,84 Z'],
-      ['bi','M54,122 L64,116 C65,134 62,152 56,166 L46,166 C45,150 48,136 52,124 Z'],
-      [null,'M50,124 L52,124 C48,136 45,150 46,166 L40,166 C42,150 46,136 50,124 Z'],
-      ['oa','M40,166 L48,166 C44,190 39,212 35,234 L30,232 C31,210 35,186 40,166 Z'],
-      ['oa','M48,166 L56,166 C53,190 46,214 40,236 L35,234 C39,212 44,190 48,166 Z'],
-      [null,'M30,232 L40,236 C42,250 40,264 34,276 C30,280 26,278 25,272 C24,258 26,246 30,232 Z'],
-      [null,'M70,110 C76,122 84,126 90,127.4 L90,136 C82,136 76,134 71,132 C70,124 70,116 70,110 Z'],
-      ['schuin','M71,132 C76,134 82,136 90,136 L90,200 C84,194 77,188 71,182 C70,166 70,150 71,132 Z'],
-      ['buik','M90,127.4 C94,127.6 97,127 100,126 L100,146 L90,146 Z'],
-      ['buik','M90,146 L100,146 L100,166 L90,166 Z'],
-      ['buik','M90,166 L100,166 L100,184 L90,184 Z'],
-      ['buik','M90,184 L100,184 L100,214 C95,212 92,206 90,200 Z'],
-      [null,'M71,182 C77,188 84,194 90,200 C92,206 95,212 100,214 L100,232 C92,216 78,210 66,212 C67,202 69,192 71,182 Z'],
-      ['quad','M66,212 C71,212 76,214 79,216 C78,250 77,284 78,314 L69,314 C62,282 61,242 66,212 Z'],
-      ['quad','M79,216 C84,218 88,220 90,222 C91,240 92,256 93,272 C91,286 90,300 88,314 L78,314 C77,284 78,250 79,216 Z'],
-      [null,'M90,222 C94,224 98,228 100,232 C99,248 98,262 96,272 L93,272 C92,256 91,240 90,222 Z'],
-      ['quad','M93,272 L96,272 C97,288 97,302 96,314 L88,314 C90,300 91,286 93,272 Z'],
-      [null,'M69,314 L96,314 C97,322 96,330 93,338 L74,338 C71,330 69,322 69,314 Z'],
-      ['kuit','M74,338 L79,338 C79,360 79,382 80,402 L76,402 C69,380 65,356 74,338 Z'],
-      [null,'M79,338 L88,338 C88,360 87,382 86,402 L80,402 C79,382 79,360 79,338 Z'],
-      ['kuit','M88,338 L93,338 C100,356 98,378 91,402 L86,402 C87,382 88,360 88,338 Z'],
-      [null,'M76,402 L91,402 C93,410 95,418 94,424 L74,424 C71,418 73,410 76,402 Z']
+      [null,'M81,28 C76,28 76,44 81,44 C83,44 83,28 81,28 Z'],
+      [null,'M88,50 L100,50 L100,86 L94,84 C92,74 90,64 88,56 Z'],
+      ['trap','M88,56 C90,64 92,74 94,84 L72,88 L60,86 C72,80 82,70 88,56 Z'],
+      ['borst','M72,88 L94,84 L100,86 L100,136 C88,138 74,132 68,124 L66,118 C66,106 68,96 72,88 Z'],
+      ['sz','M60,86 C49,88 42,96 41,110 C40,122 42,132 45,140 L49,138 C49,122 52,106 58,96 Z'],
+      ['sv','M60,86 L72,88 C68,96 66,106 66,118 C62,126 56,134 49,138 C49,122 52,106 58,96 Z'],
+      ['bi','M49,138 C53,136 56,134 58,132 C60,146 60,162 57,178 L46,178 C45,164 46,150 49,138 Z'],
+      [null,'M45,140 L49,138 C46,150 45,164 46,178 L40,178 C39,164 41,150 45,140 Z'],
+      [null,'M40,178 L57,178 C57.6,181 57.6,183 57,186 L40,186 C39.4,183 39.4,181 40,178 Z'],
+      ['oa','M40,186 L48,186 C47,208 46,233.3 45,255.9 L41,255.9 C38,233.3 38,208 40,186 Z'],
+      ['oa','M48,186 L57,186 C58,208 55,233.3 51,255.9 L45,255.9 C46,233.3 47,208 48,186 Z'],
+      [null,'M41,255.9 L51,255.9 C54,264.9 54,276.2 50,285.3 C47,289.8 42,289.8 40,284.1 C38,274 38,264.9 41,255.9 Z'],
+      [null,'M68,124 C74,132 86,137 92,137.5 L92,146 C84,146 75,144 66,142 C66,136 67,130 68,124 Z'],
+      ['schuin','M66,142 C75,144 84,146 92,146 L92,206 C84,198 78,190 72,182 C68,170 66,156 66,142 Z'],
+      ['buik','M92,137.5 C95,137.6 98,137 100,136 L100,156 L92,156 Z'],
+      ['buik','M92,156 L100,156 L100,174 L92,174 Z'],
+      ['buik','M92,174 L100,174 L100,190 L92,190 Z'],
+      ['buik','M92,190 L100,190 L100,218 C96,216 93,212 92,206 Z'],
+      [null,'M72,182 C78,190 84,198 92,206 C93,212 96,216 100,218 L100,226.5 C92,218 78,212 65,212 C67,202 69,192 72,182 Z'],
+      ['quad','M65,212 C70,212 75,214 78,216 C77,249.1 77,283 78,312.4 L70,312.4 C62,283 60,242.3 65,212 Z'],
+      ['quad','M78,216 C83,218 87,220 90,222 C91,240.1 92,255.9 93,271.7 C91,287.5 90,301.1 88,312.4 L78,312.4 C77,283 77,249.1 78,216 Z'],
+      [null,'M90,222 C94,223.1 97,224.3 100,226.5 C99,240.1 97.5,255.9 96,271.7 L93,271.7 C92,255.9 91,240.1 90,222 Z'],
+      ['quad','M93,271.7 L96,271.7 C96.4,287.5 96,301.1 95,312.4 L88,312.4 C90,301.1 91,287.5 93,271.7 Z'],
+      [null,'M70,312.4 L95,312.4 C96,321.4 95,330.5 92,339.5 L74,339.5 C71,330.5 70,321.4 70,312.4 Z'],
+      ['kuit','M74,339.5 L79,339.5 C79,366.6 79,391.5 80,416.4 L75,416.4 C67,387 66,359.9 74,339.5 Z'],
+      [null,'M79,339.5 L88,339.5 C88,366.6 87,391.5 86,416.4 L80,416.4 C79,391.5 79,366.6 79,339.5 Z'],
+      ['kuit','M88,339.5 L92,339.5 C99,357.6 98,389.2 91,416.4 L86,416.4 C87,391.5 88,366.6 88,339.5 Z'],
+      [null,'M75,416.4 L91,416.4 C93,427.7 96,439 96,448 L72,448 C70,439 73,427.7 75,416.4 Z']
     ]
   },
   back:{
-    head:'<ellipse cx="100" cy="29" rx="16" ry="22.5" class="n"/>',
+    head:'<ellipse cx="100" cy="33" rx="19" ry="26" class="n"/>',
     parts:[
-      [null,'M88,44 L100,44 L100,48 L90,52 Z'],
-      ['trap','M100,48 L90,52 C88,62 82,70 68,77 C74,80 80,86 86,94 C92,110 96,128 100,150 Z'],
-      ['sa','M68,77 C58,77 50,84 48,96 C47,106 48,116 50,124 L54,122 C60,118 66,112 70,108 C71,100 72,94 72,88 C70,84 69,80 68,77 Z'],
-      ['midrug','M68,77 C74,80 80,86 86,94 C88,99 90,105 92,112 C86,118 78,122 70,124 L70,108 C71,100 72,94 72,88 C70,84 69,80 68,77 Z'],
-      ['tri','M57,120 L64,116 C65,134 62,152 56,166 L49,166 C52,150 55,136 57,120 Z'],
-      ['tri','M50,124 L54,122 L57,120 C55,136 52,150 49,166 L40,166 C42,150 46,136 50,124 Z'],
-      ['oa','M40,166 L48,166 C44,190 39,212 35,234 L30,232 C31,210 35,186 40,166 Z'],
-      ['oa','M48,166 L56,166 C53,190 46,214 40,236 L35,234 C39,212 44,190 48,166 Z'],
-      [null,'M30,232 L40,236 C42,250 40,264 34,276 C30,280 26,278 25,272 C24,258 26,246 30,232 Z'],
-      ['lats','M70,124 C78,122 86,118 92,112 C95,124 98,138 100,150 L94,154 C92,166 91,180 91,196 C84,192 77,187 71,182 C70,162 70,142 70,124 Z'],
-      ['onderrug','M100,150 L100,208 L91,208 L91,196 C91,180 92,166 94,154 Z'],
-      ['schuin','M71,182 C77,187 84,192 91,196 L91,208 C84,207 76,208 67,211 C68,200 69,190 71,182 Z'],
-      ['bil','M67,211 C76,208 84,207 91,208 C84,212 76,220 70,228 C67,222 66,216 67,211 Z'],
-      ['bil','M91,208 L100,208 L100,258 C96,262 90,262 84,260 C78,258 74,254 72,248 C70,242 70,234 70,228 C76,220 84,212 91,208 Z'],
-      [null,'M70,228 C70,234 70,242 72,248 C73,252 74,254 76,256 L77,314 L69,314 C62,284 62,252 70,228 Z'],
-      ['ham','M76,256 C78,258 82,260 86,261 C85,280 85,298 86,314 L77,314 Z'],
-      ['ham','M86,261 C90,262 96,262 100,258 C99,280 98,300 96,314 L86,314 C85,298 85,280 86,261 Z'],
-      [null,'M69,314 L96,314 C97,320 96,326 94,332 L74,332 C71,326 69,320 69,314 Z'],
-      ['kuit','M74,332 L84,332 C84,348 84,366 84,380 C81,382 78,384 76,384 C66,368 63,346 74,332 Z'],
-      ['kuit','M84,332 L94,332 C102,346 100,366 92,382 C90,382 87,381 84,380 C84,366 84,348 84,332 Z'],
-      [null,'M76,384 C78,384 81,382 84,380 C87,381 90,382 92,382 C91,390 90,396 90,402 L78,402 C78,396 77,390 76,384 Z'],
-      [null,'M78,402 L90,402 C92,410 94,418 93,424 L75,424 C73,418 75,410 78,402 Z']
+      [null,'M81,28 C76,28 76,44 81,44 C83,44 83,28 81,28 Z'],
+      [null,'M88,50 L100,50 L100,58 L90,60 Z'],
+      ['trap','M100,58 L90,60 C88,70 78,80 60,86 C68,90 76,98 82,106 C90,120 96,138 100,160 Z'],
+      ['sa','M60,86 C49,88 42,96 41,110 C40,122 42,132 45,140 L49,138 C55,132 61,124 66,116 C67,108 68,100 68,94 C66,90 63,88 60,86 Z'],
+      ['midrug','M60,86 C68,90 76,98 82,106 C85,112 87,118 89,124 C82,130 74,134 67,136 L66,116 C67,108 68,100 68,94 C66,90 63,88 60,86 Z'],
+      ['tri','M45,140 L49,138 L53,135 C51,150 49,164 48,178 L40,178 C39,164 41,150 45,140 Z'],
+      ['tri','M53,135 L58,132 C60,146 60,162 57,178 L48,178 C49,164 51,150 53,135 Z'],
+      [null,'M40,178 L57,178 C57.6,181 57.6,183 57,186 L40,186 C39.4,183 39.4,181 40,178 Z'],
+      ['oa','M40,186 L48,186 C47,208 46,233.3 45,255.9 L41,255.9 C38,233.3 38,208 40,186 Z'],
+      ['oa','M48,186 L57,186 C58,208 55,233.3 51,255.9 L45,255.9 C46,233.3 47,208 48,186 Z'],
+      [null,'M41,255.9 L51,255.9 C54,264.9 54,276.2 50,285.3 C47,289.8 42,289.8 40,284.1 C38,274 38,264.9 41,255.9 Z'],
+      ['lats','M67,136 C74,134 82,130 89,124 C93,136 97,148 100,160 L94,164 C92,176 91,190 91,204 C84,200 78,194 72,186 C67,172 65,152 67,136 Z'],
+      ['onderrug','M100,160 L100,214 L91,214 L91,204 C91,190 92,176 94,164 Z'],
+      ['schuin','M72,186 C78,194 84,200 91,204 L91,214 C84,213 75,213 65,215 C67,206 69,196 72,186 Z'],
+      ['bil','M65,215 C75,213 84,213 91,214 C83,218 75,226.5 69,235.6 C65,228.8 64,222 65,215 Z'],
+      ['bil','M91,214 L100,214 L100,267.2 C96,271.7 90,271.7 84,269.5 C77,267.2 72,260.4 70,253.6 C68,246.9 68,240.1 69,235.6 C75,226.5 83,218 91,214 Z'],
+      [null,'M69,235.6 C68,242.3 68,249.1 70,253.6 C72,260.4 74,262.7 76,264.9 L78,312.4 L70,312.4 C62,287.5 61,258.2 69,235.6 Z'],
+      ['ham','M76,264.9 C79,267.2 83,269.5 86,270.6 C85,287.5 85,301.1 86,312.4 L78,312.4 Z'],
+      ['ham','M86,270.6 C90,271.7 96,271.7 100,267.2 C98,287.5 97,301.1 95,312.4 L86,312.4 C85,301.1 85,287.5 86,270.6 Z'],
+      [null,'M70,312.4 L95,312.4 C96,319.2 95,326 93,332.7 L74,332.7 C71,326 70,319.2 70,312.4 Z'],
+      ['kuit','M74,332.7 L84,332.7 C84,350.8 84,368.9 84,384.7 C81,387 78,389.2 76,389.2 C66,371.2 64,348.6 74,332.7 Z'],
+      ['kuit','M84,332.7 L93,332.7 C101,348.6 100,371.2 92,387 C90,387 87,385.9 84,384.7 C84,368.9 84,350.8 84,332.7 Z'],
+      [null,'M76,389.2 C78,389.2 81,387 84,384.7 C87,385.9 90,387 92,387 C91,398.3 90,407.3 90,416.4 L78,416.4 C78,407.3 77,398.3 76,389.2 Z'],
+      [null,'M78,416.4 L90,416.4 C92,427.7 94,439 93,448 L75,448 C73,439 75,427.7 78,416.4 Z']
     ]
   }
 };
@@ -1554,7 +1586,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       var d=B[v[0]], half='';
       d.parts.forEach(function(x){ half+='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; });
       var all='<g>'+half+'</g><g'+MIR+'>'+half+'</g>'+d.head;
-      return '<figure><svg viewBox="18 0 164 430" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
+      return '<figure><svg viewBox="28 0 144 450" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
     }).join('');
   })();
   renderStats();
