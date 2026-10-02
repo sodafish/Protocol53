@@ -1690,8 +1690,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function ymd(t){ var d=new Date(t); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function numOf(txt){ var m=String(txt||'').replace(',','.').match(/\d+(?:\.\d+)?/); return m?parseFloat(m[0]):null; }
   function progRecord(inp,when){
-    var v=numOf(inp.value), k=inp.dataset.note; if(v==null||!k) return;
-    var t=when||Date.now(), id=k+'@'+ymd(t), ev={k:k,d:ymd(t),t:t,v:v};
+    var v=numOf(inp.value), k=inp.dataset.note; if(!k) return;
+    var t=when||Date.now(), id=k+'@'+ymd(t);
+    /* veld leeggemaakt: het meetpunt van vandaag vervalt */
+    if(v==null){ if(!when&&prog[id]){ delete prog[id]; saveProgLocal(); renderProg(); if(progCol) progCol.doc(id).delete().catch(function(){}); } return; }
+    var ev={k:k,d:ymd(t),t:t,v:v};
     var old=prog[id]; if(old&&old.v===v) return;
     prog[id]=ev; saveProgLocal(); renderProg();
     if(progCol) progCol.doc(id).set(ev).catch(function(){});
@@ -1854,6 +1857,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       /* eenmalig: huidige waarden als eerste meetpunt (op de laatste trainingsdatum van die oefening) */
       if(!progReady && !snap.metadata.fromCache){
         progReady=true;
+        progInputs().forEach(function(inp){ if(numOf(inp.value)==null) progRecord(inp); });
         if(!Object.keys(next).length){
           progInputs().forEach(function(inp){
             var li=inp.closest('.exr'), c=counts[chkKey(li)];

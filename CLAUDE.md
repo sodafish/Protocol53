@@ -78,7 +78,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Collectie `prog`: één meetpunt per invulveld per dag, id `<data-note>@jjjj-mm-dd`,
   `{k: data-note, d: datum, t: tijdstip, v: getal}`. Geschreven bij afvinken (`bumpCount` → alle
   velden van die oefening) en bij elke wijziging van het veld (na de 500 ms-debounce). Zelfde dag
-  = overschrijven. Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
+  = overschrijven; veld leegmaken = punt van vandaag weg (ook bij laden). Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
 
