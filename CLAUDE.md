@@ -72,7 +72,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
 
 ## Progressie (onderaan Statistieken)
-- Schuifbare rij tabs (`#progChips`, met spiergroepnummer ertussen) met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
+- Schuifbare rij lijntabs (`#progChips`, zoals de subtabs, met spiergroepnummer ertussen; hero en grafiek
+  hebben een vaste hoogte zodat niets verspringt) met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
   aparte lijnen). Periodes Maand / 3 maanden / Alles. Keuzes onthouden
   in localStorage `fitlog-prog-sel` en `fitlog-prog-per`.
 - Collectie `prog`: één meetpunt per invulveld per dag, id `<data-note>@jjjj-mm-dd`,

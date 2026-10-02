@@ -825,16 +825,17 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* ════════════ PROGRESSIE ════════════ */
 .prog{margin-top:3.4rem;}
 .prog-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
-.prog-chips{display:flex;align-items:center;gap:.45rem;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
-  margin:0 -1.4rem .9rem;padding:.15rem 1.4rem .35rem;scrollbar-width:none;touch-action:pan-x pan-y;
+.prog-chips{display:flex;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;
+  margin:0 -1.4rem 1rem;padding:0 1.4rem;box-shadow:inset 0 -1.5px 0 var(--line);
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 1.2rem,#000 calc(100% - 2rem),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 1.2rem,#000 calc(100% - 2rem),transparent 100%);}
 .prog-chips::-webkit-scrollbar{display:none;}
-@media(max-width:640px){.prog-chips{margin:0 -1.1rem .9rem;padding:.15rem 1.1rem .35rem;}}
-.prog-chips .pc{flex:none;scroll-snap-align:center;appearance:none;cursor:pointer;min-height:42px;padding:0 1rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
-  font:600 14px 'Work Sans',system-ui,sans-serif;color:var(--muted);white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease;}
-.prog-chips .pc[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
-.prog-chips .pc:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
-.prog-chips .pc-g{flex:none;font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:22px;line-height:1;color:var(--accent);padding:0 .1rem 0 .35rem;}
+@media(max-width:640px){.prog-chips{margin:0 -1.1rem 1rem;padding:0 1.1rem;}}
+.prog-chips .pc{flex:none;appearance:none;cursor:pointer;min-height:46px;padding:0 .85rem;border:none;background:transparent;
+  font:600 15px 'Work Sans',system-ui,sans-serif;color:var(--muted);white-space:nowrap;-webkit-tap-highlight-color:transparent;
+  box-shadow:inset 0 -3px 0 transparent;transition:color .2s ease,box-shadow .25s ease;}
+.prog-chips .pc[aria-selected="true"]{color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent);}
+.prog-chips .pc:focus-visible{outline:2.5px solid var(--accent);outline-offset:-3px;}
+.prog-chips .pc-g{flex:none;align-self:center;font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:19px;line-height:1;color:var(--accent);padding:0 .15rem 0 .55rem;}
 .prog-chips .pc-g:first-child{padding-left:0;}
 .prog-sel{position:relative;display:block;margin:0 0 .7rem;}
 .prog-sel .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
@@ -842,13 +843,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   background:var(--surface);color:var(--ink);font:600 16px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
 .prog-sel select:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .prog-sel::after{content:"";position:absolute;right:1.2rem;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none;}
-.prog-hero{display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .7rem;margin:1.4rem 0 .4rem;min-height:2.6rem;}
+.prog-hero{display:flex;align-items:baseline;gap:.7rem;margin:1.4rem 0 .6rem;height:44px;white-space:nowrap;overflow:hidden;}
 .prog-hero .ph-v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:40px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;}
 .prog-hero .ph-u{font-size:14px;font-weight:600;color:var(--muted);margin-left:-.4rem;}
 .prog-hero .ph-d{font-size:13.5px;color:var(--muted);}
 .prog-hero .ph-d b{font-weight:600;color:var(--ink);}
 .prog-hero .ph-e{font-size:14px;color:var(--muted);line-height:1.45;}
-.prog-chart{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;}
+.prog-empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 1.5rem;border:1.5px dashed var(--line);border-radius:14px;font-size:14px;line-height:1.45;color:var(--muted);white-space:normal;}
+.prog-chart{position:relative;height:190px;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;}
 .prog-chart svg{display:block;width:100%;height:auto;overflow:visible;}
 .prog-chart .gl{stroke:var(--line-soft);stroke-width:1;}
 .prog-chart .ax{fill:var(--muted);font:500 11px 'Work Sans',system-ui,sans-serif;}
@@ -1765,13 +1767,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       .sort(function(a,b){ return a.t-b.t; });
     var now=Date.now(), from=pPer==='all'?(all.length?all[0].t:now):now-(+pPer)*864e5;
     var pts=all.filter(function(e){ return e.t>=from; });
-    box.innerHTML='';
-    if(!all.length){ hero.innerHTML='<p class="ph-e">Nog geen metingen. Vul je '+unit+' in bij deze oefening en vink ze af; vanaf dan groeit hier de lijn.</p>'; return; }
+    if(!all.length){ hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>'; box.innerHTML='<div class="prog-empty">Nog geen metingen. Vul je '+unit+' in bij deze oefening en vink ze af; vanaf dan groeit hier de lijn.</div>'; return; }
     var last=all[all.length-1], first=pts[0];
     var diff=first&&pts.length>1?last.v-first.v:null;
     hero.innerHTML='<span class="ph-v">'+fmtV(last.v)+'</span><span class="ph-u">'+unit+'</span>'+
       '<span class="ph-d">'+(diff==null?'laatst op '+dLab(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+fmtV(Math.abs(diff))+' '+unit+'</b> sinds '+dLab(first.t))+'</span>';
-    if(!pts.length){ hero.insertAdjacentHTML('beforeend','<p class="ph-e" style="flex-basis:100%">Geen metingen in deze periode.</p>'); return; }
+    if(!pts.length){ box.innerHTML='<div class="prog-empty">Geen metingen in deze periode.</div>'; return; }
     /* grafiek */
     var W=Math.max(260,box.clientWidth||320), H=190, L=34, R=10, T=16, B=26;
     var x0=pPer==='all'?pts[0].t:from, x1=now; if(x1-x0<864e5) x0=x1-7*864e5;
