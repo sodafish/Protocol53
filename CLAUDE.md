@@ -30,7 +30,9 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
 - Antwoord Tom kort, in het Nederlands.
 
 ## Statistieken (spierbalans onder Kracht)
-Figuur voor/achter + lijst met sets per week per spier, over de laatste 90 dagen. Kleur is relatief
+Figuur voor/achter + lijst met sets per week per spier. Schakelaar 1 week / 1 maand / 3 maanden
+(`perDays`, keuze onthouden in localStorage `fitlog-stats-per`). `hist` bewaart alles, ook ouder dan
+90 dagen, dus een langere periode toevoegen kan zonder datamigratie. Kleur is relatief
 t.o.v. de best getrainde spier, zodat je de balans ziet, niet een absoluut getal.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
@@ -47,13 +49,14 @@ t.o.v. de best getrainde spier, zodat je de balans ziet, niet een absoluut getal
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de
   laatste rij van die oefening. De opwarming telt niet mee.
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
-- Score per spier = som van sets × gewicht over 90 dagen, gedeeld door het aantal weken.
+- Score per spier = som van sets × gewicht binnen de gekozen periode, gedeeld door het aantal weken
+  (vanaf de eerste training in die periode, minstens 1).
 - Rij `seed` (eenmalig): tellingen uit `counts` van vóór de statistieken, geteld op hun `last`-datum.
 
 **Oefeningen toevoegen of verwijderen — de geschiedenis blijft kloppen:**
 - Elke `hist`-rij bewaart zijn eigen kopie van spieren en sets. Een oefening verwijderen of haar
   spierverdeling aanpassen verandert dus niets aan wat al geteld is; ze telt alleen niet meer mee
-  voor nieuwe trainingen en valt na 90 dagen vanzelf uit het venster.
+  voor nieuwe trainingen en schuift met de tijd vanzelf uit de gekozen periode.
 - Nieuwe oefening: geef haar een nieuwe, unieke sleutel én voeg een regel toe aan `MUSCLES`. Zonder
   regel werkt de terugval op `GROUPDEF`, maar die is grover.
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
