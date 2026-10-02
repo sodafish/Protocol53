@@ -69,7 +69,9 @@ h1,h2,h3{font-family:'Fraunces',Georgia,serif;}
   text-transform:uppercase;color:var(--accent);}
 
 /* ── header / masthead ── */
-header.top{background:var(--paper);}
+header.top{background:var(--paper);position:sticky;top:env(safe-area-inset-top, 0px);z-index:30;}
+header.top{box-shadow:0 1.5px 0 0 transparent;transition:box-shadow .2s ease;}
+header.top.stuck{box-shadow:0 1.5px 0 0 var(--line);}
 .masthead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
   flex-wrap:wrap;padding:1.6rem 0 1.4rem;}
 .masthead h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(2.2rem,5.5vw,3.3rem);
@@ -80,7 +82,7 @@ header.top{background:var(--paper);}
   letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
 
 /* full-width ink tab bar */
-.tabbar{background:var(--ink);position:sticky;top:env(safe-area-inset-top, 0px);z-index:30;}
+.tabbar{background:var(--ink);}
 .tabs{display:flex;flex-wrap:nowrap;gap:0;}
 .tab{flex:1 1 0;min-width:0;appearance:none;cursor:pointer;background:transparent;
   border:none;border-right:1px solid rgba(245,241,232,.14);
@@ -1151,9 +1153,8 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       p.hidden=!on;
       if(on) panel=p;
     });
-    /* spring terug tot net onder de titel, zodat de tabbalk bovenaan blijft */
-    var tb=document.querySelector('.tabbar');
-    if(tb && window.scrollY>tb.offsetTop) window.scrollTo({top:tb.offsetTop});
+    /* nieuwe sessie begint bovenaan, met de tabs weer in beeld */
+    if(window.scrollY>0) window.scrollTo({top:0});
     if(panel) reveal(panel);
     if((k==='schema'||k==='cardio') && window.__cascadeSchema) window.__cascadeSchema();
   }
@@ -1197,10 +1198,13 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   }
 
 
-  /* ---- subtabs plakken net onder de tabbalk ---- */
-  var tbar=document.querySelector('.tabbar');
+  /* ---- subtabs plakken net onder de vaste kop ---- */
+  var tbar=document.querySelector('header.top');
   function setTbh(){ if(tbar) document.documentElement.style.setProperty('--tbh',tbar.getBoundingClientRect().height+'px'); }
   setTbh(); window.addEventListener('resize',setTbh);
+  /* dun lijntje onder de kop zodra er inhoud onder schuift */
+  function setStuck(){ if(tbar) tbar.classList.toggle('stuck',window.scrollY>4); }
+  setStuck(); window.addEventListener('scroll',setStuck,{passive:true});
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(setTbh);
 
   /* ---- schema: Dag 1 / Dag 2 / Week ---- */
