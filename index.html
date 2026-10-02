@@ -802,10 +802,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 
   <div class="pane" id="s-d3">
     <div class="tools-row">
-      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3">Vinkjes wissen</button>
-      <label class="eqsel"><span class="sr">Toon</span><select aria-label="Filter op plek">
-        <option value="all" selected>Alles</option><option value="f">Floor</option><option value="c">Cable</option><option value="d">Dumbbells</option>
-      </select></label>
+      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3">Start nieuwe sessie</button>
     </div>
     <ol class="exl">
       <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Opwarming</span></li>
@@ -851,7 +848,6 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
-    <button type="button" class="reset reset-chk" data-reset="s-d3">Vinkjes wissen</button>
     <label class="sess-note-l" for="sessNote">Notities</label>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
   </div>
@@ -1305,6 +1301,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   /* ---- filter op plek (C / D / F) ---- */
   (function(){
     var pane=document.getElementById('s-d3'), sel=pane.querySelector('.eqsel select');
+    if(!sel) return;
     function apply(f){
       sel.closest('.eqsel').classList.toggle('on', f!=='all');
       pane.querySelectorAll('.exl').forEach(function(ol){
