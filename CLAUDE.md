@@ -29,7 +29,7 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
 - Tom ziet de update na de app volledig te sluiten en opnieuw te openen.
 - Antwoord Tom kort, in het Nederlands.
 
-## Statistieken (spierbalans onder Kracht)
+## Statistieken (Kracht → subtab Statistieken)
 Figuur voor/achter + lijst met sets per week per spier. Schakelaar 1 week / 1 maand / 3 maanden
 (`perDays`, keuze onthouden in localStorage `fitlog-stats-per`). `hist` bewaart alles, ook ouder dan
 90 dagen, dus een langere periode toevoegen kan zonder datamigratie. Kleur is relatief
@@ -42,7 +42,12 @@ t.o.v. de best getrainde spier, zodat je de balans ziet, niet een absoluut getal
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
   ze staat (Borst, Schouders …) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
-- `P53BODY`-tekening zit in `drawBody()`; elk vlak heeft `data-m` = sleutel uit `MLAB`.
+- Kracht heeft twee subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+  in localStorage `fitlog-ksub`.
+- Lichaamstekening zit in `drawBody()`: halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
+  worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
+  randen; de naden en de buitenomtrek komen van een tweede laag met dikke lijn (`.o`). Een gat tussen
+  vlakken wordt dus zichtbaar als achtergrond: altijd randen laten aansluiten.
 
 **Hoe het telt:**
 - Elke afvinking (via `bumpCount`, dus zoals de teller) schrijft een rij in collectie `hist`:

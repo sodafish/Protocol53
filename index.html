@@ -782,21 +782,22 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 @media(prefers-reduced-motion:reduce){.to-top{transition:opacity .2s ease;transform:none;}}
 
 /* ════════════ STATISTIEKEN: spierbalans ════════════ */
-.stats{margin-top:3.2rem;}
-.stats-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
+#p-schema .ksub{position:relative;top:auto;box-shadow:none;margin:0 0 1.2rem;}
+.ksub .seg-ind{transform:translateX(calc(100% * var(--i,0)));}
+.stats{margin-top:.2rem;}
 .stats-per{display:flex;gap:.4rem;margin:1rem 0 0;}
 .stats-per button{appearance:none;cursor:pointer;flex:1 1 0;min-height:40px;padding:0 .6rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
   font:600 13.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease;}
 .stats-per button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
 .stats-per button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
-.stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.2rem auto 0;max-width:18rem;}
+.stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.2rem auto 0;max-width:20rem;}
 .stats-fig figure{margin:0;text-align:center;}
 .stats-fig svg{width:100%;height:auto;display:block;}
 .stats-fig figcaption{margin-top:.3rem;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-.stats-fig .b{fill:var(--paper-soft);stroke:var(--line);stroke-width:1;}
-.stats-fig .m{fill:var(--paper-soft);stroke:var(--paper);stroke-width:1.2;stroke-linejoin:round;transition:fill .5s ease;}
-.stats-fig .m.z{stroke:var(--line);stroke-width:1;}
+.stats-fig .o path,.stats-fig .o ellipse{fill:var(--line)!important;stroke:var(--line);stroke-width:5;stroke-linejoin:round;}
+.stats-fig .n,.stats-fig .m{fill:var(--paper-soft);stroke:var(--line);stroke-width:1.6;stroke-linejoin:round;}
+.stats-fig .m{transition:fill .5s ease;}
 .stats-leg{display:flex;align-items:center;justify-content:center;gap:.6rem;margin:1rem 0 0;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .stats-leg i{width:7rem;height:8px;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 18%,var(--surface)),var(--accent));}
 .stats-list{list-style:none;margin:1.4rem 0 0;padding:0;}
@@ -832,6 +833,12 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 
 <!-- ════════════ SCHEMA ════════════ -->
 <section id="p-schema" role="tabpanel" aria-labelledby="t-schema">
+
+  <div class="seg ksub" role="tablist" aria-label="Kracht">
+    <button type="button" class="seg-b" role="tab" id="k-train" aria-controls="s-d3" aria-selected="true">Training</button>
+    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Statistieken</button>
+    <span class="seg-ind" aria-hidden="true"></span>
+  </div>
 
   <div class="pane" id="s-d3">
     <div class="tools-row">
@@ -881,8 +888,12 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
-    <section class="stats" aria-labelledby="statsT">
-      <h2 class="stats-t" id="statsT">Statistieken</h2>
+    <label class="sess-note-l" for="sessNote">Notities</label>
+    <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+  </div>
+
+  <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
+    <section class="stats" aria-label="Statistieken">
       <div class="stats-per" role="group" aria-label="Periode">
         <button type="button" data-d="7">1 week</button><button type="button" data-d="30">1 maand</button><button type="button" data-d="90">3 maanden</button>
       </div>
@@ -891,8 +902,6 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <div class="stats-leg" aria-hidden="true"><span>minder</span><i></i><span>meer</span></div>
       <ol class="stats-list" id="statsList"></ol>
     </section>
-    <label class="sess-note-l" for="sessNote">Notities</label>
-    <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
   </div>
 
 </section>
@@ -1464,9 +1473,8 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     });
     var weeks=Math.min(perDays/7,Math.max(1,(now-first)/(7*864e5))), max=0;
     Object.keys(score).forEach(function(k){ score[k]/=weeks; max=Math.max(max,score[k]); });
-    fig.querySelectorAll('.m').forEach(function(p){
+    fig.querySelectorAll('svg > g:not(.o) .m').forEach(function(p){
       var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
-      p.classList.toggle('z',!v);
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
     var n=Object.keys(days).length, sub=document.getElementById('statsSub');
@@ -1482,58 +1490,90 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   (function drawBody(){
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var B={
-  /* hoofd en nek over het midden (niet gespiegeld) */
-  head:'<ellipse cx="100" cy="32" rx="17" ry="23" class="b"/><path d="M91,52 L109,52 L111,66 L89,66 Z" class="b"/>',
   front:{
-    base:[
-      'M54,214 C49,222 48,236 53,246 C57,250 62,248 63,242 L64,214 Z',    // hand
-      'M80,284 C78,290 79,296 82,300 L94,300 C96,294 96,288 94,284 Z',    // knie
-      'M82,374 C78,382 76,390 80,394 L95,394 C96,386 95,380 93,374 Z'     // voet
-    ],
-    mid:'<path d="M84,180 L116,180 C118,188 120,196 121,204 L104,206 L100,214 L96,206 L79,204 C80,196 82,188 84,180 Z" class="b"/>',
-    m:{
-      trap:  ['M90,58 C86,63 80,66 70,68 L88,70 L92,66 Z'],
-      sz:    ['M70,68 C58,68 50,76 49,92 C49,100 51,106 54,110 L58,106 C57,92 61,80 70,72 Z'],
-      sv:    ['M72,71 C64,77 60,89 60,105 C64,107 68,105 70,101 C72,91 76,83 83,76 C80,72 76,70 72,71 Z'],
-      borst: ['M84,74 C76,80 71,92 70,102 C78,111 90,113 99,110 L99,72 C94,71 89,72 84,74 Z'],
-      bi:    ['M55,112 C51,124 51,138 55,148 L64,148 C67,136 67,122 64,108 C61,108 58,110 55,112 Z'],
-      oa:    ['M54,152 C50,168 50,192 54,212 L63,212 C66,192 67,168 65,152 Z'],
-      buik:  ['M90,116 L99,116 L99,178 L91,176 C89,156 89,136 90,116 Z'],
-      schuin:['M72,108 C71,128 73,152 79,174 L88,176 C87,154 87,134 88,116 C82,115 76,112 72,108 Z'],
-      quad:  ['M79,206 C73,224 73,256 79,282 L95,282 C98,262 98,232 96,208 Z'],
-      kuit:  ['M80,302 C76,322 77,348 82,372 L92,372 C95,348 95,322 93,302 Z']
-    }
+    head:'<ellipse cx="100" cy="29" rx="16" ry="22.5" class="n"/>',
+    parts:[
+      [null,'M88,44 L100,44 L100,75 L93,74 C92,66 91,60 89,52 Z'],
+      ['trap','M89,52 C91,60 92,66 93,74 L74,80 L68,77 C78,72 85,64 89,52 Z'],
+      ['borst','M74,80 L93,74 L100,75 L100,126 C88,128 76,122 70,110 C69,98 71,88 74,80 Z'],
+      ['sz','M68,77 C58,77 50,84 48,96 C47,106 48,116 50,124 L54,122 C55,108 58,94 64,84 Z'],
+      ['sv','M68,77 L74,80 C71,88 69,98 70,110 C68,114 66,116 64,116 L54,122 C55,108 58,94 64,84 Z'],
+      ['bi','M54,122 L64,116 C65,134 62,152 56,166 L46,166 C45,150 48,136 52,124 Z'],
+      [null,'M50,124 L52,124 C48,136 45,150 46,166 L40,166 C42,150 46,136 50,124 Z'],
+      ['oa','M40,166 L48,166 C44,190 39,212 35,234 L30,232 C31,210 35,186 40,166 Z'],
+      ['oa','M48,166 L56,166 C53,190 46,214 40,236 L35,234 C39,212 44,190 48,166 Z'],
+      [null,'M30,232 L40,236 C42,250 40,264 34,276 C30,280 26,278 25,272 C24,258 26,246 30,232 Z'],
+      [null,'M70,110 C76,122 84,126 90,127.4 L90,136 C82,136 76,134 71,132 C70,124 70,116 70,110 Z'],
+      ['schuin','M71,132 C76,134 82,136 90,136 L90,200 C84,194 77,188 71,182 C70,166 70,150 71,132 Z'],
+      ['buik','M90,127.4 C94,127.6 97,127 100,126 L100,146 L90,146 Z'],
+      ['buik','M90,146 L100,146 L100,166 L90,166 Z'],
+      ['buik','M90,166 L100,166 L100,184 L90,184 Z'],
+      ['buik','M90,184 L100,184 L100,214 C95,212 92,206 90,200 Z'],
+      [null,'M71,182 C77,188 84,194 90,200 C92,206 95,212 100,214 L100,232 C92,216 78,210 66,212 C67,202 69,192 71,182 Z'],
+      ['quad','M66,212 C71,212 76,214 79,216 C78,250 77,284 78,314 L69,314 C62,282 61,242 66,212 Z'],
+      ['quad','M79,216 C84,218 88,220 90,222 C91,240 92,256 93,272 C91,286 90,300 88,314 L78,314 C77,284 78,250 79,216 Z'],
+      [null,'M90,222 C94,224 98,228 100,232 C99,248 98,262 96,272 L93,272 C92,256 91,240 90,222 Z'],
+      ['quad','M93,272 L96,272 C97,288 97,302 96,314 L88,314 C90,300 91,286 93,272 Z'],
+      [null,'M69,314 L96,314 C97,322 96,330 93,338 L74,338 C71,330 69,322 69,314 Z'],
+      ['kuit','M74,338 L79,338 C79,360 79,382 80,402 L76,402 C69,380 65,356 74,338 Z'],
+      [null,'M79,338 L88,338 C88,360 87,382 86,402 L80,402 C79,382 79,360 79,338 Z'],
+      ['kuit','M88,338 L93,338 C100,356 98,378 91,402 L86,402 C87,382 88,360 88,338 Z'],
+      [null,'M76,402 L91,402 C93,410 95,418 94,424 L74,424 C71,418 73,410 76,402 Z']
+    ]
   },
   back:{
-    base:[
-      'M54,214 C49,222 48,236 53,246 C57,250 62,248 63,242 L64,214 Z',
-      'M80,284 C78,290 79,296 82,300 L94,300 C96,294 96,288 94,284 Z',
-      'M82,352 C80,362 80,370 82,376 L93,376 C94,368 94,360 93,352 Z',
-      'M82,378 C78,384 76,390 80,394 L95,394 C96,388 95,382 93,378 Z'
-    ],
-    m:{
-      trap:   ['M99,52 C94,58 86,64 72,68 C82,72 90,80 94,90 L99,104 Z'],
-      sa:     ['M70,68 C58,68 50,76 49,92 C49,100 51,106 54,110 L60,100 C62,90 66,80 74,74 Z'],
-      midrug: ['M93,92 C90,84 84,78 76,76 C78,90 84,104 92,116 L99,120 L99,106 Z'],
-      lats:   ['M74,80 C70,100 72,124 82,148 L99,152 L99,124 L90,118 C82,106 77,94 74,80 Z'],
-      tri:    ['M55,112 C51,124 51,138 55,148 L64,148 C67,136 67,122 64,108 C61,106 58,108 55,112 Z'],
-      oa:     ['M54,152 C50,168 50,192 54,212 L63,212 C66,192 67,168 65,152 Z'],
-      onderrug:['M84,152 L99,155 L99,182 L82,182 C84,172 84,162 84,152 Z'],
-      bil:    ['M80,186 C73,198 74,216 84,224 C92,227 98,222 99,214 L99,186 Z'],
-      ham:    ['M80,228 C74,246 76,268 80,282 L95,282 C98,262 98,242 96,228 Z'],
-      kuit:   ['M80,302 C73,316 74,336 82,350 L93,350 C97,336 97,316 93,302 Z']
-    }
+    head:'<ellipse cx="100" cy="29" rx="16" ry="22.5" class="n"/>',
+    parts:[
+      [null,'M88,44 L100,44 L100,48 L90,52 Z'],
+      ['trap','M100,48 L90,52 C88,62 82,70 68,77 C74,80 80,86 86,94 C92,110 96,128 100,150 Z'],
+      ['sa','M68,77 C58,77 50,84 48,96 C47,106 48,116 50,124 L54,122 C60,118 66,112 70,108 C71,100 72,94 72,88 C70,84 69,80 68,77 Z'],
+      ['midrug','M68,77 C74,80 80,86 86,94 C88,99 90,105 92,112 C86,118 78,122 70,124 L70,108 C71,100 72,94 72,88 C70,84 69,80 68,77 Z'],
+      ['tri','M57,120 L64,116 C65,134 62,152 56,166 L49,166 C52,150 55,136 57,120 Z'],
+      ['tri','M50,124 L54,122 L57,120 C55,136 52,150 49,166 L40,166 C42,150 46,136 50,124 Z'],
+      ['oa','M40,166 L48,166 C44,190 39,212 35,234 L30,232 C31,210 35,186 40,166 Z'],
+      ['oa','M48,166 L56,166 C53,190 46,214 40,236 L35,234 C39,212 44,190 48,166 Z'],
+      [null,'M30,232 L40,236 C42,250 40,264 34,276 C30,280 26,278 25,272 C24,258 26,246 30,232 Z'],
+      ['lats','M70,124 C78,122 86,118 92,112 C95,124 98,138 100,150 L94,154 C92,166 91,180 91,196 C84,192 77,187 71,182 C70,162 70,142 70,124 Z'],
+      ['onderrug','M100,150 L100,208 L91,208 L91,196 C91,180 92,166 94,154 Z'],
+      ['schuin','M71,182 C77,187 84,192 91,196 L91,208 C84,207 76,208 67,211 C68,200 69,190 71,182 Z'],
+      ['bil','M67,211 C76,208 84,207 91,208 C84,212 76,220 70,228 C67,222 66,216 67,211 Z'],
+      ['bil','M91,208 L100,208 L100,258 C96,262 90,262 84,260 C78,258 74,254 72,248 C70,242 70,234 70,228 C76,220 84,212 91,208 Z'],
+      [null,'M70,228 C70,234 70,242 72,248 C73,252 74,254 76,256 L77,314 L69,314 C62,284 62,252 70,228 Z'],
+      ['ham','M76,256 C78,258 82,260 86,261 C85,280 85,298 86,314 L77,314 Z'],
+      ['ham','M86,261 C90,262 96,262 100,258 C99,280 98,300 96,314 L86,314 C85,298 85,280 86,261 Z'],
+      [null,'M69,314 L96,314 C97,320 96,326 94,332 L74,332 C71,326 69,320 69,314 Z'],
+      ['kuit','M74,332 L84,332 C84,348 84,366 84,380 C81,382 78,384 76,384 C66,368 63,346 74,332 Z'],
+      ['kuit','M84,332 L94,332 C102,346 100,366 92,382 C90,382 87,381 84,380 C84,366 84,348 84,332 Z'],
+      [null,'M76,384 C78,384 81,382 84,380 C87,381 90,382 92,382 C91,390 90,396 90,402 L78,402 C78,396 77,390 76,384 Z'],
+      [null,'M78,402 L90,402 C92,410 94,418 93,424 L75,424 C73,418 75,410 78,402 Z']
+    ]
   }
 };
-    function both(d,a){ return '<path d="'+d+'" '+a+'/><path d="'+d+'" transform="matrix(-1 0 0 1 200 0)" '+a+'/>'; }
+    var MIR=' transform="matrix(-1 0 0 1 200 0)"';
     fig.innerHTML=[['front','Voor'],['back','Achter']].map(function(v){
-      var d=B[v[0]], s='<figure><svg viewBox="40 0 120 400" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde">'+B.head+(d.mid||'');
-      d.base.forEach(function(p){ s+=both(p,'class="b"'); });
-      Object.keys(d.m).forEach(function(k){ d.m[k].forEach(function(p){ s+=both(p,'class="m" data-m="'+k+'"'); }); });
-      return s+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
+      var d=B[v[0]], half='';
+      d.parts.forEach(function(x){ half+='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; });
+      var all='<g>'+half+'</g><g'+MIR+'>'+half+'</g>'+d.head;
+      return '<figure><svg viewBox="18 0 164 430" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
     }).join('');
   })();
   renderStats();
+  /* ---- Kracht: subtabs Training / Statistieken ---- */
+  (function(){
+    var KEY='fitlog-ksub', tabs=[document.getElementById('k-train'),document.getElementById('k-stats')];
+    if(!tabs[0]) return;
+    var bar=tabs[0].parentNode;
+    function show(i,anim){
+      tabs.forEach(function(t,n){ t.setAttribute('aria-selected',n===i?'true':'false'); document.getElementById(t.getAttribute('aria-controls')).hidden=n!==i; });
+      bar.style.setProperty('--i',i);
+      try{ localStorage.setItem(KEY,i); }catch(e){}
+      if(anim){ var p=document.getElementById(tabs[i].getAttribute('aria-controls')); if(i===0&&window.__cascadeSchema) window.__cascadeSchema(); else if(typeof reveal==='function') reveal(p); }
+    }
+    var start=0; try{ start=+localStorage.getItem(KEY)||0; }catch(e){}
+    show(start===1?1:0,false);
+    requestAnimationFrame(function(){ bar.classList.add('ready'); });
+    tabs.forEach(function(t,n){ t.addEventListener('click',function(){ show(n,true); }); });
+  })();
 
   /* ---- filter op plek (C / D / F) ---- */
   (function(){
