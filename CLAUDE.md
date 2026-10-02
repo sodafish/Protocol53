@@ -44,7 +44,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   ze staat (Borst, Schouders …) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
 - Kracht heeft twee subtabs (Training met knoppen 'Start nieuwe training' bovenaan en 'Einde training'
-  onderaan, beide `.reset-chk`: vinkjes leeg; tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+  onderaan, beide `.reset-chk`, volle breedte met pijl: vinkjes leeg; Start scrolt naar Opwarming,
+  Einde naar boven; tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
@@ -54,7 +55,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 **Hoe het telt:**
 - Elke afvinking (via `bumpCount`, dus zoals de teller) schrijft een rij in collectie `hist`:
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de
-  laatste rij van die oefening. De opwarming telt niet mee.
+  laatste rij van die oefening; zakt de teller via de min-knop naar 0, dan gaan alle rijen van die
+  oefening weg, ook haar deel in `seed` (`histClear`). De opwarming telt niet mee.
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
 - Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
   weken vanaf de eerste training in die periode, minstens 1).

@@ -650,6 +650,11 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 
 .reset-chk.reset-top{margin:.2rem 0 1rem;}
 .reset-chk.reset-end{margin:2.4rem 0 0;}
+#s-d3 .tools-row{display:block;margin:0 0 1rem;}
+#s-d3 .reset-chk.reset-top,#s-d3 .reset-chk.reset-end{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:54px;
+  border-color:var(--ink);color:var(--ink);font-size:13px;letter-spacing:.12em;}
+#s-d3 .reset-chk.reset-top:hover,#s-d3 .reset-chk.reset-end:hover{background:var(--ink);color:var(--paper);}
+#s-d3 .reset-chk svg{flex:none;}
 
 .wu-or{list-style:none;display:flex;align-items:center;gap:.8rem;padding:.35rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:none!important;}
 .wu-or::before,.wu-or::after{content:"";flex:1;height:1px;background:var(--line);}
@@ -794,15 +799,13 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .stats-per button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
 .stats-per button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
-.stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.2rem auto 0;max-width:20rem;}
+.stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:2.2rem;margin:1.6rem auto 0;max-width:21rem;}
 .stats-fig figure{margin:0;text-align:center;}
 .stats-fig svg{width:100%;height:auto;display:block;}
 .stats-fig figcaption{margin-top:.3rem;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
 .stats-fig .o path,.stats-fig .o ellipse{fill:var(--line)!important;stroke:var(--line);stroke-width:5;stroke-linejoin:round;}
 .stats-fig .n,.stats-fig .m{fill:var(--paper-soft);stroke:var(--line);stroke-width:1.6;stroke-linejoin:round;}
 .stats-fig .m{transition:fill .5s ease;}
-.stats-leg{display:flex;align-items:center;justify-content:center;gap:.6rem;margin:1rem 0 0;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-.stats-leg i{width:7rem;height:8px;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 18%,var(--surface)),var(--accent));}
 .stats-list{list-style:none;margin:1.4rem 0 0;padding:0;}
 .stats-list li{display:grid;grid-template-columns:10.6rem 1fr 2.4rem;align-items:center;gap:.7rem;padding:.42rem 0;border-bottom:1px solid var(--line-soft);font-size:14px;}
 .stats-list .sl-n{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -845,7 +848,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 
   <div class="pane" id="s-d3">
     <div class="tools-row">
-      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3">Start nieuwe training</button>
+      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5.5 12.5L12 19l6.5-6.5"/></svg><span>Start nieuwe training</span></button>
     </div>
     <ol class="exl">
       <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Opwarming</span></li>
@@ -891,7 +894,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
-    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3">Einde training</button>
+    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg><span>Einde training</span></button>
     <label class="sess-note-l" for="sessNote">Notities</label>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
   </div>
@@ -903,7 +906,6 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       </div>
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
-      <div class="stats-leg" aria-hidden="true"><span>minder</span><i></i><span>meer</span></div>
       <ol class="stats-list" id="statsList"></ol>
     </section>
   </div>
@@ -1326,6 +1328,11 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
         var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
       });
       paintChecks(); saveChecksLocal();
+      var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+      if(btn.classList.contains('reset-end')){ window.scrollTo({top:0,behavior:smooth}); }
+      else if(btn.classList.contains('reset-top')){
+        var g=pane.querySelector('.exgrp'); if(g) window.scrollTo({top:g.getBoundingClientRect().top+window.scrollY-8,behavior:smooth});
+      }
     });
   });
   paintChecks();
@@ -1366,7 +1373,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     var next={n:n,last:d>0?Date.now():(c.prev||c.last||null),prev:d>0?(c.last||null):(c.prev||null)};
     counts[k]=next; saveCountsLocal(); paintCounts();
     if(cntCol) cntCol.doc(k).set(next).catch(function(){});
-    if(d>0) histAdd(k); else if(n<(c.n||0)) histRemove(k);
+    if(d>0) histAdd(k); else if(n<(c.n||0)){ if(n===0) histClear(k); else histRemove(k); }
   }
   paintCounts();
 
@@ -1450,6 +1457,12 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     }
     delete hist[best]; saveHistLocal(); renderStats();
     if(histCol) histCol.doc(best).delete().catch(function(){});
+  }
+  /* teller op 0: alles van deze oefening weg, ook uit de beginstand */
+  function histClear(k){
+    Object.keys(hist).forEach(function(id){ var e=hist[id]; if(e&&e.k===k){ delete hist[id]; if(histCol) histCol.doc(id).delete().catch(function(){}); } });
+    var sd=hist.seed; if(sd&&sd.base&&sd.base[k]){ delete sd.base[k]; if(histCol) histCol.doc('seed').set(sd).catch(function(){}); }
+    saveHistLocal(); renderStats();
   }
   /* alle gebeurtenissen, plus de tellingen van vóór deze functie (één keer vastgelegd in 'seed') */
   function events(){
@@ -1586,7 +1599,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       var d=B[v[0]], half='';
       d.parts.forEach(function(x){ half+='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; });
       var all='<g>'+half+'</g><g'+MIR+'>'+half+'</g>'+d.head;
-      return '<figure><svg viewBox="28 0 144 450" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
+      return '<figure><svg viewBox="28 0 144 450" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg></figure>';
     }).join('');
   })();
   renderStats();
