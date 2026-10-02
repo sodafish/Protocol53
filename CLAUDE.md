@@ -84,7 +84,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   = overschrijven; veld leegmaken = punt van vandaag weg (ook bij laden). Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
-- Knop Bewerken (`#progEdit`) boven de grafiek: toont alle metingen van die oefening (nieuwste eerst)
-  met een kruisje om te verwijderen, en een formulier datum + waarde om toe te voegen (zelfde datum =
+- Knop Bewerken (`#progEdit`) rechts op de lijn van het huidige gewicht: toont alle metingen van die
+  oefening (nieuwste eerst) met een vuilbakje om te verwijderen (met bevestiging), en een formulier datum + waarde om toe te voegen (zelfde datum =
   overschrijven; tijdstip = 12u die dag).
 
