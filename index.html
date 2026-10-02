@@ -780,6 +780,28 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .to-top.on{opacity:1;transform:none;pointer-events:auto;}
 .to-top:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;}
 @media(prefers-reduced-motion:reduce){.to-top{transition:opacity .2s ease;transform:none;}}
+
+/* ════════════ STATISTIEKEN: spierbalans ════════════ */
+.stats{margin-top:3.2rem;}
+.stats-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
+.stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
+.stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1.2rem auto 0;max-width:18rem;}
+.stats-fig figure{margin:0;text-align:center;}
+.stats-fig svg{width:100%;height:auto;display:block;}
+.stats-fig figcaption{margin-top:.3rem;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.stats-fig .b{fill:var(--paper-soft);stroke:var(--line);stroke-width:1;}
+.stats-fig .m{fill:var(--paper-soft);stroke:var(--paper);stroke-width:1.2;stroke-linejoin:round;transition:fill .5s ease;}
+.stats-fig .m.z{stroke:var(--line);stroke-width:1;}
+.stats-leg{display:flex;align-items:center;justify-content:center;gap:.6rem;margin:1rem 0 0;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.stats-leg i{width:7rem;height:8px;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 18%,var(--surface)),var(--accent));}
+.stats-list{list-style:none;margin:1.4rem 0 0;padding:0;}
+.stats-list li{display:grid;grid-template-columns:10.6rem 1fr 2.4rem;align-items:center;gap:.7rem;padding:.42rem 0;border-bottom:1px solid var(--line-soft);font-size:14px;}
+.stats-list .sl-n{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stats-list .sl-b{height:8px;border-radius:999px;background:var(--paper-soft);overflow:hidden;}
+.stats-list .sl-b i{display:block;height:100%;border-radius:999px;background:var(--accent);transition:width .5s ease;}
+.stats-list .sl-v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--muted);font-size:13px;}
+.stats-list li.zero .sl-n{color:var(--muted);}
+@media(max-width:380px){.stats-list li{grid-template-columns:9.6rem 1fr 2.2rem;font-size:13.5px;}}
 </style>
 
 <header class="top">
@@ -854,6 +876,13 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
+    <section class="stats" aria-labelledby="statsT">
+      <h2 class="stats-t" id="statsT">Statistieken</h2>
+      <p class="stats-sub" id="statsSub"></p>
+      <div class="stats-fig" id="statsFig"></div>
+      <div class="stats-leg" aria-hidden="true"><span>minder</span><i></i><span>meer</span></div>
+      <ol class="stats-list" id="statsList"></ol>
+    </section>
     <label class="sess-note-l" for="sessNote">Notities</label>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
   </div>
@@ -1308,8 +1337,185 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     var next={n:n,last:d>0?Date.now():(c.prev||c.last||null),prev:d>0?(c.last||null):(c.prev||null)};
     counts[k]=next; saveCountsLocal(); paintCounts();
     if(cntCol) cntCol.doc(k).set(next).catch(function(){});
+    if(d>0) histAdd(k); else if(n<(c.n||0)) histRemove(k);
   }
   paintCounts();
+
+  /* ---- statistieken: welke spieren hoe vaak getraind (laatste 3 maanden) ----
+     Elke afgevinkte oefening wordt een gebeurtenis in 'hist' met een kopie van zijn spieren en sets.
+     Zo blijven oude oefeningen meetellen als ze uit het schema verdwijnen, en tellen nieuwe vanaf dag 1. */
+  var MLAB={borst:'Borst',sv:'Voorste schouder',sz:'Zijschouder',sa:'Achterste schouder',trap:'Trapezius',
+    lats:'Brede rugspier',midrug:'Midden rug',onderrug:'Onderrug',bi:'Biceps',tri:'Triceps',oa:'Onderarmen',
+    buik:'Buikspieren',schuin:'Schuine buikspieren',bil:'Bilspieren',quad:'Voorkant dij',ham:'Achterkant dij',kuit:'Kuiten'};
+  /* spieren per oefening: 1 = hoofdspier, .5 = werkt flink mee, .25 = helpt een beetje */
+  var MUSCLES={
+    'd2-dumbbell-reverse-lunges':{quad:1,bil:1,ham:.25},
+    'd3-bulgarian-split-squat':{quad:1,bil:1,ham:.25},
+    'd1-goblet-squat':{quad:1,bil:.5,buik:.25,onderrug:.25},
+    'd1-dumbbell-chest-press':{borst:1,sv:.5,tri:.5},
+    'd2-chest-press-machine':{borst:1,sv:.5,tri:.5},
+    'd3-push-ups':{borst:1,sv:.5,tri:.5,buik:.25},
+    'd3-chest-fly-machine':{borst:1,sv:.25},
+    'd2-leg-curl-machine':{ham:1},
+    'd3-hip-abduction':{bil:1},
+    'd1-dumbbell-romanian-deadlift':{ham:1,bil:1,onderrug:.5,oa:.25},
+    'd3-chest-supported-row':{midrug:1,lats:.5,sa:.5,bi:.5},
+    'd2-seated-cable-row':{midrug:1,lats:.5,sa:.5,bi:.5},
+    'd3-eenarmige-dumbbell-row':{lats:1,midrug:.5,sa:.5,bi:.5},
+    'd1-seated-dumbbell-shoulder-press':{sv:1,sz:.5,tri:.5,trap:.25},
+    'd3-shoulder-press-machine':{sv:1,sz:.5,tri:.5,trap:.25},
+    'd3-cable-lateral-raise':{sz:1,trap:.25},
+    'd2-dumbbell-lateral-raise':{sz:1,trap:.25},
+    'd1-lat-pulldown':{lats:1,bi:.5,midrug:.25},
+    'd2-face-pull':{sa:1,midrug:.5,trap:.5},
+    'd1-dead-hang':{oa:1,lats:.5},
+    'd3-assisted-pull-ups':{lats:1,bi:.5,midrug:.25,oa:.25},
+    'd1-plank':{buik:1,schuin:.5},
+    'd3-bird-dog':{onderrug:1,bil:.5,buik:.25},
+    'd1-farmers-carry':{oa:1,trap:1,buik:.25,schuin:.25},
+    'd3-ss-overhead-curl':{tri:1,bi:1},
+    'd3-ss-rope':{tri:1,bi:.5,oa:.5},
+    'd3-overhead-cable-triceps-extension':{tri:1},
+    'd2-triceps-rope-pushdown':{tri:1},
+    'd3-curl-machine':{bi:1},
+    'd3-dumbbell-biceps-curl':{bi:1,oa:.25},
+    /* oefeningen die eerder in het schema stonden */
+    'd3-cable-hammer-curl':{bi:1,oa:.5},
+    'd3-crunch-machine':{buik:1}
+  };
+  /* nieuwe oefening zonder eigen lijst: val terug op de spiergroep waar hij onder staat */
+  var GROUPDEF=[[/benen voor/,{quad:1,bil:.5}],[/borst/,{borst:1,sv:.5,tri:.5}],[/benen achter|billen/,{ham:1,bil:1}],
+    [/rug horizontaal/,{midrug:1,lats:.5,sa:.5,bi:.5}],[/schouder/,{sz:1,sv:.5}],[/rug verticaal|bovenrug/,{lats:1,bi:.5,midrug:.25}],
+    [/core/,{buik:1,schuin:.5}],[/arm/,{bi:.5,tri:.5}]];
+  function liFor(k){ var r=null; document.querySelectorAll('#s-d3 .exr').forEach(function(li){ if(chkKey(li)===k) r=li; }); return r; }
+  function musclesFor(k,li){
+    if(MUSCLES[k]) return MUSCLES[k];
+    li=li||liFor(k); if(!li) return {};
+    var nm=((li.querySelector('.exr-n')||{}).textContent||'').toLowerCase();
+    if(/curl/.test(nm)&&!/leg curl/.test(nm)) return {bi:1};
+    if(/tricep|pushdown|extension/.test(nm)) return {tri:1};
+    var g=li.previousElementSibling; while(g&&!g.classList.contains('exgrp')) g=g.previousElementSibling;
+    var gt=g?g.textContent.toLowerCase():'';
+    for(var i=0;i<GROUPDEF.length;i++) if(GROUPDEF[i][0].test(gt)) return GROUPDEF[i][1];
+    return {};
+  }
+  function setsFor(k,li){
+    li=li||liFor(k); var t=li&&li.querySelector('.exr-s'); t=t?t.textContent:'';
+    var m=t.match(/(\d+)\s*(?:×|x|rondes|sets)/i); return m?Math.min(6,parseInt(m[1],10)):3;
+  }
+  var HISTKEY='fitlog-hist', histCol=null, histReady=false;
+  var hist={}; try{ hist=JSON.parse(localStorage.getItem(HISTKEY)||'{}'); }catch(e){}
+  function saveHistLocal(){ try{ localStorage.setItem(HISTKEY,JSON.stringify(hist)); }catch(e){} }
+  function histAdd(k){
+    var t=Date.now(), id=k+'@'+t, ev={k:k,t:t,s:setsFor(k),m:musclesFor(k)};
+    hist[id]=ev; saveHistLocal(); renderStats();
+    if(histCol) histCol.doc(id).set(ev).catch(function(){});
+  }
+  function histRemove(k){
+    var best=null; Object.keys(hist).forEach(function(id){ var e=hist[id]; if(e&&e.k===k&&(!best||e.t>hist[best].t)) best=id; });
+    if(!best){
+      var sd=hist.seed, b=sd&&sd.base&&sd.base[k]; if(!b||!b.n) return;
+      b.n--; saveHistLocal(); renderStats();
+      if(histCol) histCol.doc('seed').set(sd).catch(function(){});
+      return;
+    }
+    delete hist[best]; saveHistLocal(); renderStats();
+    if(histCol) histCol.doc(best).delete().catch(function(){});
+  }
+  /* alle gebeurtenissen, plus de tellingen van vóór deze functie (één keer vastgelegd in 'seed') */
+  function events(){
+    var out=[];
+    Object.keys(hist).forEach(function(id){
+      var e=hist[id]; if(!e) return;
+      if(id==='seed'){
+        Object.keys(e.base||{}).forEach(function(k){ var b=e.base[k];
+          for(var i=0;i<b.n;i++) out.push({k:k,t:b.last||e.t,s:setsFor(k),m:musclesFor(k)}); });
+      } else out.push(e);
+    });
+    return out;
+  }
+  var WINDOW=90*864e5;
+  function renderStats(){
+    var fig=document.getElementById('statsFig'); if(!fig) return;
+    var now=Date.now(), score={}, first=now, days={};
+    Object.keys(MLAB).forEach(function(m){ score[m]=0; });
+    events().forEach(function(e){
+      if(!e.t||now-e.t>WINDOW) return;
+      first=Math.min(first,e.t); var d=new Date(e.t); days[d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()]=1;
+      var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in score) score[k]+=s*m[k]; });
+    });
+    var weeks=Math.max(1,(now-first)/(7*864e5)), max=0;
+    Object.keys(score).forEach(function(k){ score[k]/=weeks; max=Math.max(max,score[k]); });
+    fig.querySelectorAll('.m').forEach(function(p){
+      var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
+      p.classList.toggle('z',!v);
+      p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
+    });
+    var n=Object.keys(days).length, sub=document.getElementById('statsSub');
+    sub.textContent=n
+      ? 'Laatste 3 maanden, '+n+(n===1?' trainingsdag':' trainingsdagen')+'. Hoe donkerder, hoe meer sets per week die spier kreeg.'
+      : 'Nog geen gegevens. Vink oefeningen af en de figuur kleurt mee.';
+    var fmt=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+'').replace('.',','); };
+    var rows=Object.keys(MLAB).sort(function(a,b){ return score[b]-score[a]; });
+    document.getElementById('statsList').innerHTML=rows.map(function(k){
+      var v=score[k]; return '<li'+(v?'':' class="zero"')+'><span class="sl-n">'+MLAB[k]+'</span><span class="sl-b"><i style="width:'+(max?Math.round(100*v/max):0)+'%"></i></span><span class="sl-v">'+(v?fmt(v):'–')+'</span></li>';
+    }).join('');
+  }
+  (function drawBody(){
+    var fig=document.getElementById('statsFig'); if(!fig) return;
+    var B={
+  /* hoofd en nek over het midden (niet gespiegeld) */
+  head:'<ellipse cx="100" cy="32" rx="17" ry="23" class="b"/><path d="M91,52 L109,52 L111,66 L89,66 Z" class="b"/>',
+  front:{
+    base:[
+      'M54,214 C49,222 48,236 53,246 C57,250 62,248 63,242 L64,214 Z',    // hand
+      'M80,284 C78,290 79,296 82,300 L94,300 C96,294 96,288 94,284 Z',    // knie
+      'M82,374 C78,382 76,390 80,394 L95,394 C96,386 95,380 93,374 Z'     // voet
+    ],
+    mid:'<path d="M84,180 L116,180 C118,188 120,196 121,204 L104,206 L100,214 L96,206 L79,204 C80,196 82,188 84,180 Z" class="b"/>',
+    m:{
+      trap:  ['M90,58 C86,63 80,66 70,68 L88,70 L92,66 Z'],
+      sz:    ['M70,68 C58,68 50,76 49,92 C49,100 51,106 54,110 L58,106 C57,92 61,80 70,72 Z'],
+      sv:    ['M72,71 C64,77 60,89 60,105 C64,107 68,105 70,101 C72,91 76,83 83,76 C80,72 76,70 72,71 Z'],
+      borst: ['M84,74 C76,80 71,92 70,102 C78,111 90,113 99,110 L99,72 C94,71 89,72 84,74 Z'],
+      bi:    ['M55,112 C51,124 51,138 55,148 L64,148 C67,136 67,122 64,108 C61,108 58,110 55,112 Z'],
+      oa:    ['M54,152 C50,168 50,192 54,212 L63,212 C66,192 67,168 65,152 Z'],
+      buik:  ['M90,116 L99,116 L99,178 L91,176 C89,156 89,136 90,116 Z'],
+      schuin:['M72,108 C71,128 73,152 79,174 L88,176 C87,154 87,134 88,116 C82,115 76,112 72,108 Z'],
+      quad:  ['M79,206 C73,224 73,256 79,282 L95,282 C98,262 98,232 96,208 Z'],
+      kuit:  ['M80,302 C76,322 77,348 82,372 L92,372 C95,348 95,322 93,302 Z']
+    }
+  },
+  back:{
+    base:[
+      'M54,214 C49,222 48,236 53,246 C57,250 62,248 63,242 L64,214 Z',
+      'M80,284 C78,290 79,296 82,300 L94,300 C96,294 96,288 94,284 Z',
+      'M82,352 C80,362 80,370 82,376 L93,376 C94,368 94,360 93,352 Z',
+      'M82,378 C78,384 76,390 80,394 L95,394 C96,388 95,382 93,378 Z'
+    ],
+    m:{
+      trap:   ['M99,52 C94,58 86,64 72,68 C82,72 90,80 94,90 L99,104 Z'],
+      sa:     ['M70,68 C58,68 50,76 49,92 C49,100 51,106 54,110 L60,100 C62,90 66,80 74,74 Z'],
+      midrug: ['M93,92 C90,84 84,78 76,76 C78,90 84,104 92,116 L99,120 L99,106 Z'],
+      lats:   ['M74,80 C70,100 72,124 82,148 L99,152 L99,124 L90,118 C82,106 77,94 74,80 Z'],
+      tri:    ['M55,112 C51,124 51,138 55,148 L64,148 C67,136 67,122 64,108 C61,106 58,108 55,112 Z'],
+      oa:     ['M54,152 C50,168 50,192 54,212 L63,212 C66,192 67,168 65,152 Z'],
+      onderrug:['M84,152 L99,155 L99,182 L82,182 C84,172 84,162 84,152 Z'],
+      bil:    ['M80,186 C73,198 74,216 84,224 C92,227 98,222 99,214 L99,186 Z'],
+      ham:    ['M80,228 C74,246 76,268 80,282 L95,282 C98,262 98,242 96,228 Z'],
+      kuit:   ['M80,302 C73,316 74,336 82,350 L93,350 C97,336 97,316 93,302 Z']
+    }
+  }
+};
+    function both(d,a){ return '<path d="'+d+'" '+a+'/><path d="'+d+'" transform="matrix(-1 0 0 1 200 0)" '+a+'/>'; }
+    fig.innerHTML=[['front','Voor'],['back','Achter']].map(function(v){
+      var d=B[v[0]], s='<figure><svg viewBox="40 0 120 400" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde">'+B.head+(d.mid||'');
+      d.base.forEach(function(p){ s+=both(p,'class="b"'); });
+      Object.keys(d.m).forEach(function(k){ d.m[k].forEach(function(p){ s+=both(p,'class="m" data-m="'+k+'"'); }); });
+      return s+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
+    }).join('');
+  })();
+  renderStats();
 
   /* ---- filter op plek (C / D / F) ---- */
   (function(){
@@ -1371,9 +1577,25 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
     col=db.collection('log');
     chkCol=db.collection('checks');
     cntCol=db.collection('counts');
+    histCol=db.collection('hist');
     cntCol.onSnapshot(function(snap){
       var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
       counts=next; saveCountsLocal(); paintCounts();
+    },function(){});
+    histCol.onSnapshot(function(snap){
+      var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
+      hist=next; saveHistLocal(); renderStats();
+      /* eenmalig: tellingen van vóór de statistieken meenemen (min wat al als gebeurtenis bestaat) */
+      if(!histReady && !snap.metadata.fromCache){
+        histReady=true;
+        if(!next.seed){
+          var have={}, base={};
+          Object.keys(next).forEach(function(id){ var e=next[id]; if(e&&e.k) have[e.k]=(have[e.k]||0)+1; });
+          Object.keys(counts).forEach(function(k){ var c=counts[k], n=(c&&c.n||0)-(have[k]||0); if(n>0&&k!=='d3-wu') base[k]={n:n,last:c.last||Date.now()}; });
+          var seed={t:Date.now(),base:base}; hist.seed=seed; saveHistLocal(); renderStats();
+          histCol.doc('seed').set(seed).catch(function(){});
+        }
+      }
     },function(){});
     chkCol.onSnapshot(function(snap){
       var next={}; snap.docs.forEach(function(d){ if(d.exists && (d.data()||{}).done) next[d.id]=true; });

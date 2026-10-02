@@ -18,7 +18,9 @@ vooral op zijn iPhone, als app op het beginscherm.
 ## Data
 Supabase-project `protocol53` (Frankfurt), tabel `public.p53 (user_id, coll, id, data jsonb)`,
 RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks` (`{done}`),
-`counts` (`{n,last,prev}`). Sleutels van oefeningen (`data-note` / `data-key`) nooit hernoemen,
+`counts` (`{n,last,prev}`),
+`hist` (statistieken: één rij per afvinking `{k,t,s,m}` met een kopie van sets en spieren, plus één rij
+`seed` met de tellingen van vóór de statistieken). Sleutels van oefeningen (`data-note` / `data-key`) nooit hernoemen,
 anders raakt Tom zijn historiek kwijt.
 
 ## Werkwijze
@@ -28,3 +30,5 @@ anders raakt Tom zijn historiek kwijt.
   dan committen en pushen naar `main`. Pages publiceert binnen een minuut.
 - Tom ziet de update na de app volledig te sluiten en opnieuw te openen.
 - Antwoord Tom kort, in het Nederlands.
+- Nieuwe oefening in Kracht? Voeg haar sleutel toe aan `MUSCLES` in `index.html` (spieren met gewicht
+  1 / .5 / .25). Zonder eigen lijst valt ze terug op de spiergroep waaronder ze staat.
