@@ -653,7 +653,10 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 #s-d3 .tools-row{display:block;margin:0 0 1rem;}
 #s-d3 .reset-chk.reset-top,#s-d3 .reset-chk.reset-end{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:54px;
   border-color:var(--ink);color:var(--ink);font-size:13px;letter-spacing:.12em;}
-#s-d3 .reset-chk.reset-top:hover,#s-d3 .reset-chk.reset-end:hover{background:var(--ink);color:var(--paper);}
+#s-d3 .reset-chk.reset-top,#s-d3 .reset-chk.reset-end{-webkit-tap-highlight-color:transparent;transition:background-color .15s ease,transform .12s ease;}
+#s-d3 .reset-chk.reset-top:hover,#s-d3 .reset-chk.reset-end:hover{background:transparent;color:var(--ink);}
+@media(hover:hover){#s-d3 .reset-chk.reset-top:hover,#s-d3 .reset-chk.reset-end:hover{background:var(--paper-soft);}}
+#s-d3 .reset-chk.reset-top:active,#s-d3 .reset-chk.reset-end:active{background:var(--paper-soft);transform:scale(.98);}
 #s-d3 .reset-chk svg{flex:none;}
 
 .wu-or{list-style:none;display:flex;align-items:center;gap:.8rem;padding:.35rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:none!important;}
@@ -848,7 +851,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 
   <div class="pane" id="s-d3">
     <div class="tools-row">
-      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5.5 12.5L12 19l6.5-6.5"/></svg><span>Start nieuwe training</span></button>
+      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Start nieuwe training</span></button>
     </div>
     <ol class="exl">
       <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Opwarming</span></li>
@@ -895,7 +898,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
-    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg><span>Einde training</span></button>
+    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Einde training</span></button>
     <label class="sess-note-l" for="sessNote">Notities</label>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
   </div>
