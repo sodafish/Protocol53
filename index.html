@@ -57,7 +57,7 @@ body{
   font-size:16px;line-height:1.65;font-weight:400;
   font-feature-settings:"ss01","cv01";
   overscroll-behavior-x:none;width:100%;max-width:100%;
-  padding-bottom:calc(4rem + env(safe-area-inset-bottom));
+  padding-bottom:calc(6rem + env(safe-area-inset-bottom));
 }
 .wrap,main.wrap{max-width:52rem;margin:0 auto;
   padding-left:calc(1.4rem + env(safe-area-inset-left));
@@ -69,9 +69,7 @@ h1,h2,h3{font-family:'Fraunces',Georgia,serif;}
   text-transform:uppercase;color:var(--accent);}
 
 /* ── header / masthead ── */
-header.top{background:var(--paper);position:sticky;top:env(safe-area-inset-top, 0px);z-index:30;}
-header.top{box-shadow:0 1.5px 0 0 transparent;transition:box-shadow .2s ease;}
-header.top.stuck{box-shadow:0 1.5px 0 0 var(--line);}
+header.top{background:var(--paper);}
 .masthead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
   flex-wrap:wrap;padding:1.6rem 0 1.4rem;}
 .masthead h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(2.2rem,5.5vw,3.3rem);
@@ -774,6 +772,14 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .app-tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;}
 .app-tools button{appearance:none;cursor:pointer;min-height:44px;padding:.7rem 1.1rem;border:1.5px solid var(--line);border-radius:999px;background:transparent;font:600 12px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
 .app-tools button:hover{color:var(--ink);}
+.to-top{position:fixed;z-index:35;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;appearance:none;-webkit-tap-highlight-color:transparent;
+  display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--paper);
+  box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;transform:translateY(12px) scale(.9);pointer-events:none;
+  transition:opacity .25s ease,transform .3s cubic-bezier(.22,.61,.36,1);}
+.to-top.on{opacity:1;transform:none;pointer-events:auto;}
+.to-top:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;}
+@media(prefers-reduced-motion:reduce){.to-top{transition:opacity .2s ease;transform:none;}}
 </style>
 
 <header class="top">
@@ -802,7 +808,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 
   <div class="pane" id="s-d3">
     <div class="tools-row">
-      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3">Start nieuwe sessie</button>
+      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3">Start nieuwe training</button>
     </div>
     <ol class="exl">
       <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Opwarming</span></li>
@@ -1198,9 +1204,16 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   var tbar=document.querySelector('header.top');
   function setTbh(){ if(tbar) document.documentElement.style.setProperty('--tbh',tbar.getBoundingClientRect().height+'px'); }
   setTbh(); window.addEventListener('resize',setTbh);
-  /* dun lijntje onder de kop zodra er inhoud onder schuift */
-  function setStuck(){ if(tbar) tbar.classList.toggle('stuck',window.scrollY>4); }
-  setStuck(); window.addEventListener('scroll',setStuck,{passive:true});
+  /* ---- zwevende pijl: terug naar boven ---- */
+  (function(){
+    var up=document.createElement('button');
+    up.type='button'; up.className='to-top'; up.setAttribute('aria-label','Naar boven');
+    up.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>';
+    document.body.appendChild(up);
+    function show(){ up.classList.toggle('on', window.scrollY>window.innerHeight*0.6); }
+    show(); window.addEventListener('scroll',show,{passive:true});
+    up.addEventListener('click',function(){ window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}); });
+  })();
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(setTbh);
 
   /* ---- schema: Dag 1 / Dag 2 / Week ---- */
