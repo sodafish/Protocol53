@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Protocol 53">
@@ -817,6 +817,9 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .stats-list .sl-v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:var(--muted);font-size:13px;}
 .stats-list li.zero .sl-n{color:var(--muted);}
 @media(max-width:380px){.stats-list li{grid-template-columns:9.6rem 1fr 2.2rem;font-size:13.5px;}}
+/* geen zoom: dubbeltik uit, enkel scrollen */
+html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 </style>
 
 <header class="top">
@@ -2134,5 +2137,12 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 </script>
 
 
+<script>
+/* geen zoom met twee vingers (Safari negeert user-scalable soms) */
+(function(){
+  ['gesturestart','gesturechange','gestureend'].forEach(function(t){ document.addEventListener(t,function(e){ e.preventDefault(); },{passive:false}); });
+  document.addEventListener('touchmove',function(e){ if(e.touches&&e.touches.length>1) e.preventDefault(); },{passive:false});
+})();
+</script>
 </body>
 </html>
