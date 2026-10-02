@@ -80,5 +80,6 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   velden van die oefening) en bij elke wijziging van het veld (na de 500 ms-debounce). Zelfde dag
   = overschrijven; veld leegmaken = punt van vandaag weg (ook bij laden). Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
-- Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
+- Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde;
+  lang indrukken (650 ms) op een punt vraagt om dat meetpunt te verwijderen.
 

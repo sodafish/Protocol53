@@ -848,7 +848,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog-hero .ph-d{font-size:13.5px;color:var(--muted);}
 .prog-hero .ph-d b{font-weight:600;color:var(--ink);}
 .prog-hero .ph-e{font-size:14px;color:var(--muted);line-height:1.45;}
-.prog-chart{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;}
+.prog-chart{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;}
 .prog-chart svg{display:block;width:100%;height:auto;overflow:visible;}
 .prog-chart .gl{stroke:var(--line-soft);stroke-width:1;}
 .prog-chart .ax{fill:var(--muted);font:500 11px 'Work Sans',system-ui,sans-serif;}
@@ -859,6 +859,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog-tip{position:absolute;top:0;transform:translateX(-50%);pointer-events:none;background:var(--ink);color:var(--paper);border-radius:8px;padding:.35rem .6rem;
   font:600 12.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;opacity:0;transition:opacity .12s ease;}
 .prog-tip.on{opacity:1;}
+.prog-info{margin:1rem 0 0;font-size:12.5px;line-height:1.5;color:var(--muted);}
 .prog-tip span{font-weight:500;opacity:.75;margin-right:.4rem;}
 </style>
 
@@ -963,6 +964,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         </div>
         <div class="prog-hero" id="progHero"></div>
         <div class="prog-chart" id="progChart"></div>
+        <p class="prog-info">Verkeerd getal ingevuld? Vandaag: pas het veld aan of maak het leeg. Een vroegere meting: druk lang op het punt in de grafiek om het te verwijderen.</p>
       </div>
     </section>
   </div>
@@ -1799,9 +1801,28 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       tip.style.left=Math.min(Math.max(px*r.width/W,50),r.width-50)+'px'; tip.style.top=(py*r.height/H-44)+'px'; tip.classList.add('on');
     }
     function off(){ tip.classList.remove('on'); xh.setAttribute('visibility','hidden'); hv.setAttribute('visibility','hidden'); }
-    svg.addEventListener('pointerdown',function(e){ at(e.clientX); });
-    svg.addEventListener('pointermove',function(e){ if(e.pointerType==='mouse'||e.buttons) at(e.clientX); });
-    svg.addEventListener('pointerleave',off); svg.addEventListener('pointerup',function(e){ if(e.pointerType!=='mouse') setTimeout(off,1600); });
+    /* lang indrukken op een punt = dat meetpunt verwijderen */
+    var cur=null, lp=null, sx=0;
+    function cancelLp(){ clearTimeout(lp); lp=null; }
+    function nearest(cx){ var r=svg.getBoundingClientRect(), x=(cx-r.left)*W/r.width, best=pts[0];
+      pts.forEach(function(e){ if(Math.abs(X(e.t)-x)<Math.abs(X(best.t)-x)) best=e; }); return best; }
+    svg.addEventListener('contextmenu',function(e){ e.preventDefault(); });
+    svg.addEventListener('pointerdown',function(e){
+      at(e.clientX); cur=nearest(e.clientX); sx=e.clientX; cancelLp();
+      lp=setTimeout(function(){
+        lp=null; var ev=cur; if(!ev) return;
+        if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){}
+        if(confirm('Meting van '+dLab(ev.t)+' ('+fmtV(ev.v)+' '+unit+') verwijderen?')){
+          var id=ev.k+'@'+ev.d; delete prog[id]; saveProgLocal();
+          if(progCol) progCol.doc(id).delete().catch(function(){});
+          renderProg();
+        } else off();
+      },650);
+    });
+    svg.addEventListener('pointermove',function(e){ if(lp&&Math.abs(e.clientX-sx)>8) cancelLp(); if(e.pointerType==='mouse'||e.buttons) at(e.clientX); });
+    svg.addEventListener('pointerleave',function(){ cancelLp(); off(); });
+    svg.addEventListener('pointercancel',cancelLp);
+    svg.addEventListener('pointerup',function(e){ cancelLp(); if(e.pointerType!=='mouse') setTimeout(off,1600); });
   }
   window.addEventListener('resize',function(){ renderProg(); });
   renderProg();
