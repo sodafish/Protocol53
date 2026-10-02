@@ -866,7 +866,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog-tip{position:absolute;top:0;transform:translateX(-50%);pointer-events:none;background:var(--ink);color:var(--paper);border-radius:8px;padding:.35rem .6rem;
   font:600 12.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;opacity:0;transition:opacity .12s ease;}
 .prog-tip.on{opacity:1;}
-.prog-info{margin:1rem 0 0;font-size:12.5px;line-height:1.5;color:var(--muted);}
 .prog-bar{display:flex;justify-content:flex-start;margin:0 0 .5rem;}
 .prog-edit{display:inline-flex;align-items:center;gap:.4rem;appearance:none;cursor:pointer;min-height:34px;padding:0 .8rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
   font:600 12.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;}
@@ -990,7 +989,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         <div class="prog-hero" id="progHero"></div>
         <div class="prog-bar"><button type="button" class="prog-edit" id="progEdit" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Bewerken</span></button></div>
         <div class="prog-chart" id="progChart"></div>
-        <p class="prog-info">Verkeerd getal of een meting vergeten? Tik op Bewerken om metingen te verwijderen of toe te voegen met een datum.</p>
       </div>
     </section>
   </div>
@@ -1858,28 +1856,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       tip.style.left=Math.min(Math.max(px*r.width/W,50),r.width-50)+'px'; tip.style.top=(py*r.height/H-44)+'px'; tip.classList.add('on');
     }
     function off(){ tip.classList.remove('on'); xh.setAttribute('visibility','hidden'); hv.setAttribute('visibility','hidden'); }
-    /* lang indrukken op een punt = dat meetpunt verwijderen */
-    var cur=null, lp=null, sx=0;
-    function cancelLp(){ clearTimeout(lp); lp=null; }
-    function nearest(cx){ var r=svg.getBoundingClientRect(), x=(cx-r.left)*W/r.width, best=pts[0];
-      pts.forEach(function(e){ if(Math.abs(X(e.t)-x)<Math.abs(X(best.t)-x)) best=e; }); return best; }
-    svg.addEventListener('contextmenu',function(e){ e.preventDefault(); });
-    svg.addEventListener('pointerdown',function(e){
-      at(e.clientX); cur=nearest(e.clientX); sx=e.clientX; cancelLp();
-      lp=setTimeout(function(){
-        lp=null; var ev=cur; if(!ev) return;
-        if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){}
-        if(confirm('Meting van '+dLab(ev.t)+' ('+fmtV(ev.v)+' '+unit+') verwijderen?')){
-          var id=ev.k+'@'+ev.d; delete prog[id]; saveProgLocal();
-          if(progCol) progCol.doc(id).delete().catch(function(){});
-          renderProg();
-        } else off();
-      },650);
-    });
-    svg.addEventListener('pointermove',function(e){ if(lp&&Math.abs(e.clientX-sx)>8) cancelLp(); if(e.pointerType==='mouse'||e.buttons) at(e.clientX); });
-    svg.addEventListener('pointerleave',function(){ cancelLp(); off(); });
-    svg.addEventListener('pointercancel',cancelLp);
-    svg.addEventListener('pointerup',function(e){ cancelLp(); if(e.pointerType!=='mouse') setTimeout(off,1600); });
+    svg.addEventListener('pointerdown',function(e){ at(e.clientX); });
+    svg.addEventListener('pointermove',function(e){ if(e.pointerType==='mouse'||e.buttons) at(e.clientX); });
+    svg.addEventListener('pointerleave',off);
+    svg.addEventListener('pointerup',function(e){ if(e.pointerType!=='mouse') setTimeout(off,1600); });
   }
   window.addEventListener('resize',function(){ renderProg(); });
   renderProg();
