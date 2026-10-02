@@ -499,6 +499,9 @@ body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
 .masthead .stamp{font-weight:600;font-size:11.5px;letter-spacing:.12em;}
 .masthead .stamp.warn{flex-basis:100%;display:flex;align-items:flex-start;gap:.5rem;color:var(--accent);letter-spacing:.04em;text-transform:none;font-size:13px;line-height:1.35;}
 .masthead .stamp.warn::before{content:"";flex:none;margin-top:.42em;width:8px;height:8px;border-radius:50%;background:var(--accent);}
+.masthead .stamp.warn{color:#C8361A;} .masthead .stamp.warn::before{background:#C8361A;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .masthead .stamp.warn{color:#F2714E;} :root:not([data-theme="light"]) .masthead .stamp.warn::before{background:#F2714E;}}
+:root[data-theme="dark"] .masthead .stamp.warn{color:#F2714E;} :root[data-theme="dark"] .masthead .stamp.warn::before{background:#F2714E;}
 
 /* hoofdtabs: pil-schakelaar zoals de Cupkeuring */
 .tabbar{background:var(--paper);padding-block:10px;}
