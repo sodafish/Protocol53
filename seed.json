@@ -1,0 +1,192 @@
+{
+ "log": {
+  "note--d2-dumbbell-lateral-raise": {
+   "t": "4",
+   "updatedAt": 1790607744758
+  },
+  "note--d1-goblet-squat": {
+   "t": "10",
+   "updatedAt": 1790606398528
+  },
+  "note--d2-chest-press-machine": {
+   "t": "41",
+   "updatedAt": 1790607592146
+  },
+  "note--d2-triceps-rope-pushdown": {
+   "t": "19",
+   "updatedAt": 1790608654786
+  },
+  "note--d2-leg-curl-machine": {
+   "t": "29",
+   "updatedAt": 1790608334894
+  },
+  "note--d2-seated-cable-row": {
+   "t": "45",
+   "updatedAt": 1790606852094
+  },
+  "note--d2-face-pull": {
+   "t": "15",
+   "updatedAt": 1790867850793
+  },
+  "note--d2-weighted-back-extension": {
+   "t": "5",
+   "updatedAt": 1790608992556
+  },
+  "note--d1-plank": {
+   "t": "30",
+   "updatedAt": 1790869735678
+  },
+  "note--d2-dumbbell-reverse-lunges": {
+   "t": "0",
+   "updatedAt": 1790865753864
+  }
+ },
+ "checks": {
+  "d2-wu": {
+   "at": 1790866153687,
+   "done": true
+  }
+ },
+ "counts": {
+  "d3-eenarmige-dumbbell-row": {
+   "last": 1790889634690,
+   "n": 0,
+   "prev": 1790889634690
+  },
+  "d2-face-pull": {
+   "last": 1790928248347,
+   "n": 0,
+   "prev": null
+  },
+  "d3-shoulder-press-machine": {
+   "last": 1790889648719,
+   "n": 0,
+   "prev": 1790889648719
+  },
+  "d3-curl-machine": {
+   "last": 1790889150055,
+   "n": 0,
+   "prev": null
+  },
+  "d1-lat-pulldown": {
+   "last": 1790929227662,
+   "n": 0,
+   "prev": null
+  },
+  "d3-cable-hammer-curl": {
+   "last": 1790888034883,
+   "n": 0,
+   "prev": 1790888034883
+  },
+  "d2-chest-press-machine": {
+   "last": 1790885073709,
+   "n": 0,
+   "prev": 1790885073709
+  },
+  "d3-crunch-machine": {
+   "last": 1790890707725,
+   "n": 0,
+   "prev": null
+  },
+  "d1-dead-hang": {
+   "last": 1790886732584,
+   "n": 0,
+   "prev": null
+  },
+  "d3-overhead-cable-triceps-extension": {
+   "last": 1790879608082,
+   "n": 0,
+   "prev": 1790879608082
+  },
+  "d2-seated-cable-row": {
+   "last": 1790880103384,
+   "n": 0,
+   "prev": null
+  },
+  "d1-dumbbell-romanian-deadlift": {
+   "last": 1790880326009,
+   "n": 0,
+   "prev": 1790880326009
+  },
+  "d3-chest-supported-row": {
+   "last": 1790924525488,
+   "n": 0,
+   "prev": null
+  },
+  "d2-dumbbell-reverse-lunges": {
+   "last": 1790881967642,
+   "n": 0,
+   "prev": 1790881967642
+  },
+  "d3-cable-lateral-raise": {
+   "last": 1790888463254,
+   "n": 0,
+   "prev": 1790888463254
+  },
+  "d1-farmers-carry": {
+   "last": 1790879827026,
+   "n": 0,
+   "prev": 1790879827026
+  },
+  "d3-wu": {
+   "last": 1790890547878,
+   "n": 0,
+   "prev": 1790890547878
+  },
+  "d3-assisted-pull-ups": {
+   "last": 1790923400430,
+   "n": 0,
+   "prev": 1790923400430
+  },
+  "d3-hip-abduction": {
+   "last": 1790888984264,
+   "n": 0,
+   "prev": null
+  },
+  "d2-triceps-rope-pushdown": {
+   "last": 1790889148914,
+   "n": 0,
+   "prev": null
+  },
+  "d1-plank": {
+   "last": 1790884105246,
+   "n": 0,
+   "prev": 1790884105246
+  },
+  "d1-seated-dumbbell-shoulder-press": {
+   "last": 1790891075347,
+   "n": 0,
+   "prev": null
+  },
+  "d3-bulgarian-split-squat": {
+   "last": 1790928170208,
+   "n": 1,
+   "prev": 1790885219634
+  },
+  "d3-push-ups": {
+   "last": 1790885074270,
+   "n": 0,
+   "prev": 1790885074270
+  },
+  "d1-dumbbell-chest-press": {
+   "last": 1790886555792,
+   "n": 0,
+   "prev": 1790886555792
+  },
+  "d3-chest-fly-machine": {
+   "last": 1790888237943,
+   "n": 0,
+   "prev": null
+  },
+  "d3-ss-overhead-curl": {
+   "last": 1790889661083,
+   "n": 0,
+   "prev": null
+  },
+  "d1-goblet-squat": {
+   "last": 1790880312517,
+   "n": 0,
+   "prev": 1790880312517
+  }
+ }
+}

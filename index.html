@@ -1,0 +1,1781 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Protocol 53">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F7F2EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1411" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<script src="vendor/supabase.js"></script>
+<script src="cloud.js"></script>
+</head>
+<body>
+<title>Protocol 53</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1815;
+  --paper:#f5f1e8;
+  --paper-soft:#ebe5d4;
+  --paper-dark:#ddd4bc;
+  --surface:#faf6ec;
+  --terra:#a8341a;
+  --terra-soft:#c5553a;
+  --gold:#9c7a3c;
+  --gold-soft:#b89456;
+  --green:#4a5d3a;
+  --green-soft:#5f7449;
+  --blue:#3a5568;
+  --blue-soft:#547089;
+  --plum:#7a4a5e;
+  --plum-soft:#9a6478;
+  --muted:#6b6559;
+  --muted-soft:#8a8270;
+  --rood:#b23a1e;
+  --line:#c4bca3;
+  --line-soft:#d6cfb8;
+  --text:var(--ink);
+  --text-muted:var(--muted);
+  /* accent driven per tab */
+  --accent:var(--terra);
+  --accent-soft:var(--terra-soft);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{background:var(--paper);-webkit-text-size-adjust:100%;scroll-behavior:smooth;
+  overscroll-behavior-x:none;}
+body{
+  font-family:'Work Sans',system-ui,sans-serif;
+  background:var(--paper);color:var(--ink);
+  font-size:16px;line-height:1.65;font-weight:400;
+  font-feature-settings:"ss01","cv01";
+  overscroll-behavior-x:none;width:100%;max-width:100%;
+  padding-bottom:calc(4rem + env(safe-area-inset-bottom));
+}
+.wrap,main.wrap{max-width:52rem;margin:0 auto;
+  padding-left:calc(1.4rem + env(safe-area-inset-left));
+  padding-right:calc(1.4rem + env(safe-area-inset-right));}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;}
+
+/* ── mono eyebrow helper ── */
+.eyebrow{font-family:'Work Sans',system-ui,sans-serif;font-size:.65rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--accent);}
+
+/* ── header / masthead ── */
+header.top{background:var(--paper);}
+.masthead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  flex-wrap:wrap;padding:1.6rem 0 1.4rem;}
+.masthead h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:clamp(2.2rem,5.5vw,3.3rem);
+  line-height:.9;letter-spacing:-0.03em;color:var(--ink);display:flex;align-items:baseline;gap:.28em;}
+.masthead h1 em{font-style:italic;font-weight:600;color:var(--accent);
+  font-size:1.7em;letter-spacing:-0.04em;}
+.masthead .stamp{font-family:'Work Sans',system-ui,sans-serif;font-size:.66rem;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+
+/* full-width ink tab bar */
+.tabbar{background:var(--ink);position:sticky;top:env(safe-area-inset-top, 0px);z-index:30;}
+.tabs{display:flex;flex-wrap:nowrap;gap:0;}
+.tab{flex:1 1 0;min-width:0;appearance:none;cursor:pointer;background:transparent;
+  border:none;border-right:1px solid rgba(245,241,232,.14);
+  color:rgba(245,241,232,.55);font-family:'Work Sans',system-ui,sans-serif;font-weight:500;font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:1.5rem .4rem 1.4rem;transition:.18s;white-space:nowrap;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;line-height:1.1;position:relative;}
+.tab:last-child{border-right:none;}
+.tab .label{display:block;font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:1.32rem;
+  text-transform:none;letter-spacing:-0.01em;line-height:1.15;color:rgba(245,241,232,.7);
+  transition:color .3s ease,font-weight .3s ease;}
+.tab .freq{font-size:.62rem;letter-spacing:.14em;
+  color:rgba(245,241,232,.5);transition:color .3s ease;}
+.tab[aria-selected="true"] .freq{color:var(--accent-soft);}
+.tab:hover{color:rgba(245,241,232,.9);background:rgba(245,241,232,.05);}
+.tab:hover .label{color:var(--paper);}
+.tab:focus-visible{outline:2px solid var(--accent-soft);outline-offset:-3px;}
+.tab[aria-selected="true"]{color:var(--paper);background:rgba(245,241,232,.13);}
+.tab[aria-selected="true"] .label{color:var(--paper);font-weight:500;}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;
+  height:5px;background:var(--accent-soft);}
+
+body[data-tab="schema"]{--accent:#2b86c0;--accent-soft:#7cc8f0;}
+body[data-tab="kracht"]{--accent:var(--terra);--accent-soft:var(--terra-soft);}
+body[data-tab="voeding"]{--accent:var(--green);--accent-soft:var(--green-soft);}
+body[data-tab="cardio"]{--accent:var(--blue);--accent-soft:var(--blue-soft);}
+body[data-tab="extra"]{--accent:var(--gold);--accent-soft:var(--gold-soft);}
+
+section[hidden],.pane[hidden]{display:none;}
+main.wrap{padding-top:2.4rem;}
+
+/* ── subtabs ── */
+.subtab-wrap{margin:1.8rem 0 1.3rem;}
+.subtab-label{font-family:'Work Sans',system-ui,sans-serif;font-size:.62rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.subtabs{display:flex;gap:0;border:1px solid var(--line);}
+.subtabs-2{margin-top:.4rem;}
+.subtabs-2 .subtab{font-style:italic;opacity:.62;}
+.subtabs-2 .subtab:hover{opacity:.85;}
+.subtabs-2 .subtab[aria-selected="true"]{opacity:1;}
+.subtab{flex:1;appearance:none;cursor:pointer;background:transparent;
+  border:none;border-right:1px solid var(--line);color:var(--muted);
+  font-family:'Fraunces',Georgia,serif;font-size:1rem;font-weight:400;
+  padding:.7rem .5rem;transition:.18s;}
+.subtab:last-child{border-right:none;}
+.subtab:hover{color:var(--ink);background:var(--paper-soft);}
+.subtab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+.subtab[aria-selected="true"]{background:var(--ink);color:var(--paper);}
+
+/* ── kaartjes ── */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:1.8rem 0 2.2rem;
+  border:1px solid var(--ink);}
+.card{background:var(--paper);border-right:1px solid var(--line);
+  padding:1.4rem 1.15rem 1.3rem;text-align:left;position:relative;}
+.card:last-child{border-right:none;}
+.card .big{display:block;font-family:'Fraunces',Georgia,serif;font-weight:400;
+  font-size:1.9rem!important;line-height:1;color:var(--accent);letter-spacing:-0.02em;
+  min-height:1.8rem;}
+.card .lbl{font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;line-height:1.4;color:var(--ink);
+  margin:.75rem 0 .4rem;}
+.card .dsc{color:var(--muted);font-size:.86rem;font-weight:400;line-height:1.5;}
+.cards.two{grid-template-columns:repeat(2,1fr);}
+.cards.four{grid-template-columns:repeat(4,1fr);}
+/* accent tint per card kept subtle: number uses tab accent by default */
+.c-1 .big{color:var(--accent);} .c-2 .big{color:var(--blue);}
+.c-3 .big{color:var(--gold);} .c-4 .big{color:var(--accent);}
+@media(max-width:640px){
+  .masthead{gap:.25rem;padding:1.3rem 0 1.1rem;}
+  main.wrap{padding-top:1.4rem;}
+  .cards,.cards.two,.cards.four,.cards.row3{grid-template-columns:1fr;border:1px solid var(--ink);}
+  .card{border-right:none;border-bottom:1px solid var(--line);}
+  .card:last-child{border-bottom:none;}
+  .card .big{font-size:1.9rem;}
+}
+
+/* ── secties ── */
+.section{margin-bottom:2.4rem;}
+/* every section heading: large heading in the tab's accent colour */
+.section-title,.superhead{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.55rem;
+  color:var(--accent);letter-spacing:-0.02em;line-height:1.1;
+  padding-bottom:.5rem;border-bottom:1px solid var(--ink);margin-bottom:.9rem;}
+.superhead{font-size:1.75rem;margin:2.6rem 0 1.2rem;}
+/* subtitle: subordinate to the superhead above it — small upright subheading */
+.section-title.sub{border-bottom:none;padding-bottom:0;margin-bottom:0;
+  font-size:1.1rem;font-weight:600;font-style:normal;color:var(--accent);letter-spacing:-0.01em;}
+.section-note{color:var(--muted);font-size:.95rem;font-weight:400;
+  margin:.6rem 0 1rem;line-height:1.6;}
+
+/* ── tabellen ── */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem -1.4rem 0;padding:0 1.4rem;}
+table{border-collapse:collapse;width:100%;font-size:.9rem;background:transparent;
+  border:1px solid var(--line);min-width:30rem;}
+th{background:var(--paper-soft);text-align:left;font-family:'Work Sans',system-ui,sans-serif;
+  font-weight:400;font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--muted);padding:.7rem .8rem;border-bottom:1px solid var(--ink);}
+td{padding:.75rem .8rem;border-bottom:1px solid var(--line);vertical-align:top;font-weight:400;
+  line-height:1.55;}
+td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:.98rem;}
+tr:last-child td{border-bottom:none;}
+tr.row-groen td:first-child{box-shadow:inset 3px 0 0 var(--green);}
+tr.row-amber td:first-child{box-shadow:inset 3px 0 0 var(--gold);}
+tr.row-rood td:first-child{box-shadow:inset 3px 0 0 var(--rood);}
+tr.hl td{background:var(--paper-soft);}
+tr.hl strong{font-weight:600;color:var(--accent);}
+tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
+.badge{display:inline-block;font-family:'Work Sans',system-ui,sans-serif;font-size:.58rem;
+  font-weight:400;padding:.22rem .5rem;text-transform:uppercase;letter-spacing:.1em;
+  white-space:nowrap;border:1px solid currentColor;}
+.b-groen{color:var(--green);}
+.b-vrij{color:var(--paper);background:var(--green);border-color:var(--green);}
+.b-amber{color:var(--gold);}
+.b-rood{color:var(--rood);border-color:var(--rood);}
+.b-super{color:var(--paper);background:var(--ink);border-color:var(--ink);font-weight:500;}
+.legend{display:flex;flex-wrap:wrap;gap:1rem;margin:.75rem 0 1.1rem;font-size:.78rem;color:var(--muted);}
+.legend span{display:flex;align-items:center;gap:.35rem;}
+.dot{width:.55rem;height:.55rem;}
+
+/* ── genummerde regels ── */
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:1.5rem;
+  border:1px solid var(--ink);}
+.rule{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+  text-align:left;background:var(--paper);border-right:1px solid var(--line);padding:1.15rem 1rem;}
+.rule:last-child{border-right:none;}
+.rule .num{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:1.9rem;
+  line-height:1;color:var(--accent);letter-spacing:-0.02em;}
+.rule .txt{font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;line-height:1.4;margin-top:.6rem;color:var(--ink);}
+@media(max-width:640px){
+  .rules{grid-template-columns:1fr 1fr;}
+  .rule{border-bottom:1px solid var(--line);}
+  .rule:nth-child(odd){border-right:1px solid var(--line);}
+  .rule:nth-child(even){border-right:none;}
+  .rule:nth-last-child(-n+2){border-bottom:none;}
+}
+
+/* ── tipbox / kader ── */
+.tip{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--accent);
+  padding:1.3rem 1.5rem;margin:1.2rem 0;}
+.tip b.h{display:block;font-family:'Fraunces',Georgia,serif;font-size:1.15rem;font-weight:600;
+  letter-spacing:-0.01em;margin-bottom:.6rem;color:var(--ink);}
+.tip p{margin-bottom:.7rem;font-size:.95rem;font-weight:400;line-height:1.65;}
+.tip p:last-child{margin-bottom:0;}
+.tip ul{list-style:none;}
+.tip li{font-size:.95rem;font-weight:400;margin-bottom:.7rem;line-height:1.6;
+  padding-left:1.4rem;position:relative;}
+.tip li:last-child{margin-bottom:0;}
+.tip li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:600;}
+.tip strong{font-family:'Fraunces',Georgia,serif;font-weight:500;}
+
+/* ── twee kolommen ── */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;margin-top:1.2rem;}
+@media(max-width:640px){.cols{grid-template-columns:1fr;}}
+.col{background:var(--paper);border:1px solid var(--line);padding:1.6rem;}
+.col h3{font-family:'Fraunces',Georgia,serif;font-size:1.35rem;font-weight:500;color:var(--ink);
+  padding-bottom:.7rem;border-bottom:2px solid var(--ink);margin-bottom:.7rem;}
+.col .colsub{color:var(--muted);font-size:.85rem;font-weight:400;margin:.1rem 0 .9rem;line-height:1.5;}
+.grouplabel{font-family:'Work Sans',system-ui,sans-serif;font-size:.6rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--muted);
+  margin:1.1rem 0 .5rem;padding-top:.8rem;border-top:1px solid var(--line);}
+.grouplabel:first-of-type{margin-top:0;padding-top:0;border-top:none;}
+
+/* ── afvinkbare items ── */
+.ex{display:flex;gap:.9rem;align-items:flex-start;background:var(--paper);
+  border:1px solid var(--line);padding:.9rem 1rem;margin-bottom:.5rem;}
+.ex .name{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1rem;}
+.ex .mus{color:var(--accent);font-family:'Work Sans',system-ui,sans-serif;font-size:.66rem;
+  text-transform:uppercase;letter-spacing:.1em;margin-top:.15rem;}
+.tagline{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-top:.25rem;}
+.tag{display:inline-block;font-family:'Work Sans',system-ui,sans-serif;font-size:.56rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;padding:.16rem .45rem;white-space:nowrap;
+  border:1px solid currentColor;}
+.tag-c{color:var(--green);}
+.tag-i{color:var(--muted);}
+.tag-o{color:var(--blue);}
+.tag-x{color:var(--blue);}
+.ex .opts{color:var(--muted);font-size:.86rem;font-weight:400;line-height:1.5;margin-top:.2rem;}
+.ex .dose{font-size:.86rem;font-weight:500;margin-top:.25rem;}
+.item{display:flex;gap:.7rem;align-items:flex-start;padding:.5rem 0;}
+.item .n{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:.95rem;line-height:1.3;}
+.item .mus{color:var(--accent);font-family:'Work Sans',system-ui,sans-serif;font-size:.64rem;
+  text-transform:uppercase;letter-spacing:.1em;line-height:1.4;}
+.item .d{font-size:.82rem;font-weight:500;color:var(--accent);}
+.item .o{color:var(--muted);font-size:.82rem;font-weight:400;line-height:1.5;}
+.reset{appearance:none;cursor:pointer;background:transparent;border:1px solid var(--ink);
+  color:var(--ink);font-family:'Work Sans',system-ui,sans-serif;font-size:.66rem;
+  text-transform:uppercase;letter-spacing:.12em;
+  padding:.55rem 1rem;margin-top:.7rem;transition:.18s;}
+.reset:hover{background:var(--ink);color:var(--paper);}
+.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* ── mobiel: stacked tabellen ── */
+@media(max-width:640px){
+  .scroll{margin:1rem 0 0;padding:0;}
+  table.stack{min-width:0;display:block;border:none;background:none;}
+  table.stack thead{display:none;}
+  table.stack tbody{display:block;}
+  table.stack tr{display:block;background:var(--paper);border:1px solid var(--line);
+    padding:1rem 1.1rem;margin-bottom:.6rem;}
+  table.stack tr:last-child{margin-bottom:0;}
+  table.stack tr.row-groen{border-left:3px solid var(--green);}
+  table.stack tr.row-amber{border-left:3px solid var(--gold);}
+  table.stack tr.row-rood{border-left:3px solid var(--rood);}
+  table.stack td{display:block;border:none;padding:0;font-size:.9rem;font-weight:400;line-height:1.55;}
+  table.stack tr td:first-child,
+  table.stack tr.row-groen td:first-child,
+  table.stack tr.row-amber td:first-child,
+  table.stack tr.row-rood td:first-child{box-shadow:none;}
+  table.stack td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.1rem;margin-bottom:.35rem;}
+  table.stack td[data-label]::before{content:attr(data-label);display:block;
+    font-family:'Work Sans',system-ui,sans-serif;font-size:.56rem;font-weight:500;text-transform:uppercase;
+    letter-spacing:.14em;color:var(--muted);margin:.6rem 0 .15rem;}
+  table.stack td[data-label="Frequentie"]::before,
+  table.stack td[data-label="Telt mee"]::before{content:none;display:none;}
+  table.stack td[data-label="Frequentie"],
+  table.stack td[data-label="Telt mee"]{margin-top:.5rem;}
+}
+@media(max-width:520px){
+  table{min-width:26rem;font-size:.84rem;}
+  th,td{padding:.6rem .55rem;}
+  .section-title{font-size:1.45rem;}
+  .superhead{font-size:1.6rem;margin:2.2rem 0 1rem;}
+  .section-title.sub{font-size:1.05rem;}
+  .tab{min-width:0;padding:.9rem .2rem;gap:.32rem;}
+  .tab .label{font-size:1.15rem;}
+  .tab .freq{font-size:.56rem;letter-spacing:.1em;}
+}
+
+/* ── logboek inputs ── */
+.log{display:flex;align-items:center;gap:.35rem;margin-top:.65rem;}
+.ex > div:last-child,.item > div:last-child{flex:1;min-width:0;}
+.note{display:block;width:100%;margin-top:.4rem;background:var(--paper-soft);
+  border:1px solid var(--line);padding:.4rem .6rem;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:.85rem;font-weight:400;color:var(--ink);
+  -webkit-appearance:none;}
+td .note{margin-top:0;max-width:9rem;}
+@media(max-width:640px){td .note{max-width:none;}}
+.note::placeholder{color:var(--muted-soft);}
+.note:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+.note:not(:placeholder-shown){border-color:var(--accent);background:var(--paper);}
+.log .x{color:var(--muted);font-size:.85rem;}
+.log .gap{width:.9rem;}
+.log .unit{color:var(--muted);font-family:'Work Sans',system-ui,sans-serif;font-size:.66rem;
+  text-transform:uppercase;letter-spacing:.08em;}
+.log input{width:3.6rem;background:var(--paper-soft);border:1px solid var(--line);
+  padding:.35rem .4rem;font-family:'Work Sans',system-ui,sans-serif;font-size:.82rem;font-weight:500;
+  color:var(--ink);text-align:center;-webkit-appearance:none;}
+.log input::placeholder{color:var(--muted-soft);font-weight:400;}
+.log input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+.log input:not(:placeholder-shown){border-color:var(--accent);background:var(--paper);}
+
+/* ════════════ SCHEMA-TAB ════════════ */
+.seg{display:grid;grid-template-columns:repeat(2,1fr);border-bottom:1px solid var(--line);margin:0 0 1rem;
+  position:sticky;top:var(--tbh,60px);z-index:20;background:var(--paper);}
+.seg-b{appearance:none;cursor:pointer;background:transparent;border:none;
+  font-family:'Fraunces',Georgia,serif;font-size:.95rem;font-weight:400;color:var(--muted);padding:.7rem .4rem .65rem;
+  box-shadow:inset 0 -2px 0 transparent;transition:color .2s ease,box-shadow .2s ease,background-color .2s ease;}
+.seg-b{position:relative;z-index:1;}
+.seg-b[aria-selected="true"]{color:var(--accent);font-weight:600;}
+/* glijdende markering onder de actieve dag */
+.seg-ind{position:absolute;top:0;bottom:0;left:0;width:calc(100% / 2);z-index:0;pointer-events:none;
+  background:var(--paper-soft);box-shadow:inset 0 -3px 0 var(--accent);
+  transform:translateX(calc(var(--i,0) * 100%));}
+.seg.ready .seg-ind{transition:transform .42s cubic-bezier(.22,.61,.36,1),box-shadow .45s ease;}
+.seg-b:focus-visible{outline:2px solid var(--accent);outline-offset:-3px;}
+.pane[hidden]{display:none;}
+/* rijen bouwen van boven naar onder op */
+@keyframes rowIn{from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:none;}}
+.pane.cascade .pane-note,.pane.cascade .exr,.pane.cascade .wk li{
+  opacity:0;animation:rowIn .45s cubic-bezier(.22,.61,.36,1) forwards;animation-delay:calc(var(--n,0) * 60ms);}
+/* het schemapaneel zelf niet nog eens laten opschuiven: de rijen doen het werk */
+.revealing > .pane{opacity:1!important;animation:none!important;transform:none!important;}
+.pane-note strong{color:var(--text);font-weight:600;}
+.pane-note{color:var(--muted);font-size:.86rem;line-height:1.5;margin:0 0 .6rem;}
+.exl{list-style:none;border-top:1px solid var(--ink);}
+.exr{display:grid;grid-template-columns:1.6rem 1fr 5.6rem;gap:.7rem;align-items:center;
+  padding:.8rem 0;border-bottom:1px solid var(--line);}
+.exr-i{font-family:'Work Sans',system-ui,sans-serif;font-size:.68rem;font-weight:600;color:var(--accent);}
+.exr-n{font-family:'Fraunces',Georgia,serif;font-size:1.02rem;font-weight:500;line-height:1.25;color:var(--ink);}
+.exr-s{font-family:'Work Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.04em;color:var(--muted);margin-top:.2rem;}
+.note.exr-in{margin:0;width:100%;max-width:none;font-family:'Work Sans',system-ui,sans-serif;font-size:16px;
+  font-weight:600;text-align:center;padding:.55rem .3rem;}
+.wk{list-style:none;border-top:1px solid var(--ink);}
+.wk li{display:grid;grid-template-columns:7.5rem 1fr;gap:.8rem;align-items:baseline;padding:.9rem 0;border-bottom:1px solid var(--line);}
+.wk-d{font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.wk-t{font-family:'Fraunces',Georgia,serif;font-size:1.02rem;font-weight:500;color:var(--ink);}
+.wk-t em{font-style:normal;font-family:'Work Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;color:var(--muted);margin-left:.6rem;}
+
+/* ════════════ PHONE-FIRST ════════════ */
+@media(max-width:640px){
+  .wrap,main.wrap{padding-left:calc(1.1rem + env(safe-area-inset-left));padding-right:calc(1.1rem + env(safe-area-inset-right));}
+  .masthead{padding:1rem 0 .9rem;}
+  .tab{padding:1rem .15rem .95rem;}
+  .tab .label{font-size:1.08rem!important;}
+  main.wrap{padding-top:1.1rem;}
+  .section{margin-bottom:1.7rem;}
+  .superhead{margin:2rem 0 .9rem!important;}
+  .section-title{margin-bottom:.6rem;}
+  .section-note{font-size:.9rem;margin:.4rem 0 .8rem;}
+  .tip{padding:1rem 1.05rem;margin:.8rem 0;}
+  .tip b.h{font-size:1.02rem;margin-bottom:.45rem;}
+  .tip p,.tip li{font-size:.9rem;line-height:1.55;}
+  .tip li{margin-bottom:.55rem;padding-left:1.2rem;}
+
+  /* kaarten: 4 → 2×2 */
+  .cards{margin:.2rem 0 1.5rem;}
+  .cards.four{grid-template-columns:1fr 1fr;}
+  .cards.four .card{padding:.95rem .85rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .cards.four .card:nth-child(2n){border-right:none;}
+  .cards.four .card:nth-last-child(-n+2){border-bottom:none;}
+  .cards.four .card .big{font-size:1.5rem!important;min-height:0;}
+  .cards.four .card .lbl{margin:.5rem 0 .3rem;}
+  /* kaarten: 3 → compacte rijen */
+  .cards:not(.four) .card{display:grid;grid-template-columns:5.2rem 1fr;column-gap:.9rem;align-items:center;padding:.85rem .95rem;}
+  .cards:not(.four) .card .big{grid-row:1/3;font-size:1.35rem!important;min-height:0;}
+  .cards:not(.four) .card .lbl{margin:0 0 .2rem;}
+  .rules{margin-top:.2rem;}
+  .rule{padding:.85rem .85rem;}
+
+  /* tabellen: strakke lijstrijen i.p.v. losse blokken */
+  table.stack{border-top:1px solid var(--ink);}
+  table.stack tr{display:grid;grid-template-columns:1fr auto;column-gap:.75rem;row-gap:.3rem;align-items:start;
+    background:none;border:none;border-bottom:1px solid var(--line);padding:.8rem 0 .8rem .8rem;margin:0;}
+  table.stack tr.row-groen{border-left:3px solid var(--green);}
+  table.stack tr.row-amber{border-left:3px solid var(--gold);}
+  table.stack tr.row-rood{border-left:3px solid var(--rood);}
+  table.stack td{margin:0;}
+  table.stack td:first-child{grid-column:1;grid-row:1;align-self:center;font-size:1rem;margin:0;}
+  table.stack td[data-label="Frequentie"],
+  table.stack td[data-label="Telt mee"]{grid-column:2;grid-row:1;align-self:center;justify-self:end;margin:0;}
+  table.stack td[data-label="Portie"]{grid-column:1/-1;font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;
+    font-weight:600;letter-spacing:.04em;color:var(--muted);}
+  table.stack td[data-label="Portie"]::before{content:"Portie · ";display:inline;margin:0;font-size:inherit;letter-spacing:inherit;}
+  table.stack td:last-child{grid-column:1/-1;font-size:.88rem;line-height:1.5;color:var(--text);}
+}
+
+/* ── animaties ── */
+/* accent-kleur vloeiend mee bij tabwissel */
+.section-title,.superhead,.section-title.sub,.card .big,.tab .freq,
+.tab[aria-selected="true"]::after,.badge,.item .mus,.ex .mus{
+  transition:color .45s ease,border-color .45s ease,background-color .45s ease;}
+.tab[aria-selected="true"]::after{transition:background-color .45s ease;}
+
+/* oud paneel fadet kort uit voordat het verdwijnt */
+.leaving{animation:leave .14s ease forwards;}
+@keyframes leave{from{opacity:1;transform:none;}to{opacity:0;transform:translateY(-6px);}}
+
+/* tabwissel: inhoud fadet + schuift zacht omhoog, secties gestaggerd */
+@keyframes reveal{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+.revealing > *{opacity:0;animation:reveal .5s cubic-bezier(.22,.61,.36,1) forwards;}
+.revealing > *:nth-child(1){animation-delay:.02s;}
+.revealing > *:nth-child(2){animation-delay:.07s;}
+.revealing > *:nth-child(3){animation-delay:.12s;}
+.revealing > *:nth-child(4){animation-delay:.17s;}
+.revealing > *:nth-child(5){animation-delay:.22s;}
+.revealing > *:nth-child(6){animation-delay:.27s;}
+.revealing > *:nth-child(7){animation-delay:.32s;}
+.revealing > *:nth-child(8){animation-delay:.37s;}
+.revealing > *:nth-child(n+9){animation-delay:.4s;}
+
+/* de tekst binnen de bovenste blokken schuift subtiel van links in */
+@keyframes slidein{from{opacity:0;transform:translateX(-10px);}to{opacity:1;transform:none;}}
+.revealing .card .big,.revealing .card .lbl,.revealing .card .dsc,
+.revealing .rule .num,.revealing .rule .txt{
+  opacity:0;animation:slidein .5s cubic-bezier(.22,.61,.36,1) forwards;}
+.revealing .card .big,.revealing .rule .num{animation-delay:.18s;}
+.revealing .card .lbl,.revealing .rule .txt{animation-delay:.26s;}
+.revealing .card .dsc{animation-delay:.32s;}
+
+/* hover-lift op desktop */
+@media(hover:hover){
+  table.stack tr,tbody tr{transition:background-color .18s ease;}
+  tbody tr:hover td{background:var(--paper-soft);}
+  tr.hl:hover td{background:var(--paper-dark);}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .pane.cascade .pane-note,.pane.cascade .exr,.pane.cascade .wk li{opacity:1!important;animation:none!important;transform:none!important;}
+  .seg-ind{transition:none!important;}
+  *{transition:none!important;}
+  .revealing > *,.revealing .card .big,.revealing .card .lbl,.revealing .card .dsc,
+  .revealing .rule .num,.revealing .rule .txt{
+    opacity:1!important;animation:none!important;transform:none!important;}
+}
+
+/* ════════════ Stijl gelijk aan de Cupkeuring ════════════ */
+:root{
+  --ink:#2A1D16; --paper:#F7F2EA; --paper-soft:#EFE6D8; --paper-dark:#E3D7C4; --surface:#FBF8F3;
+  --terra:#9A4424; --terra-soft:#C4764F; --muted:#5E4A3E; --muted-soft:#8A7868;
+  --line:#D9CBB8; --line-soft:#E6DCCB; --rood:#A3321F;
+  --green:#4A6B3E; --gold:#8C6A2E; --blue:#2F6FA8;
+}
+body[data-tab]{--accent:#9A4424;--accent-soft:#C4764F;}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#F1E8DC; --paper:#1B1411; --paper-soft:#30251F; --paper-dark:#3A2E27; --surface:#241B17;
+    --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;
+    --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
+  }
+  :root:not([data-theme="light"]) body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
+}
+:root[data-theme="dark"]{
+  --ink:#F1E8DC; --paper:#1B1411; --paper-soft:#30251F; --paper-dark:#3A2E27; --surface:#241B17;
+  --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;
+  --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
+}
+:root[data-theme="dark"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
+
+body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
+.eyebrow{font-weight:600;font-size:12px;letter-spacing:.16em;}
+
+/* kop */
+.masthead{border-bottom:none;padding:1.8rem 0 .6rem;margin-bottom:0;}
+.masthead h1{font-weight:600;font-size:clamp(34px,6vw,50px);line-height:1;letter-spacing:-0.01em;}
+.masthead h1 em{font-size:1em;font-weight:700;letter-spacing:-0.01em;}
+.masthead .stamp{font-weight:600;font-size:11.5px;letter-spacing:.12em;}
+
+/* hoofdtabs: pil-schakelaar zoals de Cupkeuring */
+.tabbar{background:var(--paper);padding-block:10px;}
+.tabs{border:1.5px solid var(--ink);border-radius:999px;padding:3px;gap:3px;background:var(--surface);}
+.tab{border-right:none;border-radius:999px;padding:9px 6px!important;min-height:44px;justify-content:center;background:transparent;}
+.tab .label{font-family:'Work Sans',system-ui,sans-serif;font-size:15px!important;font-weight:600;letter-spacing:0;color:var(--muted);}
+.tab:hover{background:var(--paper-soft);} .tab:hover .label{color:var(--ink);}
+.tab[aria-selected="true"]{background:var(--ink);} .tab[aria-selected="true"] .label{color:var(--paper);font-weight:600;}
+.tab[aria-selected="true"]::after{display:none;}
+/* glijdende pil: een donkere laag met lichte labels, uitgeknipt tot de actieve tab */
+.tabs{position:relative;}
+.tab{-webkit-tap-highlight-color:transparent;}
+.tab[aria-selected="true"]{background:transparent!important;}
+.tab .label,.tab[aria-selected="true"] .label{color:var(--muted)!important;transition:none;}
+@media(hover:none){.tab:hover{background:transparent;}}
+.tabs-hi{position:absolute;top:3px;bottom:3px;left:3px;right:3px;display:flex;gap:3px;background:var(--ink);
+  border-radius:999px;pointer-events:none;z-index:2;
+  clip-path:inset(0 var(--r,100%) 0 var(--l,0px) round 999px);-webkit-clip-path:inset(0 var(--r,100%) 0 var(--l,0px) round 999px);}
+.tabs-hi span{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:15px;font-weight:600;color:var(--paper);white-space:nowrap;}
+.tabs.ready .tabs-hi{transition:clip-path .42s cubic-bezier(.22,.61,.36,1),-webkit-clip-path .42s cubic-bezier(.22,.61,.36,1);}
+.tab:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+
+/* Dag 1 / Dag 2 / Week */
+.seg{background:var(--paper);border-bottom:1.5px solid var(--line);}
+.seg-b{font-family:'Work Sans',system-ui,sans-serif;font-weight:600;font-size:14.5px;color:var(--muted);min-height:44px;}
+.seg-b[aria-selected="true"]{color:var(--ink);font-weight:600;}
+.seg-ind{background:transparent;box-shadow:inset 0 -3px 0 var(--accent);}
+
+/* oefeningen */
+.exr-i{font-weight:600;font-size:12px;letter-spacing:.04em;}
+.exr-n{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:18px;line-height:1.15;}
+.exr-s{font-weight:500;font-size:12.5px;letter-spacing:0;}
+.note{border:1.5px solid var(--line);border-radius:10px;background:var(--surface);font-family:'Work Sans',system-ui,sans-serif;}
+.note.exr-in{font-family:'Work Sans',system-ui,sans-serif;font-weight:600;border-radius:10px;min-height:44px;}
+.note:focus{outline:2.5px solid var(--accent);outline-offset:1px;}
+.wk-d{font-weight:600;font-size:12px;letter-spacing:.1em;}
+.wk-t{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;}
+.wk-t em{font-family:'Work Sans',system-ui,sans-serif;font-weight:500;font-size:12.5px;}
+
+/* koppen */
+.section-title{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;color:var(--ink);border-bottom:1.5px solid var(--line);}
+.superhead{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:30px;color:var(--ink);border-bottom:2px solid var(--ink);}
+.section-title.sub{font-size:18px;color:var(--accent);border-bottom:none;}
+
+/* kaarten en blokken: zachte kaders met ronde hoeken */
+.cards,.cards.two,.cards.four,.cards.row3{border:none!important;gap:12px;}
+.card{background:var(--surface);border:1.5px solid var(--line)!important;border-radius:14px;}
+.card .big{font-family:'Fraunces',Georgia,serif;font-weight:700;}
+.card .lbl{font-weight:600;font-size:12px;letter-spacing:.12em;}
+.rules{border:none;gap:12px;}
+.rule{background:var(--surface);border:1.5px solid var(--line)!important;border-radius:14px;}
+.rule .num{font-family:'Fraunces',Georgia,serif;font-weight:700;}
+.rule .txt{font-weight:600;font-size:12px;letter-spacing:.12em;}
+.tip{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;}
+.tip b.h{font-family:'Fraunces',Georgia,serif;font-weight:600;}
+.tip strong{font-family:inherit;font-weight:600;}
+.col{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;}
+.col h3{font-weight:600;}
+
+/* tabellen */
+.scroll table{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;border-collapse:separate;border-spacing:0;overflow:hidden;}
+th{font-weight:600;font-size:11px;letter-spacing:.12em;border-bottom:1.5px solid var(--line);}
+td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
+.badge{border-radius:999px;font-weight:600;font-size:10.5px;letter-spacing:.06em;padding:.2rem .6rem;}
+.b-vrij{color:#FFFFFF;} .b-super{color:var(--paper);}
+@media(max-width:640px){
+  .scroll table.stack{background:none;border:none;border-radius:0;overflow:visible;}
+  table.stack{border-top:1.5px solid var(--line);}
+  table.stack td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;}
+  .cards.four .card{border-right:1.5px solid var(--line)!important;}
+}
+
+.card .big .per{font-family:'Work Sans',system-ui,sans-serif;font-size:.5em;font-weight:600;color:var(--muted);letter-spacing:0;}
+.exr.exr-c{grid-template-columns:1.6rem 1fr;align-items:start;}
+.exr.exr-c .exr-i{padding-top:.3rem;}
+.exr-d{font-size:14px;line-height:1.5;color:var(--muted);margin-top:.3rem;}
+.exr-d strong{color:var(--ink);font-weight:600;}
+
+@media(max-width:640px){.seg-b{font-size:13.5px;padding:.7rem .15rem .65rem;}}
+
+.exr-opt > *{opacity:.5;transition:opacity .2s ease;}
+.exr-opt:focus-within > *{opacity:1;}
+
+.exgrp{list-style:none;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding:1.4rem 0 .5rem;border-bottom:1px solid var(--line);}
+.exl .exgrp:first-child{padding-top:.8rem;}
+
+/* afvinken */
+#s-d1 .exr,#s-d2 .exr,#s-d3 .exr{grid-template-columns:2.4rem 1fr 5.6rem;}
+.chk{appearance:none;cursor:pointer;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);
+  color:transparent;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease;}
+.chk:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+.chk[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#FFFFFF;}
+.exr.done .exr-n,.exr.done .exr-s{color:var(--muted-soft);}
+.exr.done .exr-n{text-decoration:line-through;text-decoration-thickness:1.5px;}
+.reset-chk{margin-top:1.1rem;border:1.5px solid var(--line);border-radius:999px;padding:.7rem 1.1rem;min-height:44px;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted);}
+.reset-chk:hover{background:var(--paper-soft);color:var(--ink);border-color:var(--line);}
+
+.exr-it .exr-n,.exr-it .exr-s{font-style:italic;}
+
+#s-d1 .exr.exr-wu,#s-d2 .exr.exr-wu,#s-d3 .exr.exr-wu{grid-template-columns:2.4rem 1fr;padding:.6rem 0;}
+.exr-wu .exr-n{font-size:16px;}
+
+#s-d1 .exr.exr-wu,#s-d2 .exr.exr-wu,#s-d3 .exr.exr-wu{align-items:start;padding:.8rem 0;}
+.exr-wu .chk{margin-top:.1rem;}
+.wu-list{list-style:none;margin:.45rem 0 0;padding:0;display:flex;flex-direction:column;gap:.35rem;}
+.wu-list li{display:flex;flex-direction:column;line-height:1.3;}
+.wu-list span{font-size:14.5px;font-weight:600;color:var(--ink);}
+.wu-list em{font-style:normal;font-size:12.5px;color:var(--muted);}
+.exr.done .wu-list span{color:var(--muted-soft);}
+
+.wu-list{margin:0;gap:.7rem;}
+.wu-list span{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:18px;line-height:1.15;color:var(--ink);}
+.wu-list em{font-size:12.5px;font-weight:500;margin-top:.2rem;}
+.exr.done .wu-list span{text-decoration:line-through;text-decoration-thickness:1.5px;}
+
+.wu-list{gap:1.1rem;}
+.exr-it > *{opacity:.72;transition:opacity .2s ease;}
+.exr-it:focus-within > *{opacity:1;}
+
+.exr-ramp{font-size:12px;font-weight:600;color:var(--accent);margin-top:.25rem;line-height:1.35;}
+.exr.done .exr-ramp{color:var(--muted-soft);}
+
+#s-d3 .exgrp{padding-top:2.4rem;}
+#s-d3 .exl .exgrp:first-child{padding-top:.8rem;}
+
+.exr-cnt{font-size:12px;font-weight:500;color:var(--muted);margin-top:.25rem;font-variant-numeric:tabular-nums;}
+
+.exr-s .exr-cnt{display:inline-flex;align-items:center;gap:.35rem;margin:0 0 0 .3rem;color:var(--accent);font-weight:600;}
+.cnt-minus{appearance:none;cursor:pointer;width:18px;height:18px;border-radius:50%;border:1.2px solid var(--line);background:transparent;color:var(--muted);
+  display:inline-flex;align-items:center;justify-content:center;padding:0;position:relative;-webkit-tap-highlight-color:transparent;}
+.cnt-minus::after{content:"";position:absolute;inset:-10px;}
+.cnt-minus:hover{color:var(--ink);border-color:var(--muted);}
+.cnt-minus:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+.exr-warn{color:var(--accent);font-weight:600;margin-left:.3rem;white-space:nowrap;}
+.exr.done .exr-warn{color:var(--muted-soft);}
+.exr-s .exr-cnt + .exr-warn{margin-left:.35rem;}
+
+.note:not(:placeholder-shown){border-color:var(--line);background:var(--surface);}
+
+/* sticky koppen naadloos maskeren (ook met de veilige zone van de iPhone) */
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top, 0px);background:var(--paper);z-index:40;pointer-events:none;}
+.seg{top:calc(env(safe-area-inset-top, 0px) + var(--tbh,60px) - 1px);box-shadow:0 -4px 0 0 var(--paper);}
+
+/* Kracht/Cardio staat meteen op zijn plakpositie, direct onder de hoofdtabs */
+main.wrap{padding-top:0!important;}
+section[role="tabpanel"]{padding-top:1.4rem;}
+
+.reset-chk.reset-top{margin:.2rem 0 1rem;}
+
+.wu-or{list-style:none;display:flex;align-items:center;gap:.8rem;padding:.35rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:none!important;}
+.wu-or::before,.wu-or::after{content:"";flex:1;height:1px;background:var(--line);}
+.exr-wu:has(+ .wu-or){border-bottom:none!important;}
+.cnt-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;}
+.eq{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:6px;border:1.2px solid var(--line);font-family:inherit;font:600 12px/1 system-ui,-apple-system,sans-serif;letter-spacing:0;color:var(--muted);vertical-align:3px;margin-left:.15rem;text-decoration:none;}
+.eq-c{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent);}
+.wu-list li span.eq{display:inline-flex;font:600 12px/1 system-ui,-apple-system,sans-serif;color:var(--muted);letter-spacing:0;}
+.eq-d{background:color-mix(in srgb,var(--muted) 16%,transparent);border-color:transparent;color:var(--ink);}
+.tools-row{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:.2rem 0 1rem;flex-wrap:wrap;}
+.tools-row .reset-chk.reset-top{margin:0;}
+.eqf{display:flex;gap:.3rem;}
+.eqf button{appearance:none;cursor:pointer;min-width:44px;min-height:44px;padding:0 .7rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--muted);}
+.eqf button:hover{color:var(--ink);}
+.eqf button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#FFFFFF;}
+.eqf button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.f-hide{display:none!important;}
+.nw{white-space:nowrap;}
+.wu-list li span.nw{font:inherit;color:inherit;}
+.eqsel{position:relative;display:inline-flex;}
+.eqsel .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+.eqsel select{appearance:none;-webkit-appearance:none;cursor:pointer;min-height:44px;padding:0 2.3rem 0 1.1rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.eqsel::after{content:"";position:absolute;right:1rem;top:50%;width:6px;height:6px;border-right:1.6px solid var(--muted);border-bottom:1.6px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none;}
+.eqsel.on select{background:var(--accent);border-color:var(--accent);color:#FFFFFF;}
+.eqsel.on::after{border-color:#FFFFFF;}
+.eqsel select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.eqsel option{text-transform:none;letter-spacing:0;color:#1a1a1a;background:#fff;}
+.exgrp.grp-done{color:var(--muted-soft);text-decoration:line-through;text-decoration-thickness:1.5px;}
+.exr.grp-skip .exr-n,.exr.grp-skip .exr-s,.exr.grp-skip .wu-list span,.exr.grp-skip .wu-list em{color:var(--muted-soft);text-decoration:line-through;text-decoration-thickness:1px;}
+.exr.grp-skip .exr-s *{color:inherit;}
+.exr.grp-skip{opacity:.4;}
+.exgrp:has(.grp-n){display:flex;align-items:baseline;gap:.6rem;}
+.grp-n{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:34px;line-height:.9;letter-spacing:0;text-transform:none;color:var(--accent);min-width:1.1ch;}
+.exgrp.grp-done .grp-n{color:var(--muted-soft);}
+.grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
+.exgrp.grp-done .grp-opt{text-decoration:none;}
+.exsec{list-style:none;display:flex;align-items:center;gap:.8rem;margin-top:2.6rem;padding:.4rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
+.exsec::before,.exsec::after{content:"";flex:1;height:1px;background:var(--line);}
+#s-d3 .exsec + .exgrp{padding-top:1.2rem;}
+#s-d3 .exl .exsec:first-child{margin-top:1.7rem;margin-bottom:.5rem;}
+.exr-in2{display:flex;flex-direction:column;gap:.4rem;}
+.exdiv{list-style:none;height:20px;border-bottom:1px solid var(--line);}
+.wu-cnt{margin-top:.5rem;}
+.wu-cnt .exr-cnt{margin-left:0;}
+.exr-warn{color:#C8361A;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .exr-warn{color:#F2714E;}}
+:root[data-theme="dark"] .exr-warn{color:#F2714E;}
+.exr.done .exr-warn{color:var(--muted-soft);}
+
+.info-b{appearance:none;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:.4rem;vertical-align:2px;border-radius:50%;border:1.3px solid var(--muted-soft);background:transparent;color:var(--muted);padding:0;}
+.info-b span{font:italic 600 12px/1 'Fraunces',Georgia,serif;}
+.info-b::after{content:"";position:absolute;inset:-12px;}
+.info-b:hover{color:var(--ink);border-color:var(--ink);}
+.info-b:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.exr.done .info-b,.exr.grp-skip .info-b{text-decoration:none;}
+.sheet-bg{position:fixed;inset:0;background:rgba(20,14,10,.42);z-index:90;opacity:0;transition:opacity .25s ease;}
+.sheet-bg.on{opacity:1;}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
+  border-radius:22px 22px 0 0;padding:.6rem 1.25rem calc(1.4rem + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.61,.36,1);}
+.sheet.on{transform:none;}
+.sheet-grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto .7rem;}
+.sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.9rem;}
+.sheet-head h3{margin:0;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:22px;line-height:1.15;}
+.sheet-x{appearance:none;cursor:pointer;flex:none;width:44px;height:44px;margin:-8px -10px 0 0;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;border-radius:50%;}
+.sheet-x:hover{color:var(--ink);}
+.sheet-fig{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:.6rem;margin-bottom:.8rem;}
+.sheet-fig svg{display:block;width:100%;height:auto;}
+.sheet-cap{font-size:13px;color:var(--muted);line-height:1.45;margin:0;}
+.sheet-tips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem;}
+.sheet-tips li{position:relative;padding-left:1.3rem;font-size:14.5px;line-height:1.45;}
+.sheet-tips li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--accent);}
+.sheet-warn{margin:1rem 0 0;padding:.75rem .9rem;border-radius:12px;background:color-mix(in srgb,#C8361A 10%,transparent);font-size:13.5px;line-height:1.45;}
+.sheet-warn strong{color:#C8361A;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sheet-warn strong{color:#F2714E;}}
+:root[data-theme="dark"] .sheet-warn strong{color:#F2714E;}
+.sheet-vid{display:flex;align-items:center;justify-content:center;gap:.55rem;margin-top:1.1rem;min-height:48px;border-radius:999px;background:var(--ink);color:var(--surface);text-decoration:none;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.sheet-vid:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+@media (prefers-reduced-motion:reduce){.sheet,.sheet-bg{transition:none;}}
+.sheet-fig.sheet-photo{padding:0;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;outline:none;}
+.sheet-photo:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.ph-frame{position:relative;aspect-ratio:3/2;background:#111;}
+.ph-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;}
+.ph-tag{position:absolute;left:10px;top:10px;padding:.3rem .6rem;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:600 11px/1 'Work Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;}
+.ph-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.6rem .8rem;}
+.ph-dots{display:flex;gap:6px;}
+.ph-dots i{width:7px;height:7px;border-radius:50%;background:var(--line);}
+.ph-dots i.on{background:var(--accent);}
+.ph-hint{font-size:12px;color:var(--muted);}
+.ph-src{margin:.6rem 0 0;font-size:11px;color:var(--muted-soft);}
+.sheet-fig.sheet-gif{background:#fff;padding:.4rem;display:flex;justify-content:center;}
+.sheet-gif img{display:block;width:min(100%,280px);height:auto;aspect-ratio:1;}
+.ph-frame img{opacity:0;transition:opacity .45s ease;}
+.ph-frame img.on{opacity:1;}
+@media (prefers-reduced-motion:reduce){.ph-frame img{transition:none;}}
+.ph-foot,.ph-tag{display:none!important;}
+.ph-src{display:none!important;}
+.sess-note-l{display:block;margin:3.2rem 0 .6rem;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
+textarea.sess-note{display:block;width:100%;box-sizing:border-box;min-height:300px;margin:0;padding:.8rem .9rem;overflow:hidden;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);
+  font-family:'Work Sans',system-ui,sans-serif;font-size:16px;font-weight:400;line-height:1.5;resize:vertical;}
+textarea.sess-note:focus{outline:none;border-color:var(--accent);}
+textarea.sess-note::placeholder{color:var(--muted-soft);}
+.sheet-tip{margin:.8rem 0 0;padding:.7rem .85rem;border-radius:12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px;line-height:1.45;}
+#s-d3 .exl .exgrp:first-child{padding-top:1.8rem;}
+#dietNote{margin-bottom:2rem;}
+
+#p53-login{position:fixed;inset:0;z-index:200;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px));}
+#p53-login[hidden]{display:none;}
+#p53-login .lg-card{width:100%;max-width:380px;display:flex;flex-direction:column;gap:.9rem;}
+#p53-login h1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:40px;line-height:1;margin:0 0 .2rem;color:var(--ink);}
+#p53-login h1 em{color:var(--accent);font-weight:500;}
+#p53-login .lg-sub{margin:0 0 .6rem;color:var(--muted);font-size:14.5px;line-height:1.45;}
+#p53-login label{display:flex;flex-direction:column;gap:.35rem;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+#p53-login input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.8rem .9rem;min-height:48px;}
+#p53-login input:focus{outline:none;border-color:var(--accent);}
+#p53-login .lg-msg{min-height:1.2em;margin:0;font-size:13.5px;color:var(--accent);}
+#p53-login .lg-main{appearance:none;cursor:pointer;min-height:50px;border:none;border-radius:999px;background:var(--ink);color:var(--surface);font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;}
+#p53-login .lg-alt{appearance:none;cursor:pointer;background:none;border:none;color:var(--muted);font:500 14px 'Work Sans',system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;min-height:44px;}
+.app-tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;}
+.app-tools button{appearance:none;cursor:pointer;min-height:44px;padding:.7rem 1.1rem;border:1.5px solid var(--line);border-radius:999px;background:transparent;font:600 12px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.app-tools button:hover{color:var(--ink);}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="masthead">
+      <h1>Protocol <em>53</em></h1>
+      <span class="stamp" id="syncStamp"></span>
+    </div>
+  </div>
+</header>
+<nav class="tabbar">
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="t-schema"  aria-controls="p-schema"  aria-selected="true"><span class="label">Kracht</span></button>
+      <button class="tab" role="tab" id="t-cardio"  aria-controls="p-cardio"  aria-selected="false"><span class="label">Cardio</span></button>
+      <button class="tab" role="tab" id="t-voeding" aria-controls="p-voeding" aria-selected="false"><span class="label">Dieet</span></button>
+      <button class="tab" role="tab" id="t-kracht"  aria-controls="p-kracht"  aria-selected="false"><span class="label">Info</span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ════════════ SCHEMA ════════════ -->
+<section id="p-schema" role="tabpanel" aria-labelledby="t-schema">
+
+  <div class="pane" id="s-d3">
+    <div class="tools-row">
+      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3">Vinkjes wissen</button>
+      <label class="eqsel"><span class="sr">Toon</span><select aria-label="Filter op plek">
+        <option value="all" selected>Alles</option><option value="f">Floor</option><option value="c">Cable</option><option value="d">Dumbbells</option>
+      </select></label>
+    </div>
+    <ol class="exl">
+      <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Opwarming</span></li>
+      <li data-eq="f" class="exr exr-wu" data-key="d3-wu"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><ul class="wu-list"><li><span>Band Pull-Aparts</span><em>2 × 15</em></li><li><span>Romprotatie</span><em>10 per kant · armen gestrekt of gekruisd</em></li><li><span>Armzwaaien</span><em>10 × voor, 10 × achter · armen gestrekt</em></li><li><span>Squats zonder gewicht</span><em>10–15</em></li></ul></div></li>
+      <li class="exgrp"><span class="grp-n">1</span><span class="grp-t">Benen voor</span></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Reverse Lunges</div><div class="exr-s">3 × 8–12 per been</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-reverse-lunges" placeholder="kg" aria-label="Dumbbell Reverse Lunges — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bulgarian Split Squat</div><div class="exr-s">3 × 8–12 per been</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-bulgarian-split-squat" placeholder="kg" aria-label="Bulgarian Split Squat — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Goblet Squat</div><div class="exr-s">3 × 6–10<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-goblet-squat" placeholder="kg" aria-label="Goblet Squat — kg"></li>
+      <li class="exgrp"><span class="grp-n">2</span><span class="grp-t">Borst</span></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Chest Press 15°</div><div class="exr-s">3 × 6–10</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dumbbell-chest-press" placeholder="kg" aria-label="Dumbbell Chest Press 15° — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest Press Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-chest-press-machine" placeholder="kg" aria-label="Chest Press Machine — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Push-Ups</div><div class="exr-s">3 × tot 2 voor falen</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-push-ups" placeholder="reps" aria-label="Push-Ups — reps"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest Fly Machine</div><div class="exr-s">3 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-chest-fly-machine" placeholder="kg" aria-label="Chest Fly Machine — kg"></li>
+      <li class="exgrp"><span class="grp-n">3</span><span class="grp-t">Benen achter &amp; billen</span></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Leg Curl Machine</div><div class="exr-s">3 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-leg-curl-machine" placeholder="kg" aria-label="Leg Curl Machine — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Hip Abduction Machine</div><div class="exr-s">3 × 12–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-hip-abduction" placeholder="kg" aria-label="Hip Abduction Machine — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Romanian Deadlift</div><div class="exr-s">3 × 8–12<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dumbbell-romanian-deadlift" placeholder="kg" aria-label="Dumbbell Romanian Deadlift — kg"></li>
+      <li class="exgrp"><span class="grp-n">4</span><span class="grp-t">Rug horizontaal</span></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest-Supported Row</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-chest-supported-row" placeholder="kg" aria-label="Chest-Supported Row — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Seated Cable Row</div><div class="exr-s">3 × 8–12<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-seated-cable-row" placeholder="kg" aria-label="Seated Cable Row — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Eenarmige Dumbbell Row</div><div class="exr-s">3 × 8–12 per arm<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-eenarmige-dumbbell-row" placeholder="kg" aria-label="Eenarmige Dumbbell Row — kg"></li>
+      <li class="exgrp"><span class="grp-n">5</span><span class="grp-t">Schouders</span></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Seated Dumbbell Shoulder Press</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-seated-dumbbell-shoulder-press" placeholder="kg" aria-label="Seated Dumbbell Shoulder Press — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Shoulder Press Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-shoulder-press-machine" placeholder="kg" aria-label="Shoulder Press Machine — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cable Single Arm Lateral Raise</div><div class="exr-s">2 × 12–20 per arm</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-cable-lateral-raise" placeholder="kg" aria-label="Cable Single Arm Lateral Raise — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Lateral Raise</div><div class="exr-s">3 × 12–20</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-lateral-raise" placeholder="kg" aria-label="Dumbbell Lateral Raise — kg"></li>
+      <li class="exgrp"><span class="grp-n">6</span><span class="grp-t">Rug verticaal &amp; bovenrug</span></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Lat Pulldown Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-lat-pulldown" placeholder="kg" aria-label="Lat Pulldown Machine — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cable Face Pull</div><div class="exr-s">3 × 12–15, licht</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-face-pull" placeholder="kg" aria-label="Cable Face Pull — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Hangen aan de stang</div><div class="exr-s">3 × 10–20 sec</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dead-hang" placeholder="sec" aria-label="Hangen aan de stang — sec"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">(Assisted) Pull-Ups</div><div class="exr-s">3 × 5–10 · wanneer je er klaar voor bent</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-assisted-pull-ups" placeholder="kg" aria-label="(Assisted) Pull-Ups — kg"></li>
+      <li class="exgrp"><span class="grp-n">7</span><span class="grp-t">Core</span></li>
+      <li data-eq="f" class="exr" data-key="d1-plank"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Plank + Side Plank</div><div class="exr-s">2 rondes: 30–60 sec voor · 20–40 sec per kant</div></div></li>
+      <li data-eq="f" class="exr" data-key="d3-bird-dog"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bird Dog</div><div class="exr-s">2 sets · 6–8 per kant · 5–10 sec vasthouden</div></div></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Farmer's Carry</div><div class="exr-s">2 × 30 m, heen en weer mag<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-farmers-carry" placeholder="kg" aria-label="Farmer's Carry — kg"></li>
+      <li class="exsec" aria-hidden="true"><span>Optioneel</span></li>
+      <li class="exgrp"><span class="grp-n">8</span><span class="grp-t">Armen</span></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Extension + Biceps Curl</div><div class="exr-s">Superset · 2 rondes × 10–15 · touw + stang</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl" placeholder="kg" aria-label="Overhead Extension — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl-b" placeholder="kg" aria-label="Biceps Curl — kg"></div></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Rope Pushdown + Hammer Curl</div><div class="exr-s">Superset · 2 rondes × 10–15 · zelfde touw</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope" placeholder="kg" aria-label="Rope Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope-b" placeholder="kg" aria-label="Hammer Curl — kg"></div></li>
+      <li class="exdiv" aria-hidden="true"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Cable Triceps Extension</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-overhead-cable-triceps-extension" placeholder="kg" aria-label="Overhead Cable Triceps Extension — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Triceps Rope Pushdown</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-triceps-rope-pushdown" placeholder="kg" aria-label="Triceps Rope Pushdown — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
+    </ol>
+    <button type="button" class="reset reset-chk" data-reset="s-d3">Vinkjes wissen</button>
+    <label class="sess-note-l" for="sessNote">Notities</label>
+    <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+  </div>
+
+</section>
+
+<!-- ════════════ CARDIO ════════════ -->
+<section id="p-cardio" role="tabpanel" aria-labelledby="t-cardio" hidden>
+
+  <div class="pane" id="s-cardio">
+    <p class="pane-note"><strong>2× per week, 60 min in zone 2</strong>, los van je krachttraining. Kies vrij — alleen je hartslag telt. Hou minstens één dag met impact.</p>
+    <ol class="exl">
+      <li class="exgrp">Buiten</li>
+      <li class="exr exr-c"><span class="exr-i">01</span><div class="exr-t"><div class="exr-n">Stevig wandelen</div><div class="exr-d"><strong>Knievriendelijk alternatief voor joggen.</strong> Stap zo stevig dat je in zone 2 blijft: korte zinnen lukken, een gesprek niet. Lage impact en makkelijk een uur vol te houden.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">02</span><div class="exr-t"><div class="exr-n">Buiten wandel-joggen of lopen</div><div class="exr-d"><strong>De enige vorm met echte botprikkel.</strong> Wissel jog- en wandelblokken af om je hartslag op doel te houden. Daglicht en frisse lucht helpen je slaap. Met je meniscus kan joggen gevoelig liggen — kies dan stevig wandelen.</div></div></li>
+      <li class="exgrp">Gym</li>
+      <li class="exr exr-c"><span class="exr-i">03</span><div class="exr-t"><div class="exr-n">Loopband, jog- en wandelblokken</div><div class="exr-d">Zelfde botprikkel als buiten, maar binnen. Wissel jog- en wandelblokken af om je hartslag op doel te houden.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">04</span><div class="exr-t"><div class="exr-n">Roeitrainer</div><div class="exr-d">Meeste spiermassa in één beweging, geen impact. Je regelt de intensiteit precies met je haaltempo.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">05</span><div class="exr-t"><div class="exr-n">Crosstrainer</div><div class="exr-d">Hele lichaam in beweging, gewrichtsvriendelijk, makkelijk op één tempo te houden.</div></div></li>
+      <li class="exr exr-c exr-opt"><span class="exr-i">06</span><div class="exr-t"><div class="exr-n">Fietsen</div><div class="exr-s">Optioneel · buiten of hometrainer</div><div class="exr-d">Geen impact op je gewrichten. Let op een zadel dat je perineum niet belast.</div></div></li>
+    </ol>
+  </div>
+
+  <label class="sess-note-l" for="cardioNote">Notities</label>
+  <textarea id="cardioNote" class="note sess-note" data-note="cardio-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+</section>
+
+<!-- ════════════ VOEDING & GEWICHT ════════════ -->
+<section id="p-voeding" role="tabpanel" aria-labelledby="t-voeding" hidden>
+
+  <div class="section" style="margin-top:1.5rem">
+    <div class="rules">
+      <div class="rule"><span class="num">1</span><span class="txt">G&eacute;&eacute;n suikers</span></div>
+      <div class="rule"><span class="num">2</span><span class="txt">Protein &amp; Green</span></div>
+      <div class="rule"><span class="num">3</span><span class="txt">RAW Food</span></div>
+      <div class="rule"><span class="num">4</span><span class="txt">150 g eiwit</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Groenten</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-groen"><td>Alle groenten</td><td data-label="Frequentie"><span class="badge b-vrij">Vrijuit</span></td><td data-label="Portie">Onbeperkt</td><td>Zo gevarieerd mogelijk. Uitzondering: zetmeelrijke groenten zoals aardappelen en maïs.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Eiwitten</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-groen"><td>Magere kwark, skyr <span class="badge b-super">★ Top-eiwit</span></td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">150–200 g</td><td><strong>De sterkste eiwitbron in dit schema.</strong> Vrijwel vet- en suikervrij, boordevol eiwit, weinig calorieën en lang verzadigend — precies wat je wil in een deficit. Naturel, met bessen erdoor.</td></tr>
+        <tr class="row-groen"><td>Eieren</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">2–3 per dag</td><td>Eiwit en gezonde vetten in één. Gekookt, gepocheerd of roerei in olijfolie.</td></tr>
+        <tr class="row-groen"><td>Eiwitshake</td><td data-label="Frequentie"><span class="badge b-groen">1–2× per dag</span></td><td data-label="Portie">1 zakje of scoop (±25 g eiwit)</td><td><strong>Handig om je dagtotaal van 150 g te halen.</strong> Het tijdstip maakt weinig uit — je totale eiwit per dag telt het zwaarst. Eerst gewone voeding, want die vult beter; de shake vult het gat dat overblijft. Kies whey-isolaat zonder toegevoegde suikers.</td></tr>
+        <tr class="row-groen"><td>Kip, kalkoen</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">120–150 g</td><td>Zonder vel. Mager en eiwitrijk.</td></tr>
+        <tr class="row-groen"><td>Vette vis</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">2–3× per week</td><td>Zalm, makreel, sardines, haring. Blik in eigen nat is prima.</td></tr>
+        <tr class="row-amber"><td>Griekse yoghurt</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">150–200 g</td><td>Naturel, zonder toegevoegde suiker. Let op het etiket: alleen melk en cultuur, geen verdikkingsmiddel. Vetter dan magere kwark of skyr, dus wat meer calorieën.</td></tr>
+        <tr class="row-amber"><td>Tonijn</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">2–3× per week</td><td>Geen vervanger van vette vis — hou het bij die paar keer per week.</td></tr>
+        <tr class="row-rood"><td>Mager rundsvlees</td><td data-label="Frequentie"><span class="badge b-rood">Uitzonderlijk</span></td><td data-label="Portie">120–150 g, 2× per week</td><td>Biefstuk of rosbief. Eiwit, ijzer, B12 en zink.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Gezonde vetten</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-groen"><td>Olijfolie</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">1–2 el per dag</td><td>Extra vierge. Eén eetlepel is al ruim 120 kcal — met drie maaltijden drink je ongemerkt een halve dagportie weg. Gebruik bakspray als je vaker bakt.</td></tr>
+        <tr class="row-groen"><td>Avocado</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">½ per dag</td><td>Verzadigt sterk. Een halve is genoeg — een hele mag, maar niet iedere dag.</td></tr>
+        <tr class="row-amber"><td>Noten en zaden</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Een handvol</td><td>Ongezouten. Een handje is prima, een halve zak niet. Lijnzaad en chiazaad leveren omega-3; lijnzaad wel gemalen, anders verteert het niet.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Fruit</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-amber"><td>Bessen</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">100–150 g</td><td>Aardbeien, frambozen, blauwe bessen, bramen. Het minste suiker van al het fruit. Diepvries is even goed als vers.</td></tr>
+        <tr class="row-amber"><td>Appel, peer, citrus, kiwi</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">1 à 2 stuks per dag</td><td>Volle vrucht, niet als sap.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Koolhydraten</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-amber"><td>Peulvruchten</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Vuistgrote portie</td><td>Linzen, kikkererwten, bonen. Van alle koolhydraatbronnen de laagste bloedsuikerreactie, plus veel vezels en plantaardig eiwit.</td></tr>
+        <tr class="row-amber"><td>Quinoa, zilvervliesrijst</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Vuistgrote portie</td><td>Bij voorkeur op je trainingsdagen, om je spierglycogeen aan te vullen.</td></tr>
+        <tr class="row-rood"><td>Havermout</td><td data-label="Frequentie"><span class="badge b-rood">Uitzonderlijk</span></td><td data-label="Portie">40–50 g droog</td><td>Grove vlokken, geen sachets. Enkel op je trainingsdagen als ontbijt, en combineer altijd met skyr, noten of een ei erbij.</td></tr>
+        <tr class="row-rood"><td>100% volkorenbrood</td><td data-label="Frequentie"><span class="badge b-rood">Uitzonderlijk</span></td><td data-label="Portie">1 à 2 sneden</td><td>Let op het etiket: 100% volkoren, geen bloem met karamelkleurstof. Blijft fijngemalen en luchtig, dus de bloedsuikerpiek is sterker dan je van volkoren verwacht. Zuurdesem-roggebrood is de betere keuze.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Snacks &amp; zoetigheid</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-amber"><td>Puur cacaopoeder</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">1–2 el</td><td>Eén ingrediënt, geen suiker, veel vezels en antioxidanten. Door je skyr, in koffie of in een shake. Kies een merk dat op cadmium test — cacao neemt dat op uit de bodem.</td></tr>
+        <tr class="row-amber"><td>Stevia</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Naar smaak</td><td>Pure steviolglycosiden geven geen calorieën of bloedsuikerreactie. Let op het etiket: veel stevia is aangelengd met erythritol of maltodextrine. Houdt wel je voorkeur voor zoet in stand.</td></tr>
+        <tr class="row-amber"><td>Olijven</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Handvol</td><td>Gezonde vetten en vrijwel geen koolhydraten. Wel zout, dus niet de hele pot.</td></tr>
+        <tr class="row-amber"><td>Pure chocolade 85%+</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">2 blokjes, ±20 g</td><td>Vier ingrediënten, weinig suiker, en je bent er sneller tevreden mee dan met melkchocolade. De beste snack binnen dit kader.</td></tr>
+        <tr class="row-amber"><td>Groentesticks met hummus</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">2 el hummus</td><td>Vult de trek zonder bloedsuikerpiek. Kijk bij kant-en-klare hummus op het etiket.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Dranken</div>
+    <div class="scroll"><table class="stack">
+      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <tbody>
+        <tr class="row-groen"><td>Water, koffie, thee</td><td data-label="Frequentie"><span class="badge b-vrij">Vrijuit</span></td><td data-label="Portie">Onbeperkt</td><td>Zonder suiker. Drinken vóór de maaltijd dempt de honger.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <label class="sess-note-l" for="dietNote">Notities</label>
+  <textarea id="dietNote" class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+
+
+  <div class="section">
+    <div class="cards" style="margin-top:.9rem">
+      <div class="card c-3"><div class="big">40–50%</div><div class="lbl">Gezonde vetten</div><div class="dsc">Avocado, olijfolie, noten, vette vis</div></div>
+      <div class="card c-1"><div class="big">25–35%</div><div class="lbl">Eiwitten</div><div class="dsc">Vlees, vis, eieren, skyr, kwark</div></div>
+      <div class="card c-2"><div class="big">&lt;20%</div><div class="lbl">Koolhydraten</div><div class="dsc">Via groenten, bessen en volkoren</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Eiwit is de uitzondering</div>
+    <div class="tip">
+      <p>Wie afvalt zonder genoeg eiwit verliest spiermassa mee. Boven de vijftig gaat dat sneller dan daarvoor, en het is precies wat je met je krachttraining probeert te beschermen.</p>
+      <p><strong>Voor jou: 150 gram per dag.</strong> Reken op je streefgewicht, niet op je huidige — vetweefsel heeft geen eiwit nodig. Dat komt neer op ongeveer 1,7 gram per kilo: bewust iets boven de gangbare 1,2–1,6, omdat je in een deficit zit, zwaar traint en boven de vijftig bent.</p>
+      <p>In de praktijk haal je dat zonder poeder: drie eieren is 18 gram, 200 g skyr of kwark is 22, 150 g kip of vis is 35, een blikje tonijn is 25. Dan zit je al op honderd — de laatste vijftig haal je met één à twee extra porties, bijvoorbeeld een shake.</p>
+      <p>Je controle: blijft je vetvrije massa rond de 73 kg terwijl je gewicht daalt, dan zit je goed. Zakt die mee, dan is eiwit het eerste om te verhogen.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Waarom je niet hoeft te tellen</div>
+    <div class="tip"><ul>
+      <li><strong>Vet en eiwit verzadigen langer.</strong> Eieren met avocado houden je vier tot vijf uur vol; toast houdt je anderhalf uur vol. Minder honger betekent automatisch minder eten, zonder wilskracht.</li>
+      <li><strong>Minder bloedsuikerpieken, minder trek.</strong> De snaaibehoefte om vier uur is bijna altijd een dip na een koolhydraatrijke lunch.</li>
+      <li><strong>Je lichaam reguleert beter.</strong> Bij voldoende vet en eiwit werken je verzadigingssignalen zoals ze horen.</li>
+    </ul>
+    <p style="margin-top:.6rem">Waar je wel op let: noten. Die zijn calorierijk én makkelijk door te eten — een handje is prima, een halve zak niet. Vet uit avocado of olijfolie is zelfbegrenzend, noten uit een zak niet. Verder geen grammen wegen.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Waar je op meet</div>
+    <div class="tip">
+      <b class="h">Zo meet je je middelomtrek juist</b>
+      <p>Op blote huid, staand en ontspannen. Het lint komt halverwege je onderste rib en de bovenkant van je heupbot — bij de meeste mensen ongeveer op navelhoogte. Horizontaal rondom, niet scheef.</p>
+      <p>Meet aan het einde van een normale uitademing, zonder je buik in te trekken en zonder het lint aan te spannen. Het moet de huid raken maar niet indrukken. Doe het altijd op hetzelfde moment van de dag, bij voorkeur 's ochtends nuchter — dan zijn je metingen onderling vergelijkbaar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ KRACHT ════════════ -->
+<section id="p-kracht" role="tabpanel" aria-labelledby="t-kracht" hidden>
+
+  <div class="cards four">
+    <div class="card c-1"><div class="big">2×<span class="per"> / week</span></div><div class="lbl">Fullbody</div><div class="dsc">Volledige sessie van 60 min. Twee keer volstaat voor onderhoud, met 2–3 dagen rust ertussen</div></div>
+    <div class="card c-1"><div class="big">2×<span class="per"> / week</span></div><div class="lbl">Cardio apart</div><div class="dsc">60 min zone 2, los van je krachttraining. Mag buiten de gym</div></div>
+    <div class="card c-1"><div class="big">±2</div><div class="lbl">In reserve</div><div class="dsc">Stop wanneer je nog ongeveer 2 technisch goede herhalingen had gekund</div></div>
+    <div class="card c-1"><div class="big">Controle</div><div class="lbl">Veiligheid</div><div class="dsc">Nooit laten vallen of zwaaien — trager in de afremfase</div></div>
+  </div>
+
+  <div class="superhead">Kracht</div>
+
+  <div class="section" style="margin-top:.3rem">
+    <div class="section-title sub">Intensiteit</div>
+    <p class="section-note"><strong style="font-weight:700;color:var(--text)">De belasting is de prikkel, niet het aantal sets!</strong></p>
+    <div class="tip"><ul>
+      <li><strong>Is het zwaar genoeg?</strong> Stop elke werkset — niet alleen de laatste — wanneer je nog ongeveer twee technisch goede herhalingen had kunnen doen. Kies het gewicht op je eerste set en hou het voor alle sets; door vermoeidheid zakt het aantal herhalingen meestal 1–2 per set (bijv. 11, 10, 9). Dat is goed. Zak je onder de onderkant van het bereik, dan was het te zwaar of rustte je te kort. Voelt het alsof je er nog vijf kon doen, dan is het te licht. Bij isolatieoefeningen mag je laatste set tot 0–1 in reserve; bij de zware oefeningen blijf je op 2.</li>
+      <li><strong>Blijf in het bereik van je schema.</strong> Elke oefening heeft een eigen bereik: 6–10 voor de zwaarste, 8–12 of 10–15 voor de rest. Lichter gewicht met meer reps bouwt evenveel spier als zwaarder met minder, zolang je dicht bij falen komt. Een gewicht dat met goede vorm gaat is dus geen compromis, mits je stopt met nog ongeveer twee herhalingen in reserve.</li>
+      <li><strong>Wanneer verhogen?</strong> Eerst herhalingen erbij binnen hetzelfde gewicht. Haal je bij alle sets de bovenkant van het bereik (bijv. 12 bij 8–12), dan gaat het gewicht omhoog en begin je weer onderaan (rond 8). Je gaat er nooit bovenuit — je klimt in het bereik en reset met meer gewicht. Pas als dat spoor doodloopt zet je er een vierde set bij.</li>
+      <li><strong>Rust volledig uit.</strong> Twee tot drie minuten bij de zware oefeningen, negentig seconden bij de isolatie. Te kort rusten maakt je volgende set lichter dan bedoeld.</li>
+    </ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title sub">Tempo</div>
+    <p class="section-note"><strong style="font-weight:700;color:var(--text)">Traag terug naar het startpunt.</strong></p>
+    <div class="tip"><ul>
+      <li><strong>De regel: de fase waar je het gewicht tegenhoudt moet trager.</strong> De andere fase mag vlot. Bij een curl is dat optrekken vlot, terug naar gestrekt traag. Bij een squat is dat zakken traag, terug naar staand vlot. Ongeveer één tot twee tellen voor de vlotte fase, twee tot drie tellen voor de trage.</li>
+      <li><strong>Het is ook de veilige uitvoering.</strong> Peesblessures ontstaan bij een plotse schok op een gespannen gewricht, niet bij een geleidelijk opgebouwde belasting. Zolang je de afremfase stuurt, bestaat dat moment niet. Zwaaien om het gewicht omhoog te krijgen, of het laten vallen aan het einde van een set, zijn de twee momenten waarop je de controle verliest.</li>
+      <li><strong>Nooit zwaaien.</strong> Gebruik je momentum om het gewicht omhoog te krijgen, dan verlies je precies op het zwaarste punt de controle — en dat is waar blessures ontstaan. Voelt het niet zonder zwaai, dan is het gewicht te zwaar.</li>
+      <li><strong>Overdrijf niet.</strong> Vijf tellen of meer kost je gewicht zonder dat het meer oplevert, en geeft flink meer spierpijn.</li>
+    </ul></div>
+  </div>
+
+  <div class="superhead">Cardio</div>
+
+  <div class="section" style="margin-top:.3rem">
+    <div class="section-title sub">Vorm en zone</div>
+    <p class="section-note"><strong style="font-weight:700;color:var(--text)">2× per week, 60 minuten, los van je krachttraining.</strong> Vrij van vorm — alleen je hartslag telt. Train in <strong style="font-weight:700;color:var(--text)">HR zone 2</strong> die de Apple Watch meegeeft. Hoeft niet in de gym: buiten wandel-joggen of fietsen mag evengoed. Uitzondering: bij je VO2max-blokken mag je hartslag bewust hoger pieken, tot zone 4–5.</p>
+
+    <div class="tip" style="margin-top:1rem">
+      <b class="h">Jouw cardioplan: buiten wandelen met loopblokjes</b>
+      <p>Een uur stevig buiten wandelen is je zone 2-basis: vetverbrandend, gewrichtsvriendelijk, met daglicht en frisse lucht erbij. Gooi er af en toe een pittiger blokje tussen — een helling op, of enkele minuten sneller.</p>
+      <p>Die blokjes tillen je hartslag even hoger (meer conditie- en VO2max-prikkel dan vlak wandelen). Ligt joggen goed voor je knie, dan geeft dat er ook de meeste botprikkel bij; met je meniscus is bergop wandelen het knievriendelijke alternatief dat toch belast.</p>
+    </div>
+
+    <div class="tip" style="margin-top:1rem">
+      <b class="h">Wil je je VO2max echt omhoog</b>
+      <p>Rustig wandelen bouwt je basis, maar tilt je VO2max maar beperkt op. Voor echte winst maak je de blokjes korter en harder: <strong>4× 4 minuten bijna all-out</strong> (zone 4–5, praten lukt niet meer) met telkens 3 minuten rustig wandelen ertussen. Knievriendelijk uit te voeren als steile helling of loopband bergop, dus zonder joggen.</p>
+      <p>Eén zo'n sessie per week volstaat. VO2max is een van de sterkste voorspellers van gezonde levensjaren — op jouw niveau (±33) valt hier met weinig moeite veel te winnen. Bouw het rustig op: begin met losse loopblokjes, maak ze pittiger naarmate het makkelijker voelt.</p>
+    </div>
+
+    <div class="tip" style="margin-top:1rem">
+      <b class="h">Hou minstens één cardiodag met impact</b>
+      <p>Wandel-joggen of lopen geeft een botprikkel via de lichte impact — waardevol op jouw leeftijd. Roeien, crossen en fietsen zijn gewrichtsvriendelijk maar zonder impact.</p>
+    </div>
+
+    <div class="tip" style="margin-top:1rem">
+      <b class="h">De praattest wint van de tabel</b>
+      <p>Zit je in een hogere HR-zone terwijl je rustig ademt, dan is dat geen probleem — je ademhaling is de meting.</p>
+      <p>Waar je wil zitten: korte zinnen lukken, een gesprek niet. Dat gevoel is betrouwbaarder dan elk getal.</p>
+      <p>Nog simpeler: kun je de hele tijd door je neus blijven ademen, dan zit je goed. Moet je naar je mond, dan ga je te hard.</p>
+    </div>
+  </div>
+
+  <div class="superhead">Slaap</div>
+
+  <div class="cards row3" style="margin-top:.3rem">
+    <div class="card c-4"><div class="big">7–9</div><div class="lbl">Uur per nacht</div><div class="dsc">Minder dan zes verslechtert insulinegevoeligheid</div></div>
+    <div class="card c-4"><div class="big">Vast</div><div class="lbl">Opstaanuur</div><div class="dsc">Elke dag hetzelfde, ook in het weekend. Dat stuurt je hele ritme</div></div>
+    <div class="card c-4"><div class="big">5–6 u</div><div class="lbl">Cafeïne blijft hangen</div><div class="dsc">Een koffie om vier uur zit om middernacht nog voor een kwart in je systeem</div></div>
+  </div>
+
+  <div class="section">
+    <div class="tip">
+      <ul>
+        <li><strong>7 tot 9 uur, en vooral: op vaste tijden opstaan, ook in het weekend.</strong></li>
+        <li>Cafeïne heeft een halfwaardetijd van vijf tot zes uur. Een koffie om vier uur zit om middernacht nog voor een kwart in je systeem.</li>
+        <li>Alcohol laat je sneller inslapen maar verstoort je diepe slaap. Je merkt het de volgende dag aan je herstel.</li>
+        <li>Koele, donkere kamer. Schermen dimmen het laatste uur.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="superhead">App</div>
+  <div class="section" style="margin-top:.3rem">
+    <p class="section-note">Je gegevens staan in je eigen database en worden bewaard op al je toestellen. Maak af en toe een back-up, bijvoorbeeld één keer per maand.</p>
+    <div class="app-tools">
+      <button type="button" onclick="p53Backup()">Back-up exporteren</button>
+      <button type="button" onclick="p53Logout()">Uitloggen</button>
+    </div>
+  </div>
+
+</section>
+
+</main>
+<div class="sheet-bg" hidden></div>
+<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head"><h3 id="sheet-t"></h3><button type="button" class="sheet-x" aria-label="Sluiten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-body"></div>
+</div>
+
+
+<script>
+(function(){
+  document.body.dataset.tab='schema';
+  var map={schema:['t-schema','p-schema'],cardio:['t-cardio','p-cardio'],kracht:['t-kracht','p-kracht'],
+           voeding:['t-voeding','p-voeding']};
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var revealTimer;
+  function reveal(panel){
+    if(reduce) return;
+    clearTimeout(revealTimer);
+    panel.classList.remove('revealing');
+    void panel.offsetWidth;              /* forceer reflow zodat de animatie herstart */
+    panel.classList.add('revealing');
+    /* verwijder de klasse pas als de laatste (gestaggerde) animatie klaar is */
+    revealTimer=setTimeout(function(){ panel.classList.remove('revealing'); },1000);
+  }
+  var leaveTimer;
+  function swap(k){
+    document.body.dataset.tab=k;
+    var panel;
+    Object.keys(map).forEach(function(key){
+      var on=key===k;
+      document.getElementById(map[key][0]).setAttribute('aria-selected',on?'true':'false');
+      var p=document.getElementById(map[key][1]);
+      p.classList.remove('leaving');
+      p.hidden=!on;
+      if(on) panel=p;
+    });
+    /* spring terug tot net onder de titel, zodat de tabbalk bovenaan blijft */
+    var tb=document.querySelector('.tabbar');
+    if(tb && window.scrollY>tb.offsetTop) window.scrollTo({top:tb.offsetTop});
+    if(panel) reveal(panel);
+    if((k==='schema'||k==='cardio') && window.__cascadeSchema) window.__cascadeSchema();
+  }
+  function select(k,animate){
+    var current=document.querySelector('section[role="tabpanel"]:not([hidden])');
+    if(animate&&!reduce&&current&&current.id!==map[k][1]){
+      clearTimeout(leaveTimer);
+      current.classList.add('leaving');
+      leaveTimer=setTimeout(function(){ swap(k); },130);
+    }else{
+      swap(k);
+    }
+  }
+  var tabsEl=document.querySelector('.tabs');
+  var hi=document.createElement('div'); hi.className='tabs-hi'; hi.setAttribute('aria-hidden','true');
+  document.querySelectorAll('.tab .label').forEach(function(l){ var sp=document.createElement('span'); sp.textContent=l.textContent; hi.appendChild(sp); });
+  if(tabsEl) tabsEl.appendChild(hi);
+  function moveInd(el){
+    el=el||document.querySelector('.tab[aria-selected="true"]');
+    if(!el) return;
+    var l=el.offsetLeft-hi.offsetLeft, r=hi.offsetWidth-(l+el.offsetWidth);
+    hi.style.setProperty('--l',l+'px'); hi.style.setProperty('--r',r+'px');
+  }
+  Object.keys(map).forEach(function(k){
+    var t=document.getElementById(map[k][0]);
+    t.addEventListener('click',function(){
+      Object.keys(map).forEach(function(key){ document.getElementById(map[key][0]).setAttribute('aria-selected',key===k?'true':'false'); });
+      moveInd(t);
+      select(k,true);
+    });
+  });
+  moveInd();
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ if(tabsEl) tabsEl.classList.add('ready'); }); });
+  window.addEventListener('resize',function(){ moveInd(); });
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ moveInd(); });
+  /* eerste weergave ook zacht laten opkomen */
+  var active=document.querySelector('.tab[aria-selected="true"]');
+  if(active){
+    var pid=active.getAttribute('aria-controls');
+    if(pid) reveal(document.getElementById(pid));
+  }
+
+
+  /* ---- subtabs plakken net onder de tabbalk ---- */
+  var tbar=document.querySelector('.tabbar');
+  function setTbh(){ if(tbar) document.documentElement.style.setProperty('--tbh',tbar.getBoundingClientRect().height+'px'); }
+  setTbh(); window.addEventListener('resize',setTbh);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(setTbh);
+
+  /* ---- schema: Dag 1 / Dag 2 / Week ---- */
+  var PANEKEY='fitlog-pane';
+  var cascadeTimer;
+  function cascade(p){
+    if(reduce||!p) return;
+    var items=p.querySelectorAll('.pane-note, .exr, .wk li');
+    items.forEach(function(el,i){ el.style.setProperty('--n',i); });
+    clearTimeout(cascadeTimer);
+    p.classList.remove('cascade'); void p.offsetWidth; p.classList.add('cascade');
+    cascadeTimer=setTimeout(function(){ p.classList.remove('cascade'); }, items.length*60+500);
+  }
+  window.__cascadeSchema=function(){ cascade(document.querySelector('section[role="tabpanel"]:not([hidden]) .pane')); };
+  window.__cascadeSchema();
+
+
+  /* ---- afvinken: welke oefening is gedaan (ook gedeeld tussen toestellen) ---- */
+  var CHKKEY='fitlog-checks';
+  var checks={}; try{ checks=JSON.parse(localStorage.getItem(CHKKEY)||'{}'); }catch(e){}
+  var chkCol=null;
+  function chkKey(li){ if(li.dataset.key) return li.dataset.key; var inp=li.querySelector('.note[data-note]'); return inp?inp.dataset.note:null; }
+  function paintChecks(){
+    document.querySelectorAll('#s-d1 .exr,#s-d2 .exr,#s-d3 .exr').forEach(function(li){
+      var k=chkKey(li), on=!!checks[k], b=li.querySelector('.chk');
+      li.classList.toggle('done',on); if(b) b.setAttribute('aria-pressed',on?'true':'false');
+    });
+    /* één oefening per spiergroep: is er één gedaan, dan is de hele groep af */
+    document.querySelectorAll('#s-d3 .exgrp').forEach(function(g){
+      var rows=[], li=g.nextElementSibling;
+      while(li && !li.classList.contains('exgrp')){ if(li.classList.contains('exr')) rows.push(li); li=li.nextElementSibling; }
+      var anyDone=rows.some(function(r){ return r.classList.contains('done'); });
+      g.classList.toggle('grp-done',anyDone);
+      rows.forEach(function(r){ r.classList.toggle('grp-skip', anyDone && !r.classList.contains('done')); });
+    });
+  }
+  function saveChecksLocal(){ try{ localStorage.setItem(CHKKEY,JSON.stringify(checks)); }catch(e){} }
+  document.querySelectorAll('#s-d1 .chk,#s-d2 .chk,#s-d3 .chk').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();
+      var k=chkKey(b.closest('.exr')); if(!k) return;
+      var on=!checks[k]; if(on) checks[k]=true; else delete checks[k];
+      paintChecks(); saveChecksLocal();
+      if(chkCol){ (on?chkCol.doc(k).set({done:true,at:Date.now()}):chkCol.doc(k).delete()).catch(function(){}); }
+      if(!b.closest('.exr-wu')) bumpCount(k,on?1:-1);
+    });
+  });
+  document.querySelectorAll('.reset-chk').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var pane=document.getElementById(btn.dataset.reset);
+      pane.querySelectorAll('.exr').forEach(function(li){
+        var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
+      });
+      paintChecks(); saveChecksLocal();
+    });
+  });
+  paintChecks();
+
+  /* ---- teller: hoe vaak een oefening is afgevinkt ---- */
+  var CNTKEY='fitlog-counts', cntCol=null;
+  var counts={}; try{ counts=JSON.parse(localStorage.getItem(CNTKEY)||'{}'); }catch(e){}
+  function saveCountsLocal(){ try{ localStorage.setItem(CNTKEY,JSON.stringify(counts)); }catch(e){} }
+  function fmtDate(t){ var d=new Date(t); return d.getDate()+'/'+(d.getMonth()+1); }
+  function paintCounts(){
+    document.querySelectorAll('#s-d3 .exr:not(.exr-wu)').forEach(function(li){
+      var k=chkKey(li), c=counts[k], line=li.querySelector('.exr-s'); if(!line) return;
+      var el=line.querySelector('.exr-cnt');
+      if(!c||!c.n){ if(el) el.remove(); return; }
+      if(!el){
+        el=document.createElement('span'); el.className='exr-cnt';
+        el.innerHTML='<span class="cnt-n"></span><button type="button" class="cnt-minus" aria-label="Eén minder"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>';
+        el.querySelector('.cnt-minus').addEventListener('click',function(e){ e.stopPropagation(); bumpCount(k,-1); });
+        var w=line.querySelector('.exr-warn'); if(w) line.insertBefore(el,w); else line.appendChild(el);
+      }
+      el.querySelector('.cnt-n').textContent=(line.classList.contains('wu-cnt')?'':'· ')+c.n+'×';
+    });
+    /* bolletje: per spiergroep de oefening die je het laatst deed */
+    document.querySelectorAll('#s-d3 .exgrp').forEach(function(g){
+      var best=null, bt=0, li=g.nextElementSibling;
+      while(li && !li.classList.contains('exgrp')){
+        var d=li.querySelector('.cnt-dot'); if(d) d.remove();
+        if(li.classList.contains('exr') && !li.classList.contains('exr-wu')){
+          var c=counts[chkKey(li)]; if(c&&c.n&&c.last&&c.last>bt){ bt=c.last; best=li; }
+        }
+        li=li.nextElementSibling;
+      }
+      if(best){ var el=best.querySelector('.exr-cnt'); if(el){ var dot=document.createElement('span'); dot.className='cnt-dot'; dot.title='Vorige keer'; dot.setAttribute('aria-label','Vorige keer'); el.insertBefore(dot,el.querySelector('.cnt-minus')); } }
+    });
+  }
+  function bumpCount(k,d){
+    var c=counts[k]||{n:0}; var n=Math.max(0,(c.n||0)+d);
+    var next={n:n,last:d>0?Date.now():(c.prev||c.last||null),prev:d>0?(c.last||null):(c.prev||null)};
+    counts[k]=next; saveCountsLocal(); paintCounts();
+    if(cntCol) cntCol.doc(k).set(next).catch(function(){});
+  }
+  paintCounts();
+
+  /* ---- filter op plek (C / D / F) ---- */
+  (function(){
+    var pane=document.getElementById('s-d3'), sel=pane.querySelector('.eqsel select');
+    function apply(f){
+      sel.closest('.eqsel').classList.toggle('on', f!=='all');
+      pane.querySelectorAll('.exl').forEach(function(ol){
+        var kids=[].slice.call(ol.children), grp=null, any=false;
+        function closeGrp(){ if(grp) grp.classList.toggle('f-hide', f!=='all' && !any); }
+        kids.forEach(function(li){
+          if(li.classList.contains('exgrp')){ closeGrp(); grp=li; any=false; return; }
+          if(li.classList.contains('wu-or')||li.classList.contains('exsec')||li.classList.contains('exdiv')) return;
+          var show = f==='all' || li.dataset.eq===f;
+          li.classList.toggle('f-hide', !show); if(show) any=true;
+        });
+        closeGrp();
+        ol.querySelectorAll('.exsec').forEach(function(o){ var n=o.nextElementSibling, vis=false; while(n && !n.classList.contains('exsec') && !(o.dataset.scope==='grp' && n.classList.contains('exgrp'))){ if(!n.classList.contains('f-hide')) vis=true; n=n.nextElementSibling; } o.classList.toggle('f-hide',!vis); });
+        ol.querySelectorAll('.exdiv').forEach(function(o){ var a=o.previousElementSibling, b=o.nextElementSibling; o.classList.toggle('f-hide', !(a&&b&&!a.classList.contains('f-hide')&&!b.classList.contains('f-hide')&&b.classList.contains('exr'))); });
+        ol.querySelectorAll('.wu-or').forEach(function(o){ var a=o.previousElementSibling, b=o.nextElementSibling; o.classList.toggle('f-hide', !(a&&b&&!a.classList.contains('f-hide')&&!b.classList.contains('f-hide'))); });
+      });
+    }
+    sel.addEventListener('change',function(){ apply(sel.value); });
+    sel.value='all'; apply('all');
+  })();
+
+  /* ---- logboek: gedeelde database, zodat elk toestel dezelfde gewichten ziet ---- */
+  var STORE='fitlog-v1';
+  var stamp=document.getElementById('syncStamp');
+  function setStamp(t){ if(!stamp) return; /* alleen tonen als er iets misloopt */ stamp.textContent=(t==='Bewaard op al je toestellen'||t==='Opslaan…')?'':t; }
+  function loadLocal(){ try{ return JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){ return {}; } }
+  function saveLocal(d){ try{ localStorage.setItem(STORE, JSON.stringify(d)); }catch(e){} }
+  var local=loadLocal();
+  var inputs=[].slice.call(document.querySelectorAll('.note[data-note]'));
+  var col=null, timers={};
+  function keyOf(inp){ return 'note--'+inp.dataset.note; }
+  inputs.forEach(function(inp){
+    var key=keyOf(inp);
+    if(local[key] && local[key].t) inp.value=local[key].t;
+    inp.addEventListener('click',function(e){ e.stopPropagation(); });
+    inp.addEventListener('keydown',function(e){ e.stopPropagation(); });
+    inp.addEventListener('input',function(){
+      if(!local[key]) local[key]={};
+      local[key].t=inp.value; saveLocal(local);
+      if(!col) return;
+      clearTimeout(timers[key]); setStamp('Opslaan…');
+      timers[key]=setTimeout(function(){
+        col.doc(key).set({t:inp.value, updatedAt:Date.now()})
+          .then(function(){ setStamp('Bewaard op al je toestellen'); })
+          .catch(function(){ setStamp('Niet bewaard — probeer opnieuw'); });
+      },500);
+    });
+  });
+
+  var use=window.claude && window.claude.use;
+  if(!use){ setStamp('Alleen op dit toestel'); return; }
+  window.claude.use('db').then(function(db){
+    if(!db){ setStamp('Alleen op dit toestel'); return; }
+    col=db.collection('log');
+    chkCol=db.collection('checks');
+    cntCol=db.collection('counts');
+    cntCol.onSnapshot(function(snap){
+      var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
+      counts=next; saveCountsLocal(); paintCounts();
+    },function(){});
+    chkCol.onSnapshot(function(snap){
+      var next={}; snap.docs.forEach(function(d){ if(d.exists && (d.data()||{}).done) next[d.id]=true; });
+      checks=next; saveChecksLocal(); paintChecks();
+    },function(){});
+    var first=true;
+    col.onSnapshot(function(snap){
+      var remote={};
+      snap.docs.forEach(function(d){ if(d.exists) remote[d.id]=(d.data()||{}).t; });
+      inputs.forEach(function(inp){
+        var key=keyOf(inp);
+        if(document.activeElement===inp) return;
+        if(remote[key]!=null){
+          if(inp.value!==remote[key]) inp.value=remote[key];
+          if(!local[key]) local[key]={};
+          local[key].t=remote[key];
+        }
+      });
+      saveLocal(local);
+      if(first && !snap.metadata.fromCache){
+        first=false;
+        /* eenmalig: gewichten die enkel in deze browser stonden mee naar de database */
+        inputs.forEach(function(inp){
+          var key=keyOf(inp), v=local[key]&&local[key].t;
+          if(v && remote[key]==null) col.doc(key).set({t:v, updatedAt:Date.now()}).catch(function(){});
+        });
+      }
+      setStamp('Bewaard op al je toestellen');
+    },function(){ setStamp('Verbinding verbroken — herlaad'); });
+  });
+
+})();
+</script>
+<script>
+(function(){
+  /* ================= figuur-motor ================= */
+  var D=Math.PI/180, GY=210;
+  var L={T:54,N:17,UA:28,FA:26,TH:46,SH:46,FT:17};
+  function dir(a){ return [Math.sin(a*D),-Math.cos(a*D)]; }
+  function add(p,a,len){ var d=dir(a); return [p[0]+d[0]*len,p[1]+d[1]*len]; }
+  function ik(R,G,a,b,pref){
+    var dx=G[0]-R[0], dy=G[1]-R[1], d=Math.sqrt(dx*dx+dy*dy);
+    d=Math.max(Math.abs(a-b)+.01,Math.min(a+b-.01,d));
+    var A=Math.acos((a*a+d*d-b*b)/(2*a*d)), base=Math.atan2(dy,dx);
+    var c1=[R[0]+a*Math.cos(base+A),R[1]+a*Math.sin(base+A)], c2=[R[0]+a*Math.cos(base-A),R[1]+a*Math.sin(base-A)];
+    var score=function(c){ return pref==='front'?c[0]:pref==='back'?-c[0]:pref==='down'?c[1]:-c[1]; };
+    var J=score(c1)>=score(c2)?c1:c2;
+    var hl=Math.sqrt(Math.pow(G[0]-J[0],2)+Math.pow(G[1]-J[1],2))||1;
+    return [J,[J[0]+(G[0]-J[0])/hl*b, J[1]+(G[1]-J[1])/hl*b]];
+  }
+  var DEF={t:0,h:0,ua:180,fa:180,th:180,sh:180,ft:90};
+  function v(P,k){ if(P[k]!==undefined) return P[k];
+    if(k==='ua2'||k==='fa2'||k==='th2'||k==='sh2'||k==='ft2') return v(P,k.slice(0,-1));
+    return DEF[k]; }
+  function side(P){
+    var Hp=[0,0], S=add(Hp,v(P,'t'),L.T), Hd=add(S,v(P,'t')+v(P,'h'),L.N);
+    var j={hip:Hp,sh:S,head:Hd};
+    j.el=add(S,v(P,'ua'),L.UA); j.wr=add(j.el,v(P,'fa'),L.FA);
+    j.el2=add(S,v(P,'ua2'),L.UA); j.wr2=add(j.el2,v(P,'fa2'),L.FA);
+    j.kn=add(Hp,v(P,'th'),L.TH); j.an=add(j.kn,v(P,'sh'),L.SH);
+    j.kn2=add(Hp,v(P,'th2'),L.TH); j.an2=add(j.kn2,v(P,'sh2'),L.SH);
+    var an=P.anchor||'hip', at=P.at||[150,111], ref=j[an], dx=at[0]-ref[0], dy=at[1]-ref[1];
+    for(var n in j){ j[n]=[j[n][0]+dx,j[n][1]+dy]; }
+    if(P.l){ var r=ik(j.hip,P.l,L.TH,L.SH,P.lb||'front'); j.kn=r[0]; j.an=r[1]; }
+    if(P.l2){ var r2=ik(j.hip,P.l2,L.TH,L.SH,P.lb2||P.lb||'front'); j.kn2=r2[0]; j.an2=r2[1]; }
+    if(P.a){ var r3=ik(j.sh,P.a,L.UA,L.FA,P.ab||'down'); j.el=r3[0]; j.wr=r3[1]; }
+    if(P.a2){ var r4=ik(j.sh,P.a2,L.UA,L.FA,P.ab2||P.ab||'down'); j.el2=r4[0]; j.wr2=r4[1]; }
+    j.to=add(j.an,v(P,'ft'),L.FT); j.to2=add(j.an2,v(P,'ft2'),L.FT);
+    j.ang=v(P,'t'); j.fa=v(P,'fa'); j.fa2=v(P,'fa2');
+    return j;
+  }
+  function front(P){
+    var c=P.cx||150, sy=P.sy||84, rot=P.rot||0, cw=Math.cos(rot*D), hw=24*cw, j={};
+    j.head=[c+Math.sin(rot*D)*2,sy-22]; j.nose=[c+Math.sin(rot*D)*9, sy-22];
+    j.shL=[c-hw,sy]; j.shR=[c+hw,sy];
+    var hy=P.hy||sy+54; j.hip=[c,hy]; j.hpL=[c-13,hy]; j.hpR=[c+13,hy];
+    var lh=P.lh||[-6,54], rh=P.rh||[6,54];
+    j.wrL=[j.shL[0]+lh[0]*(P.armRot?cw:1),sy+lh[1]]; j.wrR=[j.shR[0]+rh[0]*(P.armRot?cw:1),sy+rh[1]];
+    j.elL=[(j.shL[0]+j.wrL[0])/2-(P.eb||0),(sy+j.wrL[1])/2+(P.ed===undefined?3:P.ed)];
+    j.elR=[(j.shR[0]+j.wrR[0])/2+(P.eb||0),(sy+j.wrR[1])/2+(P.ed===undefined?3:P.ed)];
+    var kL=P.kL||[-15,hy+46-hy], kR=P.kR||[15,46], fL=P.fL||[-16,203-hy], fR=P.fR||[16,203-hy];
+    j.knL=[c+kL[0],hy+kL[1]]; j.knR=[c+kR[0],hy+kR[1]]; j.anL=[c+fL[0],hy+fL[1]]; j.anR=[c+fR[0],hy+fR[1]];
+    return j;
+  }
+  function lerp(A,B,p){
+    var o={}, k;
+    for(k in A){ var a=A[k], b=B[k];
+      if(typeof a==='number' && typeof b==='number') o[k]=a+(b-a)*p;
+      else if(Array.isArray(a) && Array.isArray(b)) o[k]=[a[0]+(b[0]-a[0])*p,a[1]+(b[1]-a[1])*p];
+      else o[k]=p<.5?a:b; }
+    for(k in B){ if(!(k in o)) o[k]=B[k]; }
+    return o;
+  }
+  function ease(x){ return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2; }
+
+  /* ---------- tekenen ---------- */
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag,attrs,parent){ var e=document.createElementNS(NS,tag); for(var k in attrs){ var v=attrs[k]; if((k==='fill'||k==='stroke')&&String(v).indexOf('var(')===0) e.style[k]=v; else e.setAttribute(k,v); } if(parent) parent.appendChild(e); return e; }
+  function fixv(h){ return (h||'').replace(/(fill|stroke)="(var\([^)]*\))"/g,'style="$1:$2"'); }
+  function pts(){ return [].slice.call(arguments).map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' L'); }
+  function seg(p){ return 'M'+pts.apply(null,p); }
+  var INK='var(--ink)', FAR='var(--muted-soft)', ACC='var(--accent)', PROP='var(--line)';
+
+  function build(svg,view){
+    var g={};
+    var mk=function(n,c,w){ g[n]=el('path',{fill:'none',stroke:c,'stroke-width':w,'stroke-linecap':'round','stroke-linejoin':'round'},svg); };
+    g.dyn=el('g',{},svg);
+    if(view==='front'){
+      mk('legL',INK,8); mk('legR',INK,8); mk('torso',INK,11); mk('armL',INK,7); mk('armR',INK,7);
+      g.head=el('circle',{r:12,fill:INK},svg); g.nose=el('circle',{r:2.4,fill:'var(--paper)'},svg);
+    } else {
+      mk('leg2',FAR,8); mk('arm2',FAR,7); mk('torso',INK,11); mk('leg',INK,8);
+      g.head=el('circle',{r:12,fill:INK},svg); mk('arm',INK,7);
+    }
+    g.top=el('g',{},svg);
+    return g;
+  }
+  function dbAt(parent,p,kind,ang){
+    if(kind==='disc'){ el('circle',{cx:p[0],cy:p[1],r:8,fill:ACC},parent); el('circle',{cx:p[0],cy:p[1],r:3,fill:'var(--paper)'},parent); return; }
+    if(kind==='plate'){ el('circle',{cx:p[0],cy:p[1],r:12,fill:'none',stroke:ACC,'stroke-width':5},parent); return; }
+    if(kind==='grip'){ el('rect',{x:p[0]-3,y:p[1]-8,width:6,height:16,rx:3,fill:ACC},parent); return; }
+    var w=kind==='v'?10:26, h=kind==='v'?26:10;
+    el('rect',{x:p[0]-w/2,y:p[1]-h/2,width:w,height:h,rx:3.5,fill:ACC},parent);
+  }
+  function draw(g,view,P,ex){
+    var j=view==='front'?front(P):side(P), dyn=g.dyn, top=g.top;
+    while(dyn.firstChild) dyn.removeChild(dyn.firstChild);
+    while(top.firstChild) top.removeChild(top.firstChild);
+    var J=function(n){ return j[n]; };
+    (ex.cables||[]).forEach(function(c){ el('path',{d:seg([c.from,J(c.to)]),stroke:'var(--muted)','stroke-width':1.6,fill:'none'},dyn); });
+    (ex.links||[]).forEach(function(c){ el('path',{d:seg([J(c[0]),J(c[1])]),stroke:ACC,'stroke-width':3,fill:'none','stroke-linecap':'round'},top); });
+    (ex.levers||[]).forEach(function(c){ el('path',{d:seg([c.from,J(c.to)]),stroke:PROP,'stroke-width':6,fill:'none','stroke-linecap':'round'},dyn); });
+    (ex.pads||[]).forEach(function(c){ var p=J(c.at); el('circle',{cx:p[0]+(c.dx||0),cy:p[1]+(c.dy||0),r:c.r||8,fill:PROP},dyn); });
+    if(view==='front'){
+      g.legL.setAttribute('d',seg([j.hpL,j.knL,j.anL])); g.legR.setAttribute('d',seg([j.hpR,j.knR,j.anR]));
+      g.torso.setAttribute('d','M'+pts(j.shL,j.shR)+' M'+pts([(j.shL[0]+j.shR[0])/2,j.shL[1]],j.hip)+' M'+pts(j.hpL,j.hpR));
+      g.armL.setAttribute('d',seg([j.shL,j.elL,j.wrL])); g.armR.setAttribute('d',seg([j.shR,j.elR,j.wrR]));
+      g.head.setAttribute('cx',j.head[0]); g.head.setAttribute('cy',j.head[1]);
+      g.nose.setAttribute('cx',j.nose[0]); g.nose.setAttribute('cy',j.nose[1]); g.nose.style.display=P.rot?'':'none';
+    } else {
+      g.leg2.setAttribute('d',seg([j.hip,j.kn2,j.an2,j.to2])); g.leg.setAttribute('d',seg([j.hip,j.kn,j.an,j.to]));
+      g.arm2.setAttribute('d',seg([j.sh,j.el2,j.wr2])); g.arm.setAttribute('d',seg([j.sh,j.el,j.wr]));
+      g.torso.setAttribute('d',seg([j.hip,j.sh]));
+      g.head.setAttribute('cx',j.head[0]); g.head.setAttribute('cy',j.head[1]);
+    }
+    (ex.hold||[]).forEach(function(h){ dbAt(top,J(h[0]),h[1]); });
+  }
+
+  /* ---------- rekwisieten (statisch) ---------- */
+  function P_(d,c){ return '<path d="'+d+'" fill="none" stroke="'+(c||'var(--line)')+'" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'; }
+  function bench(x1,x2,y){ return P_('M'+x1+' '+y+'H'+x2,'var(--line)')+P_('M'+(x1+10)+' '+(y+4)+'V207 M'+(x2-10)+' '+(y+4)+'V207','var(--line)'); }
+  function seat(x1,x2,y,bx,btop){ return bench(x1,x2,y)+(bx!==undefined?P_('M'+bx+' '+(y-2)+'L'+(bx-8)+' '+btop):''); }
+  function tower(x){ return P_('M'+x+' 14V207','var(--line)')+P_('M'+(x-14)+' 207H'+(x+14),'var(--line)'); }
+  function pulley(x,y){ return '<circle cx="'+x+'" cy="'+y+'" r="5" style="fill:var(--paper);stroke:var(--muted)" stroke-width="2"/>'; }
+  function bar(x1,x2,y){ return P_('M'+x1+' '+y+'H'+x2,'var(--muted-soft)'); }
+  function mat(x1,x2){ return '<rect x="'+x1+'" y="206" width="'+(x2-x1)+'" height="5" rx="2.5" fill="var(--line)"/>'; }
+
+  /* ---------- tijdlijnen ---------- */
+  function cyc(down,up,dl,ul,hold,top){ return [[0,1,down,dl],[1,1,hold||300,dl],[1,0,up,ul],[0,0,top||600,'']]; }
+  var SLOW_DOWN=function(){ return cyc(1800,1000,'Traag zakken','Vlot omhoog'); };
+  var PULL=function(){ return cyc(1000,1800,'Vlot trekken','Traag terug'); };
+  var PUSH=function(){ return cyc(1000,1800,'Vlot duwen','Traag terug'); };
+  var LIFT=function(){ return cyc(1000,1800,'Vlot omhoog','Traag zakken'); };
+
+  var ST={at:[160,111],t:2,l:[165,203],l2:[161,203]};
+  function S(o){ var r={}; for(var k in ST) r[k]=ST[k]; for(k in o) r[k]=o[k]; return r; }
+
+  var EX={
+    squat:{cap:'Voeten op heupbreedte, handen achter je hoofd of armen naar voren. Zak traag tot je dijen ongeveer horizontaal zijn, kom vlot terug omhoog. Knieën in de richting van je tenen.',
+      poses:[S({ua:90,fa:90}),S({at:[140,160],t:38,ua:92,fa:92})],seq:SLOW_DOWN()},
+    goblet:{cap:'Dumbbell of kettlebell rechtop tegen je borst. Zak traag (2 tellen) tot je dijen ongeveer horizontaal zijn, kom vlot terug omhoog.',
+      poses:[S({ua:172,fa:25,ua2:172,fa2:25}),S({at:[143,158],t:32,ua:185,fa:45,ua2:185,fa2:45})],seq:SLOW_DOWN(),hold:[['wr','v']]},
+    lunge:{cap:'Stap met één been ver naar achter en zak traag recht naar beneden tot je achterste knie bijna de grond raakt. Duw je vlot terug op via je voorste hiel.',
+      poses:[S({at:[176,111],l:[182,203],l2:[178,203],ua:182,fa:180,ua2:178,fa2:180}),{at:[138,152],t:5,l:[182,203],l2:[96,198],lb2:'down',ft2:150,ua:182,fa:180,ua2:178,fa2:180}],
+      seq:SLOW_DOWN(),hold:[['wr','h'],['wr2','h']]},
+    bulgarian:{cap:'Achterste voet met de wreef op de bank. Zak traag recht naar beneden, kom vlot terug omhoog. Je voorste knie blijft boven je voet.',
+      props:bench(55,125,168),
+      poses:[{at:[172,116],t:4,l:[196,203],l2:[112,162],lb2:'down',ft2:250,ua:182,fa:180,ua2:178,fa2:180},{at:[150,156],t:14,l:[196,203],l2:[112,162],lb2:'down',ft2:250,ua:182,fa:180,ua2:178,fa2:180}],
+      seq:SLOW_DOWN(),hold:[['wr','h'],['wr2','h']]},
+    dbpress:{cap:'Bank op 15°, schouderbladen tegen de bank. Duw de dumbbells vlot omhoog boven je borst, laat ze traag zakken tot naast je borst.',
+      props:P_('M70 160L205 124')+P_('M90 160V207 M190 132V207'),
+      poses:[{at:[110,142],t:75,h:0,l:[58,203],lb:'up',a:[160,74],a2:[158,74]},{at:[110,142],t:75,l:[58,203],lb:'up',a:[150,118],a2:[148,118],ab:'down'}],
+      seq:SLOW_DOWN(),hold:[['wr','disc']]},
+    chestmachine:{cap:'Handgrepen op borsthoogte. Duw vlot naar voren zonder je ellebogen helemaal op slot te zetten, kom traag terug.',
+      props:seat(110,170,160,118,82),
+      poses:[{at:[136,152],t:-6,l:[192,203],a:[150,102],a2:[147,102],ab:'down'},{at:[136,152],t:-6,l:[192,203],a:[184,100],a2:[181,100],ab:'down'}],
+      seq:PUSH(),hold:[['wr','grip']],levers:[{from:[222,58],to:'wr'}]},
+    pushup:{cap:'Lichaam één rechte lijn van hoofd tot hielen. Zak traag tot je borst bijna de grond raakt, duw vlot terug.',
+      props:mat(50,240),
+      poses:[{anchor:'an',at:[70,201],t:72,th:252,sh:252,ft:170,a:[210,206],a2:[206,206],ab:'back'},{anchor:'an',at:[70,201],t:86,th:266,sh:266,ft:170,a:[210,206],a2:[206,206],ab:'up'}],
+      seq:SLOW_DOWN()},
+    fly:{view:'front',cap:'Ellebogen licht gebogen en vast. Breng de handgrepen vlot samen voor je borst, laat ze traag terug open gaan tot je borst rekt.',
+      props:P_('M120 154H180')+P_('M150 156V207'),
+      poses:[{hy:150,lh:[-70,6],rh:[70,6],ed:6,kL:[-18,10],kR:[18,10],fL:[-20,53],fR:[20,53]},{hy:150,lh:[18,10],rh:[-18,10],ed:8,eb:6,kL:[-18,10],kR:[18,10],fL:[-20,53],fR:[20,53]}],
+      seq:cyc(1000,1800,'Vlot samen','Traag open'),hold:[['wrL','grip'],['wrR','grip']]},
+    legcurl:{cap:'Knieën in lijn met het draaipunt. Trek je hielen vlot onder de bank, laat ze traag terugkomen.',
+      props:seat(100,175,160,108,88),
+      poses:[{at:[128,152],t:-6,th:92,sh:105,ft:20,a:[150,160],a2:[148,160]},{at:[128,152],t:-6,th:92,sh:205,ft:120,a:[150,160],a2:[148,160]}],
+      seq:PULL(),pads:[{at:'an',dx:4,r:8}]},
+    abduction:{view:'front',cap:'Rechtop zitten, rug tegen de leuning. Duw je knieën vlot naar buiten, laat ze traag terugkomen. Niet zwaaien.',
+      props:P_('M115 154H185')+P_('M150 156V207'),
+      poses:[{hy:150,lh:[-4,58],rh:[4,58],kL:[-20,10],kR:[20,10],fL:[-20,53],fR:[20,53]},{hy:150,lh:[-4,58],rh:[4,58],kL:[-50,8],kR:[50,8],fL:[-36,53],fR:[36,53]}],
+      seq:cyc(1000,1800,'Vlot open','Traag terug'),pads:[{at:'knL',dx:-6,r:6},{at:'knR',dx:6,r:6}]},
+    rdl:{cap:'Knieën licht gebogen, dumbbells dicht langs je benen, rug recht. Duw je heupen traag naar achter tot net onder de knie, kom vlot omhoog door je heupen naar voren te duwen.',
+      poses:[S({ua:180,fa:180,ua2:180,fa2:180}),S({at:[136,116],t:72,ua:180,fa:180,ua2:180,fa2:180})],seq:SLOW_DOWN(),hold:[['wr','h'],['wr2','h']]},
+    csrow:{cap:'Borst stevig op het kussen. Trek je ellebogen vlot naar achter langs je lichaam, laat traag zakken tot je armen gestrekt zijn.',
+      props:P_('M132 154L184 110')+P_('M150 146V207'),
+      poses:[{at:[128,140],t:50,l:[72,203],l2:[68,203],ua:180,fa:180,ua2:180,fa2:180},{at:[128,140],t:50,l:[72,203],l2:[68,203],ua:238,fa:178,ua2:238,fa2:178}],
+      seq:PULL(),hold:[['wr','h']]},
+    cablerow:{cap:'Rug recht, borst fier. Trek de handgreep vlot naar je navel, ellebogen langs je lichaam. Strek traag terug zonder voorover te hangen.',
+      props:bench(70,140,182)+P_('M196 160V200','var(--line)')+pulley(268,178)+P_('M268 30V207','var(--line)'),
+      poses:[{at:[112,176],t:12,l:[193,176],lb:'up',a:[178,128],a2:[175,128]},{at:[112,176],t:-6,l:[193,176],lb:'up',a:[124,148],a2:[121,148],ab:'back'}],
+      seq:PULL(),hold:[['wr','grip']],cables:[{from:[268,178],to:'wr'}]},
+    onearmrow:{cap:'Knie en hand op de bank, rug plat. Trek de dumbbell vlot naar je heup, laat traag zakken tot je arm gestrekt is.',
+      props:bench(70,190,170),
+      poses:[{at:[112,128],t:88,l:[96,203],l2:[64,165],lb2:'down',ft2:-90,a2:[168,165],ua:180,fa:180},{at:[112,128],t:88,l:[96,203],l2:[64,165],lb2:'down',ft2:-90,a2:[168,165],ua:262,fa:178}],
+      seq:PULL(),hold:[['wr','h']]},
+    dbshoulder:{cap:'Rug tegen de leuning. Duw de dumbbells vlot boven je hoofd, laat ze traag zakken tot op schouderhoogte.',
+      props:seat(105,170,160,112,72),
+      poses:[{at:[132,152],t:-4,l:[188,203],ua:182,fa:12,ua2:182,fa2:12},{at:[132,152],t:-4,l:[188,203],ua:4,fa:4,ua2:4,fa2:4}],
+      seq:PUSH(),hold:[['wr','disc']]},
+    shouldermachine:{cap:'Handgrepen net onder schouderhoogte. Duw vlot omhoog zonder je rug hol te trekken, laat traag zakken.',
+      props:seat(105,170,160,112,72),
+      poses:[{at:[132,152],t:-4,l:[188,203],ua:182,fa:12,ua2:182,fa2:12},{at:[132,152],t:-4,l:[188,203],ua:6,fa:6,ua2:6,fa2:6}],
+      seq:PUSH(),hold:[['wr','grip']],levers:[{from:[90,40],to:'wr'}]},
+    cablelateral:{view:'front',cap:'Foto toont de versie met twee armen; jij doet één arm. Kabel laag aan de andere kant, voor je lichaam. Til vlot zijwaarts tot schouderhoogte, laat traag zakken.',
+      props:tower(60)+pulley(60,200),
+      poses:[{lh:[-14,40],rh:[-14,52],ed:3},{lh:[-14,40],rh:[54,4],ed:3}],
+      seq:LIFT(),hold:[['wrR','grip']],cables:[{from:[60,200],to:'wrR'}]},
+    lateral:{view:'front',cap:'Licht voorover, ellebogen licht gebogen. Til de dumbbells vlot zijwaarts tot schouderhoogte, laat traag zakken. Niet zwaaien.',
+      poses:[{lh:[-8,54],rh:[8,54]},{lh:[-54,4],rh:[54,4]}],seq:LIFT(),hold:[['wrL','v'],['wrR','v']]},
+    pulldown:{cap:'Licht achterover, borst fier. Trek de stang vlot naar je bovenborst, ellebogen naar beneden. Laat traag omhoog tot je armen gestrekt zijn.',
+      props:seat(108,175,165,null)+'<rect x="160" y="138" width="22" height="10" rx="5" fill="var(--line)"/>'+pulley(150,10),
+      poses:[{at:[140,158],t:-10,l:[190,203],a:[150,46],a2:[147,46],ab:'back'},{at:[140,158],t:-12,l:[190,203],a:[146,100],a2:[143,100],ab:'back'}],
+      seq:PULL(),hold:[['wr','grip']],cables:[{from:[150,10],to:'wr'}]},
+    facepull:{cap:'Kabel op gezichtshoogte, licht. Trek het touw vlot naar je gezicht, ellebogen hoog en naar buiten. Traag terug.',
+      props:tower(268)+pulley(268,62),
+      poses:[S({at:[150,111],l:[155,203],l2:[150,203],t:-2,a:[204,62],a2:[201,62],ab:'down'}),S({at:[150,111],l:[155,203],l2:[150,203],t:-4,a:[162,46],a2:[159,46],ab:'down'})],
+      seq:PULL(),hold:[['wr','grip']],cables:[{from:[268,62],to:'wr'}]},
+    hang:{cap:'Handen iets breder dan schouders. Hang met gestrekte armen, trek je schouders licht naar beneden — niet passief in je schouders hangen.',
+      props:bar(110,200,40),noGround:true,
+      poses:[{anchor:'wr',at:[160,40],t:0,ua:0,fa:0,ua2:0,fa2:0,th:182,sh:252,ft:160},{anchor:'wr',at:[160,40],t:3,ua:6,fa:2,ua2:6,fa2:2,th:182,sh:252,ft:160}],
+      seq:[[0,1,1500,'Schouders laag'],[1,1,2500,'Hou vast'],[1,0,1500,'Schouders laag'],[0,0,600,'']]},
+    pullup:{cap:'Knieën op het hulpkussen of voet in een band. Trek jezelf vlot op tot je kin boven de stang, laat traag zakken tot je armen gestrekt zijn.',
+      props:bar(110,200,48),noGround:true,
+      poses:[{anchor:'wr',at:[160,48],t:2,ua:0,fa:0,ua2:0,fa2:0,th:178,sh:262,ft:180},{anchor:'wr',at:[160,48],t:2,ua:168,fa:12,ua2:168,fa2:12,th:178,sh:262,ft:180}],
+      seq:cyc(1100,1900,'Vlot op','Traag zakken'),pads:[{at:'kn',dy:7,r:9}]},
+    plank:{cap:'Ellebogen onder je schouders, één rechte lijn van hoofd tot hielen. Span je buik en billen aan, adem rustig door.',tip:'60 sec makkelijk? Maak hem zwaarder, niet langer: alles maximaal aanspannen, ellebogen verder naar voren of één been optillen. Blijf rond 30–45 sec.',
+      props:mat(50,240),
+      poses:[{anchor:'an',at:[70,201],t:84,th:264,sh:264,ft:170,ua:180,fa:90,ua2:180,fa2:90},{anchor:'an',at:[70,201],t:84,th:264,sh:264,ft:170,ua:180,fa:90,ua2:180,fa2:90}],
+      seq:[[0,1,3000,'Hou vast · 30–60 sec'],[1,0,3000,'Hou vast · 30–60 sec']]},
+    birddog:{cap:'Handen onder je schouders, knieën onder je heupen. Strek één arm en het andere been tot horizontaal, hou 5–10 tellen vast, rug stil.',
+      props:mat(40,240),
+      poses:[{at:[110,152],t:90,th:180,sh:270,ft:180,th2:180,sh2:270,ft2:180,ua:180,fa:180,ua2:180,fa2:180},{at:[110,152],t:90,th:180,sh:270,ft:180,th2:268,sh2:270,ft2:180,ua:88,fa:88,ua2:180,fa2:180}],
+      seq:[[0,1,1200,'Strekken'],[1,1,2200,'Hou 5 tellen'],[1,0,1200,'Terug'],[0,0,700,'']]},
+    crunch:{cap:'Handgrepen bij je borst, voeten vast. Rol je romp vlot naar voren door je buik aan te spannen, kom traag terug.',
+      props:seat(105,170,165,112,90),
+      poses:[{at:[132,157],t:-6,l:[186,203],ua:168,fa:18,ua2:168,fa2:18},{at:[132,157],t:38,l:[186,203],ua:205,fa:60,ua2:205,fa2:60}],
+      seq:cyc(1000,1800,'Vlot aanspannen','Traag terug'),hold:[['wr','grip']]},
+    carry:{cap:'Zware dumbbells naast je lichaam. Wandel rechtop met kleine passen, schouders laag en naar achter, romp stil.',
+      poses:[{at:[150,113],t:1,th:162,sh:184,th2:198,sh2:206,ua:180,fa:180,ua2:180,fa2:180},{at:[150,113],t:1,th:198,sh:206,th2:162,sh2:184,ua:180,fa:180,ua2:180,fa2:180}],
+      seq:[[0,1,650,'Rechtop wandelen'],[1,0,650,'Rechtop wandelen']],hold:[['wr','h']]},
+    backext:{cap:'Heupen net boven het kussen, rug recht. Zak traag naar beneden, kom vlot op tot je lichaam één lijn vormt — niet verder doorbuigen.',
+      props:P_('M150 148L172 128')+P_('M78 192L96 182')+P_('M120 207L160 150 M80 207L88 190'),
+      poses:[{at:[156,128],t:172,th:226,sh:226,ft:120,ua:325,fa:220,ua2:325,fa2:220},{at:[156,128],t:46,th:226,sh:226,ft:120,ua:200,fa:96,ua2:200,fa2:96}],
+      seq:LIFT(),hold:[['wr','plate']]},
+    ohext:{cap:'Rug naar de kabel, touw achter je hoofd. Ellebogen hoog en dicht bij je hoofd; strek vlot naar voren-boven, buig traag terug.',
+      props:tower(40)+pulley(40,196),
+      poses:[S({at:[150,113],l:[176,203],l2:[124,203],t:24,ua:20,fa:195,ua2:20,fa2:195}),S({at:[150,113],l:[176,203],l2:[124,203],t:24,ua:30,fa:30,ua2:30,fa2:30})],
+      seq:cyc(1000,1800,'Vlot strekken','Traag buigen'),hold:[['wr','grip']],cables:[{from:[40,196],to:'wr'}]},
+    pushdown:{cap:'Ellebogen vast tegen je zij. Duw het touw vlot naar beneden tot je armen gestrekt zijn, laat traag terugkomen tot borsthoogte.',
+      props:tower(240)+pulley(240,18),
+      poses:[S({t:8,ua:176,fa:48,ua2:176,fa2:48}),S({t:8,ua:176,fa:172,ua2:176,fa2:172})],
+      seq:cyc(1000,1800,'Vlot duwen','Traag terug'),hold:[['wr','grip']],cables:[{from:[240,18],to:'wr'}]},
+    cablecurl:{cap:'Ellebogen vast tegen je zij. Curl de stang vlot op, laat traag zakken tot je armen gestrekt zijn. Niet met je rug meehelpen.',
+      props:tower(250)+pulley(250,200),
+      poses:[S({ua:182,fa:178,ua2:182,fa2:178}),S({ua:182,fa:28,ua2:182,fa2:28})],seq:LIFT(),hold:[['wr','grip']],cables:[{from:[250,200],to:'wr'}]},
+    hammer:{cap:'Touw met duimen naar boven, ellebogen vast. Curl vlot op, laat traag zakken.',
+      props:tower(250)+pulley(250,200),
+      poses:[S({ua:182,fa:178,ua2:182,fa2:178}),S({ua:182,fa:32,ua2:182,fa2:32})],seq:LIFT(),hold:[['wr','grip']],cables:[{from:[250,200],to:'wr'}]},
+    curlmachine:{cap:'Bovenarmen plat op het kussen, oksels tegen de rand. Curl vlot op, laat traag zakken tot bijna gestrekt.',
+      props:seat(100,160,165,null)+P_('M164 112L196 136')+P_('M196 140V207'),
+      poses:[{at:[128,158],t:14,l:[182,203],a:[208,136],a2:[205,136],ab:'up'},{at:[128,158],t:14,l:[182,203],a:[176,80],a2:[173,80],ab:'down'}],
+      seq:LIFT(),hold:[['wr','grip']],levers:[{from:[188,128],to:'wr'}]},
+    dbcurl:{cap:'Ellebogen vast naast je lichaam. Curl de dumbbells vlot op, laat traag zakken. Niet zwaaien.',
+      poses:[S({ua:182,fa:178,ua2:182,fa2:178}),S({ua:182,fa:30,ua2:182,fa2:30})],seq:LIFT(),hold:[['wr','disc']]},
+    pullapart:{view:'front',cap:'Armen gestrekt voor je op schouderhoogte. Trek de band vlot uit elkaar tot je handen naast je lichaam zijn, schouderbladen samen. Traag terug.',
+      poses:[{lh:[12,8],rh:[-12,8],ed:0},{lh:[-58,4],rh:[58,4],ed:0}],
+      seq:cyc(900,1500,'Uit elkaar','Traag terug'),links:[['wrL','wrR']]},
+    rotation:{view:'front',cap:'Een bal is niet nodig. Voeten stil, armen gestrekt of gekruist. Draai rustig je romp naar links en naar rechts, heupen blijven naar voren.',
+      poses:[{rot:-55,armRot:true,lh:[-56,4],rh:[56,4],ed:0},{rot:55,armRot:true,lh:[-56,4],rh:[56,4],ed:0}],
+      seq:[[0,1,1600,'Rustig draaien'],[1,1,300,''],[1,0,1600,'Rustig draaien'],[0,0,300,'']]},
+    armcircle:{cap:'Rechtop, armen gestrekt. Maak grote, rustige cirkels: 10× naar voren, 10× naar achter.',
+      poses:[S({ua:180,fa:180,ua2:0,fa2:0}),S({ua:540,fa:540,ua2:360,fa2:360})],
+      seq:[[0,1,2600,'Grote cirkels']],linear:true}
+  };
+  EX.ss1={seqOf:['ohext','cablecurl'],cap:'Superset: een set Overhead Extension (touw) en meteen daarna een set Biceps Curl (stang), dan pas rust. Bij beide: vlot strekken of opcurlen, traag terug.'};
+  EX.ss2={seqOf:['pushdown','hammer'],cap:'Superset met hetzelfde touw: een set Rope Pushdown en meteen daarna een set Hammer Curl, dan pas rust. Bij beide: vlot duwen of opcurlen, traag terug.'};
+
+  var NAMES={'Squats zonder gewicht':'squat','Goblet Squat':'goblet','Dumbbell Reverse Lunges':'lunge','Bulgarian Split Squat':'bulgarian',
+    'Dumbbell Chest Press 15°':'dbpress','Chest Press Machine':'chestmachine','Push-Ups':'pushup','Chest Fly Machine':'fly',
+    'Leg Curl Machine':'legcurl','Hip Abduction Machine':'abduction','Dumbbell Romanian Deadlift':'rdl',
+    'Chest-Supported Row':'csrow','Seated Cable Row':'cablerow','Eenarmige Dumbbell Row':'onearmrow',
+    'Seated Dumbbell Shoulder Press':'dbshoulder','Shoulder Press Machine':'shouldermachine','Cable Single Arm Lateral Raise':'cablelateral','Dumbbell Lateral Raise':'lateral',
+    'Lat Pulldown Machine':'pulldown','Cable Face Pull':'facepull','Hangen aan de stang':'hang','(Assisted) Pull-Ups':'pullup',
+    'Plank + Side Plank':'plank','Bird Dog':'birddog','Crunch Machine':'crunch',"Farmer's Carry":'carry','Weighted Back Extension':'backext',
+    'Overhead Extension + Biceps Curl':'ss1','Rope Pushdown + Hammer Curl':'ss2','Overhead Cable Triceps Extension':'ohext','Triceps Rope Pushdown':'pushdown',
+    'Curl Machine':'curlmachine','Dumbbell Biceps Curl':'dbcurl','Band Pull-Aparts':'pullapart','Romprotatie':'rotation','Armzwaaien':'armcircle'};
+
+  /* ---------- speler ---------- */
+  function player(host,key){
+    var raf=null, stop=false, reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var list=EX[key].seqOf||[key], idx=0;
+    var svg=el('svg',{viewBox:'0 0 300 230',role:'img','aria-label':'Animatie van de uitvoering'},host);
+    var stat=el('g',{},svg), body=el('g',{},svg);
+    var lbl=el('text',{x:16,y:26,'font-family':'Work Sans,system-ui,sans-serif','font-size':12,'font-weight':600,'letter-spacing':1.5,fill:'var(--muted)'},svg);
+    var g, ex, view, total, T0=null;
+    function load(k){
+      ex=EX[k]; view=ex.view||'side';
+      stat.innerHTML=(ex.noGround?'':'<line x1="20" y1="'+GY+'" x2="280" y2="'+GY+'" style="stroke:var(--line)" stroke-width="2"/>')+fixv(ex.props);
+      while(body.firstChild) body.removeChild(body.firstChild);
+      g=build(body,view); total=ex.seq.reduce(function(s,x){return s+x[2];},0); T0=null;
+    }
+    load(list[0]);
+    if(reduce){ draw(g,view,lerp(ex.poses[0],ex.poses[1],.6),ex); return {stop:function(){}}; }
+    var reps=0;
+    function frame(ts){
+      if(stop) return;
+      if(T0===null) T0=ts;
+      var t=ts-T0;
+      if(t>=total){
+        reps++; if(list.length>1 && reps>=2){ reps=0; idx=(idx+1)%list.length; load(list[idx]); T0=ts; t=0; } else { T0=ts; t=0; }
+      }
+      var acc=0, P=ex.poses[0], text='';
+      for(var i=0;i<ex.seq.length;i++){ var s=ex.seq[i];
+        if(t<acc+s[2]){ var p=(t-acc)/s[2]; p=(s[0]===s[1])?0:(ex.linear?p:ease(p));
+          P=lerp(ex.poses[s[0]],ex.poses[s[1]],p); text=s[3]; break; }
+        acc+=s[2]; }
+      if(list.length>1) text=(idx+1)+' · '+(text||'').toUpperCase(); else text=(text||'').toUpperCase();
+      if(lbl.textContent!==text) lbl.textContent=text;
+      draw(g,view,P,ex);
+      raf=requestAnimationFrame(frame);
+    }
+    raf=requestAnimationFrame(frame);
+    return {stop:function(){ stop=true; if(raf) cancelAnimationFrame(raf); }};
+  }
+
+  var IMG={"squat": ["img/squat-0.jpg", "img/squat-1.jpg"], "goblet": ["img/goblet-0.jpg", "img/goblet-1.jpg"], "lunge": ["img/lunge-0.jpg", "img/lunge-1.jpg"], "bulgarian": ["img/bulgarian-0.jpg", "img/bulgarian-1.jpg"], "dbpress": ["img/dbpress-0.jpg", "img/dbpress-1.jpg"], "chestmachine": ["img/chestmachine-0.jpg", "img/chestmachine-1.jpg"], "pushup": ["img/pushup-0.jpg", "img/pushup-1.jpg"], "fly": ["img/fly-0.jpg", "img/fly-1.jpg"], "legcurl": ["img/legcurl-0.jpg", "img/legcurl-1.jpg"], "abduction": ["img/abduction-0.jpg", "img/abduction-1.jpg"], "rdl": ["img/rdl-0.jpg", "img/rdl-1.jpg"], "csrow": ["img/csrow-0.jpg", "img/csrow-1.jpg"], "cablerow": ["img/cablerow-0.jpg", "img/cablerow-1.jpg"], "onearmrow": ["img/onearmrow-0.jpg", "img/onearmrow-1.jpg"], "dbshoulder": ["img/dbshoulder-0.jpg", "img/dbshoulder-1.jpg"], "shouldermachine": ["img/shouldermachine-0.jpg", "img/shouldermachine-1.jpg"], "lateral": ["img/lateral-0.jpg", "img/lateral-1.jpg"], "pulldown": ["img/pulldown-0.jpg", "img/pulldown-1.jpg"], "facepull": ["img/facepull-0.jpg", "img/facepull-1.jpg"], "hang": ["img/hang-0.jpg", "img/hang-1.jpg"], "pullup": ["img/pullup-0.jpg", "img/pullup-1.jpg"], "plank": ["img/plank-0.jpg", "img/plank-1.jpg"], "crunch": ["img/crunch-0.jpg", "img/crunch-1.jpg"], "carry": ["img/carry-0.jpg", "img/carry-1.jpg"], "backext": ["img/backext-0.jpg", "img/backext-1.jpg"], "ohext": ["img/ohext-0.jpg", "img/ohext-1.jpg"], "pushdown": ["img/pushdown-0.jpg", "img/pushdown-1.jpg"], "cablecurl": ["img/cablecurl-0.jpg", "img/cablecurl-1.jpg"], "hammer": ["img/hammer-0.jpg", "img/hammer-1.jpg"], "curlmachine": ["img/curlmachine-0.jpg?v=2", "img/curlmachine-1.jpg?v=2"], "dbcurl": ["img/dbcurl-0.jpg", "img/dbcurl-1.jpg"], "pullapart": ["img/pullapart-0.jpg", "img/pullapart-1.jpg"], "armcircle": ["img/armcircle-0.jpg", "img/armcircle-1.jpg"]};
+  IMG.cablelateral=["img/cablelateral-0.jpg","img/cablelateral-1.jpg"]; IMG.rotation=["img/rotation-0.jpg","img/rotation-1.jpg"];
+  IMG.ss1=[IMG.ohext[0],IMG.ohext[1],IMG.cablecurl[0],IMG.cablecurl[1]];
+  IMG.ss2=[IMG.pushdown[0],IMG.pushdown[1],IMG.hammer[0],IMG.hammer[1]];
+  var SSL={ss1:['Overhead Extension','Biceps Curl'],ss2:['Rope Pushdown','Hammer Curl']};
+
+  function photos(host,k){
+    var list=IMG[k], i=0, timer=null, STEP=1500;
+    host.classList.add('sheet-photo');
+    host.innerHTML='<div class="ph-frame">'+list.map(function(src,n){ return '<img alt="'+(n%2===0?'Beginhouding':'Eindhouding')+'" src="'+src+'">'; }).join('')+'<span class="ph-tag"></span></div><div class="ph-foot"><span class="ph-dots"></span></div>';
+    var imgs=host.querySelectorAll('.ph-frame img'), dots=host.querySelector('.ph-dots'), tag=host.querySelector('.ph-tag');
+    dots.innerHTML=list.map(function(){ return '<i></i>'; }).join('');
+    function show(){
+      [].forEach.call(imgs,function(im,n){ im.classList.toggle('on',n===i); });
+      [].forEach.call(dots.children,function(d,n){ d.classList.toggle('on',n===i); });
+      var t=(i%2===0?'Start':'Eind'); if(SSL[k]) t=(i<2?'1 · '+SSL[k][0]:'2 · '+SSL[k][1])+' — '+t.toLowerCase();
+      tag.textContent=t;
+    }
+    function next(){ i=(i+1)%list.length; show(); }
+    function run(){ clearInterval(timer); timer=setInterval(next,STEP); }
+    host.querySelector('.ph-frame').addEventListener('click',function(){ next(); run(); });
+    show(); run();
+    return {stop:function(){ clearInterval(timer); }};
+  }
+
+  /* ---------- venster ---------- */
+  var bg=document.querySelector('.sheet-bg'), sh=document.querySelector('.sheet'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
+  var cur=null, lastFocus=null;
+  function open(name,btn){
+    var k=NAMES[name]; if(!k) return; lastFocus=btn;
+    tt.textContent=name;
+    bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+(IMG[k]?'<p class="ph-src">Foto\'s: Free Exercise DB</p>':'');
+    bodyEl.querySelector('.sheet-cap').textContent=EX[k].cap;
+    if(EX[k].tip){ var tp=document.createElement('p'); tp.className='sheet-tip'; tp.textContent=EX[k].tip; bodyEl.appendChild(tp); }
+    if(EX[k].link){ var lk=document.createElement('a'); lk.className='sheet-vid'; lk.href=EX[k].link[1]; lk.target='_blank'; lk.rel='noopener'; lk.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>'; lk.appendChild(document.createTextNode(EX[k].link[0])); bodyEl.appendChild(lk); }
+    bg.hidden=false; sh.hidden=false;
+    requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); });
+    cur=IMG[k]?photos(bodyEl.querySelector('.sheet-fig'),k):player(bodyEl.querySelector('.sheet-fig'),k);
+    sh.querySelector('.sheet-x').focus({preventScroll:true});
+  }
+  function close(){
+    if(cur){ cur.stop(); cur=null; }
+    bg.classList.remove('on'); sh.classList.remove('on');
+    setTimeout(function(){ bg.hidden=true; sh.hidden=true; bodyEl.innerHTML=''; },320);
+    if(lastFocus) lastFocus.focus({preventScroll:true});
+  }
+  var INFO_BTN='<button type="button" class="info-b" aria-label="Uitvoering"><span>i</span></button>';
+  document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
+    if(n.querySelector('.info-b')) return;
+    var name=n.textContent.replace(/ /g,' ').trim(); if(!NAMES[name]) return;
+    n.insertAdjacentHTML('beforeend',INFO_BTN);
+    var b=n.querySelector('.info-b'); b.setAttribute('aria-label','Uitvoering '+name);
+    b.addEventListener('click',function(e){ e.stopPropagation(); open(name,b); });
+  });
+  bg.addEventListener('click',close); sh.querySelector('.sheet-x').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !sh.hidden) close(); });
+  window.__p53anim={EX:EX,NAMES:NAMES,player:player,staticPose:function(host,k,ph){ var ex=EX[k], view=ex.view||'side'; var svg=el('svg',{viewBox:'0 0 300 230',width:205},host); svg.innerHTML='<line x1="20" y1="'+GY+'" x2="280" y2="'+GY+'" stroke="var(--line)" stroke-width="2"/>'+fixv(ex.props); var gb=el('g',{},svg); var g=build(gb,view); draw(g,view,ex.poses[ph],ex); }};
+})();
+</script>
+<script>
+(function(){ var ts=[].slice.call(document.querySelectorAll('textarea.sess-note')); if(!ts.length) return;
+  function fitOne(t){ if(!t.offsetParent) return; t.style.height='auto'; t.style.height=Math.max(300,t.scrollHeight+4)+'px'; }
+  function fit(){ ts.forEach(fitOne); }
+  ts.forEach(function(t){ t.addEventListener('input',function(){ fitOne(t); }); }); window.addEventListener('resize',fit);
+  setTimeout(fit,300); setTimeout(fit,2000);
+  document.addEventListener('click',function(e){ if(e.target.closest && e.target.closest('.tab')) setTimeout(fit,400); });
+})();
+</script>
+
+
+</body>
+</html>
