@@ -809,7 +809,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .stats-fig .o path,.stats-fig .o ellipse{fill:var(--line)!important;stroke:var(--line);stroke-width:5;stroke-linejoin:round;}
 .stats-fig .n,.stats-fig .m{fill:var(--paper-soft);stroke:var(--line);stroke-width:1.6;stroke-linejoin:round;}
 .stats-fig .m{transition:fill .5s ease;}
-.stats-list{list-style:none;margin:1.4rem 0 0;padding:0;}
+.stats-list{list-style:none;margin:2.6rem 0 0;padding:0;}
 .stats-list li{display:grid;grid-template-columns:10.6rem 1fr 2.4rem;align-items:center;gap:.7rem;padding:.42rem 0;border-bottom:1px solid var(--line-soft);font-size:14px;}
 .stats-list .sl-n{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .stats-list .sl-b{height:8px;border-radius:999px;background:var(--paper-soft);overflow:hidden;}
@@ -1335,7 +1335,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
       if(btn.classList.contains('reset-end')){ window.scrollTo({top:0,behavior:smooth}); }
       else if(btn.classList.contains('reset-top')){
-        var g=pane.querySelector('.exgrp'); if(g) window.scrollTo({top:g.getBoundingClientRect().top+window.scrollY-8,behavior:smooth});
+        var g=pane.querySelector('.exgrp'); if(g) window.scrollTo({top:g.getBoundingClientRect().top+window.scrollY+2,behavior:smooth});
       }
     });
   });
@@ -1520,12 +1520,12 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
-    var n=Object.keys(days).length, sub=document.getElementById('statsSub'), unit=perWeek?'sets per week':'sets', head;
+    var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
     if(per==='dag'){ var d=new Date(last); head=last?'Laatste training, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Laatste training'; }
     else if(per==='week') head='Laatste 7 dagen, '+n+(n===1?' trainingsdag':' trainingsdagen');
     else if(per==='maand') head='Laatste 30 dagen, '+n+(n===1?' trainingsdag':' trainingsdagen');
     else { var f=new Date(first); head='Sinds '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' trainingsdag':' trainingsdagen'); }
-    sub.textContent=n ? head+'. Hoe donkerder, hoe meer '+unit+' die spier kreeg.'
+    sub.textContent=n ? head+'.'
       : 'Nog geen gegevens in deze periode. Vink oefeningen af en de figuur kleurt mee.';
     var fmt=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+'').replace('.',','); };
     var rows=Object.keys(MLAB).sort(function(a,b){ return score[b]-score[a]; });
