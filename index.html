@@ -867,6 +867,24 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   font:600 12.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;opacity:0;transition:opacity .12s ease;}
 .prog-tip.on{opacity:1;}
 .prog-info{margin:1rem 0 0;font-size:12.5px;line-height:1.5;color:var(--muted);}
+.prog-bar{display:flex;justify-content:flex-start;margin:0 0 .5rem;}
+.prog-edit{display:inline-flex;align-items:center;gap:.4rem;appearance:none;cursor:pointer;min-height:34px;padding:0 .8rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
+  font:600 12.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;}
+.prog-edit[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+.prog-edit:active{transform:scale(.97);}
+.prog-chart.editing{height:auto;}
+.pe-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
+.pe-list li{display:flex;align-items:center;gap:.8rem;min-height:48px;border-bottom:1px solid var(--line-soft);font-size:15px;}
+.pe-list .pe-d{flex:1;color:var(--muted);}
+.pe-list .pe-v{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.pe-del{appearance:none;cursor:pointer;width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:var(--muted-soft);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+.pe-del:active{background:var(--paper-soft);}
+.pe-empty{padding:.9rem 0;color:var(--muted);font-size:14px;}
+.pe-add{display:grid;grid-template-columns:1fr 6.5rem auto;gap:.5rem;margin-top:1rem;align-items:center;}
+.pe-add input{min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 16px 'Work Sans',system-ui,sans-serif;padding:0 .7rem;min-width:0;-webkit-appearance:none;}
+.pe-add input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+.pe-add button{appearance:none;cursor:pointer;min-height:46px;padding:0 1rem;border-radius:999px;border:none;background:var(--ink);color:var(--paper);font:600 14px 'Work Sans',system-ui,sans-serif;}
+.pe-add button:active{transform:scale(.97);}
 .prog-tip span{font-weight:500;opacity:.75;margin-right:.4rem;}
 </style>
 
@@ -970,8 +988,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
           <button type="button" data-d="30">Maand</button><button type="button" data-d="90">3 maanden</button><button type="button" data-d="all">Alles</button>
         </div>
         <div class="prog-hero" id="progHero"></div>
+        <div class="prog-bar"><button type="button" class="prog-edit" id="progEdit" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Bewerken</span></button></div>
         <div class="prog-chart" id="progChart"></div>
-        <p class="prog-info">Verkeerd getal ingevuld? Vandaag: pas het veld aan of maak het leeg. Een vroegere meting: druk lang op het punt in de grafiek om het te verwijderen.</p>
+        <p class="prog-info">Verkeerd getal of een meting vergeten? Tik op Bewerken om metingen te verwijderen of toe te voegen met een datum.</p>
       </div>
     </section>
   </div>
@@ -1765,13 +1784,45 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     for(var x=a;x<=b+1e-9;x+=step) out.push(Math.round(x*100)/100);
     return out;
   }
+  var progEdit=false;
+  (function(){ var eb=document.getElementById('progEdit'); if(!eb) return;
+    eb.addEventListener('click',function(){ progEdit=!progEdit; eb.setAttribute('aria-pressed',progEdit?'true':'false'); eb.querySelector('span').textContent=progEdit?'Klaar':'Bewerken'; renderProg(); });
+  })();
+  function progPut(k,d,v){
+    var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d, ev={k:k,d:d,t:t,v:v};
+    prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
+  }
+  function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
+  function renderEdit(box,k,all,unit){
+    box.classList.add('editing');
+    var rows=all.slice().reverse().map(function(e){
+      return '<li><span class="pe-d">'+DAGEN[new Date(e.t).getDay()].slice(0,2)+' '+dLab(e.t)+' '+new Date(e.t).getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+unit+'</span>'+
+        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Meting van '+dLab(e.t)+' verwijderen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></li>';
+    }).join('');
+    box.innerHTML='<ul class="pe-list">'+(rows||'<li class="pe-empty">Nog geen metingen.</li>')+'</ul>'+
+      '<form class="pe-add"><input type="date" name="d" value="'+ymd(Date.now())+'" max="'+ymd(Date.now())+'" aria-label="Datum"><input type="text" name="v" inputmode="decimal" placeholder="'+unit+'" aria-label="Waarde in '+unit+'"><button type="submit">Toevoegen</button></form>';
+    box.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){ progDel(b.dataset.id); renderProg(); }); });
+    var f=box.querySelector('.pe-add');
+    f.addEventListener('submit',function(e){ e.preventDefault();
+      var d=f.d.value, v=numOf(f.v.value);
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ f.d.focus(); return; }
+      if(v==null){ f.v.focus(); return; }
+      progPut(k,d,v); renderProg();
+    });
+  }
   function renderProg(){
     var box=document.getElementById('progChart'), hero=document.getElementById('progHero'); if(!box||!progSel||!progSel.value) return;
+    box.classList.remove('editing');
     var k=progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
     var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; })
       .sort(function(a,b){ return a.t-b.t; });
     var now=Date.now(), from=pPer==='all'?(all.length?all[0].t:now):now-(+pPer)*864e5;
     var pts=all.filter(function(e){ return e.t>=from; });
+    if(progEdit){
+      if(!all.length) hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>';
+      else { var lst=all[all.length-1]; hero.innerHTML='<span class="ph-v">'+fmtV(lst.v)+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">laatst op '+dLab(lst.t)+'</span>'; }
+      renderEdit(box,k,all,unit); return;
+    }
     if(!all.length){ hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>'; box.innerHTML='<div class="prog-empty">Nog geen metingen. Vul je '+unit+' in bij deze oefening en vink ze af; vanaf dan groeit hier de lijn.</div>'; return; }
     var last=all[all.length-1], first=pts[0];
     var diff=first&&pts.length>1?last.v-first.v:null;

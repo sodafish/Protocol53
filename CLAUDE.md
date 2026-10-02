@@ -85,4 +85,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde;
   lang indrukken (650 ms) op een punt vraagt om dat meetpunt te verwijderen.
+- Knop Bewerken (`#progEdit`) boven de grafiek: toont alle metingen van die oefening (nieuwste eerst)
+  met een kruisje om te verwijderen, en een formulier datum + waarde om toe te voegen (zelfde datum =
+  overschrijven; tijdstip = 12u die dag).
 
