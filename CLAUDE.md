@@ -7,6 +7,8 @@ vooral op zijn iPhone, als app op het beginscherm.
 ## Bestanden
 - `index.html` — de hele app (HTML, CSS en JS in één bestand). Hier gebeuren bijna alle aanpassingen.
 - `cloud.js` — opslag in Supabase met offline wachtrij, inlogscherm, back-up en uitloggen.
+  Statusregel onder de titel (`#syncStamp`, klasse `warn`): offline / database niet bereikbaar
+  (bv. gepauzeerd Supabase-project) / nog niet bewaard; bij problemen elke minuut opnieuw proberen.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
 - `sw.js` — service worker. Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
   (icons, cloud.js, vendor) zodat de iPhone de nieuwe versie ophaalt.

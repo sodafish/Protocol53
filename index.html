@@ -497,6 +497,8 @@ body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
 .masthead h1{font-weight:600;font-size:clamp(34px,6vw,50px);line-height:1;letter-spacing:-0.01em;}
 .masthead h1 em{font-size:1em;font-weight:700;letter-spacing:-0.01em;}
 .masthead .stamp{font-weight:600;font-size:11.5px;letter-spacing:.12em;}
+.masthead .stamp.warn{flex-basis:100%;display:flex;align-items:flex-start;gap:.5rem;color:var(--accent);letter-spacing:.04em;text-transform:none;font-size:13px;line-height:1.35;}
+.masthead .stamp.warn::before{content:"";flex:none;margin-top:.42em;width:8px;height:8px;border-radius:50%;background:var(--accent);}
 
 /* hoofdtabs: pil-schakelaar zoals de Cupkeuring */
 .tabbar{background:var(--paper);padding-block:10px;}
@@ -1856,7 +1858,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* ---- logboek: gedeelde database, zodat elk toestel dezelfde gewichten ziet ---- */
   var STORE='fitlog-v1';
   var stamp=document.getElementById('syncStamp');
-  function setStamp(t){ if(!stamp) return; /* alleen tonen als er iets misloopt */ stamp.textContent=(t==='Bewaard op al je toestellen'||t==='Opslaan…')?'':t; }
+  function setStamp(t){ if(!stamp) return; /* alleen tonen als er iets misloopt; een waarschuwing van cloud.js blijft staan */ var v=(t==='Bewaard op al je toestellen'||t==='Opslaan…')?'':t; if(!v&&stamp.classList.contains('warn')) return; stamp.textContent=v; }
   function loadLocal(){ try{ return JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){ return {}; } }
   function saveLocal(d){ try{ localStorage.setItem(STORE, JSON.stringify(d)); }catch(e){} }
   var local=loadLocal();

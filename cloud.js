@@ -21,12 +21,17 @@
     var m=merged(coll);
     return {metadata:{fromCache:!pulled},docs:Object.keys(m).map(function(id){ var d=m[id]; return {id:id,exists:true,data:function(){ return d; }}; })};
   }
+  var down=false; /* true zolang de database niet antwoordt terwijl het toestel wel online is */
   function stamp(){
     var el=document.getElementById('syncStamp'); if(!el) return;
-    if(queue.length && !navigator.onLine) el.textContent='Offline — wordt bewaard zodra je online bent';
-    else if(queue.length && pulled) el.textContent='Nog niet bewaard — even geduld';
-    else if(el.textContent.indexOf('Offline')===0||el.textContent.indexOf('Nog niet')===0) el.textContent='';
+    var msg='';
+    if(!navigator.onLine) msg='Offline · wat je invult wordt bewaard zodra je online bent';
+    else if(down) msg='Database niet bereikbaar · je gegevens blijven op dit toestel bewaard';
+    else if(queue.length && pulled) msg='Nog niet bewaard · even geduld';
+    if(msg){ el.textContent=msg; el.classList.add('warn'); }
+    else if(el.classList.contains('warn')){ el.textContent=''; el.classList.remove('warn'); }
   }
+  function setDown(v){ if(down!==v){ down=v; stamp(); } }
   function emit(coll){
     (listeners[coll]||[]).forEach(function(l){ try{ l(snap(coll)); }catch(e){} });
     setTimeout(stamp,0);
@@ -42,23 +47,25 @@
       : sb.from('p53').upsert({user_id:user.id,coll:op.coll,id:op.id,data:op.data,updated_at:new Date().toISOString()},{onConflict:'user_id,coll,id'});
     return p.then(function(r){
       flushing=false;
-      if(r.error){ stamp(); return; }
+      if(r.error){ setDown(true); stamp(); return; }
+      setDown(false);
       queue.shift(); save(QKEY,queue);
       var c=cache[op.coll]=cache[op.coll]||{};
       if(op.data===null) delete c[op.id]; else c[op.id]=op.data;
       save(CKEY,cache);
       return flush();
-    },function(){ flushing=false; stamp(); });
+    },function(){ flushing=false; setDown(true); stamp(); });
   }
   function pull(){
     if(!user) return Promise.resolve();
     return sb.from('p53').select('coll,id,data').then(function(r){
-      if(r.error) return;
+      if(r.error){ setDown(true); return; }
+      setDown(false);
       var next={};
       (r.data||[]).forEach(function(row){ (next[row.coll]=next[row.coll]||{})[row.id]=row.data; });
       cache=next; save(CKEY,cache); pulled=true; emitAll();
       return r.data||[];
-    },function(){});
+    },function(){ setDown(true); });
   }
   function sync(){ return flush().then(pull); }
 
@@ -143,6 +150,9 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 
   window.addEventListener('online',function(){ sync(); });
+  window.addEventListener('offline',stamp);
+  /* zolang er iets misloopt: elke minuut opnieuw proberen */
+  setInterval(function(){ if(user && document.visibilityState==='visible' && navigator.onLine && (down||queue.length)) sync(); },60000);
   document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') sync(); });
 
   /* ---------- back-up en uitloggen ---------- */
