@@ -726,6 +726,9 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
   border-radius:22px 22px 0 0;padding:.6rem 1.25rem calc(1.4rem + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.61,.36,1);}
 .sheet.on{transform:none;}
+.pe-sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.pe-sheet .pe-add{margin:0 0 1.2rem;}
+.pe-sub{margin:-.5rem 0 1rem;font-size:13.5px;color:var(--muted);}
 .sheet-grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto .7rem;}
 .sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.9rem;}
 .sheet-head h3{margin:0;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:22px;line-height:1.15;}
@@ -849,7 +852,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog-sel select:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .prog-sel::after{content:"";position:absolute;right:1.2rem;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none;}
 .prog-head{display:flex;align-items:center;gap:.8rem;margin:1.4rem 0 .6rem;}
-.prog-hero{flex:1;min-width:0;display:flex;align-items:baseline;gap:.7rem;height:44px;white-space:nowrap;overflow:hidden;}
+.prog-hero{flex:1;min-width:0;display:flex;align-items:baseline;gap:.7rem;height:48px;padding-left:3px;margin-left:-3px;white-space:nowrap;overflow:hidden;}
 .prog-head .prog-edit{flex:none;}
 .prog-hero .ph-v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:40px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;}
 .prog-hero .ph-u{font-size:14px;font-weight:600;color:var(--muted);margin-left:-.4rem;}
@@ -868,11 +871,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog-tip{position:absolute;top:0;transform:translateX(-50%);pointer-events:none;background:var(--ink);color:var(--paper);border-radius:8px;padding:.35rem .6rem;
   font:600 12.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;opacity:0;transition:opacity .12s ease;}
 .prog-tip.on{opacity:1;}
-.prog-edit{display:inline-flex;align-items:center;gap:.4rem;appearance:none;cursor:pointer;min-height:34px;padding:0 .8rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
+.prog-edit{display:inline-flex;align-items:center;justify-content:center;appearance:none;cursor:pointer;width:44px;height:44px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;
   font:600 12.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;}
-.prog-edit[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
 .prog-edit:active{transform:scale(.97);}
-.prog-chart.editing{height:auto;}
 .pe-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
 .pe-list li{display:flex;align-items:center;gap:.8rem;min-height:48px;border-bottom:1px solid var(--line-soft);font-size:15px;}
 .pe-list .pe-d{flex:1;color:var(--muted);}
@@ -880,7 +881,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pe-del{appearance:none;cursor:pointer;width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:var(--muted-soft);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .pe-del:active{background:var(--paper-soft);}
 .pe-empty{padding:.9rem 0;color:var(--muted);font-size:14px;}
-.pe-add{display:grid;grid-template-columns:1fr 6.5rem auto;gap:.5rem;margin-top:1rem;align-items:center;}
+.pe-add{display:grid;grid-template-columns:1fr 6.5rem auto;gap:.5rem;align-items:center;}
 .pe-add input{min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 16px 'Work Sans',system-ui,sans-serif;padding:0 .7rem;min-width:0;-webkit-appearance:none;}
 .pe-add input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
 .pe-add button{appearance:none;cursor:pointer;min-height:46px;padding:0 1rem;border-radius:999px;border:none;background:var(--ink);color:var(--paper);font:600 14px 'Work Sans',system-ui,sans-serif;}
@@ -987,7 +988,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         <div class="stats-per prog-per" role="group" aria-label="Periode progressie">
           <button type="button" data-d="30">Maand</button><button type="button" data-d="90">3 maanden</button><button type="button" data-d="all">Alles</button>
         </div>
-        <div class="prog-head"><div class="prog-hero" id="progHero"></div><button type="button" class="prog-edit" id="progEdit" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Bewerken</span></button></div>
+        <div class="prog-head"><div class="prog-hero" id="progHero"></div><button type="button" class="prog-edit" id="progEdit" aria-haspopup="dialog" aria-label="Metingen bewerken" title="Metingen bewerken"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div>
         <div class="prog-chart" id="progChart"></div>
       </div>
     </section>
@@ -1254,6 +1255,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 </section>
 
 </main>
+<div class="sheet-bg" id="pe-bg" hidden></div>
+<div class="sheet pe-sheet" id="pe-sheet" role="dialog" aria-modal="true" aria-labelledby="pe-t" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head"><h3 id="pe-t">Metingen</h3><button type="button" class="sheet-x" aria-label="Sluiten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="pe-body"></div>
+</div>
 <div class="sheet-bg" hidden></div>
 <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
@@ -1782,45 +1789,67 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     for(var x=a;x<=b+1e-9;x+=step) out.push(Math.round(x*100)/100);
     return out;
   }
-  var progEdit=false;
-  (function(){ var eb=document.getElementById('progEdit'); if(!eb) return;
-    eb.addEventListener('click',function(){ progEdit=!progEdit; eb.setAttribute('aria-pressed',progEdit?'true':'false'); eb.querySelector('span').textContent=progEdit?'Klaar':'Bewerken'; renderProg(); });
-  })();
+  var peBg=document.getElementById('pe-bg'), peSh=document.getElementById('pe-sheet'), peOpen=false, peLast=null;
   function progPut(k,d,v){
     var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d, ev={k:k,d:d,t:t,v:v};
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
-  function renderEdit(box,k,all,unit){
-    box.classList.add('editing');
-    var rows=all.slice().reverse().map(function(e){
-      return '<li><span class="pe-d">'+DAGEN[new Date(e.t).getDay()].slice(0,2)+' '+dLab(e.t)+' '+new Date(e.t).getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+unit+'</span>'+
+  function peData(){
+    var k=progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
+    var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return b.t-a.t; });
+    return {k:k,unit:unit,all:all,name:inp?progLabel(inp):k};
+  }
+  function renderSheet(keepForm){
+    if(!peOpen) return;
+    var D=peData(), body=peSh.querySelector('.pe-body');
+    peSh.querySelector('#pe-t').textContent=D.name;
+    var fv=keepForm&&body.querySelector('.pe-add')?{d:body.querySelector('[name=d]').value}:null;
+    var rows=D.all.map(function(e){
+      var dt=new Date(e.t);
+      return '<li><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,2)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>'+
         '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Meting van '+dLab(e.t)+' verwijderen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
     }).join('');
-    box.innerHTML='<ul class="pe-list">'+(rows||'<li class="pe-empty">Nog geen metingen.</li>')+'</ul>'+
-      '<form class="pe-add"><input type="date" name="d" value="'+ymd(Date.now())+'" max="'+ymd(Date.now())+'" aria-label="Datum"><input type="text" name="v" inputmode="decimal" placeholder="'+unit+'" aria-label="Waarde in '+unit+'"><button type="submit">Toevoegen</button></form>';
-    box.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){ var e=prog[b.dataset.id]; if(!e) return; if(!confirm('Meting van '+dLab(e.t)+' '+new Date(e.t).getFullYear()+' ('+fmtV(e.v)+' '+unit+') verwijderen?')) return; progDel(b.dataset.id); renderProg(); }); });
-    var f=box.querySelector('.pe-add');
-    f.addEventListener('submit',function(e){ e.preventDefault();
+    body.innerHTML='<p class="pe-sub">'+D.all.length+(D.all.length===1?' meting':' metingen')+'. Voeg toe of verwijder.</p>'+
+      '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Datum"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Waarde in '+D.unit+'"><button type="submit">Toevoegen</button></form>'+
+      '<ul class="pe-list">'+(rows||'<li class="pe-empty">Nog geen metingen.</li>')+'</ul>';
+    body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
+      var e=prog[b.dataset.id]; if(!e) return;
+      if(!confirm('Meting van '+dLab(e.t)+' '+new Date(e.t).getFullYear()+' ('+fmtV(e.v)+' '+D.unit+') verwijderen?')) return;
+      progDel(b.dataset.id); renderProg(); renderSheet(true);
+    }); });
+    var f=body.querySelector('.pe-add');
+    f.addEventListener('submit',function(ev){ ev.preventDefault();
       var d=f.d.value, v=numOf(f.v.value);
       if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ f.d.focus(); return; }
       if(v==null){ f.v.focus(); return; }
-      progPut(k,d,v); renderProg();
+      progPut(D.k,d,v); renderProg(); renderSheet(true);
     });
+  }
+  function openSheet(){
+    if(!peSh) return; peOpen=true; peLast=document.activeElement; renderSheet(false);
+    peBg.hidden=false; peSh.hidden=false; peSh.scrollTop=0;
+    requestAnimationFrame(function(){ peBg.classList.add('on'); peSh.classList.add('on'); });
+    peSh.querySelector('.sheet-x').focus({preventScroll:true});
+  }
+  function closeSheet(){
+    if(!peOpen) return; peOpen=false;
+    peBg.classList.remove('on'); peSh.classList.remove('on');
+    setTimeout(function(){ if(!peOpen){ peBg.hidden=true; peSh.hidden=true; peSh.querySelector('.pe-body').innerHTML=''; } },320);
+    if(peLast) peLast.focus({preventScroll:true});
+  }
+  if(peSh){
+    document.getElementById('progEdit').addEventListener('click',openSheet);
+    peBg.addEventListener('click',closeSheet); peSh.querySelector('.sheet-x').addEventListener('click',closeSheet);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&peOpen) closeSheet(); });
   }
   function renderProg(){
     var box=document.getElementById('progChart'), hero=document.getElementById('progHero'); if(!box||!progSel||!progSel.value) return;
-    box.classList.remove('editing');
     var k=progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
     var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; })
       .sort(function(a,b){ return a.t-b.t; });
     var now=Date.now(), from=pPer==='all'?(all.length?all[0].t:now):now-(+pPer)*864e5;
     var pts=all.filter(function(e){ return e.t>=from; });
-    if(progEdit){
-      if(!all.length) hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>';
-      else { var lst=all[all.length-1]; hero.innerHTML='<span class="ph-v">'+fmtV(lst.v)+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">laatst op '+dLab(lst.t)+'</span>'; }
-      renderEdit(box,k,all,unit); return;
-    }
     if(!all.length){ hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>'; box.innerHTML='<div class="prog-empty">Nog geen metingen. Vul je '+unit+' in bij deze oefening en vink ze af; vanaf dan groeit hier de lijn.</div>'; return; }
     var last=all[all.length-1], first=pts[0];
     var diff=first&&pts.length>1?last.v-first.v:null;
