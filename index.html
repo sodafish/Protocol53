@@ -825,6 +825,17 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* ════════════ PROGRESSIE ════════════ */
 .prog{margin-top:3.4rem;}
 .prog-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
+.prog-chips{display:flex;align-items:center;gap:.45rem;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+  margin:0 -1.4rem .9rem;padding:.15rem 1.4rem .35rem;scrollbar-width:none;touch-action:pan-x pan-y;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 1.2rem,#000 calc(100% - 2rem),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 1.2rem,#000 calc(100% - 2rem),transparent 100%);}
+.prog-chips::-webkit-scrollbar{display:none;}
+@media(max-width:640px){.prog-chips{margin:0 -1.1rem .9rem;padding:.15rem 1.1rem .35rem;}}
+.prog-chips .pc{flex:none;scroll-snap-align:center;appearance:none;cursor:pointer;min-height:42px;padding:0 1rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
+  font:600 14px 'Work Sans',system-ui,sans-serif;color:var(--muted);white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease;}
+.prog-chips .pc[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+.prog-chips .pc:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+.prog-chips .pc-g{flex:none;font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:22px;line-height:1;color:var(--accent);padding:0 .1rem 0 .35rem;}
+.prog-chips .pc-g:first-child{padding-left:0;}
 .prog-sel{position:relative;display:block;margin:0 0 .7rem;}
 .prog-sel .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
 .prog-sel select{appearance:none;-webkit-appearance:none;width:100%;min-height:52px;padding:0 2.8rem 0 1.1rem;border-radius:14px;border:1.5px solid var(--line);
@@ -946,7 +957,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       <ol class="stats-list" id="statsList"></ol>
       <div class="prog" id="prog">
         <h2 class="prog-t">Progressie</h2>
-        <label class="prog-sel"><span class="sr">Oefening</span><select id="progSel" aria-label="Oefening"></select></label>
+        <div class="prog-chips" id="progChips" role="tablist" aria-label="Oefening"></div>
         <div class="stats-per prog-per" role="group" aria-label="Periode progressie">
           <button type="button" data-d="30">Maand</button><button type="button" data-d="90">3 maanden</button><button type="button" data-d="all">Alles</button>
         </div>
@@ -1670,7 +1681,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     function show(i,anim){
       tabs.forEach(function(t,n){ t.setAttribute('aria-selected',n===i?'true':'false'); document.getElementById(t.getAttribute('aria-controls')).hidden=n!==i; });
       bar.style.setProperty('--i',i);
-      if(i===1&&window.__renderProg) setTimeout(window.__renderProg,0);
+      if(i===1&&window.__renderProg) setTimeout(function(){ window.__renderProg(); if(window.__progChipScroll) window.__progChipScroll(); },0);
       try{ localStorage.setItem(KEY,i); }catch(e){}
       if(anim){ var p=document.getElementById(tabs[i].getAttribute('aria-controls')); if(i===0&&window.__cascadeSchema) window.__cascadeSchema(); else if(typeof reveal==='function') reveal(p); }
     }
@@ -1702,22 +1713,30 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   window.__progRecord=progRecord; window.__renderProg=function(){ renderProg(); };
   function progInputs(){ return [].slice.call(document.querySelectorAll('#s-d3 .exr:not(.exr-wu) .exr-in[data-note]')); }
   function progLabel(inp){ return (inp.getAttribute('aria-label')||inp.dataset.note).replace(/\s+—\s+\S+$/,''); }
-  var progSel=document.getElementById('progSel'), PPKEY='fitlog-prog-per', PSKEY='fitlog-prog-sel';
+  var progSel={value:null}, PPKEY='fitlog-prog-per', PSKEY='fitlog-prog-sel';
   var pPer='90'; try{ pPer=localStorage.getItem(PPKEY)||'90'; }catch(e){}
-  (function fillSel(){
-    if(!progSel) return;
+  (function fillChips(){
+    var row=document.getElementById('progChips'); if(!row) return;
     var html='', grp=null;
     progInputs().forEach(function(inp){
       var li=inp.closest('.exr'), g=li.previousElementSibling; while(g&&!g.classList.contains('exgrp')) g=g.previousElementSibling;
+      var gn=g&&g.querySelector('.grp-n')?g.querySelector('.grp-n').textContent.trim():'';
       var gt=g?(g.querySelector('.grp-t')||g).textContent.trim():'';
-      if(gt!==grp){ if(grp!==null) html+='</optgroup>'; html+='<optgroup label="'+gt.replace(/"/g,'&quot;')+'">'; grp=gt; }
-      html+='<option value="'+inp.dataset.note+'">'+progLabel(inp).replace(/</g,'&lt;')+'</option>';
+      if(gt!==grp){ html+='<span class="pc-g" title="'+gt.replace(/"/g,'&quot;')+'">'+gn+'</span>'; grp=gt; }
+      html+='<button type="button" role="tab" class="pc" data-k="'+inp.dataset.note+'" aria-selected="false">'+progLabel(inp).replace(/</g,'&lt;')+'</button>';
     });
-    if(grp!==null) html+='</optgroup>';
-    progSel.innerHTML=html;
+    row.innerHTML=html;
+    var chips=[].slice.call(row.querySelectorAll('.pc'));
+    function pick(b,scroll){
+      progSel.value=b.dataset.k;
+      chips.forEach(function(c){ c.setAttribute('aria-selected',c===b?'true':'false'); });
+      if(scroll){ var x=b.offsetLeft-row.clientWidth/2+b.offsetWidth/2; row.scrollTo({left:Math.max(0,x),behavior:scroll==='smooth'?'smooth':'auto'}); }
+    }
     var keep=null; try{ keep=localStorage.getItem(PSKEY); }catch(e){}
-    if(keep && progSel.querySelector('option[value="'+keep+'"]')) progSel.value=keep;
-    progSel.addEventListener('change',function(){ try{ localStorage.setItem(PSKEY,progSel.value); }catch(e){} renderProg(); });
+    var start=chips.filter(function(c){ return c.dataset.k===keep; })[0]||chips[0];
+    if(start) pick(start,false);
+    window.__progChipScroll=function(){ var b=row.querySelector('.pc[aria-selected="true"]'); if(b) pick(b,true); };
+    chips.forEach(function(b){ b.addEventListener('click',function(){ pick(b,'smooth'); try{ localStorage.setItem(PSKEY,b.dataset.k); }catch(e){} renderProg(); }); });
   })();
   document.querySelectorAll('.prog-per button').forEach(function(b){
     b.setAttribute('aria-pressed',b.dataset.d===pPer?'true':'false');
@@ -1766,7 +1785,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     if(pts.length>1) g+='<path class="ar" d="'+d+' L'+X(pts[pts.length-1].t).toFixed(1)+' '+Y(lo)+' L'+X(pts[0].t).toFixed(1)+' '+Y(lo)+' Z"/><path class="ln" d="'+d+'"/>';
     var showDots=pts.length<=24;
     pts.forEach(function(e,n){ if(showDots||n===pts.length-1) g+='<circle class="dt" cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="4"/>'; });
-    g+='<line class="xh" y1="'+T+'" y2="'+(H-B)+'" x1="-9" x2="-9"/><circle class="dt hv" r="5" cx="-20" cy="-20"/></svg><div class="prog-tip"></div>';
+    g+='<line class="xh" y1="'+T+'" y2="'+(H-B)+'" x1="0" x2="0" visibility="hidden"/><circle class="dt hv" r="5" cx="0" cy="0" visibility="hidden"/></svg><div class="prog-tip"></div>';
     box.innerHTML=g;
     /* aftasten met vinger of muis */
     var svg=box.querySelector('svg'), xh=svg.querySelector('.xh'), hv=svg.querySelector('.hv'), tip=box.querySelector('.prog-tip');
@@ -1775,10 +1794,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       pts.forEach(function(e){ if(Math.abs(X(e.t)-x)<Math.abs(X(best.t)-x)) best=e; });
       var px=X(best.t), py=Y(best.v);
       xh.setAttribute('x1',px); xh.setAttribute('x2',px); hv.setAttribute('cx',px); hv.setAttribute('cy',py);
+      xh.setAttribute('visibility','visible'); hv.setAttribute('visibility','visible');
       tip.innerHTML='<span>'+dLab(best.t)+'</span>'+fmtV(best.v)+' '+unit;
       tip.style.left=Math.min(Math.max(px*r.width/W,50),r.width-50)+'px'; tip.style.top=(py*r.height/H-44)+'px'; tip.classList.add('on');
     }
-    function off(){ tip.classList.remove('on'); xh.setAttribute('x1',-9); xh.setAttribute('x2',-9); hv.setAttribute('cx',-20); }
+    function off(){ tip.classList.remove('on'); xh.setAttribute('visibility','hidden'); hv.setAttribute('visibility','hidden'); }
     svg.addEventListener('pointerdown',function(e){ at(e.clientX); });
     svg.addEventListener('pointermove',function(e){ if(e.pointerType==='mouse'||e.buttons) at(e.clientX); });
     svg.addEventListener('pointerleave',off); svg.addEventListener('pointerup',function(e){ if(e.pointerType!=='mouse') setTimeout(off,1600); });
