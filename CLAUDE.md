@@ -44,8 +44,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   ze staat (Borst, Schouders …) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
 - Kracht heeft twee subtabs (Training met knoppen 'Start nieuwe training' bovenaan en 'Einde training'
-  onderaan, beide `.reset-chk`, volle breedte met pijl: vinkjes leeg; Start scrolt naar Opwarming,
-  Einde naar boven; tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+  onderaan, beide `.reset-chk`, volle breedte met plus/vinkje: vinkjes leeg; Start scrolt naar Opwarming,
+  Einde opent Statistieken › Dag (`window.__ksub`, `window.__statsPer`); tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun

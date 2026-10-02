@@ -1333,7 +1333,13 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       });
       paintChecks(); saveChecksLocal();
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
-      if(btn.classList.contains('reset-end')){ window.scrollTo({top:0,behavior:smooth}); }
+      if(btn.classList.contains('reset-end')){
+        /* naar Statistieken › Dag, met de subtabs bovenaan in beeld */
+        if(window.__statsPer) window.__statsPer('dag');
+        if(window.__ksub) window.__ksub(1);
+        var bar=document.querySelector('#p-schema .ksub');
+        window.scrollTo({top:bar?bar.getBoundingClientRect().top+window.scrollY-12:0,behavior:'auto'});
+      }
       else if(btn.classList.contains('reset-top')){
         var g=pane.querySelector('.exgrp'); if(g) window.scrollTo({top:g.getBoundingClientRect().top+window.scrollY+2,behavior:smooth});
       }
@@ -1492,6 +1498,11 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       renderStats();
     });
   });
+  window.__statsPer=function(v){
+    per=v; try{ localStorage.setItem(PERKEY,per); }catch(e){}
+    document.querySelectorAll('.stats-per button').forEach(function(x){ x.setAttribute('aria-pressed',x.dataset.d===per?'true':'false'); });
+    renderStats();
+  };
   var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'],
       MAANDEN=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
   function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
@@ -1619,6 +1630,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
       try{ localStorage.setItem(KEY,i); }catch(e){}
       if(anim){ var p=document.getElementById(tabs[i].getAttribute('aria-controls')); if(i===0&&window.__cascadeSchema) window.__cascadeSchema(); else if(typeof reveal==='function') reveal(p); }
     }
+    window.__ksub=function(i){ show(i,true); };
     var start=0; try{ start=+localStorage.getItem(KEY)||0; }catch(e){}
     show(start===1?1:0,false);
     requestAnimationFrame(function(){ bar.classList.add('ready'); });
