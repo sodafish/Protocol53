@@ -2366,7 +2366,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
 
   /* ---------- venster ---------- */
-  var bg=document.querySelector('.sheet-bg'), sh=document.querySelector('.sheet'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
+  var bg=document.querySelector('.sheet-bg:not(#pe-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
   var cur=null, lastFocus=null;
   function open(name,btn){
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
