@@ -18,7 +18,7 @@ vooral op zijn iPhone, als app op het beginscherm.
 ## Data
 Supabase-project `protocol53` (Frankfurt), tabel `public.p53 (user_id, coll, id, data jsonb)`,
 RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks` (`{done}`),
-`counts` (`{n,last,prev}`), `hist` (statistieken, zie hieronder). Sleutels van oefeningen
+`counts` (`{n,last,prev}`), `hist` (statistieken) en `prog` (progressie), zie hieronder. Sleutels van oefeningen
 (`data-note` / `data-key`) nooit hernoemen, anders raakt Tom zijn historiek kwijt.
 
 ## Werkwijze
@@ -70,4 +70,15 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   regel werkt de terugval op `GROUPDEF`, maar die is grover.
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
+
+## Progressie (onderaan Statistieken)
+- Keuzelijst met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
+  aparte lijnen), gegroepeerd per spiergroep. Periodes Maand / 3 maanden / Alles. Keuzes onthouden
+  in localStorage `fitlog-prog-sel` en `fitlog-prog-per`.
+- Collectie `prog`: één meetpunt per invulveld per dag, id `<data-note>@jjjj-mm-dd`,
+  `{k: data-note, d: datum, t: tijdstip, v: getal}`. Geschreven bij afvinken (`bumpCount` → alle
+  velden van die oefening) en bij elke wijziging van het veld (na de 500 ms-debounce). Zelfde dag
+  = overschrijven. Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
+- Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
+- Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
 
