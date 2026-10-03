@@ -41,7 +41,17 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
   `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
   in `NAMES` (bv. 'Torso Rotation', 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
-## Statistieken (Strength → subtab Progress)
+## Navigatie
+- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass` met backdrop-blur): pil met **Workout**
+  en **Progress**, plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
+  `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = naar boven scrollen.
+- De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
+  de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
+  `window.__ksub` is omwikkeld zodat sprongen (bv. End workout → Progress) de navbar bijwerken.
+- Onder de titel staat de huidige pagina (`#pgTitle`).
+- Pijl naar boven (`.to-top`) staat boven de navbar. Body heeft extra ruimte onderaan.
+
+## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
 - Day = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
 - Month = laatste 30 dagen, All = sinds de eerste afvinking → gemiddeld aantal sets per week.
