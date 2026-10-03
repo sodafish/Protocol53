@@ -2298,8 +2298,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     xl.forEach(function(t,n){ g+='<text class="ax" x="'+X(t).toFixed(1)+'" y="'+(H-6)+'" text-anchor="'+(n===0?'start':n===2?'end':'middle')+'">'+(n===2?'today':dLabYr(t))+'</text>'; });
     var d=pts.map(function(e,n){ return (n?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
     if(pts.length>1) g+='<path class="ar" d="'+d+' L'+X(pts[pts.length-1].t).toFixed(1)+' '+Y(lo)+' L'+X(pts[0].t).toFixed(1)+' '+Y(lo)+' Z"/><path class="ln" d="'+d+'"/>';
-    var showDots=pts.length<=24;
-    pts.forEach(function(e,n){ if(showDots||n===pts.length-1) g+='<circle class="dt" cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="4"/>'; });
+    /* bolletje alleen bij de eerste, de laatste en waar de waarde verandert */
+    pts.forEach(function(e,n){ if(n===0||n===pts.length-1||e.v!==pts[n-1].v) g+='<circle class="dt" cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="4"/>'; });
     g+='<line class="xh" y1="'+T+'" y2="'+(H-B)+'" x1="0" x2="0" visibility="hidden"/><circle class="dt hv" r="5" cx="0" cy="0" visibility="hidden"/></svg><div class="prog-tip"></div>';
     box.innerHTML=g;
     /* aftasten met vinger of muis */
@@ -2995,7 +2995,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       box.querySelector('.ip-chart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" preserveAspectRatio="none" aria-label="Progress chart">'+
         '<line x1="0" x2="'+W+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--line)"/>'+
         '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'+
-        pts.map(function(e){ return '<circle cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'; }).join('')+
+        pts.filter(function(e,i){ return i===0||i===pts.length-1||e.v!==pts[i-1].v; }).map(function(e){ return '<circle cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'; }).join('')+
         '<text x="0" y="'+(H-4)+'" font-size="11" fill="var(--muted)" font-family="Work Sans,system-ui,sans-serif">'+F.d(x0)+'</text>'+
         '<text x="'+W+'" y="'+(H-4)+'" font-size="11" fill="var(--muted)" text-anchor="end" font-family="Work Sans,system-ui,sans-serif">'+F.d(x1)+'</text></svg>';
     });

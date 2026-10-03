@@ -124,6 +124,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   = overschrijven; veld leegmaken = punt van vandaag weg (ook bij laden). Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
+  In beide grafieken loopt de lijn door alle metingen, maar een bolletje staat alleen bij de eerste, de laatste en
+  waar de waarde verandert.
 - Ook in het uitlegvenster (i-knop, dus ook voor uitgezette oefeningen via het keuzeblad): per invulveld met metingen
   een blok 'Your progress' (supersets: twee blokken met naam) met laatste waarde, verschil sinds de eerste meting,
   potlood (`window.__progEdit(k)` opent `#pe-sheet` bovenop, klasse `.top`) en een mini-grafiek van de eerste tot de
