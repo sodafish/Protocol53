@@ -749,6 +749,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .info-b:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .exr.done .info-b,.exr.grp-skip .info-b{text-decoration:none;}
 .sheet-bg.over{z-index:95;} .sheet.over{z-index:96;}
+.sheet-bg.top{z-index:97;} .sheet.top{z-index:98;}
 .sheet-bg{position:fixed;inset:0;background:rgba(20,14,10,.42);z-index:90;opacity:0;transition:opacity .25s ease;}
 .sheet-bg.on{opacity:1;}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
@@ -806,7 +807,9 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .sheet-risk svg{flex:none;margin-top:.1rem;color:var(--accent);}
 .ip-box{margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line);}
 .ip-t{margin:0 0 .5rem;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
-.ip-hero{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.5rem;white-space:nowrap;}
+.ip-head{display:flex;align-items:center;gap:.8rem;margin-bottom:.5rem;}
+.ip-hero{flex:1;min-width:0;display:flex;align-items:baseline;gap:.7rem;white-space:nowrap;overflow:hidden;}
+.ip-head .ip-edit{flex:none;}
 .ip-hero .ph-v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:32px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;}
 .ip-hero .ph-u{font-size:13px;font-weight:600;color:var(--muted);margin-left:-.4rem;}
 .ip-hero .ph-d{font-size:13px;color:var(--muted);}
@@ -2145,7 +2148,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
      Bewaard bij afvinken en bij elke wijziging van het invulveld (zelfde dag = overschrijven). */
   var PROGKEY='fitlog-prog', progCol=null, progReady=false;
   var prog={}; try{ prog=JSON.parse(localStorage.getItem(PROGKEY)||'{}'); }catch(e){}
-  function saveProgLocal(){ try{ localStorage.setItem(PROGKEY,JSON.stringify(prog)); }catch(e){} }
+  function saveProgLocal(){ try{ localStorage.setItem(PROGKEY,JSON.stringify(prog)); }catch(e){} try{ document.dispatchEvent(new Event('p53-prog')); }catch(e){} }
   function ymd(t){ var d=new Date(t); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function numOf(txt){ var m=String(txt||'').replace(',','.').match(/\d+(?:\.\d+)?/); return m?parseFloat(m[0]):null; }
   function progRecord(inp,when){
@@ -2209,14 +2212,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     for(var x=a;x<=b+1e-9;x+=step) out.push(Math.round(x*100)/100);
     return out;
   }
-  var peBg=document.getElementById('pe-bg'), peSh=document.getElementById('pe-sheet'), peOpen=false, peLast=null;
+  var peBg=document.getElementById('pe-bg'), peSh=document.getElementById('pe-sheet'), peOpen=false, peLast=null, peKey=null;
   function progPut(k,d,v){
     var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d, ev={k:k,d:d,t:t,v:v};
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
   function peData(){
-    var k=progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
+    var k=peKey||progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
     var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return b.t-a.t; });
     return {k:k,unit:unit,all:all,name:inp?progLabel(inp):k};
   }
@@ -2247,6 +2250,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       progPut(D.k,d,v); renderProg(); renderSheet(true);
     });
   }
+  /* ook te openen vanuit het uitlegvenster, voor één oefening (komt dan bovenop) */
+  window.__progEdit=function(k){ peKey=k; peBg.classList.add('top'); peSh.classList.add('top'); openSheet(); };
   function openSheet(){
     if(!peSh) return; peOpen=true; peLast=document.activeElement; renderSheet(false);
     peBg.hidden=false; peSh.hidden=false; peSh.scrollTop=0;
@@ -2254,7 +2259,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     peSh.querySelector('.sheet-x').focus({preventScroll:true});
   }
   function closeSheet(){
-    if(!peOpen) return; peOpen=false;
+    if(!peOpen) return; peOpen=false; peKey=null; setTimeout(function(){ if(!peOpen){ peBg.classList.remove('top'); peSh.classList.remove('top'); } },330);
     peBg.classList.remove('on'); peSh.classList.remove('on');
     setTimeout(function(){ if(!peOpen){ peBg.hidden=true; peSh.hidden=true; peSh.querySelector('.pe-body').innerHTML=''; } },320);
     if(peLast) peLast.focus({preventScroll:true});
@@ -2922,7 +2927,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     tt.textContent=name;
     bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+(IMG[k]?'<p class="ph-src">Foto\'s: Free Exercise DB</p>':'');
     bodyEl.querySelector('.sheet-cap').textContent=EX[k].cap;
-    progBlock(name);
+    bodyEl.insertAdjacentHTML('beforeend','<div class="ip-wrap"></div>'); curName=name; progBlock(name);
     if(EX[k].risk){ var rk=document.createElement('p'); rk.className='sheet-tip sheet-risk'; rk.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5M12 17.2v.1"/></svg><span></span>'; rk.querySelector('span').textContent=EX[k].risk; bodyEl.appendChild(rk); }
     if(EX[k].tip){ var tp=document.createElement('p'); tp.className='sheet-tip'; tp.textContent=EX[k].tip; bodyEl.appendChild(tp); }
     if(EX[k].link){ var lk=document.createElement('a'); lk.className='sheet-vid'; lk.href=EX[k].link[1]; lk.target='_blank'; lk.rel='noopener'; lk.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>'; lk.appendChild(document.createTextNode(EX[k].link[0])); bodyEl.appendChild(lk); }
@@ -2963,22 +2968,25 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     n.insertAdjacentHTML('beforeend',RISK_ICON);
     if(NAMES[name] && EX[NAMES[name]]) EX[NAMES[name]].risk=RISK[k];
   });
-  /* TEST: je progressie onder de uitleg (enkel Dumbbell Chest Press 15°) */
-  var PROG_IN_INFO=['d1-dumbbell-chest-press'];
+  /* je progressie onder de uitleg: per invulveld met metingen een blok (cijfer, potlood, grafiek van eerste tot laatste meting) */
+  var curName=null;
   function progBlock(name){
-    if(!window.__progPts) return;
+    var wrap=bodyEl.querySelector('.ip-wrap'); if(!wrap||!window.__progPts) return; wrap.innerHTML='';
     var li=[].slice.call(document.querySelectorAll('#s-d3 .exr')).filter(function(x){ var n=x.querySelector('.exr-n'); return n&&n.firstChild.textContent.trim()===name; })[0]; if(!li) return;
     [].slice.call(li.querySelectorAll('.exr-in[data-note]')).forEach(function(inp){
-      var k=inp.dataset.note; if(PROG_IN_INFO.indexOf(k)<0) return;
+      var k=inp.dataset.note;
       var pts=window.__progPts(k); if(!pts.length) return;
       var unit=inp.placeholder||'kg', F=window.__progFmt, last=pts[pts.length-1], first=pts[0], diff=pts.length>1?last.v-first.v:null;
+      var two=li.querySelectorAll('.exr-in[data-note]').length>1, lab=two?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'';
       var box=document.createElement('div'); box.className='ip-box';
-      box.innerHTML='<p class="ip-t">Your progress</p><div class="ip-hero"><span class="ph-v">'+F.v(last.v)+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
-        (diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div><div class="ip-chart"></div>';
-      bodyEl.appendChild(box);
+      box.innerHTML='<p class="ip-t">Your progress'+(lab?' · '+lab:'')+'</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+F.v(last.v)+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
+        (diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div>'+
+        '<button type="button" class="prog-edit ip-edit" aria-label="Edit measurements"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div><div class="ip-chart"></div>';
+      wrap.appendChild(box);
+      box.querySelector('.ip-edit').addEventListener('click',function(){ if(window.__progEdit) window.__progEdit(k); });
       var W=Math.max(260,(bodyEl.clientWidth||320)), H=110, L=6, R=6, T=10, B=20;
-      var x0=first.t, x1=Math.max(last.t,Date.now()); if(x1-x0<7*864e5) x0=x1-7*864e5;
-      var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; }
+      var x0=first.t, x1=last.t; if(x1-x0<864e5){ x0-=864e5; x1+=864e5; }
+      var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo-=pad; hi+=pad;
       function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
       var d=pts.map(function(e,i){ return (i?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
       box.querySelector('.ip-chart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" preserveAspectRatio="none" aria-label="Progress chart">'+
@@ -2989,6 +2997,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         '<text x="'+W+'" y="'+(H-4)+'" font-size="11" fill="var(--muted)" text-anchor="end" font-family="Work Sans,system-ui,sans-serif">'+F.d(x1)+'</text></svg>';
     });
   }
+  document.addEventListener('p53-prog',function(){ if(!sh.hidden && curName) progBlock(curName); });
   var INFO_BTN='<button type="button" class="info-b" aria-label="How to"><span>i</span></button>';
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;

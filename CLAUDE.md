@@ -124,8 +124,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   = overschrijven; veld leegmaken = punt van vandaag weg (ook bij laden). Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
-- TEST: blok 'Your progress' (cijfer + mini-grafiek) onderaan het uitlegvenster, alleen voor de sleutels in
-  `PROG_IN_INFO` (nu `d1-dumbbell-chest-press`) en enkel als er metingen zijn (`window.__progPts`, `progBlock`).
+- Ook in het uitlegvenster (i-knop, dus ook voor uitgezette oefeningen via het keuzeblad): per invulveld met metingen
+  een blok 'Your progress' (supersets: twee blokken met naam) met laatste waarde, verschil sinds de eerste meting,
+  potlood (`window.__progEdit(k)` opent `#pe-sheet` bovenop, klasse `.top`) en een mini-grafiek van de eerste tot de
+  laatste meting (geen periodefilter). Ververst live via event `p53-prog` (gestuurd door `saveProgLocal`).
 - Potloodknop (`#progEdit`, alleen icoon) rechts op de lijn van het huidige gewicht opent een
   onderblad (`#pe-sheet`, zelfde stijl als de oefeninguitleg; sluiten met kruisje, naast tikken of Esc):
   bovenaan datum + waarde + Toevoegen (zelfde datum = overschrijven; tijdstip = 12u die dag), daaronder
