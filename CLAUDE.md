@@ -83,7 +83,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   extension" → triceps.
 - Workout heeft bovenaan één omlijnde knop 'New workout' (`.reset-top`, niet volle breedte, met plus): vinkjes
   leeg en scrollen naar Warm-up; tellingen/hist zijn al bij het afvinken bewaard. (De oude End-knop is weg;
-  `window.__statsPer` bestaat nog.) Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+  `window.__statsPer` bestaat nog.) Onder de laatste groep (Arms) staat 'Finish workout' (`.finish-b`, zelfde omlijnde stijl,
+  vinkje-icoon): na `p53Confirm` alle vinkjes leeg en naar boven scrollen; tellingen, kilo's en progressie blijven. Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
