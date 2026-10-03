@@ -102,8 +102,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   oefening weg, ook haar deel in `seed` (`histClear`). De opwarming (`w0-…`) telt niet mee.
 - Ook metingen in `prog` tellen als training (in `events()`): één per oefening (rijsleutel via `chkKey`) per kalenderdag,
   alleen als er die dag nog geen `hist`-rij voor die oefening is (dus nooit dubbel). Zo telt een achteraf met het potlood
-  toegevoegde sessie mee. Sets/spieren van zo'n meting = de huidige van de oefening. Uitvinken (vinkje) wist ook de
-  meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet. Coverage ververst bij `p53-prog`.
+  toegevoegde sessie mee. Sets/spieren van zo'n meting = de huidige van de oefening. Een meting ontstaat alleen bij afvinken (alle velden van
+  die rij) of met het potlood; typen in het veld meet alleen als de rij al afgevinkt is (dan wordt de meting van vandaag
+  bijgewerkt). Uitvinken wist de meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet.
+  New/Finish workout wissen alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
 - Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
   weken vanaf de eerste training in die periode, minstens 1).
@@ -128,7 +130,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Collectie `prog`: één meetpunt per invulveld per dag, id `<data-note>@jjjj-mm-dd`,
   `{k: data-note, d: datum, t: tijdstip, v: getal}`. Geschreven bij afvinken (`bumpCount` → alle
   velden van die oefening) en bij elke wijziging van het veld (na de 500 ms-debounce). Zelfde dag
-  = overschrijven; veld leegmaken = punt van vandaag weg (ook bij laden). Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
+  = overschrijven; veld leegmaken (bij een afgevinkte rij) = punt van vandaag weg. Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
 - Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
   In beide grafieken loopt de lijn door alle metingen, maar een bolletje staat alleen bij de eerste, de laatste en
@@ -197,7 +199,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `· Elbows!`), één woord met uitroepteken direct erachter; onderrug/bovenrug heet gewoon Back. Achteraan in `.exr-s`. Het keuzeblad toont dat label mee.
 - Elke groep heeft zowel gangbare gym-oefeningen (machines, kabels, dumbbells, barbell) als calisthenics voor thuis
   (push-up-varianten, pistol/jump squat, nordic curl, inverted/ring row, pull-ups, handstand push-ups, core op de mat …).
-  Eenheid: kg bij gewicht, reps bij lichaamsgewicht, geen invulveld bij tijd of eenvoudige oefeningen.
+  Eenheid: kg bij gewicht, reps bij lichaamsgewicht, sec/min bij tijd. Elke oefening heeft een invulveld (ook de warm-up;
+  `data-note` = dezelfde sleutel als `data-key`), dus ook een progressiegrafiek.
 - Oefeningen met ongevalsrisico (vrije barbell boven lichaam/gezicht, leg press, hack squat, smith, handstand …) staan in
   `RISK` (sleutel → veiligheidstip, in het uitleg-script): rij krijgt klasse `exr-danger` en een oranje driehoekje
   (`.exr-risk`) na de naam, ook in het keuzeblad; de uitleg toont de tip in een kader met driehoek (`EX[..].risk`, `.sheet-risk`).
