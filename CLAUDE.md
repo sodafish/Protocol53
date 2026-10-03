@@ -148,8 +148,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full/Upper/Lower (`menuitemradio`, vinkje in
   accentkleur). Sluit bij keuze, tik ernaast, scrollen of Esc. Full = standaard; keuze in localStorage `fitlog-split`.
 - Upper = groepen 2, 4, 5, 6, 8; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
-- Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; ook `.exsec` 'Optional' en
-  `.exsub` 'Supersets' hebben `data-grp="g8"`). Vinkjes, tellingen, statistieken en progressie veranderen niet.
+- Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; ook de tussenkop
+  `.exsub` 'Supersets' heeft `data-grp="g8"`; de kop 'Optional' boven Arms is weg). Vinkjes, tellingen, statistieken en progressie veranderen niet.
 
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–8)
 - Structuur ligt vast: Warm-up + 8 groepen. Binnen een groep staan álle mogelijke oefeningen als gewone
