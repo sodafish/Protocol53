@@ -110,7 +110,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
 
-## Progressie per oefening (onderaan subtab Progress, kop 'Per exercise')
+## Progressie per oefening (onderaan subtab Progress, kop 'Active exercises')
 - Schuifbare rij lijntabs (`#progChips`, zoals de subtabs, met spiergroepnummer ertussen; hero en grafiek
   hebben een vaste hoogte zodat niets verspringt) met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
   aparte lijnen). Periodes Maand / 3 maanden / Alles. Keuzes onthouden
@@ -147,7 +147,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   één oefening blijft aan. Keuze in localStorage `fitlog-groups` en Supabase collectie `cfg`, doc `groups`
   (`{g1:[sleutels die aan staan]}`); zonder keuze gelden de rijen die in de HTML niet `ex-off` zijn.
 - Omdat alles per oefeningsleutel wordt bewaard, blijft de geschiedenis van een uitgezette oefening
-  bestaan: Per exercise toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
+  bestaan: Active exercises toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
 - Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen. Andere oefeningen van een groep worden niet meer doorgestreept
   als er één gedaan is (geen `grp-skip`): meerdere oefeningen per groep mag.
