@@ -46,9 +46,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   (kruisje 14), druk = `--paper-soft` + scale(.95). Geldt voor `.sheet-x` (sluiten), `.prog-edit`/`.ip-edit`, `.pe-del`, `.grp-edit`,
   `.note-erase`, `.gs-set` en de i-knop. Nieuwe icoonknop: zelfde maat en cirkel.
 - Focus op invulvelden en notities: geen dikke rand, enkel een dunne rand die zacht oplicht (40% inktkleur: in donker lichter/witter, in licht iets donkerder).
-- Invulveld aantikken (buiten onderbladen): script vóór de scroll-lock zet het veld na het openen van het toetsenbord
-  (visualViewport) op ±42% van de zichtbare hoogte als het buiten de zichtbare zone valt. De iOS-balk met pijltjes en vinkje
-  boven het toetsenbord is van Safari zelf en kan een web-app niet weghalen.
+- Invulveld aantikken: geen eigen scroll-code (een visualViewport-correctie liet de lijst flikkeren op iOS, teruggedraaid).
+  Wel `html:has(input:focus,textarea:focus){scroll-behavior:auto}` zodat iOS het veld zonder 'smooth' in beeld schuift.
+  De iOS-balk met pijltjes en vinkje boven het toetsenbord is van Safari en kan een web-app niet weghalen.
 - Bevestigen nooit met `confirm()`: gebruik `p53Confirm({title,msg,ok,danger})` (Promise<boolean>),
   een eigen venster in de app-stijl.
 - Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals
