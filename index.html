@@ -804,6 +804,13 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .exr.done .exr-risk{color:var(--muted-soft);}
 .sheet-risk{display:flex;gap:.6rem;align-items:flex-start;border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--ink);}
 .sheet-risk svg{flex:none;margin-top:.1rem;color:var(--accent);}
+.ip-box{margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line);}
+.ip-t{margin:0 0 .5rem;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
+.ip-hero{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.5rem;white-space:nowrap;}
+.ip-hero .ph-v{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:32px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;}
+.ip-hero .ph-u{font-size:13px;font-weight:600;color:var(--muted);margin-left:-.4rem;}
+.ip-hero .ph-d{font-size:13px;color:var(--muted);}
+.ip-hero .ph-d b{font-weight:600;color:var(--ink);}
 .sheet-tip{margin:.8rem 0 0;padding:.7rem .85rem;border-radius:12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px;line-height:1.45;}
 #s-d3 .exl .exgrp:first-child{padding-top:1.8rem;}
 .note-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:3.2rem 0 .6rem;}
@@ -2192,6 +2199,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var MND=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function dLab(t){ var d=new Date(t); return d.getDate()+' '+MND[d.getMonth()]; }
   function fmtV(v){ return (Math.round(v*10)/10+''); }
+  /* progressie opvragen vanuit het uitlegvenster (test) */
+  window.__progPts=function(k){ return Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return a.t-b.t; }); };
+  window.__progFmt={d:dLab,v:fmtV};
   function niceTicks(lo,hi){
     var span=hi-lo||1, step=Math.pow(10,Math.floor(Math.log10(span/3))), err=span/3/step;
     if(err>=5) step*=5; else if(err>=2) step*=2;
@@ -2912,6 +2922,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     tt.textContent=name;
     bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+(IMG[k]?'<p class="ph-src">Foto\'s: Free Exercise DB</p>':'');
     bodyEl.querySelector('.sheet-cap').textContent=EX[k].cap;
+    progBlock(name);
     if(EX[k].risk){ var rk=document.createElement('p'); rk.className='sheet-tip sheet-risk'; rk.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5M12 17.2v.1"/></svg><span></span>'; rk.querySelector('span').textContent=EX[k].risk; bodyEl.appendChild(rk); }
     if(EX[k].tip){ var tp=document.createElement('p'); tp.className='sheet-tip'; tp.textContent=EX[k].tip; bodyEl.appendChild(tp); }
     if(EX[k].link){ var lk=document.createElement('a'); lk.className='sheet-vid'; lk.href=EX[k].link[1]; lk.target='_blank'; lk.rel='noopener'; lk.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>'; lk.appendChild(document.createTextNode(EX[k].link[0])); bodyEl.appendChild(lk); }
@@ -2952,6 +2963,32 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     n.insertAdjacentHTML('beforeend',RISK_ICON);
     if(NAMES[name] && EX[NAMES[name]]) EX[NAMES[name]].risk=RISK[k];
   });
+  /* TEST: je progressie onder de uitleg (enkel Dumbbell Chest Press 15°) */
+  var PROG_IN_INFO=['d1-dumbbell-chest-press'];
+  function progBlock(name){
+    if(!window.__progPts) return;
+    var li=[].slice.call(document.querySelectorAll('#s-d3 .exr')).filter(function(x){ var n=x.querySelector('.exr-n'); return n&&n.firstChild.textContent.trim()===name; })[0]; if(!li) return;
+    [].slice.call(li.querySelectorAll('.exr-in[data-note]')).forEach(function(inp){
+      var k=inp.dataset.note; if(PROG_IN_INFO.indexOf(k)<0) return;
+      var pts=window.__progPts(k); if(!pts.length) return;
+      var unit=inp.placeholder||'kg', F=window.__progFmt, last=pts[pts.length-1], first=pts[0], diff=pts.length>1?last.v-first.v:null;
+      var box=document.createElement('div'); box.className='ip-box';
+      box.innerHTML='<p class="ip-t">Your progress</p><div class="ip-hero"><span class="ph-v">'+F.v(last.v)+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
+        (diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div><div class="ip-chart"></div>';
+      bodyEl.appendChild(box);
+      var W=Math.max(260,(bodyEl.clientWidth||320)), H=110, L=6, R=6, T=10, B=20;
+      var x0=first.t, x1=Math.max(last.t,Date.now()); if(x1-x0<7*864e5) x0=x1-7*864e5;
+      var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; }
+      function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
+      var d=pts.map(function(e,i){ return (i?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
+      box.querySelector('.ip-chart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" preserveAspectRatio="none" aria-label="Progress chart">'+
+        '<line x1="0" x2="'+W+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--line)"/>'+
+        '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'+
+        pts.map(function(e){ return '<circle cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'; }).join('')+
+        '<text x="0" y="'+(H-4)+'" font-size="11" fill="var(--muted)" font-family="Work Sans,system-ui,sans-serif">'+F.d(x0)+'</text>'+
+        '<text x="'+W+'" y="'+(H-4)+'" font-size="11" fill="var(--muted)" text-anchor="end" font-family="Work Sans,system-ui,sans-serif">'+F.d(x1)+'</text></svg>';
+    });
+  }
   var INFO_BTN='<button type="button" class="info-b" aria-label="How to"><span>i</span></button>';
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;
