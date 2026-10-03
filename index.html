@@ -1761,11 +1761,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     document.querySelectorAll('#s-d3 .exgrp').forEach(function(g){
       var rows=[], li=g.nextElementSibling;
       while(li && !li.classList.contains('exgrp')){ if(li.classList.contains('exr') && !li.classList.contains('ex-off')) rows.push(li); li=li.nextElementSibling; }
-      /* andere oefeningen blijven actief: je mag er meerdere per groep doen */
-      var anyDone=rows.some(function(r){ return r.classList.contains('done'); });
-      if(g.dataset.grp==='g0') anyDone=rows.length>0 && rows.every(function(r){ return r.classList.contains('done'); }); /* opwarming: pas af als alles gedaan is */
+      var anyDone=rows.some(function(r){ return r.classList.contains('done'); }), wu=g.dataset.grp==='g0';
+      if(wu) anyDone=rows.length>0 && rows.every(function(r){ return r.classList.contains('done'); }); /* opwarming: pas af als alles gedaan is */
       g.classList.toggle('grp-done',anyDone);
-      rows.forEach(function(r){ r.classList.remove('grp-skip'); });
+      /* één oefening gedaan = groep af: de andere worden doorgestreept (blijven wel aanklikbaar); niet bij de opwarming */
+      rows.forEach(function(r){ r.classList.toggle('grp-skip',!wu && anyDone && !r.classList.contains('done')); });
     });
   }
   function saveChecksLocal(){ try{ localStorage.setItem(CHKKEY,JSON.stringify(checks)); }catch(e){} }
