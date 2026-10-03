@@ -2030,13 +2030,16 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
   /* alle gebeurtenissen, plus de tellingen van vóór deze functie (één keer vastgelegd in 'seed') */
   function events(){
-    var out=[];
+    var out=[], seenHist={};
     Object.keys(hist).forEach(function(id){
       var e=hist[id]; if(!e) return;
       if(id==='seed'){
         Object.keys(e.base||{}).forEach(function(k){ var b=e.base[k];
           for(var i=0;i<b.n;i++) out.push({k:k,t:b.last||e.t,s:setsFor(k),m:musclesFor(k)}); });
-      } else out.push(e);
+      } else {
+        /* maximaal één training per oefening per dag (opnieuw afvinken na New workout telt niet dubbel) */
+        var dk=e.k+'|'+new Date(e.t).toDateString(); if(seenHist[dk]) return; seenHist[dk]=1; out.push(e);
+      }
     });
     /* metingen in de progressiegrafiek tellen ook als training: één per oefening per dag, ook zonder vinkje
        (zo vul je achteraf een vergeten sessie aan met het potlood) */
