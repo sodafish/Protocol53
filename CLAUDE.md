@@ -174,7 +174,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (Torso Rotation, Bird Dog) zijn verwijderd. Nieuwe oefeningen dus altijd met twee foto's.
 - De i-knop is iets lichter (klasse `.nop`) bij oefeningen zonder opgeslagen progressie (`markProg`, ververst bij `p53-prog`),
   ook in het keuzeblad; zo zie je waar progressie te bekijken valt.
-- Sets & reps per oefening: in het keuzeblad een rond knopje met schuifjes (`.gs-set`, oranje als aangepast) opent
+- Sets & reps per oefening: in het keuzeblad een rond knopje met schuifjes (`.gs-set`; standaard lichter, aangepast = gewone tint, zoals de i-knop) opent
   `#set-sheet` (bovenop, klasse `.top`) met stepper Sets (0–10, 0 = geen 'N ×') en tekstveld 'Reps or time', voorbeeld
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
