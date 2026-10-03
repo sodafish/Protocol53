@@ -31,7 +31,7 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
 - Tom ziet de update na de app volledig te sluiten en opnieuw te openen.
 - Antwoord Tom kort, in het Nederlands.
 
-## Statistieken (Kracht → subtab Statistieken)
+## Statistieken (Kracht → subtab Progressie, vroeger 'Statistieken')
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
 - Dag = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
 - Maand = laatste 30 dagen, Alles = sinds de eerste afvinking → gemiddeld aantal sets per week.
@@ -46,7 +46,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   ze staat (Borst, Schouders …) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
 - Kracht heeft twee subtabs (Training met knoppen 'Start nieuwe training' bovenaan en 'Einde training'
-  onderaan, beide `.reset-chk`, volle breedte met plus/vinkje: vinkjes leeg; Start scrolt naar Opwarming,
+  onderaan, beide `.reset-chk`, volle breedte, omlijnd, met plus/vinkje: vinkjes leeg; Start scrolt naar Opwarming,
   Einde opent Statistieken › Dag (`window.__ksub`, `window.__statsPer`); tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
@@ -73,7 +73,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
 
-## Progressie (onderaan Statistieken)
+## Progressie per oefening (onderaan subtab Progressie, kop 'Per oefening')
 - Schuifbare rij lijntabs (`#progChips`, zoals de subtabs, met spiergroepnummer ertussen; hero en grafiek
   hebben een vaste hoogte zodat niets verspringt) met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
   aparte lijnen). Periodes Maand / 3 maanden / Alles. Keuzes onthouden
