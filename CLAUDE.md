@@ -196,7 +196,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Oefeningen met ongevalsrisico (vrije barbell boven lichaam/gezicht, leg press, hack squat, smith, handstand …) staan in
   `RISK` (sleutel → veiligheidstip, in het uitleg-script): rij krijgt klasse `exr-danger` en een oranje driehoekje
   (`.exr-risk`) na de naam, ook in het keuzeblad; de uitleg toont de tip in een kader met driehoek (`EX[..].risk`, `.sheet-risk`).
-  Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. In het keuzeblad staan ze altijd onderaan (in de workout niet).
+  Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad (de workout niet): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
+  dan gevaarlijke; binnen elke laag op populariteit volgens `POP` (per groep een lijst sleutels, meest gedaan eerst).
+  Nieuwe oefening: ook haar sleutel op de juiste plek in `POP` zetten.
 - De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
