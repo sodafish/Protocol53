@@ -754,7 +754,8 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
   border-radius:22px 22px 0 0;padding:.6rem 1.25rem calc(1.4rem + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.61,.36,1);}
 .sheet.on{transform:none;}
-.pe-sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.sheet-bg{touch-action:none;}
 .pe-sheet .pe-add{margin:0 0 1.2rem;}
 .pe-sub{margin:-.5rem 0 1rem;font-size:13.5px;color:var(--muted);}
 .sheet-grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto .7rem;}
@@ -3129,6 +3130,23 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   document.addEventListener('p53-user',function(e){ fromUser(e.detail); });
   /* verjaardag om middernacht: bij terugkomen opnieuw berekenen */
   document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') paint(); });
+})();
+</script>
+<script>
+/* ---- achterliggende pagina vastzetten zolang er een onderblad open is (iOS scrolt anders de pagina i.p.v. de lijst) ---- */
+(function(){
+  var sheets=[].slice.call(document.querySelectorAll('.sheet')), locked=false, y=0, b=document.body;
+  /* open = zichtbaar én niet aan het sluiten (klasse on); zo komt de pagina vrij vóór een sprong na het sluiten */
+  function anyOpen(){ return sheets.some(function(s){ return !s.hidden && s.classList.contains('on'); }); }
+  function sync(){
+    var on=anyOpen(); if(on===locked) return; locked=on;
+    if(on){ y=window.scrollY; b.style.position='fixed'; b.style.top=(-y)+'px'; b.style.left='0'; b.style.right='0'; b.style.width='100%'; }
+    else{ b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; window.scrollTo(0,y); }
+  }
+  var mo=new MutationObserver(sync);
+  sheets.forEach(function(s){ mo.observe(s,{attributes:true,attributeFilter:['hidden','class']}); });
+  /* naast het blad slepen doet niets */
+  document.querySelectorAll('.sheet-bg').forEach(function(bg){ bg.addEventListener('touchmove',function(e){ e.preventDefault(); },{passive:false}); });
 })();
 </script>
 </body>
