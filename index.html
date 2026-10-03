@@ -735,7 +735,8 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exr.grp-skip .exr-n,.exr.grp-skip .exr-s,.exr.grp-skip .wu-list span,.exr.grp-skip .wu-list em{color:var(--muted-soft);text-decoration:line-through;text-decoration-thickness:1px;}
 .exr.grp-skip .exr-s *{color:inherit;}
 .exr.grp-skip{opacity:.4;}
-.exgrp:has(.grp-n){display:flex;align-items:baseline;gap:.6rem;}
+.exgrp:has(.grp-n),.exgrp:has(.grp-edit){display:flex;align-items:baseline;gap:.6rem;}
+.exgrp[data-grp="g0"]{align-items:center;}
 .grp-n{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:34px;line-height:.9;letter-spacing:0;text-transform:none;color:var(--accent);min-width:1.1ch;}
 .exgrp.grp-done .grp-n{color:var(--muted-soft);}
 .grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
@@ -1108,7 +1109,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       </div>
     </div>
     <ol class="exl">
-      <li class="exgrp" data-grp="g0"><span class="grp-n">0</span><span class="grp-t">Warm-up</span><button type="button" class="grp-edit" data-grp="g0" aria-label="Choose exercises for Warm-up"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></li>
+      <li class="exgrp" data-grp="g0"><span class="grp-t">Warm-up</span><button type="button" class="grp-edit" data-grp="g0" aria-label="Choose exercises for Warm-up"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></li>
       <li class="exr ex-off" data-grp="g0" data-key="w0-rowing"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Rowing Machine</div><div class="exr-s">5 min, easy pace</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="w0-rowing" placeholder="min" aria-label="Rowing Machine — min"></li>
       <li class="exr ex-off" data-grp="g0" data-key="w0-cross-trainer"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cross Trainer</div><div class="exr-s">5 min, easy pace</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="w0-cross-trainer" placeholder="min" aria-label="Cross Trainer — min"></li>
       <li class="exr ex-off" data-grp="g0" data-key="w0-bike"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Stationary Bike</div><div class="exr-s">5 min, easy pace</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="w0-bike" placeholder="min" aria-label="Stationary Bike — min"></li>

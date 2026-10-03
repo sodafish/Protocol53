@@ -181,7 +181,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep (bij Arms vóór de kop Supersets), plus MUSCLES/NAMES/EX/IMG.
-- Warm-up (groep 0, `data-grp="g0"`) bestaat uit losse rijen met sleutels `w0-…` (zonder invulveld): 4 standaard
+- Warm-up (groep 0, `data-grp="g0"`, kop zonder nummer) bestaat uit losse rijen met sleutels `w0-…` (zonder invulveld): 4 standaard
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
