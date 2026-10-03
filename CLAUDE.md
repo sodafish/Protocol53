@@ -49,7 +49,7 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
   de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
   `window.__ksub` is omwikkeld zodat sprongen (bv. End workout → Progress) de navbar bijwerken.
 - Onder de titel staat de huidige pagina (`#pgTitle`).
-- Pijl naar boven (`.to-top`) staat boven de navbar. Body heeft extra ruimte onderaan.
+- Geen zwevende pijl naar boven meer (tik op het actieve navbar-item). Body heeft extra ruimte onderaan.
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
@@ -66,9 +66,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
   ze staat (Chest, Shoulders …, regexen op de Engelse koppen) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
-- Strength heeft twee subtabs (Training met knoppen 'Start new workout' bovenaan en 'End workout'
-  onderaan, beide `.reset-chk`, volle breedte, omlijnd, met plus/vinkje: vinkjes leeg; Start scrolt naar Warm-up,
-  End opent Progress › Day (`window.__ksub`, `window.__statsPer`); tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+- Workout heeft bovenaan één omlijnde knop 'New workout' (`.reset-top`, niet volle breedte, met plus): vinkjes
+  leeg en scrollen naar Warm-up; tellingen/hist zijn al bij het afvinken bewaard. (De oude End-knop is weg;
+  `window.__statsPer` bestaat nog.) Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
