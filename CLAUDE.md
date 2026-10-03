@@ -59,7 +59,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 26% oppervlakkleur (donker 24%), blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout**
-  en **Progress**, plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
+  en **Balance** (vroeger Progress; intern blijft het `progress`, `#k-stats`, weegschaal-icoon), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
   `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = naar boven scrollen.
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
   de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
