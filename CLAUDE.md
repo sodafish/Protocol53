@@ -106,6 +106,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   die rij) of met het potlood; typen in het veld meet alleen als de rij al afgevinkt is (dan wordt de meting van vandaag
   bijgewerkt). Uitvinken wist de meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet.
   New/Finish workout wissen alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
+- Het getal 'N×' bij een oefening = aantal trainingen in de statistieken (`window.__exStat(k)` uit `events()`: vinkjes +
+  metingen, één per dag); warm-up gebruikt nog `counts`. Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
+  Een meting verwijderen wist ook de hist-rij(en) van die oefening op die dag (`__histDropDay`), en is het vandaag en
+  staat ze afgevinkt, dan gaat ook het vinkje weg. `renderStats` werkt de getallen bij (`paintCounts`).
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
 - Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
   weken vanaf de eerste training in die periode, minstens 1).

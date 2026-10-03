@@ -1784,15 +1784,16 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var counts={}; try{ counts=JSON.parse(localStorage.getItem(CNTKEY)||'{}'); }catch(e){}
   function saveCountsLocal(){ try{ localStorage.setItem(CNTKEY,JSON.stringify(counts)); }catch(e){} }
   function fmtDate(t){ var d=new Date(t); return d.getDate()+'/'+(d.getMonth()+1); }
+  /* hoe vaak gedaan = aantal trainingen in de statistieken (vinkjes + metingen, één per dag); warm-up: de teller */
+  function statOf(k){ return (!/^w0-/.test(k) && window.__exStat) ? window.__exStat(k) : counts[k]; }
   function paintCounts(){
     document.querySelectorAll('#s-d3 .exr:not(.exr-wu)').forEach(function(li){
-      var k=chkKey(li), c=counts[k], line=li.querySelector('.exr-s'); if(!line) return;
+      var k=chkKey(li), c=statOf(k), line=li.querySelector('.exr-s'); if(!line) return;
       var el=line.querySelector('.exr-cnt');
       if(!c||!c.n){ if(el) el.remove(); return; }
       if(!el){
         el=document.createElement('span'); el.className='exr-cnt';
-        el.innerHTML='<span class="cnt-n"></span><button type="button" class="cnt-minus" aria-label="One less"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>';
-        el.querySelector('.cnt-minus').addEventListener('click',function(e){ e.stopPropagation(); bumpCount(k,-1); });
+        el.innerHTML='<span class="cnt-n"></span>';
         var w=line.querySelector('.exr-warn'); if(w) line.insertBefore(el,w); else line.appendChild(el);
       }
       el.querySelector('.cnt-n').textContent=(line.classList.contains('wu-cnt')?'':'· ')+c.n+'×';
@@ -1803,11 +1804,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       while(li && !li.classList.contains('exgrp')){
         var d=li.querySelector('.cnt-dot'); if(d) d.remove();
         if(li.classList.contains('exr') && !li.classList.contains('exr-wu')){
-          var c=counts[chkKey(li)]; if(c&&c.n&&c.last&&c.last>bt){ bt=c.last; best=li; }
+          var c=statOf(chkKey(li)); if(c&&c.n&&c.last&&c.last>bt){ bt=c.last; best=li; }
         }
         li=li.nextElementSibling;
       }
-      if(best){ var el=best.querySelector('.exr-cnt'); if(el){ var dot=document.createElement('span'); dot.className='cnt-dot'; dot.title='Last time'; dot.setAttribute('aria-label','Last time'); el.insertBefore(dot,el.querySelector('.cnt-minus')); } }
+      if(best){ var el=best.querySelector('.exr-cnt'); if(el){ var dot=document.createElement('span'); dot.className='cnt-dot'; dot.title='Last time'; dot.setAttribute('aria-label','Last time'); el.appendChild(dot); } }
     });
   }
   function bumpCount(k,d){
@@ -2044,6 +2045,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     return out;
   }
   document.addEventListener('p53-prog',function(){ renderStats(); });
+  window.__exStat=function(k){ var n=0,last=0; events().forEach(function(e){ if(e.k===k){ n++; if(e.t>last) last=e.t; } }); return {n:n,last:last}; };
+  /* meting verwijderd in de grafiek: ook de vinkjes-gebeurtenis(sen) van die oefening op die dag weg, zodat alles klopt */
+  window.__histDropDay=function(k,d){
+    function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+    Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&ymdL(e.t)===d){ delete hist[id]; if(histCol) histCol.doc(id).delete().catch(function(){}); } });
+    saveHistLocal(); renderStats(); };
   var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','alles'];
   var per='maand'; try{ per=localStorage.getItem(PERKEY)||'maand'; }catch(e){}
   if(PERS.indexOf(per)<0) per='maand';
@@ -2063,7 +2070,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var DAGEN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
       MAANDEN=['January','February','March','April','May','June','July','August','September','October','November','December'];
   function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
-  function renderStats(){
+  function renderStats(){ setTimeout(paintCounts,0);
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var now=Date.now(), score={}, first=now, days={}, evs=events().filter(function(e){ return e.t; }), last=0;
     evs.forEach(function(e){ if(e.t>last) last=e.t; });
@@ -2300,7 +2307,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
       var e=prog[b.dataset.id]; if(!e) return;
       p53Confirm({title:'Delete measurement?',msg:dLab(e.t)+' '+new Date(e.t).getFullYear()+' · '+fmtV(e.v)+' '+D.unit,ok:'Delete',danger:true}).then(function(y){
-        if(!y) return; progDel(b.dataset.id); renderProg(); renderSheet(true);
+        if(!y) return; progDel(b.dataset.id);
+        var _i=document.querySelector('#s-d3 .exr-in[data-note="'+e.k+'"]'), _li=_i&&_i.closest('.exr'); if(_li&&window.__histDropDay) window.__histDropDay(chkKey(_li),e.d);
+        /* meting van vandaag weg terwijl de oefening afgevinkt staat: vinkje ook weg */
+        if(_li&&e.d===ymd(Date.now())&&_li.classList.contains('done')){ var _c=_li.querySelector('.chk'); if(_c) _c.click(); }
+        renderProg(); renderSheet(true);
       });
     }); });
     var f=body.querySelector('.pe-add');
