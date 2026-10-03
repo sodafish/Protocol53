@@ -65,6 +65,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
   `window.__ksub` is omwikkeld zodat sprongen (bv. End workout → Progress) de navbar bijwerken.
 - Onder de titel staat de huidige pagina (`#pgTitle`).
+- Alles wat je kiest wordt onthouden (localStorage): pagina `fitlog-view` (Cardio/Diet/Info; Workout/Progress via
+  `fitlog-ksub`), periode statistieken `fitlog-stats-per`, oefening en periode progressie `fitlog-prog-sel`/`fitlog-prog-per`,
+  Full/Upper/Lower `fitlog-split`, oefeningen per groep `fitlog-groups` (+ cfg/groups), geboortedatum (+ cfg/profile).
 - Geen zwevende pijl naar boven meer (tik op het actieve navbar-item). Body heeft extra ruimte onderaan.
 
 ## Statistieken (Workout/Progress → Progress)

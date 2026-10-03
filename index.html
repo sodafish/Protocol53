@@ -2987,6 +2987,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     moreBtn.classList.toggle('on',!!TAB[v]);
     sh.querySelectorAll('[data-view]').forEach(function(b){ if(b.dataset.view===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
     if(title) title.textContent=NAMES[v]||'';
+    try{ localStorage.setItem('fitlog-view',v); }catch(e){}
   }
   function go(v){
     if(v===view){ window.scrollTo({top:0,behavior:'smooth'}); return; }
@@ -3011,7 +3012,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   bg.addEventListener('click',closeMore); sh.querySelector('.sheet-x').addEventListener('click',closeMore);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeMore(); });
   sh.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ closeMore(); var v=b.dataset.view; setTimeout(function(){ if(v===view) window.scrollTo({top:0}); else go(v); },180); }); });
+  /* laatste pagina terug (Cardio, Diet of Info; Workout/Progress onthoudt fitlog-ksub al) */
+  var saved=null; try{ saved=localStorage.getItem('fitlog-view'); }catch(e){}
   paint(current());
+  if(saved && TAB[saved] && saved!==view){ document.getElementById(TAB[saved]).click(); paint(saved); window.scrollTo(0,0); }
 })();
 </script>
 <script>
