@@ -96,7 +96,8 @@
     var prev=load('p53-uid',null);
     if(prev && prev!==u.id){ wipeLocal(); save('p53-uid',u.id); location.reload(); return; }
     save('p53-uid',u.id);
-    user=u; resolveDb(db);
+    user=u; window.__p53user=u; resolveDb(db);
+    try{ document.dispatchEvent(new CustomEvent('p53-user',{detail:u})); }catch(e){}
     flush().then(pull);
   }
   function showLogin(msg){
@@ -107,6 +108,7 @@
       '<p class="lg-sub">Log in to save your data across all your devices.</p>'+
       '<label>Email<input type="email" name="email" autocomplete="username" required></label>'+
       '<label>Password<input type="password" name="pw" autocomplete="current-password" required minlength="6"></label>'+
+      '<label class="lg-dob" hidden>Date of birth<input type="date" name="dob"></label>'+
       '<p class="lg-msg" role="status"></p>'+
       '<button type="submit" class="lg-main">Log in</button>'+
       '<button type="button" class="lg-alt">No account yet? Create account</button>'+
@@ -119,17 +121,20 @@
       o.querySelector('.lg-main').textContent=signup?'Create account':'Log in';
       this.textContent=signup?'Already have an account? Log in':'No account yet? Create account';
       f.pw.setAttribute('autocomplete',signup?'new-password':'current-password');
+      o.querySelector('.lg-dob').hidden=!signup;
       m.textContent='';
     });
     f.addEventListener('submit',function(e){
       e.preventDefault();
       var email=f.email.value.trim(), pw=f.pw.value;
       if(!email||pw.length<6){ m.textContent='Enter your email and a password of at least 6 characters.'; return; }
+      var dob=f.dob.value;
+      if(signup && !/^\d{4}-\d{2}-\d{2}$/.test(dob)){ m.textContent='Enter your date of birth.'; return; }
       m.textContent=signup?'Creating account…':'Logging in…';
-      var p=signup?sb.auth.signUp({email:email,password:pw}):sb.auth.signInWithPassword({email:email,password:pw});
+      var p=signup?sb.auth.signUp({email:email,password:pw,options:{data:{dob:dob}}}):sb.auth.signInWithPassword({email:email,password:pw});
       p.then(function(r){
         if(r.error){ m.textContent=/Invalid login/i.test(r.error.message)?'Email or password is incorrect.':/not confirmed/i.test(r.error.message)?'First confirm your email address via the email you received.':r.error.message; return; }
-        if(signup && !r.data.session){ m.textContent='Account created. Confirm via the email you received, then log in here.'; signup=false; o.querySelector('.lg-main').textContent='Log in'; return; }
+        if(signup && !r.data.session){ m.textContent='Account created. Confirm via the email you received, then log in here.'; signup=false; o.querySelector('.lg-main').textContent='Log in'; o.querySelector('.lg-dob').hidden=true; o.querySelector('.lg-alt').textContent='No account yet? Create account'; return; }
         o.hidden=true; start(r.data.user||r.data.session.user);
       },function(){ m.textContent='No connection. Try again once you are online.'; });
     });

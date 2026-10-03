@@ -11,7 +11,7 @@ vooral op zijn iPhone, als app op het beginscherm.
   Statusregel onder de titel (`#syncStamp`, klasse `warn`): offline / database niet bereikbaar
   (bv. gepauzeerd Supabase-project) / nog niet bewaard; bij problemen elke minuut opnieuw proberen.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
-- `sw.js` — service worker. Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
+- `sw.js` — service worker (`const VERSION = 'p53-vN';`, let op de spaties bij zoeken/vervangen). Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
   (icons, cloud.js, vendor) zodat de iPhone de nieuwe versie ophaalt.
 - `manifest.webmanifest`, `icons/` — app-naam en icoon (eigen ontwerp van Tom, `p53-*.png`).
 - `img/` — oefenfoto's (Free Exercise DB, begin/eind), wisselen automatisch onder de i-knop.
@@ -44,6 +44,14 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals
   `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
   in `NAMES` (bv. 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
+
+## Leeftijd in de titel (Protocol + leeftijd)
+- Kop `<em id="ageNum">`, `document.title` en meta `apple-mobile-web-app-title` tonen 'Protocol' + leeftijd; zonder
+  geboortedatum 53. Berekend bij laden en bij terugkeren naar de app (verjaardag schuift vanzelf op).
+- Geboortedatum: bij 'Create account' verplicht veld (`cloud.js`, `user_metadata.dob` via `signUp`); daarna in
+  collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. Aanpasbaar op Info › App
+  (`#dobIn`). `cloud.js` zet `window.__p53user` en stuurt event `p53-user`.
+- App-icoon blijft voorlopig de vaste 53 (iOS haalt het icoon alleen op bij 'Zet op beginscherm').
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 38% oppervlakkleur, blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout**

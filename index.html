@@ -814,6 +814,10 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 #p53-login .lg-msg{min-height:1.2em;margin:0;font-size:13.5px;color:var(--accent);}
 #p53-login .lg-main{appearance:none;cursor:pointer;min-height:50px;border:none;border-radius:999px;background:var(--ink);color:var(--surface);font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;}
 #p53-login .lg-alt{appearance:none;cursor:pointer;background:none;border:none;color:var(--muted);font:500 14px 'Work Sans',system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;min-height:44px;}
+.dob-f{display:flex;flex-direction:column;gap:.35rem;margin-top:1.1rem;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.dob-f input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;min-height:48px;max-width:220px;-webkit-appearance:none;appearance:none;}
+.dob-f input:focus{outline:none;border-color:var(--accent);}
+.dob-note{margin-top:.4rem;}
 .app-tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;}
 .app-tools button{appearance:none;cursor:pointer;min-height:44px;padding:.7rem 1.1rem;border:1.5px solid var(--line);border-radius:999px;background:transparent;font:600 12px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
 .app-tools button:hover{color:var(--ink);}
@@ -1000,7 +1004,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <header class="top">
   <div class="wrap">
     <div class="masthead">
-      <h1>Protocol <em>53</em></h1>
+      <h1>Protocol <em id="ageNum">53</em></h1>
       <p class="pg-title" id="pgTitle">Workout</p>
       <span class="stamp" id="syncStamp"></span>
     </div>
@@ -1439,6 +1443,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   <div class="superhead">App</div>
   <div class="section" style="margin-top:.3rem">
     <p class="section-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
+    <label class="dob-f">Date of birth<input type="date" id="dobIn"></label>
+    <p class="section-note dob-note">Sets the number in the title: Protocol + your age.</p>
     <div class="app-tools">
       <button type="button" onclick="p53Backup()">Export backup</button>
       <button type="button" onclick="p53Logout()">Log out</button>
@@ -2901,6 +2907,32 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
   sel.addEventListener('change',function(){ cur=sel.value; try{ localStorage.setItem(KEY,cur); }catch(e){} apply(); });
   apply();
+})();
+</script>
+<script>
+/* ---- leeftijd in de titel: Protocol + leeftijd. Geboortedatum in cfg/profile {dob} (bij aanmelden uit user_metadata), cache fitlog-dob ---- */
+(function(){
+  var KEY='fitlog-dob', dob=null, col=null, got=false;
+  try{ dob=localStorage.getItem(KEY); }catch(e){}
+  var num=document.getElementById('ageNum'), inp=document.getElementById('dobIn'), meta=document.querySelector('meta[name="apple-mobile-web-app-title"]');
+  function age(d){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); if(!m) return null;
+    var now=new Date(), a=now.getFullYear()-(+m[1]); if(now.getMonth()+1<+m[2]||(now.getMonth()+1===+m[2]&&now.getDate()<+m[3])) a--;
+    return a>=10&&a<=110?a:null; }
+  function paint(){ var a=age(dob), n=a==null?53:a; if(num) num.textContent=n; document.title='Protocol '+n; if(meta) meta.setAttribute('content','Protocol '+n);
+    if(inp && document.activeElement!==inp) inp.value=dob||''; }
+  function setDob(d,save){ dob=d||null; try{ if(dob) localStorage.setItem(KEY,dob); else localStorage.removeItem(KEY); }catch(e){} paint();
+    if(save && col) (dob?col.doc('profile').set({dob:dob}):col.doc('profile').delete()).catch(function(){}); }
+  if(inp){ var t=new Date(); inp.max=t.toISOString().slice(0,10);
+    inp.addEventListener('change',function(){ var v=inp.value; if(v && age(v)==null) return; setDob(v,true); }); }
+  function fromUser(u){ var d=u&&u.user_metadata&&u.user_metadata.dob; if(d && got && !dob) setDob(d,true); }
+  paint();
+  if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('cfg');
+    col.onSnapshot(function(snap){ var d=null; snap.docs.forEach(function(x){ if(x.id==='profile') d=x.data(); });
+      if(snap.metadata&&snap.metadata.fromCache) return;
+      got=true; if(d&&d.dob){ if(d.dob!==dob) setDob(d.dob,false); } else fromUser(window.__p53user); },function(){}); });
+  document.addEventListener('p53-user',function(e){ fromUser(e.detail); });
+  /* verjaardag om middernacht: bij terugkomen opnieuw berekenen */
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') paint(); });
 })();
 </script>
 </body>
