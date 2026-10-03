@@ -837,12 +837,15 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   font:600 13.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease;}
 .stats-per button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
 .stats-per button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
-/* Full / Upper / Lower boven Workout */
-.split-f{display:flex;gap:.35rem;margin:0 0 1rem;}
-.split-f button{appearance:none;cursor:pointer;flex:1 1 0;min-height:40px;padding:0 .6rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
-  font:600 13.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;transition:background-color .2s ease,color .2s ease,border-color .2s ease;}
-.split-f button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
-.split-f button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+/* Full / Upper / Lower: dropdown naast New workout */
+#s-d3 .tools-row{display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;}
+.split-sel{position:relative;display:inline-flex;align-items:center;flex:none;}
+.split-sel select{appearance:none;-webkit-appearance:none;cursor:pointer;min-height:48px;padding:0 2.6rem 0 1.3rem;border-radius:999px;
+  border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;-webkit-tap-highlight-color:transparent;}
+.split-sel select:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+.split-sel svg{position:absolute;right:1.1rem;pointer-events:none;color:var(--muted);}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 #s-d3 .split-off{display:none!important;}
 .stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
 .stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:2.2rem;margin:1.6rem auto 0;max-width:21rem;}
@@ -1026,13 +1029,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   </div>
 
   <div class="pane" id="s-d3">
-    <div class="split-f" role="group" aria-label="Workout type">
-      <button type="button" data-split="full" aria-pressed="true">Full</button>
-      <button type="button" data-split="upper" aria-pressed="false">Upper</button>
-      <button type="button" data-split="lower" aria-pressed="false">Lower</button>
-    </div>
     <div class="tools-row">
       <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>New workout</span></button>
+      <label class="split-sel"><span class="vh">Workout type</span><select id="splitSel">
+        <option value="full">Full</option><option value="upper">Upper</option><option value="lower">Lower</option>
+      </select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></label>
     </div>
     <ol class="exl">
       <li class="exgrp" data-grp="g0"><span class="grp-n">0</span><span class="grp-t">Warm-up</span><button type="button" class="grp-edit" data-grp="g0" aria-label="Choose exercises for Warm-up"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></li>
@@ -2890,16 +2891,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* ---- Full / Upper / Lower: verbergt groepen die je vandaag niet traint (Warm-up altijd). Keuze in localStorage fitlog-split ---- */
 (function(){
   var KEY='fitlog-split', SPLIT={upper:['g2','g4','g5','g6','g8'],lower:['g1','g3','g7']};
-  var box=document.querySelector('.split-f'); if(!box) return;
+  var sel=document.getElementById('splitSel'); if(!sel) return;
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(cur!=='upper'&&cur!=='lower') cur='full';
   function apply(){
     var keep=SPLIT[cur];
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',!!keep && g!=='g0' && keep.indexOf(g)<0); });
-    box.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.split===cur?'true':'false'); });
+    sel.value=cur;
   }
-  box.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){
-    cur=b.dataset.split; try{ localStorage.setItem(KEY,cur); }catch(e){} apply(); }); });
+  sel.addEventListener('change',function(){ cur=sel.value; try{ localStorage.setItem(KEY,cur); }catch(e){} apply(); });
   apply();
 })();
 </script>

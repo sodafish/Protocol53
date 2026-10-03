@@ -116,9 +116,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 
-## Full / Upper / Lower (bovenaan Workout)
-- Pillen `.split-f` (zelfde stijl als de periodeknoppen van Progress, maar eigen klasse: de code van Progress
-  selecteert `.stats-per button`) boven 'New workout'. Full = standaard; keuze in localStorage `fitlog-split`.
+## Full / Upper / Lower (dropdown naast New workout)
+- Dropdown `#splitSel` (in `label.split-sel`, pil met chevron, zelfde hoogte als 'New workout') rechts naast
+  'New workout' in `.tools-row`. Full = standaard; keuze in localStorage `fitlog-split`.
 - Upper = groepen 2, 4, 5, 6, 8; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
 - Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; ook `.exsec` 'Optional' en
   `.exsub` 'Supersets' hebben `data-grp="g8"`). Vinkjes, tellingen, statistieken en progressie veranderen niet.
