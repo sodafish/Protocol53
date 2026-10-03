@@ -83,7 +83,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Elke afvinking (via `bumpCount`, dus zoals de teller) schrijft een rij in collectie `hist`:
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de
   laatste rij van die oefening; zakt de teller via de min-knop naar 0, dan gaan alle rijen van die
-  oefening weg, ook haar deel in `seed` (`histClear`). De opwarming telt niet mee.
+  oefening weg, ook haar deel in `seed` (`histClear`). De opwarming (`w0-…`) telt niet mee.
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
 - Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
   weken vanaf de eerste training in die periode, minstens 1).
@@ -116,7 +116,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 
-## Oefeningen per groep kiezen (groepen 1–8; Warm-up niet)
+## Oefeningen per groep kiezen (Warm-up en groepen 1–8)
 - Structuur ligt vast: Warm-up + 8 groepen. Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
 - Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Minstens
@@ -129,6 +129,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep (bij Arms vóór de kop Supersets), plus MUSCLES/NAMES/EX/IMG.
+- Warm-up (groep 0, `data-grp="g0"`) bestaat uit losse rijen met sleutels `w0-…` (zonder invulveld): 4 standaard
+  (pull-aparts, torso rotation, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
+  Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
+  als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
+- In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
+  (klasse `.over`, hogere z-index).
 - De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 

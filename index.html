@@ -744,6 +744,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .info-b:hover{color:var(--ink);border-color:var(--ink);}
 .info-b:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .exr.done .info-b,.exr.grp-skip .info-b{text-decoration:none;}
+.sheet-bg.over{z-index:95;} .sheet.over{z-index:96;}
 .sheet-bg{position:fixed;inset:0;background:rgba(20,14,10,.42);z-index:90;opacity:0;transition:opacity .25s ease;}
 .sheet-bg.on{opacity:1;}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
@@ -1024,8 +1025,16 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>New workout</span></button>
     </div>
     <ol class="exl">
-      <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Warm-up</span></li>
-      <li data-eq="f" class="exr exr-wu" data-key="d3-wu"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><ul class="wu-list"><li><span>Band Pull-Aparts</span><em>2 × 15</em></li><li><span>Torso Rotation</span><em>10 per side · arms crossed over your chest</em></li><li><span>Bodyweight Squats</span><em>10–15</em></li><li><span>Glute Bridge</span><em>12–15 · hold 1 count at the top</em></li></ul></div></li>
+      <li class="exgrp" data-grp="g0"><span class="grp-n">0</span><span class="grp-t">Warm-up</span><button type="button" class="grp-edit" data-grp="g0" aria-label="Choose exercises for Warm-up"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></li>
+      <li class="exr ex-off" data-grp="g0" data-key="w0-rowing"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Rowing Machine</div><div class="exr-s">5 min, easy pace</div></div></li>
+      <li class="exr ex-off" data-grp="g0" data-key="w0-cross-trainer"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cross Trainer</div><div class="exr-s">5 min, easy pace</div></div></li>
+      <li class="exr ex-off" data-grp="g0" data-key="w0-bike"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Stationary Bike</div><div class="exr-s">5 min, easy pace</div></div></li>
+      <li class="exr ex-off" data-grp="g0" data-key="w0-incline-walk"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Incline Treadmill Walk</div><div class="exr-s">5 min, brisk walk</div></div></li>
+      <li class="exr" data-grp="g0" data-key="w0-pull-aparts"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Band Pull-Aparts</div><div class="exr-s">2 × 15</div></div></li>
+      <li class="exr" data-grp="g0" data-key="w0-torso-rotation"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Torso Rotation</div><div class="exr-s">10 per side · arms crossed over your chest</div></div></li>
+      <li class="exr" data-grp="g0" data-key="w0-bodyweight-squats"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bodyweight Squats</div><div class="exr-s">10–15</div></div></li>
+      <li class="exr" data-grp="g0" data-key="w0-glute-bridge"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Glute Bridge</div><div class="exr-s">12–15 · hold 1 count at the top</div></div></li>
+      <li class="exr ex-off" data-grp="g0" data-key="w0-arm-circles"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Arm Circles</div><div class="exr-s">10 forward · 10 backward</div></div></li>
       <li class="exgrp" data-grp="g1"><span class="grp-n">1</span><span class="grp-t">Front legs</span><button type="button" class="grp-edit" data-grp="g1" aria-label="Choose exercises for Front legs"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></li>
       <li data-eq="f" class="exr" data-grp="g1"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Reverse Lunges</div><div class="exr-s">3 × 8–12 per leg</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-reverse-lunges" placeholder="kg" aria-label="Dumbbell Reverse Lunges — kg"></li>
       <li data-eq="f" class="exr" data-grp="g1"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bulgarian Split Squat</div><div class="exr-s">3 × 8–12 per leg</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-bulgarian-split-squat" placeholder="kg" aria-label="Bulgarian Split Squat — kg"></li>
@@ -1544,6 +1553,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var rows=[], li=g.nextElementSibling;
       while(li && !li.classList.contains('exgrp')){ if(li.classList.contains('exr') && !li.classList.contains('ex-off')) rows.push(li); li=li.nextElementSibling; }
       var anyDone=rows.some(function(r){ return r.classList.contains('done'); });
+      if(g.dataset.grp==='g0'){ /* opwarming: alles doen, niets doorstrepen */
+        g.classList.toggle('grp-done',rows.length>0 && rows.every(function(r){ return r.classList.contains('done'); }));
+        rows.forEach(function(r){ r.classList.remove('grp-skip'); }); return; }
       g.classList.toggle('grp-done',anyDone);
       rows.forEach(function(r){ r.classList.toggle('grp-skip', anyDone && !r.classList.contains('done')); });
     });
@@ -1728,6 +1740,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var hist={}; try{ hist=JSON.parse(localStorage.getItem(HISTKEY)||'{}'); }catch(e){}
   function saveHistLocal(){ try{ localStorage.setItem(HISTKEY,JSON.stringify(hist)); }catch(e){} }
   function histAdd(k){
+    if(/^w0-/.test(k)) return; /* opwarming telt niet mee voor de statistieken */
     var t=Date.now(), id=k+'@'+t, ev={k:k,t:t,s:setsFor(k),m:musclesFor(k)};
     hist[id]=ev; saveHistLocal(); renderStats();
     if(histCol) histCol.doc(id).set(ev).catch(function(){});
@@ -2176,7 +2189,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         if(!next.seed){
           var have={}, base={};
           Object.keys(next).forEach(function(id){ var e=next[id]; if(e&&e.k) have[e.k]=(have[e.k]||0)+1; });
-          Object.keys(counts).forEach(function(k){ var c=counts[k], n=(c&&c.n||0)-(have[k]||0); if(n>0&&k!=='d3-wu') base[k]={n:n,last:c.last||Date.now()}; });
+          Object.keys(counts).forEach(function(k){ var c=counts[k], n=(c&&c.n||0)-(have[k]||0); if(n>0&&k!=='d3-wu'&&!/^w0-/.test(k)) base[k]={n:n,last:c.last||Date.now()}; });
           var seed={t:Date.now(),base:base}; hist.seed=seed; saveHistLocal(); renderStats();
           histCol.doc('seed').set(seed).catch(function(){});
         }
@@ -2516,6 +2529,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   EX.inclinecurl={cap:'Back on an incline bench, arms hanging straight down. Curl up briskly without moving your elbows forward, lower slowly until your arms are straight.'};
   EX.kickbacktri={cap:'Knee and hand on a bench, upper arm along your body. Extend your arm briskly back until straight, lower slowly. Upper arm stays still.'};
   EX.dbohext={cap:'Seated with back support, one dumbbell in both hands above your head. Lower slowly behind your head, elbows pointing up, extend briskly.'};
+  EX.rowing={cap:'Feet strapped in, resistance low to medium. Push with your legs first, then lean back slightly and pull the handle to your lower ribs. Return in reverse order: arms, body, knees. Easy pace, you should be able to talk.'};
+  EX.elliptical={cap:'Stand tall, hold the moving handles lightly, whole foot on the pedals. Low resistance, smooth and steady rhythm. Easy pace, you should be able to talk.'};
+  EX.bike={cap:'Saddle at hip height: knee slightly bent at the bottom of the stroke. Low resistance, steady cadence. Easy pace, you should be able to talk.'};
+  EX.treadmill={cap:'Incline 5–10 %, brisk walking speed. Stand tall and don’t hold the handrails. You should feel warm, not out of breath.'};
   EX.ss1={seqOf:['ohext','cablecurl'],cap:'Superset: one set of Overhead Extension (rope) followed immediately by one set of Biceps Curl (bar), then rest. For both: extend or curl up briskly, slowly back.'};
   EX.ss2={seqOf:['pushdown','hammer'],cap:'Superset with the same rope: one set of Rope Pushdown followed immediately by one set of Hammer Curl, then rest. For both: push or curl up briskly, slowly back.'};
 
@@ -2528,6 +2545,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     'Plank + Side Plank':'plank','Bird Dog':'birddog','Crunch Machine':'crunch',"Farmer's Carry":'carry','Weighted Back Extension':'backext',
     'Overhead Extension + Biceps Curl':'ss1','Rope Pushdown + Hammer Curl':'ss2','Overhead Cable Triceps Extension':'ohext','Triceps Rope Pushdown':'pushdown',
     'Curl Machine':'curlmachine','Dumbbell Biceps Curl':'dbcurl','Band Pull-Aparts':'pullapart','Torso Rotation':'rotation','Arm Circles':'armcircle','Glute Bridge':'bridge',
+    'Rowing Machine':'rowing','Cross Trainer':'elliptical','Stationary Bike':'bike','Incline Treadmill Walk':'treadmill',
     'Incline Dumbbell Press':'inclinepress','Dumbbell Flyes':'dbfly','Cable Crossover':'crossover','Incline Chest Press Machine':'inclinemachine','Low-to-High Cable Fly':'lowfly','Hip Thrust':'hipthrust','Seated Leg Curl Machine':'seatedlegcurl','Cable Pull-Through':'pullthrough','Cable Glute Kickback':'kickback','Seated Calf Raise Machine':'seatedcalf','Incline Dumbbell Row':'inclinerow','Seated Row Machine':'rowmachine','Single-Arm Cable Row':'onearmcablerow','High Row Machine':'highrow','Chest-Supported T-Bar Row':'tbarrow','Arnold Press':'arnold','Reverse Fly Machine':'reversefly','Seated Rear Delt Raise':'reardelt','Dumbbell Front Raise':'frontraise','Dumbbell Shrug':'shrug','Close-Grip Lat Pulldown':'closepulldown','Underhand Pulldown':'underpulldown','Straight-Arm Pulldown':'straightarm','Single-Arm Lat Pulldown':'onearmpulldown','Cable Rear Delt Fly':'cablereardelt','Dead Bug':'deadbug','Pallof Press':'pallof','Cable Crunch':'cablecrunch','Dumbbell Hammer Curl':'dbhammer','Incline Dumbbell Curl':'inclinecurl','Cable Biceps Curl':'cablecurl','Dumbbell Triceps Kickback':'kickbacktri','Dumbbell Overhead Triceps Extension':'dbohext'};
 
   /* ---------- speler ---------- */
@@ -2571,6 +2589,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var IMG={"squat": ["img/squat-0.jpg", "img/squat-1.jpg"], "goblet": ["img/goblet-0.jpg", "img/goblet-1.jpg"], "lunge": ["img/lunge-0.jpg", "img/lunge-1.jpg"], "bulgarian": ["img/bulgarian-0.jpg", "img/bulgarian-1.jpg"], "dbpress": ["img/dbpress-0.jpg", "img/dbpress-1.jpg"], "chestmachine": ["img/chestmachine-0.jpg", "img/chestmachine-1.jpg"], "pushup": ["img/pushup-0.jpg", "img/pushup-1.jpg"], "fly": ["img/fly-0.jpg", "img/fly-1.jpg"], "legcurl": ["img/legcurl-0.jpg", "img/legcurl-1.jpg"], "abduction": ["img/abduction-0.jpg", "img/abduction-1.jpg"], "rdl": ["img/rdl-0.jpg", "img/rdl-1.jpg"], "csrow": ["img/csrow-0.jpg", "img/csrow-1.jpg"], "cablerow": ["img/cablerow-0.jpg", "img/cablerow-1.jpg"], "onearmrow": ["img/onearmrow-0.jpg", "img/onearmrow-1.jpg"], "dbshoulder": ["img/dbshoulder-0.jpg", "img/dbshoulder-1.jpg"], "shouldermachine": ["img/shouldermachine-0.jpg", "img/shouldermachine-1.jpg"], "lateral": ["img/lateral-0.jpg", "img/lateral-1.jpg"], "pulldown": ["img/pulldown-0.jpg", "img/pulldown-1.jpg"], "facepull": ["img/facepull-0.jpg", "img/facepull-1.jpg"], "hang": ["img/hang-0.jpg", "img/hang-1.jpg"], "pullup": ["img/pullup-0.jpg", "img/pullup-1.jpg"], "plank": ["img/plank-0.jpg", "img/plank-1.jpg"], "crunch": ["img/crunch-0.jpg", "img/crunch-1.jpg"], "carry": ["img/carry-0.jpg", "img/carry-1.jpg"], "backext": ["img/backext-0.jpg", "img/backext-1.jpg"], "ohext": ["img/ohext-0.jpg", "img/ohext-1.jpg"], "pushdown": ["img/pushdown-0.jpg", "img/pushdown-1.jpg"], "cablecurl": ["img/cablecurl-0.jpg", "img/cablecurl-1.jpg"], "hammer": ["img/hammer-0.jpg", "img/hammer-1.jpg"], "curlmachine": ["img/curlmachine-0.jpg?v=2", "img/curlmachine-1.jpg?v=2"], "dbcurl": ["img/dbcurl-0.jpg", "img/dbcurl-1.jpg"], "pullapart": ["img/pullapart-0.jpg", "img/pullapart-1.jpg"], "armcircle": ["img/armcircle-0.jpg", "img/armcircle-1.jpg"]};
   IMG.legpress=["img/legpress-0.jpg","img/legpress-1.jpg"]; IMG.legext=["img/legext-0.jpg","img/legext-1.jpg"]; IMG.stepup=["img/stepup-0.jpg","img/stepup-1.jpg"]; IMG.walklunge=["img/walklunge-0.jpg","img/walklunge-1.jpg"]; IMG.hacksquat=["img/hacksquat-0.jpg","img/hacksquat-1.jpg"]; IMG.bridge=["img/bridge-0.jpg","img/bridge-1.jpg"]; IMG.calfraise=["img/calfraise-0.jpg","img/calfraise-1.jpg"]; IMG.cablelateral=["img/cablelateral-0.jpg","img/cablelateral-1.jpg"];
   IMG.inclinepress=["img/inclinepress-0.jpg","img/inclinepress-1.jpg"]; IMG.dbfly=["img/dbfly-0.jpg","img/dbfly-1.jpg"]; IMG.crossover=["img/crossover-0.jpg","img/crossover-1.jpg"]; IMG.inclinemachine=["img/inclinemachine-0.jpg","img/inclinemachine-1.jpg"]; IMG.lowfly=["img/lowfly-0.jpg","img/lowfly-1.jpg"]; IMG.hipthrust=["img/hipthrust-0.jpg","img/hipthrust-1.jpg"]; IMG.seatedlegcurl=["img/seatedlegcurl-0.jpg","img/seatedlegcurl-1.jpg"]; IMG.pullthrough=["img/pullthrough-0.jpg","img/pullthrough-1.jpg"]; IMG.kickback=["img/kickback-0.jpg","img/kickback-1.jpg"]; IMG.seatedcalf=["img/seatedcalf-0.jpg","img/seatedcalf-1.jpg"]; IMG.inclinerow=["img/inclinerow-0.jpg","img/inclinerow-1.jpg"]; IMG.rowmachine=["img/rowmachine-0.jpg","img/rowmachine-1.jpg"]; IMG.onearmcablerow=["img/onearmcablerow-0.jpg","img/onearmcablerow-1.jpg"]; IMG.highrow=["img/highrow-0.jpg","img/highrow-1.jpg"]; IMG.tbarrow=["img/tbarrow-0.jpg","img/tbarrow-1.jpg"]; IMG.arnold=["img/arnold-0.jpg","img/arnold-1.jpg"]; IMG.reversefly=["img/reversefly-0.jpg","img/reversefly-1.jpg"]; IMG.reardelt=["img/reardelt-0.jpg","img/reardelt-1.jpg"]; IMG.frontraise=["img/frontraise-0.jpg","img/frontraise-1.jpg"]; IMG.shrug=["img/shrug-0.jpg","img/shrug-1.jpg"]; IMG.closepulldown=["img/closepulldown-0.jpg","img/closepulldown-1.jpg"]; IMG.underpulldown=["img/underpulldown-0.jpg","img/underpulldown-1.jpg"]; IMG.straightarm=["img/straightarm-0.jpg","img/straightarm-1.jpg"]; IMG.onearmpulldown=["img/onearmpulldown-0.jpg","img/onearmpulldown-1.jpg"]; IMG.cablereardelt=["img/cablereardelt-0.jpg","img/cablereardelt-1.jpg"]; IMG.deadbug=["img/deadbug-0.jpg","img/deadbug-1.jpg"]; IMG.pallof=["img/pallof-0.jpg","img/pallof-1.jpg"]; IMG.cablecrunch=["img/cablecrunch-0.jpg","img/cablecrunch-1.jpg"]; IMG.dbhammer=["img/dbhammer-0.jpg","img/dbhammer-1.jpg"]; IMG.inclinecurl=["img/inclinecurl-0.jpg","img/inclinecurl-1.jpg"]; IMG.kickbacktri=["img/kickbacktri-0.jpg","img/kickbacktri-1.jpg"]; IMG.dbohext=["img/dbohext-0.jpg","img/dbohext-1.jpg"];
+  IMG.rowing=["img/rowing-0.jpg","img/rowing-1.jpg"]; IMG.elliptical=["img/elliptical-0.jpg","img/elliptical-1.jpg"]; IMG.bike=["img/bike-0.jpg","img/bike-1.jpg"]; IMG.treadmill=["img/treadmill-0.jpg","img/treadmill-1.jpg"];
   IMG.ss1=[IMG.ohext[0],IMG.ohext[1],IMG.cablecurl[0],IMG.cablecurl[1]];
   IMG.ss2=[IMG.pushdown[0],IMG.pushdown[1],IMG.hammer[0],IMG.hammer[1]];
   var SSL={ss1:['Overhead Extension','Biceps Curl'],ss2:['Rope Pushdown','Hammer Curl']};
@@ -2597,8 +2616,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* ---------- venster ---------- */
   var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#more-bg):not(#grp-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#more-sheet):not(#grp-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
   var cur=null, lastFocus=null;
-  function open(name,btn){
+  function open(name,btn,over){
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
+    bg.classList.toggle('over',!!over); sh.classList.toggle('over',!!over);
     tt.textContent=name;
     bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+(IMG[k]?'<p class="ph-src">Foto\'s: Free Exercise DB</p>':'');
     bodyEl.querySelector('.sheet-cap').textContent=EX[k].cap;
@@ -2625,6 +2645,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   });
   bg.addEventListener('click',close); sh.querySelector('.sheet-x').addEventListener('click',close);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !sh.hidden) close(); });
+  window.__p53info={has:function(name){ return !!NAMES[name]; },open:function(name,btn){ open(name,btn,true); }};
   window.__p53anim={EX:EX,NAMES:NAMES,player:player,staticPose:function(host,k,ph){ var ex=EX[k], view=ex.view||'side'; var svg=el('svg',{viewBox:'0 0 300 230',width:205},host); svg.innerHTML='<line x1="20" y1="'+GY+'" x2="280" y2="'+GY+'" stroke="var(--line)" stroke-width="2"/>'+fixv(ex.props); var gb=el('g',{},svg); var g=build(gb,view); draw(g,view,ex.poses[ph],ex); }};
 })();
 </script>
@@ -2708,7 +2729,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 })();
 </script>
 <script>
-/* ---- oefeningen per groep aan/uit (groepen 1–8). Opslag: localStorage fitlog-groups + collectie cfg/doc groups ---- */
+/* ---- oefeningen per groep aan/uit (Warm-up en groepen 1–8). Opslag: localStorage fitlog-groups + collectie cfg/doc groups ---- */
 (function(){
   var KEY='fitlog-groups', cfg={}, col=null;
   try{ cfg=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){}
@@ -2735,7 +2756,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function render(){
     var act=on(cur);
     list.innerHTML=rows(cur).map(function(li){ var k=keyOf(li), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), a=act.indexOf(k)>=0;
-      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+'</b><small>'+st+'</small></span><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; }).join('');
+      var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'"><span>i</span></button>':'';
+      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+ib+'</b><small>'+st+'</small></span><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; }).join('');
+    list.querySelectorAll('.info-b').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); window.__p53info.open(b.dataset.n,b); }); });
     list.querySelectorAll('.sw').forEach(function(c){ c.addEventListener('change',function(){
       var act=on(cur).slice(), k=c.dataset.k, i=act.indexOf(k);
       if(c.checked){ if(i<0) act.push(k); }
@@ -2753,7 +2776,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); if(last) last.focus({preventScroll:true}); }
   document.querySelectorAll('.grp-edit').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); openSheet(b.dataset.grp,b); }); });
   bg.addEventListener('click',closeSheet); sh.querySelector('.sheet-x').addEventListener('click',closeSheet);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeSheet(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open&&!document.querySelector('.sheet.over:not([hidden])')) closeSheet(); });
 })();
 </script>
 </body>
