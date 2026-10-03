@@ -144,7 +144,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 - Alle onderbladen: `overscroll-behavior:contain`; zolang een `.sheet` zichtbaar is én klasse `on` heeft, staat de
   pagina vast (body `position:fixed` met `top:-scrollY`, via MutationObserver onderaan `index.html`); bij sluiten komt
-  de scrollpositie terug. Slepen op `.sheet-bg` doet niets.
+  de scrollpositie terug, zonder animatie (tijdelijk `scroll-behavior:auto`, want `html` scrolt standaard smooth). Slepen op `.sheet-bg` doet niets.
 
 ## Full / Upper / Lower (dropdown naast New workout)
 - Eigen menu (geen native `<select>`: iOS toont dan grote systeemletters): knop `#splitBtn` (pil met chevron, 500 14.5px)

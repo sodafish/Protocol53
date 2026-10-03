@@ -3327,7 +3327,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function sync(){
     var on=anyOpen(); if(on===locked) return; locked=on;
     if(on){ y=window.scrollY; b.style.position='fixed'; b.style.top=(-y)+'px'; b.style.left='0'; b.style.right='0'; b.style.width='100%'; }
-    else{ b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; window.scrollTo(0,y); }
+    else{ /* zonder animatie terug naar dezelfde plek (html heeft scroll-behavior:smooth) */
+      var h=document.documentElement; h.style.scrollBehavior='auto';
+      b.style.position=''; b.style.top=''; b.style.left=''; b.style.right=''; b.style.width=''; window.scrollTo(0,y);
+      requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
   }
   var mo=new MutationObserver(sync);
   sheets.forEach(function(s){ mo.observe(s,{attributes:true,attributeFilter:['hidden','class']}); });
