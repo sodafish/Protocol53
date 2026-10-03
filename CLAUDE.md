@@ -43,7 +43,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   een eigen venster in de app-stijl.
 - Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals
   `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
-  in `NAMES` (bv. 'Torso Rotation', 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
+  in `NAMES` (bv. 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 38% oppervlakkleur, blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout**
@@ -130,9 +130,11 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep (bij Arms vóór de kop Supersets), plus MUSCLES/NAMES/EX/IMG.
 - Warm-up (groep 0, `data-grp="g0"`) bestaat uit losse rijen met sleutels `w0-…` (zonder invulveld): 4 standaard
-  (pull-aparts, torso rotation, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
+  (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
+- Alleen oefeningen met echte foto's (Free Exercise DB, begin/eind in `IMG`); getekende animaties zonder foto's
+  (Torso Rotation, Bird Dog) zijn verwijderd. Nieuwe oefeningen dus altijd met twee foto's.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
   (klasse `.over`, hogere z-index).
 - De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
