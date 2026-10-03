@@ -1741,6 +1741,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var on=!checks[k]; if(on) checks[k]=true; else delete checks[k];
       paintChecks(); saveChecksLocal();
       if(chkCol){ (on?chkCol.doc(k).set({done:true,at:Date.now()}):chkCol.doc(k).delete()).catch(function(){}); }
+      if(!on && window.__progDropToday) window.__progDropToday(b.closest('.exr'));
       if(!b.closest('.exr-wu')) bumpCount(k,on?1:-1);
     });
   });
@@ -2029,8 +2030,20 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
           for(var i=0;i<b.n;i++) out.push({k:k,t:b.last||e.t,s:setsFor(k),m:musclesFor(k)}); });
       } else out.push(e);
     });
+    /* metingen in de progressiegrafiek tellen ook als training: één per oefening per dag, ook zonder vinkje
+       (zo vul je achteraf een vergeten sessie aan met het potlood) */
+    var P=window.__progAll?window.__progAll():{};
+    function day(t){ var d=new Date(t); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+    var seen={}; out.forEach(function(e){ seen[e.k+'|'+day(e.t)]=1; });
+    Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number') return;
+      var inp=document.querySelector('#s-d3 .exr-in[data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?chkKey(li):p.k;
+      if(!k||/^w0-/.test(k)) return;
+      var key=k+'|'+day(p.t); if(seen[key]) return; seen[key]=1;
+      out.push({k:k,t:p.t,s:setsFor(k,li),m:musclesFor(k,li)});
+    });
     return out;
   }
+  document.addEventListener('p53-prog',function(){ renderStats(); });
   var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','alles'];
   var per='maand'; try{ per=localStorage.getItem(PERKEY)||'maand'; }catch(e){}
   if(PERS.indexOf(per)<0) per='maand';
@@ -2204,6 +2217,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     prog[id]=ev; saveProgLocal(); renderProg();
     if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
+  window.__progAll=function(){ return prog; };
+  /* uitvinken = deze sessie ongedaan: ook de meting(en) van vandaag van die oefening weg */
+  window.__progDropToday=function(li){ var td=ymd(Date.now()); li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var id=x.dataset.note+'@'+td; if(prog[id]){ progDel(id); } }); saveProgLocal(); if(typeof renderProg==='function') renderProg(); };
   window.__progRecord=progRecord; window.__renderProg=function(){ renderProg(); };
   function progInputs(){ return [].slice.call(document.querySelectorAll('#s-d3 .exr:not(.exr-wu) .exr-in[data-note]')); }
   function progLabel(inp){ return (inp.getAttribute('aria-label')||inp.dataset.note).replace(/\s+—\s+\S+$/,''); }

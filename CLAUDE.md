@@ -100,6 +100,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de
   laatste rij van die oefening; zakt de teller via de min-knop naar 0, dan gaan alle rijen van die
   oefening weg, ook haar deel in `seed` (`histClear`). De opwarming (`w0-…`) telt niet mee.
+- Ook metingen in `prog` tellen als training (in `events()`): één per oefening (rijsleutel via `chkKey`) per kalenderdag,
+  alleen als er die dag nog geen `hist`-rij voor die oefening is (dus nooit dubbel). Zo telt een achteraf met het potlood
+  toegevoegde sessie mee. Sets/spieren van zo'n meting = de huidige van de oefening. Uitvinken (vinkje) wist ook de
+  meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet. Coverage ververst bij `p53-prog`.
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
 - Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
   weken vanaf de eerste training in die periode, minstens 1).
