@@ -3016,20 +3016,27 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var li=[].slice.call(document.querySelectorAll('#s-d3 .exr')).filter(function(x){ var n=x.querySelector('.exr-n'); return n&&n.firstChild.textContent.trim()===name; })[0]; if(!li) return;
     [].slice.call(li.querySelectorAll('.exr-in[data-note]')).forEach(function(inp){
       var k=inp.dataset.note;
-      var pts=window.__progPts(k); if(!pts.length) return;
+      var pts=window.__progPts(k), none=!pts.length;
       var unit=inp.placeholder||'kg', F=window.__progFmt, last=pts[pts.length-1], first=pts[0], diff=pts.length>1?last.v-first.v:null;
       var two=li.querySelectorAll('.exr-in[data-note]').length>1, lab=two?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'';
       var box=document.createElement('div'); box.className='ip-box';
-      box.innerHTML='<p class="ip-t">Your progress'+(lab?' · '+lab:'')+'</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+F.v(last.v)+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
-        (diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div>'+
+      box.innerHTML='<p class="ip-t">Your progress'+(lab?' · '+lab:'')+'</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(none?'–':F.v(last.v))+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
+        (none?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div>'+
         '<button type="button" class="prog-edit ip-edit" aria-label="Edit measurements"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div><div class="ip-chart"></div>';
       wrap.appendChild(box);
       box.querySelector('.ip-edit').addEventListener('click',function(){ if(window.__progEdit) window.__progEdit(k); });
-      if(pts.length<2) return; /* één meting: alleen het cijfer, geen grafiek */
       /* tekenen zodra het venster zichtbaar is, op de echte breedte (anders wordt alles uitgerekt) */
       var host=box.querySelector('.ip-chart');
       function draw(){
         var W=Math.round(host.clientWidth)||Math.min(560,window.innerWidth)-40, H=110, L=6, R=6, T=10, B=20;
+        var TX='font-size="11" fill="var(--muted)" font-family="Work Sans,system-ui,sans-serif"', base='<line x1="0" x2="'+W+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--line)"/>';
+        /* nog niets: lege grafiek met uitleg */
+        if(none){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="No progress yet">'+base+
+          '<text x="'+(W/2)+'" y="'+((H-B)/2+4)+'" text-anchor="middle" '+TX.replace('11','13')+'>No progress yet · add a value with the pencil</text></svg>'; return; }
+        /* één meting: bolletje in het midden, één datum eronder */
+        if(pts.length===1){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Progress chart">'+base+
+          '<circle cx="'+(W/2)+'" cy="'+((H-B)/2)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'+
+          '<text x="'+(W/2)+'" y="'+(H-4)+'" text-anchor="middle" '+TX+'>'+F.d(last.t)+'</text></svg>'; return; }
         var x0=first.t, x1=last.t; if(x1-x0<864e5){ x0-=864e5; x1+=864e5; }
         var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo-=pad; hi+=pad;
         function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
