@@ -72,7 +72,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Day = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
+- Last (knop, vroeger Day) = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
 - Month = laatste 30 dagen, All = sinds de eerste afvinking → gemiddeld aantal sets per week.
 (interne waarden van `per` blijven 'dag'/'week'/'maand'/'alles').
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
