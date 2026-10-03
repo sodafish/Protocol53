@@ -42,7 +42,7 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
   in `NAMES` (bv. 'Torso Rotation', 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
 ## Navigatie
-- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: "frosted", 38% oppervlak, blur 30px, saturate 210%, witte lichtrand): pil met **Workout**
+- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: neutraal frosted glas, wit 42% / donker 42%, blur 30px, saturate 140%, witte lichtrand — bewust niet beige tinten): pil met **Workout**
   en **Progress**, plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
   `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = naar boven scrollen.
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
