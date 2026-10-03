@@ -1,6 +1,7 @@
 # Protocol 53 — werkafspraken voor Claude
 
-Persoonlijke trainings-app van Tom (Nederlandstalig, Vlaams). Draait als web-app (PWA) op
+Persoonlijke trainings-app van Tom. **De app zelf is in het Engels** (alle schermteksten, uitleg,
+meldingen, inloggen); met Tom communiceer je in het Nederlands. Draait als web-app (PWA) op
 https://sodafish.github.io/Protocol53/ via GitHub Pages (branch `main`, root). Tom gebruikt hem
 vooral op zijn iPhone, als app op het beginscherm.
 
@@ -29,25 +30,32 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
 - Eerst lokaal controleren (bv. `python3 -m http.server` + Playwright-screenshot op 375 px breed),
   dan committen en pushen naar `main`. Pages publiceert binnen een minuut.
 - Tom ziet de update na de app volledig te sluiten en opnieuw te openen.
-- Antwoord Tom kort, in het Nederlands.
+- Antwoord Tom kort, in het Nederlands. Nieuwe schermteksten schrijf je in het Engels.
+- Engelse teksten in JS-strings tussen enkele quotes: gebruik een typografische apostrof (don’t),
+  anders breekt de string. Uitzondering: sleutels die exact moeten overeenkomen met schermnamen
+  (bv. `"Farmer's Carry"` in `NAMES`).
+- Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals
+  `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
+  in `NAMES` (bv. 'Torso Rotation', 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
-## Statistieken (Kracht → subtab Progressie, vroeger 'Statistieken')
+## Statistieken (Strength → subtab Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Dag = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
-- Maand = laatste 30 dagen, Alles = sinds de eerste afvinking → gemiddeld aantal sets per week.
+- Day = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
+- Month = laatste 30 dagen, All = sinds de eerste afvinking → gemiddeld aantal sets per week.
+(interne waarden van `per` blijven 'dag'/'week'/'maand'/'alles').
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
-- `MLAB` — de spiergroepen en hun Nederlandse naam (17 stuks).
+- `MLAB` — de spiergroepen en hun (Engelse) schermnaam (17 stuks).
 - `MUSCLES` — per oefeningsleutel welke spieren meetellen: `1` = hoofdspier, `.5` = werkt flink mee,
   `.25` = helpt een beetje. Bv. `'d1-goblet-squat':{quad:1,bil:.5,buik:.25,onderrug:.25}`.
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
-  ze staat (Borst, Schouders …) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
+  ze staat (Chest, Shoulders …, regexen op de Engelse koppen) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
-- Kracht heeft twee subtabs (Training met knoppen 'Start nieuwe training' bovenaan en 'Einde training'
-  onderaan, beide `.reset-chk`, volle breedte, omlijnd, met plus/vinkje: vinkjes leeg; Start scrolt naar Opwarming,
-  Einde opent Statistieken › Dag (`window.__ksub`, `window.__statsPer`); tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
+- Strength heeft twee subtabs (Training met knoppen 'Start new workout' bovenaan en 'End workout'
+  onderaan, beide `.reset-chk`, volle breedte, omlijnd, met plus/vinkje: vinkjes leeg; Start scrolt naar Warm-up,
+  End opent Progress › Day (`window.__ksub`, `window.__statsPer`); tellingen/hist zijn al bij het afvinken bewaard) (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); laatste keuze
   in localStorage `fitlog-ksub`.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
@@ -73,7 +81,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
 
-## Progressie per oefening (onderaan subtab Progressie, kop 'Per oefening')
+## Progressie per oefening (onderaan subtab Progress, kop 'Per exercise')
 - Schuifbare rij lijntabs (`#progChips`, zoals de subtabs, met spiergroepnummer ertussen; hero en grafiek
   hebben een vaste hoogte zodat niets verspringt) met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
   aparte lijnen). Periodes Maand / 3 maanden / Alles. Keuzes onthouden

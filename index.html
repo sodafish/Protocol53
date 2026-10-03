@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="nl">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -293,9 +293,9 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
   table.stack td[data-label]::before{content:attr(data-label);display:block;
     font-family:'Work Sans',system-ui,sans-serif;font-size:.56rem;font-weight:500;text-transform:uppercase;
     letter-spacing:.14em;color:var(--muted);margin:.6rem 0 .15rem;}
-  table.stack td[data-label="Frequentie"]::before,
+  table.stack td[data-label="Frequency"]::before,
   table.stack td[data-label="Telt mee"]::before{content:none;display:none;}
-  table.stack td[data-label="Frequentie"],
+  table.stack td[data-label="Frequency"],
   table.stack td[data-label="Telt mee"]{margin-top:.5rem;}
 }
 @media(max-width:520px){
@@ -409,11 +409,11 @@ td .note{margin-top:0;max-width:9rem;}
   table.stack tr.row-rood{border-left:3px solid var(--rood);}
   table.stack td{margin:0;}
   table.stack td:first-child{grid-column:1;grid-row:1;align-self:center;font-size:1rem;margin:0;}
-  table.stack td[data-label="Frequentie"],
+  table.stack td[data-label="Frequency"],
   table.stack td[data-label="Telt mee"]{grid-column:2;grid-row:1;align-self:center;justify-self:end;margin:0;}
-  table.stack td[data-label="Portie"]{grid-column:1/-1;font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;
+  table.stack td[data-label="Portion"]{grid-column:1/-1;font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;
     font-weight:600;letter-spacing:.04em;color:var(--muted);}
-  table.stack td[data-label="Portie"]::before{content:"Portie · ";display:inline;margin:0;font-size:inherit;letter-spacing:inherit;}
+  table.stack td[data-label="Portion"]::before{content:"Portion · ";display:inline;margin:0;font-size:inherit;letter-spacing:inherit;}
   table.stack td:last-child{grid-column:1/-1;font-size:.88rem;line-height:1.5;color:var(--text);}
 }
 
@@ -900,9 +900,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <nav class="tabbar">
   <div class="wrap">
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="t-schema"  aria-controls="p-schema"  aria-selected="true"><span class="label">Kracht</span></button>
+      <button class="tab" role="tab" id="t-schema"  aria-controls="p-schema"  aria-selected="true"><span class="label">Strength</span></button>
       <button class="tab" role="tab" id="t-cardio"  aria-controls="p-cardio"  aria-selected="false"><span class="label">Cardio</span></button>
-      <button class="tab" role="tab" id="t-voeding" aria-controls="p-voeding" aria-selected="false"><span class="label">Dieet</span></button>
+      <button class="tab" role="tab" id="t-voeding" aria-controls="p-voeding" aria-selected="false"><span class="label">Diet</span></button>
       <button class="tab" role="tab" id="t-kracht"  aria-controls="p-kracht"  aria-selected="false"><span class="label">Info</span></button>
     </div>
   </div>
@@ -913,82 +913,82 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <!-- ════════════ SCHEMA ════════════ -->
 <section id="p-schema" role="tabpanel" aria-labelledby="t-schema">
 
-  <div class="seg ksub" role="tablist" aria-label="Kracht">
+  <div class="seg ksub" role="tablist" aria-label="Strength">
     <button type="button" class="seg-b" role="tab" id="k-train" aria-controls="s-d3" aria-selected="true">Training</button>
-    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Progressie</button>
+    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Progress</button>
     <span class="seg-ind" aria-hidden="true"></span>
   </div>
 
   <div class="pane" id="s-d3">
     <div class="tools-row">
-      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Start nieuwe training</span></button>
-      <p class="rir">Elke set tot ± 2 herhalingen in reserve</p>
+      <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Start new workout</span></button>
+      <p class="rir">Every set to ± 2 reps in reserve</p>
     </div>
     <ol class="exl">
-      <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Opwarming</span></li>
-      <li data-eq="f" class="exr exr-wu" data-key="d3-wu"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><ul class="wu-list"><li><span>Band Pull-Aparts</span><em>2 × 15</em></li><li><span>Romprotatie</span><em>10 per kant · armen gekruist voor je borst</em></li><li><span>Squats zonder gewicht</span><em>10–15</em></li><li><span>Glute Bridge</span><em>12–15 · 1 tel vasthouden bovenaan</em></li></ul></div></li>
-      <li class="exgrp"><span class="grp-n">1</span><span class="grp-t">Benen voor</span></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Reverse Lunges</div><div class="exr-s">3 × 8–12 per been</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-reverse-lunges" placeholder="kg" aria-label="Dumbbell Reverse Lunges — kg"></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bulgarian Split Squat</div><div class="exr-s">3 × 8–12 per been</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-bulgarian-split-squat" placeholder="kg" aria-label="Bulgarian Split Squat — kg"></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Goblet Squat</div><div class="exr-s">3 × 6–10<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-goblet-squat" placeholder="kg" aria-label="Goblet Squat — kg"></li>
-      <li class="exgrp"><span class="grp-n">2</span><span class="grp-t">Borst</span></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Chest Press 15°</div><div class="exr-s">3 × 6–10</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dumbbell-chest-press" placeholder="kg" aria-label="Dumbbell Chest Press 15° — kg"></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest Press Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-chest-press-machine" placeholder="kg" aria-label="Chest Press Machine — kg"></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Push-Ups</div><div class="exr-s">3 × tot 2 voor falen</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-push-ups" placeholder="reps" aria-label="Push-Ups — reps"></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest Fly Machine</div><div class="exr-s">3 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-chest-fly-machine" placeholder="kg" aria-label="Chest Fly Machine — kg"></li>
-      <li class="exgrp"><span class="grp-n">3</span><span class="grp-t">Benen achter &amp; billen</span></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Leg Curl Machine</div><div class="exr-s">3 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-leg-curl-machine" placeholder="kg" aria-label="Leg Curl Machine — kg"></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Hip Abduction Machine</div><div class="exr-s">3 × 12–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-hip-abduction" placeholder="kg" aria-label="Hip Abduction Machine — kg"></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Romanian Deadlift</div><div class="exr-s">3 × 8–12<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dumbbell-romanian-deadlift" placeholder="kg" aria-label="Dumbbell Romanian Deadlift — kg"></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Single-Leg Dumbbell Calf Raise</div><div class="exr-s">3 × 10–15 per been</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-single-leg-calf-raise" placeholder="kg" aria-label="Single-Leg Dumbbell Calf Raise — kg"></li>
-      <li class="exgrp"><span class="grp-n">4</span><span class="grp-t">Rug horizontaal</span></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest-Supported Row</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-chest-supported-row" placeholder="kg" aria-label="Chest-Supported Row — kg"></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Seated Cable Row</div><div class="exr-s">3 × 8–12<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-seated-cable-row" placeholder="kg" aria-label="Seated Cable Row — kg"></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Eenarmige Dumbbell Row</div><div class="exr-s">3 × 8–12 per arm<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-eenarmige-dumbbell-row" placeholder="kg" aria-label="Eenarmige Dumbbell Row — kg"></li>
-      <li class="exgrp"><span class="grp-n">5</span><span class="grp-t">Schouders</span></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Seated Dumbbell Shoulder Press</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-seated-dumbbell-shoulder-press" placeholder="kg" aria-label="Seated Dumbbell Shoulder Press — kg"></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Shoulder Press Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-shoulder-press-machine" placeholder="kg" aria-label="Shoulder Press Machine — kg"></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cable Single Arm Lateral Raise</div><div class="exr-s">2 × 12–20 per arm</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-cable-lateral-raise" placeholder="kg" aria-label="Cable Single Arm Lateral Raise — kg"></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Lateral Raise</div><div class="exr-s">3 × 12–20</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-lateral-raise" placeholder="kg" aria-label="Dumbbell Lateral Raise — kg"></li>
-      <li class="exgrp"><span class="grp-n">6</span><span class="grp-t">Rug verticaal &amp; bovenrug</span></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Lat Pulldown Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-lat-pulldown" placeholder="kg" aria-label="Lat Pulldown Machine — kg"></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cable Face Pull</div><div class="exr-s">3 × 12–15, licht</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-face-pull" placeholder="kg" aria-label="Cable Face Pull — kg"></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Hangen aan de stang</div><div class="exr-s">3 × 10–20 sec</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dead-hang" placeholder="sec" aria-label="Hangen aan de stang — sec"></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">(Assisted) Pull-Ups</div><div class="exr-s">3 × 5–10 · wanneer je er klaar voor bent</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-assisted-pull-ups" placeholder="kg" aria-label="(Assisted) Pull-Ups — kg"></li>
+      <li class="exgrp"><span class="grp-n">0</span><span class="grp-t">Warm-up</span></li>
+      <li data-eq="f" class="exr exr-wu" data-key="d3-wu"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><ul class="wu-list"><li><span>Band Pull-Aparts</span><em>2 × 15</em></li><li><span>Torso Rotation</span><em>10 per side · arms crossed over your chest</em></li><li><span>Bodyweight Squats</span><em>10–15</em></li><li><span>Glute Bridge</span><em>12–15 · hold 1 count at the top</em></li></ul></div></li>
+      <li class="exgrp"><span class="grp-n">1</span><span class="grp-t">Front legs</span></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Reverse Lunges</div><div class="exr-s">3 × 8–12 per leg</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-reverse-lunges" placeholder="kg" aria-label="Dumbbell Reverse Lunges — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bulgarian Split Squat</div><div class="exr-s">3 × 8–12 per leg</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-bulgarian-split-squat" placeholder="kg" aria-label="Bulgarian Split Squat — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Goblet Squat</div><div class="exr-s">3 × 6–10<span class="exr-warn">· Upper back !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-goblet-squat" placeholder="kg" aria-label="Goblet Squat — kg"></li>
+      <li class="exgrp"><span class="grp-n">2</span><span class="grp-t">Chest</span></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Chest Press 15°</div><div class="exr-s">3 × 6–10</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dumbbell-chest-press" placeholder="kg" aria-label="Dumbbell Chest Press 15° — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest Press Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-chest-press-machine" placeholder="kg" aria-label="Chest Press Machine — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Push-Ups</div><div class="exr-s">3 × to 2 short of failure</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-push-ups" placeholder="reps" aria-label="Push-Ups — reps"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest Fly Machine</div><div class="exr-s">3 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-chest-fly-machine" placeholder="kg" aria-label="Chest Fly Machine — kg"></li>
+      <li class="exgrp"><span class="grp-n">3</span><span class="grp-t">Back legs &amp; glutes</span></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Leg Curl Machine</div><div class="exr-s">3 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-leg-curl-machine" placeholder="kg" aria-label="Leg Curl Machine — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Hip Abduction Machine</div><div class="exr-s">3 × 12–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-hip-abduction" placeholder="kg" aria-label="Hip Abduction Machine — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Romanian Deadlift</div><div class="exr-s">3 × 8–12<span class="exr-warn">· Upper back !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dumbbell-romanian-deadlift" placeholder="kg" aria-label="Dumbbell Romanian Deadlift — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Single-Leg Dumbbell Calf Raise</div><div class="exr-s">3 × 10–15 per leg</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-single-leg-calf-raise" placeholder="kg" aria-label="Single-Leg Dumbbell Calf Raise — kg"></li>
+      <li class="exgrp"><span class="grp-n">4</span><span class="grp-t">Back, horizontal</span></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Chest-Supported Row</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-chest-supported-row" placeholder="kg" aria-label="Chest-Supported Row — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Seated Cable Row</div><div class="exr-s">3 × 8–12<span class="exr-warn">· Upper back !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-seated-cable-row" placeholder="kg" aria-label="Seated Cable Row — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">One-Arm Dumbbell Row</div><div class="exr-s">3 × 8–12 per arm<span class="exr-warn">· Upper back !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-eenarmige-dumbbell-row" placeholder="kg" aria-label="One-Arm Dumbbell Row — kg"></li>
+      <li class="exgrp"><span class="grp-n">5</span><span class="grp-t">Shoulders</span></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Seated Dumbbell Shoulder Press</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-seated-dumbbell-shoulder-press" placeholder="kg" aria-label="Seated Dumbbell Shoulder Press — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Shoulder Press Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-shoulder-press-machine" placeholder="kg" aria-label="Shoulder Press Machine — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cable Single Arm Lateral Raise</div><div class="exr-s">2 × 12–20 per arm</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-cable-lateral-raise" placeholder="kg" aria-label="Cable Single Arm Lateral Raise — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Lateral Raise</div><div class="exr-s">3 × 12–20</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-dumbbell-lateral-raise" placeholder="kg" aria-label="Dumbbell Lateral Raise — kg"></li>
+      <li class="exgrp"><span class="grp-n">6</span><span class="grp-t">Back, vertical &amp; upper back</span></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Lat Pulldown Machine</div><div class="exr-s">3 × 8–12</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-lat-pulldown" placeholder="kg" aria-label="Lat Pulldown Machine — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Cable Face Pull</div><div class="exr-s">3 × 12–15, light</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-face-pull" placeholder="kg" aria-label="Cable Face Pull — kg"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dead Hang</div><div class="exr-s">3 × 10–20 sec</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-dead-hang" placeholder="sec" aria-label="Dead Hang — sec"></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">(Assisted) Pull-Ups</div><div class="exr-s">3 × 5–10 · when you're ready for it</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-assisted-pull-ups" placeholder="kg" aria-label="(Assisted) Pull-Ups — kg"></li>
       <li class="exgrp"><span class="grp-n">7</span><span class="grp-t">Core</span></li>
-      <li data-eq="f" class="exr" data-key="d1-plank"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Plank + Side Plank</div><div class="exr-s">2 rondes: 30–60 sec voor · 20–40 sec per kant</div></div></li>
-      <li data-eq="f" class="exr" data-key="d3-bird-dog"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bird Dog</div><div class="exr-s">2 sets · 6–8 per kant · 5–10 sec vasthouden</div></div></li>
-      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Farmer's Carry</div><div class="exr-s">2 × 30 m, heen en weer mag<span class="exr-warn">· Bovenrug !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-farmers-carry" placeholder="kg" aria-label="Farmer's Carry — kg"></li>
-      <li class="exsec" aria-hidden="true"><span>Optioneel</span></li>
-      <li class="exgrp"><span class="grp-n">8</span><span class="grp-t">Armen</span></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Extension + Biceps Curl</div><div class="exr-s">Superset · 2 rondes × 10–15 · touw + stang</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl" placeholder="kg" aria-label="Overhead Extension — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl-b" placeholder="kg" aria-label="Biceps Curl — kg"></div></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Rope Pushdown + Hammer Curl</div><div class="exr-s">Superset · 2 rondes × 10–15 · zelfde touw</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope" placeholder="kg" aria-label="Rope Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope-b" placeholder="kg" aria-label="Hammer Curl — kg"></div></li>
+      <li data-eq="f" class="exr" data-key="d1-plank"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Plank + Side Plank</div><div class="exr-s">2 rounds: 30–60 sec front · 20–40 sec per side</div></div></li>
+      <li data-eq="f" class="exr" data-key="d3-bird-dog"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bird Dog</div><div class="exr-s">2 sets · 6–8 per side · 5–10 sec hold</div></div></li>
+      <li data-eq="f" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Farmer's Carry</div><div class="exr-s">2 × 30 m, back and forth is fine<span class="exr-warn">· Upper back !</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d1-farmers-carry" placeholder="kg" aria-label="Farmer's Carry — kg"></li>
+      <li class="exsec" aria-hidden="true"><span>Optional</span></li>
+      <li class="exgrp"><span class="grp-n">8</span><span class="grp-t">Arms</span></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Extension + Biceps Curl</div><div class="exr-s">Superset · 2 rounds × 10–15 · rope + bar</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl" placeholder="kg" aria-label="Overhead Extension — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl-b" placeholder="kg" aria-label="Biceps Curl — kg"></div></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Rope Pushdown + Hammer Curl</div><div class="exr-s">Superset · 2 rounds × 10–15 · same rope</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope" placeholder="kg" aria-label="Rope Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope-b" placeholder="kg" aria-label="Hammer Curl — kg"></div></li>
       <li class="exdiv" aria-hidden="true"></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Cable Triceps Extension</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-overhead-cable-triceps-extension" placeholder="kg" aria-label="Overhead Cable Triceps Extension — kg"></li>
-      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Triceps Rope Pushdown</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-triceps-rope-pushdown" placeholder="kg" aria-label="Triceps Rope Pushdown — kg"></li>
-      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
-      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Gedaan"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Cable Triceps Extension</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-overhead-cable-triceps-extension" placeholder="kg" aria-label="Overhead Cable Triceps Extension — kg"></li>
+      <li data-eq="c" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Triceps Rope Pushdown</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d2-triceps-rope-pushdown" placeholder="kg" aria-label="Triceps Rope Pushdown — kg"></li>
+      <li class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
+      <li data-eq="d" class="exr"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
     </ol>
-    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Einde training</span></button>
-    <label class="sess-note-l" for="sessNote">Notities</label>
-    <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+    <button type="button" class="reset reset-chk reset-end" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>End workout</span></button>
+    <label class="sess-note-l" for="sessNote">Notes</label>
+    <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
   </div>
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
-    <section class="stats" aria-label="Progressie">
-      <div class="stats-per" role="group" aria-label="Periode">
-        <button type="button" data-d="dag">Dag</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Maand</button><button type="button" data-d="alles">Alles</button>
+    <section class="stats" aria-label="Progress">
+      <div class="stats-per" role="group" aria-label="Period">
+        <button type="button" data-d="dag">Day</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="alles">All</button>
       </div>
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
       <div class="prog" id="prog">
-        <h2 class="prog-t">Per oefening</h2>
-        <div class="prog-chips" id="progChips" role="tablist" aria-label="Oefening"></div>
-        <div class="stats-per prog-per" role="group" aria-label="Periode progressie">
-          <button type="button" data-d="30">Maand</button><button type="button" data-d="90">3 maanden</button><button type="button" data-d="all">Alles</button>
+        <h2 class="prog-t">Per exercise</h2>
+        <div class="prog-chips" id="progChips" role="tablist" aria-label="Exercise"></div>
+        <div class="stats-per prog-per" role="group" aria-label="Progress period">
+          <button type="button" data-d="30">Month</button><button type="button" data-d="90">3 months</button><button type="button" data-d="all">All</button>
         </div>
-        <div class="prog-head"><div class="prog-hero" id="progHero"></div><button type="button" class="prog-edit" id="progEdit" aria-haspopup="dialog" aria-label="Metingen bewerken" title="Metingen bewerken"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div>
+        <div class="prog-head"><div class="prog-hero" id="progHero"></div><button type="button" class="prog-edit" id="progEdit" aria-haspopup="dialog" aria-label="Edit measurements" title="Edit measurements"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div>
         <div class="prog-chart" id="progChart"></div>
       </div>
     </section>
@@ -1000,21 +1000,21 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <section id="p-cardio" role="tabpanel" aria-labelledby="t-cardio" hidden>
 
   <div class="pane" id="s-cardio">
-    <p class="pane-note"><strong>2× per week, 60 min in zone 2</strong>, los van je krachttraining. Kies vrij — alleen je hartslag telt. Hou minstens één dag met impact.</p>
+    <p class="pane-note"><strong>2× per week, 60 min in zone 2</strong>, separate from your strength training. Choose freely — only your heart rate counts. Keep at least one day with impact.</p>
     <ol class="exl">
-      <li class="exgrp">Buiten</li>
-      <li class="exr exr-c"><span class="exr-i">01</span><div class="exr-t"><div class="exr-n">Stevig wandelen</div><div class="exr-d"><strong>Knievriendelijk alternatief voor joggen.</strong> Stap zo stevig dat je in zone 2 blijft: korte zinnen lukken, een gesprek niet. Lage impact en makkelijk een uur vol te houden.</div></div></li>
-      <li class="exr exr-c"><span class="exr-i">02</span><div class="exr-t"><div class="exr-n">Buiten wandel-joggen of lopen</div><div class="exr-d"><strong>De enige vorm met echte botprikkel.</strong> Wissel jog- en wandelblokken af om je hartslag op doel te houden. Daglicht en frisse lucht helpen je slaap. Met je meniscus kan joggen gevoelig liggen — kies dan stevig wandelen.</div></div></li>
+      <li class="exgrp">Outdoors</li>
+      <li class="exr exr-c"><span class="exr-i">01</span><div class="exr-t"><div class="exr-n">Brisk walking</div><div class="exr-d"><strong>Knee-friendly alternative to jogging.</strong> Walk briskly enough to stay in zone 2: short sentences work, a conversation doesn't. Low impact and easy to keep up for an hour.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">02</span><div class="exr-t"><div class="exr-n">Outdoor walk-jogging or running</div><div class="exr-d"><strong>The only form with a real bone stimulus.</strong> Alternate jogging and walking blocks to keep your heart rate on target. Daylight and fresh air help your sleep. With your meniscus, jogging can be sensitive — choose brisk walking instead.</div></div></li>
       <li class="exgrp">Gym</li>
-      <li class="exr exr-c"><span class="exr-i">03</span><div class="exr-t"><div class="exr-n">Loopband, jog- en wandelblokken</div><div class="exr-d">Zelfde botprikkel als buiten, maar binnen. Wissel jog- en wandelblokken af om je hartslag op doel te houden.</div></div></li>
-      <li class="exr exr-c"><span class="exr-i">04</span><div class="exr-t"><div class="exr-n">Roeitrainer</div><div class="exr-d">Meeste spiermassa in één beweging, geen impact. Je regelt de intensiteit precies met je haaltempo.</div></div></li>
-      <li class="exr exr-c"><span class="exr-i">05</span><div class="exr-t"><div class="exr-n">Crosstrainer</div><div class="exr-d">Hele lichaam in beweging, gewrichtsvriendelijk, makkelijk op één tempo te houden.</div></div></li>
-      <li class="exr exr-c exr-opt"><span class="exr-i">06</span><div class="exr-t"><div class="exr-n">Fietsen</div><div class="exr-s">Optioneel · buiten of hometrainer</div><div class="exr-d">Geen impact op je gewrichten. Let op een zadel dat je perineum niet belast.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">03</span><div class="exr-t"><div class="exr-n">Treadmill, jog and walk blocks</div><div class="exr-d">Same bone stimulus as outdoors, but inside. Alternate jogging and walking blocks to keep your heart rate on target.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">04</span><div class="exr-t"><div class="exr-n">Rowing machine</div><div class="exr-d">Most muscle mass in one movement, no impact. You control the intensity precisely with your stroke rate.</div></div></li>
+      <li class="exr exr-c"><span class="exr-i">05</span><div class="exr-t"><div class="exr-n">Cross-trainer</div><div class="exr-d">Whole body moving, joint-friendly, easy to hold at one pace.</div></div></li>
+      <li class="exr exr-c exr-opt"><span class="exr-i">06</span><div class="exr-t"><div class="exr-n">Cycling</div><div class="exr-s">Optional · outdoors or exercise bike</div><div class="exr-d">No impact on your joints. Pick a saddle that doesn't put pressure on your perineum.</div></div></li>
     </ol>
   </div>
 
-  <label class="sess-note-l" for="cardioNote">Notities</label>
-  <textarea id="cardioNote" class="note sess-note" data-note="cardio-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+  <label class="sess-note-l" for="cardioNote">Notes</label>
+  <textarea id="cardioNote" class="note sess-note" data-note="cardio-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
 </section>
 
 <!-- ════════════ VOEDING & GEWICHT ════════════ -->
@@ -1022,48 +1022,48 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 
   <div class="section" style="margin-top:1.5rem">
     <div class="rules">
-      <div class="rule"><span class="num">1</span><span class="txt">G&eacute;&eacute;n suikers</span></div>
+      <div class="rule"><span class="num">1</span><span class="txt">No sugars</span></div>
       <div class="rule"><span class="num">2</span><span class="txt">Protein &amp; Green</span></div>
       <div class="rule"><span class="num">3</span><span class="txt">RAW Food</span></div>
-      <div class="rule"><span class="num">4</span><span class="txt">150 g eiwit</span></div>
+      <div class="rule"><span class="num">4</span><span class="txt">150 g protein</span></div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Groenten</div>
+    <div class="section-title">Vegetables</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Alle groenten</td><td data-label="Frequentie"><span class="badge b-vrij">Vrijuit</span></td><td data-label="Portie">Onbeperkt</td><td>Zo gevarieerd mogelijk. Uitzondering: zetmeelrijke groenten zoals aardappelen en maïs.</td></tr>
+        <tr class="row-groen"><td>All vegetables</td><td data-label="Frequency"><span class="badge b-vrij">Freely</span></td><td data-label="Portion">Unlimited</td><td>As varied as possible. Exception: starchy vegetables such as potatoes and corn.</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="section">
-    <div class="section-title">Eiwitten</div>
+    <div class="section-title">Proteins</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Magere kwark, skyr <span class="badge b-super">★ Top-eiwit</span></td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">150–200 g</td><td><strong>De sterkste eiwitbron in dit schema.</strong> Vrijwel vet- en suikervrij, boordevol eiwit, weinig calorieën en lang verzadigend — precies wat je wil in een deficit. Naturel, met bessen erdoor.</td></tr>
-        <tr class="row-groen"><td>Eieren</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">2–3 per dag</td><td>Eiwit en gezonde vetten in één. Gekookt, gepocheerd of roerei in olijfolie.</td></tr>
-        <tr class="row-groen"><td>Eiwitshake</td><td data-label="Frequentie"><span class="badge b-groen">1–2× per dag</span></td><td data-label="Portie">1 zakje of scoop (±25 g eiwit)</td><td><strong>Handig om je dagtotaal van 150 g te halen.</strong> Het tijdstip maakt weinig uit — je totale eiwit per dag telt het zwaarst. Eerst gewone voeding, want die vult beter; de shake vult het gat dat overblijft. Kies whey-isolaat zonder toegevoegde suikers.</td></tr>
-        <tr class="row-groen"><td>Kip, kalkoen</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">120–150 g</td><td>Zonder vel. Mager en eiwitrijk.</td></tr>
-        <tr class="row-groen"><td>Vette vis</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">2–3× per week</td><td>Zalm, makreel, sardines, haring. Blik in eigen nat is prima.</td></tr>
-        <tr class="row-amber"><td>Griekse yoghurt</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">150–200 g</td><td>Naturel, zonder toegevoegde suiker. Let op het etiket: alleen melk en cultuur, geen verdikkingsmiddel. Vetter dan magere kwark of skyr, dus wat meer calorieën.</td></tr>
-        <tr class="row-amber"><td>Tonijn</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">2–3× per week</td><td>Geen vervanger van vette vis — hou het bij die paar keer per week.</td></tr>
-        <tr class="row-rood"><td>Mager rundsvlees</td><td data-label="Frequentie"><span class="badge b-rood">Uitzonderlijk</span></td><td data-label="Portie">120–150 g, 2× per week</td><td>Biefstuk of rosbief. Eiwit, ijzer, B12 en zink.</td></tr>
+        <tr class="row-groen"><td>Low-fat quark, skyr <span class="badge b-super">★ Top protein</span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">150–200 g</td><td><strong>The strongest protein source in this plan.</strong> Almost fat- and sugar-free, packed with protein, low in calories and filling for a long time — exactly what you want in a deficit. Plain, with berries mixed in.</td></tr>
+        <tr class="row-groen"><td>Eggs</td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">2–3 per day</td><td>Protein and healthy fats in one. Boiled, poached or scrambled in olive oil.</td></tr>
+        <tr class="row-groen"><td>Protein shake</td><td data-label="Frequency"><span class="badge b-groen">1–2× per day</span></td><td data-label="Portion">1 sachet or scoop (±25 g protein)</td><td><strong>Handy for reaching your daily total of 150 g.</strong> Timing hardly matters — your total protein per day counts most. Regular food first, because it fills you up better; the shake fills the gap that's left. Choose whey isolate without added sugars.</td></tr>
+        <tr class="row-groen"><td>Chicken, turkey</td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">120–150 g</td><td>Skinless. Lean and protein-rich.</td></tr>
+        <tr class="row-groen"><td>Oily fish</td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">2–3× per week</td><td>Salmon, mackerel, sardines, herring. Canned in its own juice is fine.</td></tr>
+        <tr class="row-amber"><td>Greek yoghurt</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">150–200 g</td><td>Plain, no added sugar. Check the label: only milk and cultures, no thickener. Fattier than low-fat quark or skyr, so a few more calories.</td></tr>
+        <tr class="row-amber"><td>Tuna</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2–3× per week</td><td>Not a replacement for oily fish — keep it to those few times a week.</td></tr>
+        <tr class="row-rood"><td>Lean beef</td><td data-label="Frequency"><span class="badge b-rood">Occasionally</span></td><td data-label="Portion">120–150 g, 2× per week</td><td>Steak or roast beef. Protein, iron, B12 and zinc.</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="section">
-    <div class="section-title">Gezonde vetten</div>
+    <div class="section-title">Healthy fats</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Olijfolie</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">1–2 el per dag</td><td>Extra vierge. Eén eetlepel is al ruim 120 kcal — met drie maaltijden drink je ongemerkt een halve dagportie weg. Gebruik bakspray als je vaker bakt.</td></tr>
-        <tr class="row-groen"><td>Avocado</td><td data-label="Frequentie"><span class="badge b-groen">Veel</span></td><td data-label="Portie">½ per dag</td><td>Verzadigt sterk. Een halve is genoeg — een hele mag, maar niet iedere dag.</td></tr>
-        <tr class="row-amber"><td>Noten en zaden</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Een handvol</td><td>Ongezouten. Een handje is prima, een halve zak niet. Lijnzaad en chiazaad leveren omega-3; lijnzaad wel gemalen, anders verteert het niet.</td></tr>
+        <tr class="row-groen"><td>Olive oil</td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">1–2 tbsp per day</td><td>Extra virgin. One tablespoon is already over 120 kcal — over three meals you unknowingly add half a day's portion. Use cooking spray if you fry often.</td></tr>
+        <tr class="row-groen"><td>Avocado</td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">½ per day</td><td>Very filling. Half is enough — a whole one is fine, but not every day.</td></tr>
+        <tr class="row-amber"><td>Nuts and seeds</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">A handful</td><td>Unsalted. A handful is fine, half a bag is not. Flaxseed and chia seed provide omega-3; flaxseed ground, otherwise it isn't digested.</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -1071,90 +1071,90 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   <div class="section">
     <div class="section-title">Fruit</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-amber"><td>Bessen</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">100–150 g</td><td>Aardbeien, frambozen, blauwe bessen, bramen. Het minste suiker van al het fruit. Diepvries is even goed als vers.</td></tr>
-        <tr class="row-amber"><td>Appel, peer, citrus, kiwi</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">1 à 2 stuks per dag</td><td>Volle vrucht, niet als sap.</td></tr>
+        <tr class="row-amber"><td>Berries</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">100–150 g</td><td>Strawberries, raspberries, blueberries, blackberries. The least sugar of all fruit. Frozen is as good as fresh.</td></tr>
+        <tr class="row-amber"><td>Apple, pear, citrus, kiwi</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1 to 2 pieces per day</td><td>Whole fruit, not as juice.</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="section">
-    <div class="section-title">Koolhydraten</div>
+    <div class="section-title">Carbohydrates</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-amber"><td>Peulvruchten</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Vuistgrote portie</td><td>Linzen, kikkererwten, bonen. Van alle koolhydraatbronnen de laagste bloedsuikerreactie, plus veel vezels en plantaardig eiwit.</td></tr>
-        <tr class="row-amber"><td>Quinoa, zilvervliesrijst</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Vuistgrote portie</td><td>Bij voorkeur op je trainingsdagen, om je spierglycogeen aan te vullen.</td></tr>
-        <tr class="row-rood"><td>Havermout</td><td data-label="Frequentie"><span class="badge b-rood">Uitzonderlijk</span></td><td data-label="Portie">40–50 g droog</td><td>Grove vlokken, geen sachets. Enkel op je trainingsdagen als ontbijt, en combineer altijd met skyr, noten of een ei erbij.</td></tr>
-        <tr class="row-rood"><td>100% volkorenbrood</td><td data-label="Frequentie"><span class="badge b-rood">Uitzonderlijk</span></td><td data-label="Portie">1 à 2 sneden</td><td>Let op het etiket: 100% volkoren, geen bloem met karamelkleurstof. Blijft fijngemalen en luchtig, dus de bloedsuikerpiek is sterker dan je van volkoren verwacht. Zuurdesem-roggebrood is de betere keuze.</td></tr>
+        <tr class="row-amber"><td>Legumes</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">Fist-sized portion</td><td>Lentils, chickpeas, beans. The lowest blood sugar response of all carbohydrate sources, plus lots of fibre and plant protein.</td></tr>
+        <tr class="row-amber"><td>Quinoa, brown rice</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">Fist-sized portion</td><td>Preferably on your training days, to replenish your muscle glycogen.</td></tr>
+        <tr class="row-rood"><td>Oats</td><td data-label="Frequency"><span class="badge b-rood">Occasionally</span></td><td data-label="Portion">40–50 g dry</td><td>Rolled oats, not sachets. Only as breakfast on your training days, and always combine with skyr, nuts or an egg.</td></tr>
+        <tr class="row-rood"><td>100% wholegrain bread</td><td data-label="Frequency"><span class="badge b-rood">Occasionally</span></td><td data-label="Portion">1 to 2 slices</td><td>Check the label: 100% wholegrain, not flour with caramel colouring. It's still finely ground and airy, so the blood sugar spike is stronger than you'd expect from wholegrain. Sourdough rye bread is the better choice.</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="section">
-    <div class="section-title">Snacks &amp; zoetigheid</div>
+    <div class="section-title">Snacks &amp; sweets</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-amber"><td>Puur cacaopoeder</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">1–2 el</td><td>Eén ingrediënt, geen suiker, veel vezels en antioxidanten. Door je skyr, in koffie of in een shake. Kies een merk dat op cadmium test — cacao neemt dat op uit de bodem.</td></tr>
-        <tr class="row-amber"><td>Stevia</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Naar smaak</td><td>Pure steviolglycosiden geven geen calorieën of bloedsuikerreactie. Let op het etiket: veel stevia is aangelengd met erythritol of maltodextrine. Houdt wel je voorkeur voor zoet in stand.</td></tr>
-        <tr class="row-amber"><td>Olijven</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">Handvol</td><td>Gezonde vetten en vrijwel geen koolhydraten. Wel zout, dus niet de hele pot.</td></tr>
-        <tr class="row-amber"><td>Pure chocolade 85%+</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">2 blokjes, ±20 g</td><td>Vier ingrediënten, weinig suiker, en je bent er sneller tevreden mee dan met melkchocolade. De beste snack binnen dit kader.</td></tr>
-        <tr class="row-amber"><td>Groentesticks met hummus</td><td data-label="Frequentie"><span class="badge b-amber">Matig</span></td><td data-label="Portie">2 el hummus</td><td>Vult de trek zonder bloedsuikerpiek. Kijk bij kant-en-klare hummus op het etiket.</td></tr>
+        <tr class="row-amber"><td>Pure cocoa powder</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1–2 tbsp</td><td>One ingredient, no sugar, lots of fibre and antioxidants. Stirred into your skyr, in coffee or in a shake. Choose a brand that tests for cadmium — cocoa absorbs it from the soil.</td></tr>
+        <tr class="row-amber"><td>Stevia</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">To taste</td><td>Pure steviol glycosides give no calories or blood sugar response. Check the label: a lot of stevia is cut with erythritol or maltodextrin. It does keep your sweet tooth alive.</td></tr>
+        <tr class="row-amber"><td>Olives</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">Handful</td><td>Healthy fats and almost no carbohydrates. Salty though, so not the whole jar.</td></tr>
+        <tr class="row-amber"><td>Dark chocolate 85%+</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2 squares, ±20 g</td><td>Four ingredients, little sugar, and it satisfies you faster than milk chocolate. The best snack within this plan.</td></tr>
+        <tr class="row-amber"><td>Veggie sticks with hummus</td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2 tbsp hummus</td><td>Satisfies cravings without a blood sugar spike. Check the label on ready-made hummus.</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="section">
-    <div class="section-title">Dranken</div>
+    <div class="section-title">Drinks</div>
     <div class="scroll"><table class="stack">
-      <thead><tr><th style="width:22%">Voedingsmiddel</th><th style="width:14%">Frequentie</th><th style="width:16%">Portie</th><th>Opmerking</th></tr></thead>
+      <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Water, koffie, thee</td><td data-label="Frequentie"><span class="badge b-vrij">Vrijuit</span></td><td data-label="Portie">Onbeperkt</td><td>Zonder suiker. Drinken vóór de maaltijd dempt de honger.</td></tr>
+        <tr class="row-groen"><td>Water, coffee, tea</td><td data-label="Frequency"><span class="badge b-vrij">Freely</span></td><td data-label="Portion">Unlimited</td><td>Without sugar. Drinking before a meal curbs hunger.</td></tr>
       </tbody>
     </table></div>
   </div>
 
-  <label class="sess-note-l" for="dietNote">Notities</label>
-  <textarea id="dietNote" class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Schrijf hier wat je wilt onthouden…"></textarea>
+  <label class="sess-note-l" for="dietNote">Notes</label>
+  <textarea id="dietNote" class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
 
 
   <div class="section">
     <div class="cards" style="margin-top:.9rem">
-      <div class="card c-3"><div class="big">40–50%</div><div class="lbl">Gezonde vetten</div><div class="dsc">Avocado, olijfolie, noten, vette vis</div></div>
-      <div class="card c-1"><div class="big">25–35%</div><div class="lbl">Eiwitten</div><div class="dsc">Vlees, vis, eieren, skyr, kwark</div></div>
-      <div class="card c-2"><div class="big">&lt;20%</div><div class="lbl">Koolhydraten</div><div class="dsc">Via groenten, bessen en volkoren</div></div>
+      <div class="card c-3"><div class="big">40–50%</div><div class="lbl">Healthy fats</div><div class="dsc">Avocado, olive oil, nuts, oily fish</div></div>
+      <div class="card c-1"><div class="big">25–35%</div><div class="lbl">Proteins</div><div class="dsc">Meat, fish, eggs, skyr, quark</div></div>
+      <div class="card c-2"><div class="big">&lt;20%</div><div class="lbl">Carbohydrates</div><div class="dsc">From vegetables, berries and wholegrain</div></div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Eiwit is de uitzondering</div>
+    <div class="section-title">Protein is the exception</div>
     <div class="tip">
-      <p>Wie afvalt zonder genoeg eiwit verliest spiermassa mee. Boven de vijftig gaat dat sneller dan daarvoor, en het is precies wat je met je krachttraining probeert te beschermen.</p>
-      <p><strong>Voor jou: 150 gram per dag.</strong> Reken op je streefgewicht, niet op je huidige — vetweefsel heeft geen eiwit nodig. Dat komt neer op ongeveer 1,7 gram per kilo: bewust iets boven de gangbare 1,2–1,6, omdat je in een deficit zit, zwaar traint en boven de vijftig bent.</p>
-      <p>In de praktijk haal je dat zonder poeder: drie eieren is 18 gram, 200 g skyr of kwark is 22, 150 g kip of vis is 35, een blikje tonijn is 25. Dan zit je al op honderd — de laatste vijftig haal je met één à twee extra porties, bijvoorbeeld een shake.</p>
-      <p>Je controle: blijft je vetvrije massa rond de 73 kg terwijl je gewicht daalt, dan zit je goed. Zakt die mee, dan is eiwit het eerste om te verhogen.</p>
+      <p>If you lose weight without enough protein, you lose muscle along with it. Over fifty that happens faster than before, and it's exactly what your strength training is trying to protect.</p>
+      <p><strong>For you: 150 grams per day.</strong> Calculate it on your target weight, not your current weight — fat tissue needs no protein. That comes to about 1.7 grams per kilo: deliberately a bit above the usual 1.2–1.6, because you're in a deficit, training hard and over fifty.</p>
+      <p>In practice you get there without powder: three eggs is 18 grams, 200 g skyr or quark is 22, 150 g chicken or fish is 35, a tin of tuna is 25. That already makes a hundred — you get the last fifty with one or two extra portions, for example a shake.</p>
+      <p>Your check: if your lean mass stays around 73 kg while your weight drops, you're on track. If it drops too, protein is the first thing to increase.</p>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Waarom je niet hoeft te tellen</div>
+    <div class="section-title">Why you don't need to count</div>
     <div class="tip"><ul>
-      <li><strong>Vet en eiwit verzadigen langer.</strong> Eieren met avocado houden je vier tot vijf uur vol; toast houdt je anderhalf uur vol. Minder honger betekent automatisch minder eten, zonder wilskracht.</li>
-      <li><strong>Minder bloedsuikerpieken, minder trek.</strong> De snaaibehoefte om vier uur is bijna altijd een dip na een koolhydraatrijke lunch.</li>
-      <li><strong>Je lichaam reguleert beter.</strong> Bij voldoende vet en eiwit werken je verzadigingssignalen zoals ze horen.</li>
+      <li><strong>Fat and protein keep you full longer.</strong> Eggs with avocado keep you full for four to five hours; toast lasts an hour and a half. Less hunger automatically means eating less, without willpower.</li>
+      <li><strong>Fewer blood sugar spikes, fewer cravings.</strong> The urge to snack at four o'clock is almost always a dip after a carb-heavy lunch.</li>
+      <li><strong>Your body regulates better.</strong> With enough fat and protein, your satiety signals work as they should.</li>
     </ul>
-    <p style="margin-top:.6rem">Waar je wel op let: noten. Die zijn calorierijk én makkelijk door te eten — een handje is prima, een halve zak niet. Vet uit avocado of olijfolie is zelfbegrenzend, noten uit een zak niet. Verder geen grammen wegen.</p>
+    <p style="margin-top:.6rem">What you do watch: nuts. They're calorie-dense and easy to keep eating — a handful is fine, half a bag is not. Fat from avocado or olive oil limits itself, nuts from a bag don't. Otherwise, no weighing grams.</p>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Waar je op meet</div>
+    <div class="section-title">What you measure</div>
     <div class="tip">
-      <b class="h">Zo meet je je middelomtrek juist</b>
-      <p>Op blote huid, staand en ontspannen. Het lint komt halverwege je onderste rib en de bovenkant van je heupbot — bij de meeste mensen ongeveer op navelhoogte. Horizontaal rondom, niet scheef.</p>
-      <p>Meet aan het einde van een normale uitademing, zonder je buik in te trekken en zonder het lint aan te spannen. Het moet de huid raken maar niet indrukken. Doe het altijd op hetzelfde moment van de dag, bij voorkeur 's ochtends nuchter — dan zijn je metingen onderling vergelijkbaar.</p>
+      <b class="h">How to measure your waist correctly</b>
+      <p>On bare skin, standing and relaxed. The tape goes halfway between your lowest rib and the top of your hip bone — for most people roughly at navel height. Horizontal all around, not at an angle.</p>
+      <p>Measure at the end of a normal exhale, without pulling in your stomach and without tightening the tape. It should touch the skin but not press in. Always do it at the same time of day, preferably in the morning before eating — then your measurements are comparable.</p>
     </div>
   </div>
 </section>
@@ -1163,92 +1163,92 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <section id="p-kracht" role="tabpanel" aria-labelledby="t-kracht" hidden>
 
   <div class="cards four">
-    <div class="card c-1"><div class="big">2×<span class="per"> / week</span></div><div class="lbl">Fullbody</div><div class="dsc">Volledige sessie van 60 min. Twee keer volstaat voor onderhoud, met 2–3 dagen rust ertussen</div></div>
-    <div class="card c-1"><div class="big">2×<span class="per"> / week</span></div><div class="lbl">Cardio apart</div><div class="dsc">60 min zone 2, los van je krachttraining. Mag buiten de gym</div></div>
-    <div class="card c-1"><div class="big">±2</div><div class="lbl">In reserve</div><div class="dsc">Stop wanneer je nog ongeveer 2 technisch goede herhalingen had gekund</div></div>
-    <div class="card c-1"><div class="big">Controle</div><div class="lbl">Veiligheid</div><div class="dsc">Nooit laten vallen of zwaaien — trager in de afremfase</div></div>
+    <div class="card c-1"><div class="big">2×<span class="per"> / week</span></div><div class="lbl">Full body</div><div class="dsc">Full 60-min session. Twice is enough for maintenance, with 2–3 rest days in between</div></div>
+    <div class="card c-1"><div class="big">2×<span class="per"> / week</span></div><div class="lbl">Separate cardio</div><div class="dsc">60 min zone 2, separate from your strength training. Can be outside the gym</div></div>
+    <div class="card c-1"><div class="big">±2</div><div class="lbl">In reserve</div><div class="dsc">Stop when you could have done about 2 more technically good reps</div></div>
+    <div class="card c-1"><div class="big">Control</div><div class="lbl">Safety</div><div class="dsc">Never drop or swing — slower in the lowering phase</div></div>
   </div>
 
-  <div class="superhead">Kracht</div>
+  <div class="superhead">Strength</div>
 
   <div class="section" style="margin-top:.3rem">
-    <div class="section-title sub">Intensiteit</div>
-    <p class="section-note"><strong style="font-weight:700;color:var(--text)">De belasting is de prikkel, niet het aantal sets!</strong></p>
+    <div class="section-title sub">Intensity</div>
+    <p class="section-note"><strong style="font-weight:700;color:var(--text)">The load is the stimulus, not the number of sets!</strong></p>
     <div class="tip"><ul>
-      <li><strong>Is het zwaar genoeg?</strong> Stop elke werkset — niet alleen de laatste — wanneer je nog ongeveer twee technisch goede herhalingen had kunnen doen. Kies het gewicht op je eerste set en hou het voor alle sets; door vermoeidheid zakt het aantal herhalingen meestal 1–2 per set (bijv. 11, 10, 9). Dat is goed. Zak je onder de onderkant van het bereik, dan was het te zwaar of rustte je te kort. Voelt het alsof je er nog vijf kon doen, dan is het te licht. Bij isolatieoefeningen mag je laatste set tot 0–1 in reserve; bij de zware oefeningen blijf je op 2.</li>
-      <li><strong>Blijf in het bereik van je schema.</strong> Elke oefening heeft een eigen bereik: 6–10 voor de zwaarste, 8–12 of 10–15 voor de rest. Lichter gewicht met meer reps bouwt evenveel spier als zwaarder met minder, zolang je dicht bij falen komt. Een gewicht dat met goede vorm gaat is dus geen compromis, mits je stopt met nog ongeveer twee herhalingen in reserve.</li>
-      <li><strong>Wanneer verhogen?</strong> Eerst herhalingen erbij binnen hetzelfde gewicht. Haal je bij alle sets de bovenkant van het bereik (bijv. 12 bij 8–12), dan gaat het gewicht omhoog en begin je weer onderaan (rond 8). Je gaat er nooit bovenuit — je klimt in het bereik en reset met meer gewicht. Pas als dat spoor doodloopt zet je er een vierde set bij.</li>
-      <li><strong>Rust volledig uit.</strong> Twee tot drie minuten bij de zware oefeningen, negentig seconden bij de isolatie. Te kort rusten maakt je volgende set lichter dan bedoeld.</li>
+      <li><strong>Is it heavy enough?</strong> Stop every working set — not just the last one — when you could still have done about two technically good reps. Choose the weight on your first set and keep it for all sets; with fatigue the number of reps usually drops 1–2 per set (e.g. 11, 10, 9). That's fine. If you drop below the bottom of the range, it was too heavy or you rested too briefly. If it feels like you could have done five more, it's too light. On isolation exercises your last set may go to 0–1 in reserve; on the heavy exercises you stay at 2.</li>
+      <li><strong>Stay within the range of your plan.</strong> Each exercise has its own range: 6–10 for the heaviest, 8–12 or 10–15 for the rest. Lighter weight with more reps builds as much muscle as heavier with fewer, as long as you get close to failure. A weight you can move with good form is therefore no compromise, provided you stop with about two reps in reserve.</li>
+      <li><strong>When to increase?</strong> First add reps at the same weight. Once you reach the top of the range on all sets (e.g. 12 in 8–12), the weight goes up and you start at the bottom again (around 8). You never go above it — you climb within the range and reset with more weight. Only when that path stalls do you add a fourth set.</li>
+      <li><strong>Rest fully.</strong> Two to three minutes on the heavy exercises, ninety seconds on isolation. Resting too briefly makes your next set lighter than intended.</li>
     </ul></div>
   </div>
 
   <div class="section">
     <div class="section-title sub">Tempo</div>
-    <p class="section-note"><strong style="font-weight:700;color:var(--text)">Traag terug naar het startpunt.</strong></p>
+    <p class="section-note"><strong style="font-weight:700;color:var(--text)">Slowly back to the starting point.</strong></p>
     <div class="tip"><ul>
-      <li><strong>De regel: de fase waar je het gewicht tegenhoudt moet trager.</strong> De andere fase mag vlot. Bij een curl is dat optrekken vlot, terug naar gestrekt traag. Bij een squat is dat zakken traag, terug naar staand vlot. Ongeveer één tot twee tellen voor de vlotte fase, twee tot drie tellen voor de trage.</li>
-      <li><strong>Het is ook de veilige uitvoering.</strong> Peesblessures ontstaan bij een plotse schok op een gespannen gewricht, niet bij een geleidelijk opgebouwde belasting. Zolang je de afremfase stuurt, bestaat dat moment niet. Zwaaien om het gewicht omhoog te krijgen, of het laten vallen aan het einde van een set, zijn de twee momenten waarop je de controle verliest.</li>
-      <li><strong>Nooit zwaaien.</strong> Gebruik je momentum om het gewicht omhoog te krijgen, dan verlies je precies op het zwaarste punt de controle — en dat is waar blessures ontstaan. Voelt het niet zonder zwaai, dan is het gewicht te zwaar.</li>
-      <li><strong>Overdrijf niet.</strong> Vijf tellen of meer kost je gewicht zonder dat het meer oplevert, en geeft flink meer spierpijn.</li>
+      <li><strong>The rule: the phase where you resist the weight should be slower.</strong> The other phase can be brisk. On a curl that means curling up briskly, lowering to straight slowly. On a squat that means lowering slowly, standing back up briskly. About one to two counts for the brisk phase, two to three counts for the slow one.</li>
+      <li><strong>It's also the safe way to do it.</strong> Tendon injuries happen with a sudden jolt on a loaded joint, not with a gradually built-up load. As long as you control the lowering phase, that moment doesn't exist. Swinging to get the weight up, or dropping it at the end of a set, are the two moments where you lose control.</li>
+      <li><strong>Never swing.</strong> If you use momentum to get the weight up, you lose control exactly at the heaviest point — and that's where injuries happen. If it doesn't work without swinging, the weight is too heavy.</li>
+      <li><strong>Don't overdo it.</strong> Five counts or more costs you weight without giving more results, and causes a lot more muscle soreness.</li>
     </ul></div>
   </div>
 
   <div class="superhead">Cardio</div>
 
   <div class="section" style="margin-top:.3rem">
-    <div class="section-title sub">Vorm en zone</div>
-    <p class="section-note"><strong style="font-weight:700;color:var(--text)">2× per week, 60 minuten, los van je krachttraining.</strong> Vrij van vorm — alleen je hartslag telt. Train in <strong style="font-weight:700;color:var(--text)">HR zone 2</strong> die de Apple Watch meegeeft. Hoeft niet in de gym: buiten wandel-joggen of fietsen mag evengoed. Uitzondering: bij je VO2max-blokken mag je hartslag bewust hoger pieken, tot zone 4–5.</p>
+    <div class="section-title sub">Form and zone</div>
+    <p class="section-note"><strong style="font-weight:700;color:var(--text)">2× per week, 60 minutes, separate from your strength training.</strong> Any form — only your heart rate counts. Train in <strong style="font-weight:700;color:var(--text)">HR zone 2</strong> as shown by the Apple Watch. Doesn't have to be in the gym: outdoor walk-jogging or cycling works just as well. Exception: during your VO2max blocks your heart rate can deliberately peak higher, up to zone 4–5.</p>
 
     <div class="tip" style="margin-top:1rem">
-      <b class="h">Jouw cardioplan: buiten wandelen met loopblokjes</b>
-      <p>Een uur stevig buiten wandelen is je zone 2-basis: vetverbrandend, gewrichtsvriendelijk, met daglicht en frisse lucht erbij. Gooi er af en toe een pittiger blokje tussen — een helling op, of enkele minuten sneller.</p>
-      <p>Die blokjes tillen je hartslag even hoger (meer conditie- en VO2max-prikkel dan vlak wandelen). Ligt joggen goed voor je knie, dan geeft dat er ook de meeste botprikkel bij; met je meniscus is bergop wandelen het knievriendelijke alternatief dat toch belast.</p>
+      <b class="h">Your cardio plan: outdoor walking with running blocks</b>
+      <p>An hour of brisk outdoor walking is your zone 2 base: fat-burning, joint-friendly, with daylight and fresh air on top. Throw in a tougher block now and then — up a hill, or a few minutes faster.</p>
+      <p>Those blocks lift your heart rate for a while (more fitness and VO2max stimulus than flat walking). If jogging suits your knee, it also gives the most bone stimulus; with your meniscus, uphill walking is the knee-friendly alternative that still loads you.</p>
     </div>
 
     <div class="tip" style="margin-top:1rem">
-      <b class="h">Wil je je VO2max echt omhoog</b>
-      <p>Rustig wandelen bouwt je basis, maar tilt je VO2max maar beperkt op. Voor echte winst maak je de blokjes korter en harder: <strong>4× 4 minuten bijna all-out</strong> (zone 4–5, praten lukt niet meer) met telkens 3 minuten rustig wandelen ertussen. Knievriendelijk uit te voeren als steile helling of loopband bergop, dus zonder joggen.</p>
-      <p>Eén zo'n sessie per week volstaat. VO2max is een van de sterkste voorspellers van gezonde levensjaren — op jouw niveau (±33) valt hier met weinig moeite veel te winnen. Bouw het rustig op: begin met losse loopblokjes, maak ze pittiger naarmate het makkelijker voelt.</p>
+      <b class="h">If you really want to raise your VO2max</b>
+      <p>Easy walking builds your base, but only lifts your VO2max a little. For real gains, make the blocks shorter and harder: <strong>4× 4 minutes almost all-out</strong> (zone 4–5, you can no longer talk) with 3 minutes of easy walking in between each. Knee-friendly as a steep hill or an inclined treadmill, so without jogging.</p>
+      <p>One such session per week is enough. VO2max is one of the strongest predictors of healthy years of life — at your level (±33) there's a lot to gain with little effort. Build up gradually: start with loose running blocks, make them tougher as it feels easier.</p>
     </div>
 
     <div class="tip" style="margin-top:1rem">
-      <b class="h">Hou minstens één cardiodag met impact</b>
-      <p>Wandel-joggen of lopen geeft een botprikkel via de lichte impact — waardevol op jouw leeftijd. Roeien, crossen en fietsen zijn gewrichtsvriendelijk maar zonder impact.</p>
+      <b class="h">Keep at least one cardio day with impact</b>
+      <p>Walk-jogging or running gives a bone stimulus through the light impact — valuable at your age. Rowing, cross-training and cycling are joint-friendly but without impact.</p>
     </div>
 
     <div class="tip" style="margin-top:1rem">
-      <b class="h">De praattest wint van de tabel</b>
-      <p>Zit je in een hogere HR-zone terwijl je rustig ademt, dan is dat geen probleem — je ademhaling is de meting.</p>
-      <p>Waar je wil zitten: korte zinnen lukken, een gesprek niet. Dat gevoel is betrouwbaarder dan elk getal.</p>
-      <p>Nog simpeler: kun je de hele tijd door je neus blijven ademen, dan zit je goed. Moet je naar je mond, dan ga je te hard.</p>
+      <b class="h">The talk test beats the table</b>
+      <p>If you're in a higher HR zone while breathing calmly, that's no problem — your breathing is the measure.</p>
+      <p>Where you want to be: short sentences work, a conversation doesn't. That feeling is more reliable than any number.</p>
+      <p>Even simpler: if you can keep breathing through your nose the whole time, you're good. If you have to switch to your mouth, you're going too hard.</p>
     </div>
   </div>
 
-  <div class="superhead">Slaap</div>
+  <div class="superhead">Sleep</div>
 
   <div class="cards row3" style="margin-top:.3rem">
-    <div class="card c-4"><div class="big">7–9</div><div class="lbl">Uur per nacht</div><div class="dsc">Minder dan zes verslechtert insulinegevoeligheid</div></div>
-    <div class="card c-4"><div class="big">Vast</div><div class="lbl">Opstaanuur</div><div class="dsc">Elke dag hetzelfde, ook in het weekend. Dat stuurt je hele ritme</div></div>
-    <div class="card c-4"><div class="big">5–6 u</div><div class="lbl">Cafeïne blijft hangen</div><div class="dsc">Een koffie om vier uur zit om middernacht nog voor een kwart in je systeem</div></div>
+    <div class="card c-4"><div class="big">7–9</div><div class="lbl">Hours per night</div><div class="dsc">Less than six worsens insulin sensitivity</div></div>
+    <div class="card c-4"><div class="big">Fixed</div><div class="lbl">Wake-up time</div><div class="dsc">The same every day, weekends included. It drives your whole rhythm</div></div>
+    <div class="card c-4"><div class="big">5–6 h</div><div class="lbl">Caffeine lingers</div><div class="dsc">A coffee at four o'clock is still a quarter in your system at midnight</div></div>
   </div>
 
   <div class="section">
     <div class="tip">
       <ul>
-        <li><strong>7 tot 9 uur, en vooral: op vaste tijden opstaan, ook in het weekend.</strong></li>
-        <li>Cafeïne heeft een halfwaardetijd van vijf tot zes uur. Een koffie om vier uur zit om middernacht nog voor een kwart in je systeem.</li>
-        <li>Alcohol laat je sneller inslapen maar verstoort je diepe slaap. Je merkt het de volgende dag aan je herstel.</li>
-        <li>Koele, donkere kamer. Schermen dimmen het laatste uur.</li>
+        <li><strong>7 to 9 hours, and above all: get up at fixed times, weekends included.</strong></li>
+        <li>Caffeine has a half-life of five to six hours. A coffee at four o'clock is still a quarter in your system at midnight.</li>
+        <li>Alcohol helps you fall asleep faster but disrupts your deep sleep. You notice it the next day in your recovery.</li>
+        <li>Cool, dark room. Dim screens in the last hour.</li>
       </ul>
     </div>
   </div>
 
   <div class="superhead">App</div>
   <div class="section" style="margin-top:.3rem">
-    <p class="section-note">Je gegevens staan in je eigen database en worden bewaard op al je toestellen. Maak af en toe een back-up, bijvoorbeeld één keer per maand.</p>
+    <p class="section-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
     <div class="app-tools">
-      <button type="button" onclick="p53Backup()">Back-up exporteren</button>
-      <button type="button" onclick="p53Logout()">Uitloggen</button>
+      <button type="button" onclick="p53Backup()">Export backup</button>
+      <button type="button" onclick="p53Logout()">Log out</button>
     </div>
   </div>
 
@@ -1258,13 +1258,13 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet-bg" id="pe-bg" hidden></div>
 <div class="sheet pe-sheet" id="pe-sheet" role="dialog" aria-modal="true" aria-labelledby="pe-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="pe-t">Metingen</h3><button type="button" class="sheet-x" aria-label="Sluiten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="pe-t">Measurements</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="pe-body"></div>
 </div>
 <div class="sheet-bg" hidden></div>
 <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="sheet-t"></h3><button type="button" class="sheet-x" aria-label="Sluiten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="sheet-t"></h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="sheet-body"></div>
 </div>
 
@@ -1349,7 +1349,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* ---- zwevende pijl: terug naar boven ---- */
   (function(){
     var up=document.createElement('button');
-    up.type='button'; up.className='to-top'; up.setAttribute('aria-label','Naar boven');
+    up.type='button'; up.className='to-top'; up.setAttribute('aria-label','Back to top');
     up.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>';
     document.body.appendChild(up);
     var hdr=document.querySelector('header.top');
@@ -1445,7 +1445,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       if(!c||!c.n){ if(el) el.remove(); return; }
       if(!el){
         el=document.createElement('span'); el.className='exr-cnt';
-        el.innerHTML='<span class="cnt-n"></span><button type="button" class="cnt-minus" aria-label="Eén minder"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>';
+        el.innerHTML='<span class="cnt-n"></span><button type="button" class="cnt-minus" aria-label="One less"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>';
         el.querySelector('.cnt-minus').addEventListener('click',function(e){ e.stopPropagation(); bumpCount(k,-1); });
         var w=line.querySelector('.exr-warn'); if(w) line.insertBefore(el,w); else line.appendChild(el);
       }
@@ -1461,7 +1461,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         }
         li=li.nextElementSibling;
       }
-      if(best){ var el=best.querySelector('.exr-cnt'); if(el){ var dot=document.createElement('span'); dot.className='cnt-dot'; dot.title='Vorige keer'; dot.setAttribute('aria-label','Vorige keer'); el.insertBefore(dot,el.querySelector('.cnt-minus')); } }
+      if(best){ var el=best.querySelector('.exr-cnt'); if(el){ var dot=document.createElement('span'); dot.className='cnt-dot'; dot.title='Last time'; dot.setAttribute('aria-label','Last time'); el.insertBefore(dot,el.querySelector('.cnt-minus')); } }
     });
   }
   function bumpCount(k,d){
@@ -1477,9 +1477,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* ---- statistieken: welke spieren hoe vaak getraind (laatste 3 maanden) ----
      Elke afgevinkte oefening wordt een gebeurtenis in 'hist' met een kopie van zijn spieren en sets.
      Zo blijven oude oefeningen meetellen als ze uit het schema verdwijnen, en tellen nieuwe vanaf dag 1. */
-  var MLAB={borst:'Borst',sv:'Voorste schouder',sz:'Zijschouder',sa:'Achterste schouder',trap:'Trapezius',
-    lats:'Brede rugspier',midrug:'Midden rug',onderrug:'Onderrug',bi:'Biceps',tri:'Triceps',oa:'Onderarmen',
-    buik:'Buikspieren',schuin:'Schuine buikspieren',bil:'Bilspieren',quad:'Voorkant dij',ham:'Achterkant dij',kuit:'Kuiten'};
+  var MLAB={borst:'Chest',sv:'Front delts',sz:'Side delts',sa:'Rear delts',trap:'Trapezius',
+    lats:'Lats',midrug:'Mid back',onderrug:'Lower back',bi:'Biceps',tri:'Triceps',oa:'Forearms',
+    buik:'Abs',schuin:'Obliques',bil:'Glutes',quad:'Quads',ham:'Hamstrings',kuit:'Calves'};
   /* spieren per oefening: 1 = hoofdspier, .5 = werkt flink mee, .25 = helpt een beetje */
   var MUSCLES={
     'd2-dumbbell-reverse-lunges':{quad:1,bil:1,ham:.25},
@@ -1518,8 +1518,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     'd3-crunch-machine':{buik:1}
   };
   /* nieuwe oefening zonder eigen lijst: val terug op de spiergroep waar hij onder staat */
-  var GROUPDEF=[[/benen voor/,{quad:1,bil:.5}],[/borst/,{borst:1,sv:.5,tri:.5}],[/benen achter|billen/,{ham:1,bil:1}],
-    [/rug horizontaal/,{midrug:1,lats:.5,sa:.5,bi:.5}],[/schouder/,{sz:1,sv:.5}],[/rug verticaal|bovenrug/,{lats:1,bi:.5,midrug:.25}],
+  var GROUPDEF=[[/front legs/,{quad:1,bil:.5}],[/chest/,{borst:1,sv:.5,tri:.5}],[/back legs|glutes/,{ham:1,bil:1}],
+    [/back, horizontal/,{midrug:1,lats:.5,sa:.5,bi:.5}],[/shoulder/,{sz:1,sv:.5}],[/back, vertical|upper back/,{lats:1,bi:.5,midrug:.25}],
     [/core/,{buik:1,schuin:.5}],[/arm/,{bi:.5,tri:.5}]];
   function liFor(k){ var r=null; document.querySelectorAll('#s-d3 .exr').forEach(function(li){ if(chkKey(li)===k) r=li; }); return r; }
   function musclesFor(k,li){
@@ -1590,8 +1590,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     document.querySelectorAll('.stats-per button').forEach(function(x){ x.setAttribute('aria-pressed',x.dataset.d===per?'true':'false'); });
     renderStats();
   };
-  var DAGEN=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'],
-      MAANDEN=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  var DAGEN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+      MAANDEN=['January','February','March','April','May','June','July','August','September','October','November','December'];
   function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
   function renderStats(){
     var fig=document.getElementById('statsFig'); if(!fig) return;
@@ -1619,13 +1619,13 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
     var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
-    if(per==='dag'){ var d=new Date(last); head=last?'Laatste training, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Laatste training'; }
-    else if(per==='week') head='Laatste 7 dagen, '+n+(n===1?' trainingsdag':' trainingsdagen');
-    else if(per==='maand') head='Laatste 30 dagen, '+n+(n===1?' trainingsdag':' trainingsdagen');
-    else { var f=new Date(first); head='Sinds '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' trainingsdag':' trainingsdagen'); }
+    if(per==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
+    else if(per==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
+    else if(per==='maand') head='Last 30 days, '+n+(n===1?' training day':' training days');
+    else { var f=new Date(first); head='Since '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' training day':' training days'); }
     sub.textContent=n ? head+'.'
-      : 'Nog geen gegevens in deze periode. Vink oefeningen af en de figuur kleurt mee.';
-    var fmt=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+'').replace('.',','); };
+      : 'No data in this period yet. Tick off exercises and the figure fills in.';
+    var fmt=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+''); };
     var rows=Object.keys(MLAB).sort(function(a,b){ return score[b]-score[a]; });
     document.getElementById('statsList').innerHTML=rows.map(function(k){
       var v=score[k]; return '<li'+(v?'':' class="zero"')+'><span class="sl-n">'+MLAB[k]+'</span><span class="sl-b"><i style="width:'+(max?Math.round(100*v/max):0)+'%"></i></span><span class="sl-v">'+(v?fmt(v):'–')+'</span></li>';
@@ -1698,11 +1698,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
 };
     var MIR=' transform="matrix(-1 0 0 1 200 0)"';
-    fig.innerHTML=[['front','Voor'],['back','Achter']].map(function(v){
+    fig.innerHTML=[['front','Front'],['back','Back']].map(function(v){
       var d=B[v[0]], half='';
       d.parts.forEach(function(x){ half+='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; });
       var all='<g>'+half+'</g><g'+MIR+'>'+half+'</g>'+d.head;
-      return '<figure><svg viewBox="28 0 144 450" role="img" aria-label="Lichaam '+v[1].toLowerCase()+'zijde"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg></figure>';
+      return '<figure><svg viewBox="28 0 144 450" role="img" aria-label="Body, '+v[1].toLowerCase()+'"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg></figure>';
     }).join('');
   })();
   renderStats();
@@ -1779,9 +1779,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       renderProg();
     });
   });
-  var MND=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  var MND=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function dLab(t){ var d=new Date(t); return d.getDate()+' '+MND[d.getMonth()]; }
-  function fmtV(v){ return (Math.round(v*10)/10+'').replace('.',','); }
+  function fmtV(v){ return (Math.round(v*10)/10+''); }
   function niceTicks(lo,hi){
     var span=hi-lo||1, step=Math.pow(10,Math.floor(Math.log10(span/3))), err=span/3/step;
     if(err>=5) step*=5; else if(err>=2) step*=2;
@@ -1807,15 +1807,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var fv=keepForm&&body.querySelector('.pe-add')?{d:body.querySelector('[name=d]').value}:null;
     var rows=D.all.map(function(e){
       var dt=new Date(e.t);
-      return '<li><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,2)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>'+
-        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Meting van '+dLab(e.t)+' verwijderen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
+      return '<li><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>'+
+        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
     }).join('');
-    body.innerHTML='<p class="pe-sub">'+(D.all.length?D.all.length+(D.all.length===1?' meting':' metingen')+'. Voeg toe of verwijder.':'Nog geen metingen. Voeg er een toe.')+'</p>'+
-      '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Datum"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Waarde in '+D.unit+'"><button type="submit">Toevoegen</button></form>'+
-      '<ul class="pe-list">'+(rows||'<li class="pe-empty">Nog geen metingen.</li>')+'</ul>';
+    body.innerHTML='<p class="pe-sub">'+(D.all.length?D.all.length+(D.all.length===1?' measurement':' measurements')+'. Add or delete.':'No measurements yet. Add one.')+'</p>'+
+      '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
+      '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
     body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
       var e=prog[b.dataset.id]; if(!e) return;
-      if(!confirm('Meting van '+dLab(e.t)+' '+new Date(e.t).getFullYear()+' ('+fmtV(e.v)+' '+D.unit+') verwijderen?')) return;
+      if(!confirm('Delete the measurement of '+dLab(e.t)+' '+new Date(e.t).getFullYear()+' ('+fmtV(e.v)+' '+D.unit+')?')) return;
       progDel(b.dataset.id); renderProg(); renderSheet(true);
     }); });
     var f=body.querySelector('.pe-add');
@@ -1850,12 +1850,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       .sort(function(a,b){ return a.t-b.t; });
     var now=Date.now(), from=pPer==='all'?(all.length?all[0].t:now):now-(+pPer)*864e5;
     var pts=all.filter(function(e){ return e.t>=from; });
-    if(!all.length){ hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>'; box.innerHTML='<div class="prog-empty">Nog geen metingen. Vul je '+unit+' in bij deze oefening en vink ze af; vanaf dan groeit hier de lijn.</div>'; return; }
+    if(!all.length){ hero.innerHTML='<span class="ph-v">–</span><span class="ph-u">'+unit+'</span>'; box.innerHTML='<div class="prog-empty">No measurements yet. Enter your '+unit+' for this exercise and tick it off; the line grows from there.</div>'; return; }
     var last=all[all.length-1], first=pts[0];
     var diff=first&&pts.length>1?last.v-first.v:null;
     hero.innerHTML='<span class="ph-v">'+fmtV(last.v)+'</span><span class="ph-u">'+unit+'</span>'+
-      '<span class="ph-d">'+(diff==null?'laatst op '+dLab(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+fmtV(Math.abs(diff))+' '+unit+'</b> sinds '+dLab(first.t))+'</span>';
-    if(!pts.length){ box.innerHTML='<div class="prog-empty">Geen metingen in deze periode.</div>'; return; }
+      '<span class="ph-d">'+(diff==null?'last on '+dLab(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+fmtV(Math.abs(diff))+' '+unit+'</b> since '+dLab(first.t))+'</span>';
+    if(!pts.length){ box.innerHTML='<div class="prog-empty">No measurements in this period.</div>'; return; }
     /* grafiek */
     var W=Math.max(260,box.clientWidth||320), H=190, L=34, R=10, T=16, B=26;
     var x0=pPer==='all'?pts[0].t:from, x1=now; if(x1-x0<864e5) x0=x1-7*864e5;
@@ -1863,10 +1863,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo=Math.max(0,lo-pad); hi+=pad;
     var ticks=niceTicks(lo,hi); lo=ticks[0]; hi=ticks[ticks.length-1];
     var X=function(t){ return L+(W-L-R)*(t-x0)/(x1-x0); }, Y=function(v){ return T+(H-T-B)*(1-(v-lo)/(hi-lo)); };
-    var g='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Progressie '+progLabel(inp||{getAttribute:function(){return k;},dataset:{note:k}})+'">';
+    var g='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Progress '+progLabel(inp||{getAttribute:function(){return k;},dataset:{note:k}})+'">';
     ticks.forEach(function(v){ var y=Y(v).toFixed(1); g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'"/><text class="ax" x="'+(L-8)+'" y="'+(+y+4)+'" text-anchor="end">'+fmtV(v)+'</text>'; });
     var xl=[x0,(x0+x1)/2,x1];
-    xl.forEach(function(t,n){ g+='<text class="ax" x="'+X(t).toFixed(1)+'" y="'+(H-6)+'" text-anchor="'+(n===0?'start':n===2?'end':'middle')+'">'+(n===2?'vandaag':dLab(t))+'</text>'; });
+    xl.forEach(function(t,n){ g+='<text class="ax" x="'+X(t).toFixed(1)+'" y="'+(H-6)+'" text-anchor="'+(n===0?'start':n===2?'end':'middle')+'">'+(n===2?'today':dLab(t))+'</text>'; });
     var d=pts.map(function(e,n){ return (n?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
     if(pts.length>1) g+='<path class="ar" d="'+d+' L'+X(pts[pts.length-1].t).toFixed(1)+' '+Y(lo)+' L'+X(pts[0].t).toFixed(1)+' '+Y(lo)+' Z"/><path class="ln" d="'+d+'"/>';
     var showDots=pts.length<=24;
@@ -1921,7 +1921,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* ---- logboek: gedeelde database, zodat elk toestel dezelfde gewichten ziet ---- */
   var STORE='fitlog-v1';
   var stamp=document.getElementById('syncStamp');
-  function setStamp(t){ if(!stamp) return; /* alleen tonen als er iets misloopt; een waarschuwing van cloud.js blijft staan */ var v=(t==='Bewaard op al je toestellen'||t==='Opslaan…')?'':t; if(!v&&stamp.classList.contains('warn')) return; stamp.textContent=v; }
+  function setStamp(t){ if(!stamp) return; /* alleen tonen als er iets misloopt; een waarschuwing van cloud.js blijft staan */ var v=(t==='Saved on all your devices'||t==='Saving…')?'':t; if(!v&&stamp.classList.contains('warn')) return; stamp.textContent=v; }
   function loadLocal(){ try{ return JSON.parse(localStorage.getItem(STORE)||'{}'); }catch(e){ return {}; } }
   function saveLocal(d){ try{ localStorage.setItem(STORE, JSON.stringify(d)); }catch(e){} }
   var local=loadLocal();
@@ -1937,20 +1937,20 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       if(!local[key]) local[key]={};
       local[key].t=inp.value; saveLocal(local);
       if(!col) return;
-      clearTimeout(timers[key]); setStamp('Opslaan…');
+      clearTimeout(timers[key]); setStamp('Saving…');
       timers[key]=setTimeout(function(){
         if(window.__progRecord && inp.classList.contains('exr-in')) window.__progRecord(inp);
         col.doc(key).set({t:inp.value, updatedAt:Date.now()})
-          .then(function(){ setStamp('Bewaard op al je toestellen'); })
-          .catch(function(){ setStamp('Niet bewaard — probeer opnieuw'); });
+          .then(function(){ setStamp('Saved on all your devices'); })
+          .catch(function(){ setStamp('Not saved — try again'); });
       },500);
     });
   });
 
   var use=window.claude && window.claude.use;
-  if(!use){ setStamp('Alleen op dit toestel'); return; }
+  if(!use){ setStamp('Only on this device'); return; }
   window.claude.use('db').then(function(db){
-    if(!db){ setStamp('Alleen op dit toestel'); return; }
+    if(!db){ setStamp('Only on this device'); return; }
     col=db.collection('log');
     chkCol=db.collection('checks');
     cntCol=db.collection('counts');
@@ -2018,8 +2018,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
           if(v && remote[key]==null) col.doc(key).set({t:v, updatedAt:Date.now()}).catch(function(){});
         });
       }
-      setStamp('Bewaard op al je toestellen');
-    },function(){ setStamp('Verbinding verbroken — herlaad'); });
+      setStamp('Saved on all your devices');
+    },function(){ setStamp('Connection lost — reload'); });
   });
 
 })();
@@ -2150,163 +2150,163 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 
   /* ---------- tijdlijnen ---------- */
   function cyc(down,up,dl,ul,hold,top){ return [[0,1,down,dl],[1,1,hold||300,dl],[1,0,up,ul],[0,0,top||600,'']]; }
-  var SLOW_DOWN=function(){ return cyc(1800,1000,'Traag zakken','Vlot omhoog'); };
-  var PULL=function(){ return cyc(1000,1800,'Vlot trekken','Traag terug'); };
-  var PUSH=function(){ return cyc(1000,1800,'Vlot duwen','Traag terug'); };
-  var LIFT=function(){ return cyc(1000,1800,'Vlot omhoog','Traag zakken'); };
+  var SLOW_DOWN=function(){ return cyc(1800,1000,'Lower slowly','Up briskly'); };
+  var PULL=function(){ return cyc(1000,1800,'Pull briskly','Slowly back'); };
+  var PUSH=function(){ return cyc(1000,1800,'Push briskly','Slowly back'); };
+  var LIFT=function(){ return cyc(1000,1800,'Up briskly','Lower slowly'); };
 
   var ST={at:[160,111],t:2,l:[165,203],l2:[161,203]};
   function S(o){ var r={}; for(var k in ST) r[k]=ST[k]; for(k in o) r[k]=o[k]; return r; }
 
   var EX={
-    squat:{cap:'Voeten op heupbreedte, handen achter je hoofd of armen naar voren. Zak traag tot je dijen ongeveer horizontaal zijn, kom vlot terug omhoog. Knieën in de richting van je tenen.',
+    squat:{cap:'Feet hip-width apart, hands behind your head or arms forward. Lower slowly until your thighs are roughly horizontal, come back up briskly. Knees in line with your toes.',
       poses:[S({ua:90,fa:90}),S({at:[140,160],t:38,ua:92,fa:92})],seq:SLOW_DOWN()},
-    goblet:{cap:'Dumbbell of kettlebell rechtop tegen je borst. Zak traag (2 tellen) tot je dijen ongeveer horizontaal zijn, kom vlot terug omhoog.',
+    goblet:{cap:'Dumbbell or kettlebell upright against your chest. Lower slowly (2 counts) until your thighs are roughly horizontal, come back up briskly.',
       poses:[S({ua:172,fa:25,ua2:172,fa2:25}),S({at:[143,158],t:32,ua:185,fa:45,ua2:185,fa2:45})],seq:SLOW_DOWN(),hold:[['wr','v']]},
-    lunge:{cap:'Stap met één been ver naar achter en zak traag recht naar beneden tot je achterste knie bijna de grond raakt. Duw je vlot terug op via je voorste hiel.',
+    lunge:{cap:'Step far back with one leg and lower slowly straight down until your back knee almost touches the floor. Push back up briskly through your front heel.',
       poses:[S({at:[176,111],l:[182,203],l2:[178,203],ua:182,fa:180,ua2:178,fa2:180}),{at:[138,152],t:5,l:[182,203],l2:[96,198],lb2:'down',ft2:150,ua:182,fa:180,ua2:178,fa2:180}],
       seq:SLOW_DOWN(),hold:[['wr','h'],['wr2','h']]},
-    bulgarian:{cap:'Achterste voet met de wreef op de bank. Zak traag recht naar beneden, kom vlot terug omhoog. Je voorste knie blijft boven je voet.',
+    bulgarian:{cap:'Rear foot with the top of the foot on the bench. Lower slowly straight down, come back up briskly. Your front knee stays above your foot.',
       props:bench(55,125,168),
       poses:[{at:[172,116],t:4,l:[196,203],l2:[112,162],lb2:'down',ft2:250,ua:182,fa:180,ua2:178,fa2:180},{at:[150,156],t:14,l:[196,203],l2:[112,162],lb2:'down',ft2:250,ua:182,fa:180,ua2:178,fa2:180}],
       seq:SLOW_DOWN(),hold:[['wr','h'],['wr2','h']]},
-    dbpress:{cap:'Bank op 15°, schouderbladen tegen de bank. Duw de dumbbells vlot omhoog boven je borst, laat ze traag zakken tot naast je borst.',
+    dbpress:{cap:'Bench at 15°, shoulder blades against the bench. Press the dumbbells up briskly above your chest, lower them slowly to beside your chest.',
       props:P_('M70 160L205 124')+P_('M90 160V207 M190 132V207'),
       poses:[{at:[110,142],t:75,h:0,l:[58,203],lb:'up',a:[160,74],a2:[158,74]},{at:[110,142],t:75,l:[58,203],lb:'up',a:[150,118],a2:[148,118],ab:'down'}],
       seq:SLOW_DOWN(),hold:[['wr','disc']]},
-    chestmachine:{cap:'Handgrepen op borsthoogte. Duw vlot naar voren zonder je ellebogen helemaal op slot te zetten, kom traag terug.',
+    chestmachine:{cap:'Handles at chest height. Push forward briskly without fully locking your elbows, come back slowly.',
       props:seat(110,170,160,118,82),
       poses:[{at:[136,152],t:-6,l:[192,203],a:[150,102],a2:[147,102],ab:'down'},{at:[136,152],t:-6,l:[192,203],a:[184,100],a2:[181,100],ab:'down'}],
       seq:PUSH(),hold:[['wr','grip']],levers:[{from:[222,58],to:'wr'}]},
-    pushup:{cap:'Lichaam één rechte lijn van hoofd tot hielen. Zak traag tot je borst bijna de grond raakt, duw vlot terug.',
+    pushup:{cap:'Body in one straight line from head to heels. Lower slowly until your chest almost touches the floor, push back up briskly.',
       props:mat(50,240),
       poses:[{anchor:'an',at:[70,201],t:72,th:252,sh:252,ft:170,a:[210,206],a2:[206,206],ab:'back'},{anchor:'an',at:[70,201],t:86,th:266,sh:266,ft:170,a:[210,206],a2:[206,206],ab:'up'}],
       seq:SLOW_DOWN()},
-    fly:{view:'front',cap:'Ellebogen licht gebogen en vast. Breng de handgrepen vlot samen voor je borst, laat ze traag terug open gaan tot je borst rekt.',
+    fly:{view:'front',cap:'Elbows slightly bent and fixed. Bring the handles together in front of your chest briskly, let them open slowly until your chest stretches.',
       props:P_('M120 154H180')+P_('M150 156V207'),
       poses:[{hy:150,lh:[-70,6],rh:[70,6],ed:6,kL:[-18,10],kR:[18,10],fL:[-20,53],fR:[20,53]},{hy:150,lh:[18,10],rh:[-18,10],ed:8,eb:6,kL:[-18,10],kR:[18,10],fL:[-20,53],fR:[20,53]}],
-      seq:cyc(1000,1800,'Vlot samen','Traag open'),hold:[['wrL','grip'],['wrR','grip']]},
-    legcurl:{cap:'Knieën in lijn met het draaipunt. Trek je hielen vlot onder de bank, laat ze traag terugkomen.',
+      seq:cyc(1000,1800,'Together briskly','Open slowly'),hold:[['wrL','grip'],['wrR','grip']]},
+    legcurl:{cap:'Knees in line with the pivot point. Pull your heels under the bench briskly, let them come back slowly.',
       props:seat(100,175,160,108,88),
       poses:[{at:[128,152],t:-6,th:92,sh:105,ft:20,a:[150,160],a2:[148,160]},{at:[128,152],t:-6,th:92,sh:205,ft:120,a:[150,160],a2:[148,160]}],
       seq:PULL(),pads:[{at:'an',dx:4,r:8}]},
-    abduction:{view:'front',cap:'Rechtop zitten, rug tegen de leuning. Duw je knieën vlot naar buiten, laat ze traag terugkomen. Niet zwaaien.',
+    abduction:{view:'front',cap:'Sit upright, back against the backrest. Push your knees out briskly, let them come back slowly. No swinging.',
       props:P_('M115 154H185')+P_('M150 156V207'),
       poses:[{hy:150,lh:[-4,58],rh:[4,58],kL:[-20,10],kR:[20,10],fL:[-20,53],fR:[20,53]},{hy:150,lh:[-4,58],rh:[4,58],kL:[-50,8],kR:[50,8],fL:[-36,53],fR:[36,53]}],
-      seq:cyc(1000,1800,'Vlot open','Traag terug'),pads:[{at:'knL',dx:-6,r:6},{at:'knR',dx:6,r:6}]},
-    rdl:{cap:'Knieën licht gebogen, dumbbells dicht langs je benen, rug recht. Duw je heupen traag naar achter tot net onder de knie, kom vlot omhoog door je heupen naar voren te duwen.',
+      seq:cyc(1000,1800,'Open briskly','Slowly back'),pads:[{at:'knL',dx:-6,r:6},{at:'knR',dx:6,r:6}]},
+    rdl:{cap:'Knees slightly bent, dumbbells close to your legs, back straight. Push your hips back slowly to just below the knee, come up briskly by driving your hips forward.',
       poses:[S({ua:180,fa:180,ua2:180,fa2:180}),S({at:[136,116],t:72,ua:180,fa:180,ua2:180,fa2:180})],seq:SLOW_DOWN(),hold:[['wr','h'],['wr2','h']]},
-    csrow:{cap:'Borst stevig op het kussen. Trek je ellebogen vlot naar achter langs je lichaam, laat traag zakken tot je armen gestrekt zijn.',
+    csrow:{cap:'Chest firmly on the pad. Pull your elbows back briskly along your body, lower slowly until your arms are straight.',
       props:P_('M132 154L184 110')+P_('M150 146V207'),
       poses:[{at:[128,140],t:50,l:[72,203],l2:[68,203],ua:180,fa:180,ua2:180,fa2:180},{at:[128,140],t:50,l:[72,203],l2:[68,203],ua:238,fa:178,ua2:238,fa2:178}],
       seq:PULL(),hold:[['wr','h']]},
-    cablerow:{cap:'Rug recht, borst fier. Trek de handgreep vlot naar je navel, ellebogen langs je lichaam. Strek traag terug zonder voorover te hangen.',
+    cablerow:{cap:'Back straight, chest up. Pull the handle briskly to your navel, elbows along your body. Extend slowly without leaning forward.',
       props:bench(70,140,182)+P_('M196 160V200','var(--line)')+pulley(268,178)+P_('M268 30V207','var(--line)'),
       poses:[{at:[112,176],t:12,l:[193,176],lb:'up',a:[178,128],a2:[175,128]},{at:[112,176],t:-6,l:[193,176],lb:'up',a:[124,148],a2:[121,148],ab:'back'}],
       seq:PULL(),hold:[['wr','grip']],cables:[{from:[268,178],to:'wr'}]},
-    onearmrow:{cap:'Knie en hand op de bank, rug plat. Trek de dumbbell vlot naar je heup, laat traag zakken tot je arm gestrekt is.',
+    onearmrow:{cap:'Knee and hand on the bench, back flat. Pull the dumbbell briskly to your hip, lower slowly until your arm is straight.',
       props:bench(70,190,170),
       poses:[{at:[112,128],t:88,l:[96,203],l2:[64,165],lb2:'down',ft2:-90,a2:[168,165],ua:180,fa:180},{at:[112,128],t:88,l:[96,203],l2:[64,165],lb2:'down',ft2:-90,a2:[168,165],ua:262,fa:178}],
       seq:PULL(),hold:[['wr','h']]},
-    dbshoulder:{cap:'Rug tegen de leuning. Duw de dumbbells vlot boven je hoofd, laat ze traag zakken tot op schouderhoogte.',
+    dbshoulder:{cap:'Back against the backrest. Press the dumbbells briskly overhead, lower them slowly to shoulder height.',
       props:seat(105,170,160,112,72),
       poses:[{at:[132,152],t:-4,l:[188,203],ua:182,fa:12,ua2:182,fa2:12},{at:[132,152],t:-4,l:[188,203],ua:4,fa:4,ua2:4,fa2:4}],
       seq:PUSH(),hold:[['wr','disc']]},
-    shouldermachine:{cap:'Handgrepen net onder schouderhoogte. Duw vlot omhoog zonder je rug hol te trekken, laat traag zakken.',
+    shouldermachine:{cap:'Handles just below shoulder height. Press up briskly without arching your back, lower slowly.',
       props:seat(105,170,160,112,72),
       poses:[{at:[132,152],t:-4,l:[188,203],ua:182,fa:12,ua2:182,fa2:12},{at:[132,152],t:-4,l:[188,203],ua:6,fa:6,ua2:6,fa2:6}],
       seq:PUSH(),hold:[['wr','grip']],levers:[{from:[90,40],to:'wr'}]},
-    cablelateral:{view:'front',cap:'Foto toont de versie met twee armen; jij doet één arm. Kabel laag aan de andere kant, voor je lichaam. Til vlot zijwaarts tot schouderhoogte, laat traag zakken.',
+    cablelateral:{view:'front',cap:'The photo shows the two-arm version; you do one arm. Cable low on the opposite side, in front of your body. Raise briskly to the side up to shoulder height, lower slowly.',
       props:tower(60)+pulley(60,200),
       poses:[{lh:[-14,40],rh:[-14,52],ed:3},{lh:[-14,40],rh:[54,4],ed:3}],
       seq:LIFT(),hold:[['wrR','grip']],cables:[{from:[60,200],to:'wrR'}]},
-    lateral:{view:'front',cap:'Licht voorover, ellebogen licht gebogen. Til de dumbbells vlot zijwaarts tot schouderhoogte, laat traag zakken. Niet zwaaien.',
+    lateral:{view:'front',cap:'Lean slightly forward, elbows slightly bent. Raise the dumbbells briskly to the side up to shoulder height, lower slowly. No swinging.',
       poses:[{lh:[-8,54],rh:[8,54]},{lh:[-54,4],rh:[54,4]}],seq:LIFT(),hold:[['wrL','v'],['wrR','v']]},
-    pulldown:{cap:'Licht achterover, borst fier. Trek de stang vlot naar je bovenborst, ellebogen naar beneden. Laat traag omhoog tot je armen gestrekt zijn.',
+    pulldown:{cap:'Lean back slightly, chest up. Pull the bar briskly to your upper chest, elbows down. Let it rise slowly until your arms are straight.',
       props:seat(108,175,165,null)+'<rect x="160" y="138" width="22" height="10" rx="5" fill="var(--line)"/>'+pulley(150,10),
       poses:[{at:[140,158],t:-10,l:[190,203],a:[150,46],a2:[147,46],ab:'back'},{at:[140,158],t:-12,l:[190,203],a:[146,100],a2:[143,100],ab:'back'}],
       seq:PULL(),hold:[['wr','grip']],cables:[{from:[150,10],to:'wr'}]},
-    facepull:{cap:'Kabel op gezichtshoogte, licht. Trek het touw vlot naar je gezicht, ellebogen hoog en naar buiten. Traag terug.',
+    facepull:{cap:'Cable at face height, light. Pull the rope briskly to your face, elbows high and out. Slowly back.',
       props:tower(268)+pulley(268,62),
       poses:[S({at:[150,111],l:[155,203],l2:[150,203],t:-2,a:[204,62],a2:[201,62],ab:'down'}),S({at:[150,111],l:[155,203],l2:[150,203],t:-4,a:[162,46],a2:[159,46],ab:'down'})],
       seq:PULL(),hold:[['wr','grip']],cables:[{from:[268,62],to:'wr'}]},
-    hang:{cap:'Handen iets breder dan schouders. Hang met gestrekte armen, trek je schouders licht naar beneden — niet passief in je schouders hangen.',
+    hang:{cap:'Hands slightly wider than shoulders. Hang with straight arms, pull your shoulders down slightly — don’t hang passively in your shoulders.',
       props:bar(110,200,40),noGround:true,
       poses:[{anchor:'wr',at:[160,40],t:0,ua:0,fa:0,ua2:0,fa2:0,th:182,sh:252,ft:160},{anchor:'wr',at:[160,40],t:3,ua:6,fa:2,ua2:6,fa2:2,th:182,sh:252,ft:160}],
-      seq:[[0,1,1500,'Schouders laag'],[1,1,2500,'Hou vast'],[1,0,1500,'Schouders laag'],[0,0,600,'']]},
-    pullup:{cap:'Knieën op het hulpkussen of voet in een band. Trek jezelf vlot op tot je kin boven de stang, laat traag zakken tot je armen gestrekt zijn.',
+      seq:[[0,1,1500,'Shoulders down'],[1,1,2500,'Hold'],[1,0,1500,'Shoulders down'],[0,0,600,'']]},
+    pullup:{cap:'Knees on the assist pad or a foot in a band. Pull yourself up briskly until your chin is over the bar, lower slowly until your arms are straight.',
       props:bar(110,200,48),noGround:true,
       poses:[{anchor:'wr',at:[160,48],t:2,ua:0,fa:0,ua2:0,fa2:0,th:178,sh:262,ft:180},{anchor:'wr',at:[160,48],t:2,ua:168,fa:12,ua2:168,fa2:12,th:178,sh:262,ft:180}],
-      seq:cyc(1100,1900,'Vlot op','Traag zakken'),pads:[{at:'kn',dy:7,r:9}]},
-    plank:{cap:'Ellebogen onder je schouders, één rechte lijn van hoofd tot hielen. Span je buik en billen aan, adem rustig door.',tip:'60 sec makkelijk? Maak hem zwaarder, niet langer: alles maximaal aanspannen, ellebogen verder naar voren of één been optillen. Blijf rond 30–45 sec.',
+      seq:cyc(1100,1900,'Up briskly','Lower slowly'),pads:[{at:'kn',dy:7,r:9}]},
+    plank:{cap:'Elbows under your shoulders, one straight line from head to heels. Brace your abs and glutes, keep breathing calmly.',tip:'60 sec easy? Make it harder, not longer: brace everything maximally, elbows further forward or lift one leg. Stay around 30–45 sec.',
       props:mat(50,240),
       poses:[{anchor:'an',at:[70,201],t:84,th:264,sh:264,ft:170,ua:180,fa:90,ua2:180,fa2:90},{anchor:'an',at:[70,201],t:84,th:264,sh:264,ft:170,ua:180,fa:90,ua2:180,fa2:90}],
-      seq:[[0,1,3000,'Hou vast · 30–60 sec'],[1,0,3000,'Hou vast · 30–60 sec']]},
-    birddog:{cap:'Handen onder je schouders, knieën onder je heupen. Strek één arm en het andere been tot horizontaal, hou 5–10 tellen vast, rug stil.',
+      seq:[[0,1,3000,'Hold · 30–60 sec'],[1,0,3000,'Hold · 30–60 sec']]},
+    birddog:{cap:'Hands under your shoulders, knees under your hips. Extend one arm and the opposite leg to horizontal, hold 5–10 counts, back still.',
       props:mat(40,240),
       poses:[{at:[110,152],t:90,th:180,sh:270,ft:180,th2:180,sh2:270,ft2:180,ua:180,fa:180,ua2:180,fa2:180},{at:[110,152],t:90,th:180,sh:270,ft:180,th2:268,sh2:270,ft2:180,ua:88,fa:88,ua2:180,fa2:180}],
-      seq:[[0,1,1200,'Strekken'],[1,1,2200,'Hou 5 tellen'],[1,0,1200,'Terug'],[0,0,700,'']]},
-    crunch:{cap:'Handgrepen bij je borst, voeten vast. Rol je romp vlot naar voren door je buik aan te spannen, kom traag terug.',
+      seq:[[0,1,1200,'Extend'],[1,1,2200,'Hold 5 counts'],[1,0,1200,'Back'],[0,0,700,'']]},
+    crunch:{cap:'Handles at your chest, feet secured. Curl your torso forward briskly by contracting your abs, come back slowly.',
       props:seat(105,170,165,112,90),
       poses:[{at:[132,157],t:-6,l:[186,203],ua:168,fa:18,ua2:168,fa2:18},{at:[132,157],t:38,l:[186,203],ua:205,fa:60,ua2:205,fa2:60}],
-      seq:cyc(1000,1800,'Vlot aanspannen','Traag terug'),hold:[['wr','grip']]},
-    carry:{cap:'Zware dumbbells naast je lichaam. Wandel rechtop met kleine passen, schouders laag en naar achter, romp stil.',
+      seq:cyc(1000,1800,'Contract briskly','Slowly back'),hold:[['wr','grip']]},
+    carry:{cap:'Heavy dumbbells at your sides. Walk upright with small steps, shoulders down and back, torso still.',
       poses:[{at:[150,113],t:1,th:162,sh:184,th2:198,sh2:206,ua:180,fa:180,ua2:180,fa2:180},{at:[150,113],t:1,th:198,sh:206,th2:162,sh2:184,ua:180,fa:180,ua2:180,fa2:180}],
-      seq:[[0,1,650,'Rechtop wandelen'],[1,0,650,'Rechtop wandelen']],hold:[['wr','h']]},
-    backext:{cap:'Heupen net boven het kussen, rug recht. Zak traag naar beneden, kom vlot op tot je lichaam één lijn vormt — niet verder doorbuigen.',
+      seq:[[0,1,650,'Walk upright'],[1,0,650,'Walk upright']],hold:[['wr','h']]},
+    backext:{cap:'Hips just above the pad, back straight. Lower slowly, come up briskly until your body forms one line — don’t arch further.',
       props:P_('M150 148L172 128')+P_('M78 192L96 182')+P_('M120 207L160 150 M80 207L88 190'),
       poses:[{at:[156,128],t:172,th:226,sh:226,ft:120,ua:325,fa:220,ua2:325,fa2:220},{at:[156,128],t:46,th:226,sh:226,ft:120,ua:200,fa:96,ua2:200,fa2:96}],
       seq:LIFT(),hold:[['wr','plate']]},
-    ohext:{cap:'Rug naar de kabel, touw achter je hoofd. Ellebogen hoog en dicht bij je hoofd; strek vlot naar voren-boven, buig traag terug.',
+    ohext:{cap:'Back to the cable, rope behind your head. Elbows high and close to your head; extend briskly forward and up, bend back slowly.',
       props:tower(40)+pulley(40,196),
       poses:[S({at:[150,113],l:[176,203],l2:[124,203],t:24,ua:20,fa:195,ua2:20,fa2:195}),S({at:[150,113],l:[176,203],l2:[124,203],t:24,ua:30,fa:30,ua2:30,fa2:30})],
-      seq:cyc(1000,1800,'Vlot strekken','Traag buigen'),hold:[['wr','grip']],cables:[{from:[40,196],to:'wr'}]},
-    pushdown:{cap:'Ellebogen vast tegen je zij. Duw het touw vlot naar beneden tot je armen gestrekt zijn, laat traag terugkomen tot borsthoogte.',
+      seq:cyc(1000,1800,'Extend briskly','Bend slowly'),hold:[['wr','grip']],cables:[{from:[40,196],to:'wr'}]},
+    pushdown:{cap:'Elbows fixed against your sides. Push the rope down briskly until your arms are straight, let it come back slowly to chest height.',
       props:tower(240)+pulley(240,18),
       poses:[S({t:8,ua:176,fa:48,ua2:176,fa2:48}),S({t:8,ua:176,fa:172,ua2:176,fa2:172})],
-      seq:cyc(1000,1800,'Vlot duwen','Traag terug'),hold:[['wr','grip']],cables:[{from:[240,18],to:'wr'}]},
-    cablecurl:{cap:'Ellebogen vast tegen je zij. Curl de stang vlot op, laat traag zakken tot je armen gestrekt zijn. Niet met je rug meehelpen.',
+      seq:cyc(1000,1800,'Push briskly','Slowly back'),hold:[['wr','grip']],cables:[{from:[240,18],to:'wr'}]},
+    cablecurl:{cap:'Elbows fixed against your sides. Curl the bar up briskly, lower slowly until your arms are straight. Don’t help with your back.',
       props:tower(250)+pulley(250,200),
       poses:[S({ua:182,fa:178,ua2:182,fa2:178}),S({ua:182,fa:28,ua2:182,fa2:28})],seq:LIFT(),hold:[['wr','grip']],cables:[{from:[250,200],to:'wr'}]},
-    hammer:{cap:'Touw met duimen naar boven, ellebogen vast. Curl vlot op, laat traag zakken.',
+    hammer:{cap:'Rope with thumbs up, elbows fixed. Curl up briskly, lower slowly.',
       props:tower(250)+pulley(250,200),
       poses:[S({ua:182,fa:178,ua2:182,fa2:178}),S({ua:182,fa:32,ua2:182,fa2:32})],seq:LIFT(),hold:[['wr','grip']],cables:[{from:[250,200],to:'wr'}]},
-    curlmachine:{cap:'Bovenarmen plat op het kussen, oksels tegen de rand. Curl vlot op, laat traag zakken tot bijna gestrekt.',
+    curlmachine:{cap:'Upper arms flat on the pad, armpits against the edge. Curl up briskly, lower slowly until almost straight.',
       props:seat(100,160,165,null)+P_('M164 112L196 136')+P_('M196 140V207'),
       poses:[{at:[128,158],t:14,l:[182,203],a:[208,136],a2:[205,136],ab:'up'},{at:[128,158],t:14,l:[182,203],a:[176,80],a2:[173,80],ab:'down'}],
       seq:LIFT(),hold:[['wr','grip']],levers:[{from:[188,128],to:'wr'}]},
-    dbcurl:{cap:'Ellebogen vast naast je lichaam. Curl de dumbbells vlot op, laat traag zakken. Niet zwaaien.',
+    dbcurl:{cap:'Elbows fixed at your sides. Curl the dumbbells up briskly, lower slowly. No swinging.',
       poses:[S({ua:182,fa:178,ua2:182,fa2:178}),S({ua:182,fa:30,ua2:182,fa2:30})],seq:LIFT(),hold:[['wr','disc']]},
-    pullapart:{view:'front',cap:'Armen gestrekt voor je op schouderhoogte. Trek de band vlot uit elkaar tot je handen naast je lichaam zijn, schouderbladen samen. Traag terug.',
+    pullapart:{view:'front',cap:'Arms straight in front of you at shoulder height. Pull the band apart briskly until your hands are beside your body, shoulder blades together. Slowly back.',
       poses:[{lh:[12,8],rh:[-12,8],ed:0},{lh:[-58,4],rh:[58,4],ed:0}],
-      seq:cyc(900,1500,'Uit elkaar','Traag terug'),links:[['wrL','wrR']]},
-    rotation:{view:'front',cap:'Voeten op heupbreedte en stil, armen gekruist voor je borst (handen op de tegenovergestelde schouder). Draai rustig je romp naar links en naar rechts, heupen blijven naar voren.',
+      seq:cyc(900,1500,'Apart','Slowly back'),links:[['wrL','wrR']]},
+    rotation:{view:'front',cap:'Feet hip-width apart and still, arms crossed over your chest (hands on the opposite shoulder). Rotate your torso calmly left and right, hips stay facing forward.',
       poses:[{rot:-55,armRot:true,lh:[42,8],rh:[-42,8],eb:10,ed:24},{rot:55,armRot:true,lh:[42,8],rh:[-42,8],eb:10,ed:24}],
-      seq:[[0,1,1600,'Rustig draaien'],[1,1,300,''],[1,0,1600,'Rustig draaien'],[0,0,300,'']]},
-    armcircle:{cap:'Rechtop, armen gestrekt. Maak grote, rustige cirkels: 10× naar voren, 10× naar achter.',
+      seq:[[0,1,1600,'Rotate calmly'],[1,1,300,''],[1,0,1600,'Rotate calmly'],[0,0,300,'']]},
+    armcircle:{cap:'Upright, arms straight. Make big, calm circles: 10× forward, 10× backward.',
       poses:[S({ua:180,fa:180,ua2:0,fa2:0}),S({ua:540,fa:540,ua2:360,fa2:360})],
-      seq:[[0,1,2600,'Grote cirkels']],linear:true}
+      seq:[[0,1,2600,'Big circles']],linear:true}
   };
-  EX.bridge={cap:'Op je rug, knieën gebogen, voeten plat op heupbreedte, armen naast je. Duw door je hielen je heupen omhoog tot je lichaam een rechte lijn vormt van knie tot schouder. Knijp je billen 1 tel aan, zak traag. Niet hol trekken in je onderrug.'};
-  EX.calfraise={cap:'Voorvoet op een trede of plaat, hiel vrij. Dumbbell in de hand aan de kant van het werkende been, met de andere hand houd je je vast. Laat je hiel traag zakken tot een stevige rek, houd 1 tel vast, kom vlot zo hoog mogelijk op je tenen. Knie gestrekt maar niet op slot.'};
-  EX.ss1={seqOf:['ohext','cablecurl'],cap:'Superset: een set Overhead Extension (touw) en meteen daarna een set Biceps Curl (stang), dan pas rust. Bij beide: vlot strekken of opcurlen, traag terug.'};
-  EX.ss2={seqOf:['pushdown','hammer'],cap:'Superset met hetzelfde touw: een set Rope Pushdown en meteen daarna een set Hammer Curl, dan pas rust. Bij beide: vlot duwen of opcurlen, traag terug.'};
+  EX.bridge={cap:'On your back, knees bent, feet flat hip-width apart, arms at your sides. Drive your hips up through your heels until your body forms a straight line from knee to shoulder. Squeeze your glutes for 1 count, lower slowly. Don’t arch your lower back.'};
+  EX.calfraise={cap:'Ball of the foot on a step or plate, heel free. Dumbbell in the hand on the side of the working leg, hold on with the other hand. Lower your heel slowly into a firm stretch, hold 1 count, rise briskly as high as possible onto your toes. Knee straight but not locked.'};
+  EX.ss1={seqOf:['ohext','cablecurl'],cap:'Superset: one set of Overhead Extension (rope) followed immediately by one set of Biceps Curl (bar), then rest. For both: extend or curl up briskly, slowly back.'};
+  EX.ss2={seqOf:['pushdown','hammer'],cap:'Superset with the same rope: one set of Rope Pushdown followed immediately by one set of Hammer Curl, then rest. For both: push or curl up briskly, slowly back.'};
 
-  var NAMES={'Squats zonder gewicht':'squat','Goblet Squat':'goblet','Dumbbell Reverse Lunges':'lunge','Bulgarian Split Squat':'bulgarian',
+  var NAMES={'Bodyweight Squats':'squat','Goblet Squat':'goblet','Dumbbell Reverse Lunges':'lunge','Bulgarian Split Squat':'bulgarian',
     'Dumbbell Chest Press 15°':'dbpress','Chest Press Machine':'chestmachine','Push-Ups':'pushup','Chest Fly Machine':'fly',
     'Leg Curl Machine':'legcurl','Hip Abduction Machine':'abduction','Dumbbell Romanian Deadlift':'rdl','Single-Leg Dumbbell Calf Raise':'calfraise',
-    'Chest-Supported Row':'csrow','Seated Cable Row':'cablerow','Eenarmige Dumbbell Row':'onearmrow',
+    'Chest-Supported Row':'csrow','Seated Cable Row':'cablerow','One-Arm Dumbbell Row':'onearmrow',
     'Seated Dumbbell Shoulder Press':'dbshoulder','Shoulder Press Machine':'shouldermachine','Cable Single Arm Lateral Raise':'cablelateral','Dumbbell Lateral Raise':'lateral',
-    'Lat Pulldown Machine':'pulldown','Cable Face Pull':'facepull','Hangen aan de stang':'hang','(Assisted) Pull-Ups':'pullup',
+    'Lat Pulldown Machine':'pulldown','Cable Face Pull':'facepull','Dead Hang':'hang','(Assisted) Pull-Ups':'pullup',
     'Plank + Side Plank':'plank','Bird Dog':'birddog','Crunch Machine':'crunch',"Farmer's Carry":'carry','Weighted Back Extension':'backext',
     'Overhead Extension + Biceps Curl':'ss1','Rope Pushdown + Hammer Curl':'ss2','Overhead Cable Triceps Extension':'ohext','Triceps Rope Pushdown':'pushdown',
-    'Curl Machine':'curlmachine','Dumbbell Biceps Curl':'dbcurl','Band Pull-Aparts':'pullapart','Romprotatie':'rotation','Armzwaaien':'armcircle','Glute Bridge':'bridge'};
+    'Curl Machine':'curlmachine','Dumbbell Biceps Curl':'dbcurl','Band Pull-Aparts':'pullapart','Torso Rotation':'rotation','Arm Circles':'armcircle','Glute Bridge':'bridge'};
 
   /* ---------- speler ---------- */
   function player(host,key){
     var raf=null, stop=false, reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
     var list=EX[key].seqOf||[key], idx=0;
-    var svg=el('svg',{viewBox:'0 0 300 230',role:'img','aria-label':'Animatie van de uitvoering'},host);
+    var svg=el('svg',{viewBox:'0 0 300 230',role:'img','aria-label':'Animation of the movement'},host);
     var stat=el('g',{},svg), body=el('g',{},svg);
     var lbl=el('text',{x:16,y:26,'font-family':'Work Sans,system-ui,sans-serif','font-size':12,'font-weight':600,'letter-spacing':1.5,fill:'var(--muted)'},svg);
     var g, ex, view, total, T0=null;
@@ -2349,13 +2349,13 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function photos(host,k){
     var list=IMG[k], i=0, timer=null, STEP=1500;
     host.classList.add('sheet-photo');
-    host.innerHTML='<div class="ph-frame">'+list.map(function(src,n){ return '<img alt="'+(n%2===0?'Beginhouding':'Eindhouding')+'" src="'+src+'">'; }).join('')+'<span class="ph-tag"></span></div><div class="ph-foot"><span class="ph-dots"></span></div>';
+    host.innerHTML='<div class="ph-frame">'+list.map(function(src,n){ return '<img alt="'+(n%2===0?'Start position':'End position')+'" src="'+src+'">'; }).join('')+'<span class="ph-tag"></span></div><div class="ph-foot"><span class="ph-dots"></span></div>';
     var imgs=host.querySelectorAll('.ph-frame img'), dots=host.querySelector('.ph-dots'), tag=host.querySelector('.ph-tag');
     dots.innerHTML=list.map(function(){ return '<i></i>'; }).join('');
     function show(){
       [].forEach.call(imgs,function(im,n){ im.classList.toggle('on',n===i); });
       [].forEach.call(dots.children,function(d,n){ d.classList.toggle('on',n===i); });
-      var t=(i%2===0?'Start':'Eind'); if(SSL[k]) t=(i<2?'1 · '+SSL[k][0]:'2 · '+SSL[k][1])+' — '+t.toLowerCase();
+      var t=(i%2===0?'Start':'End'); if(SSL[k]) t=(i<2?'1 · '+SSL[k][0]:'2 · '+SSL[k][1])+' — '+t.toLowerCase();
       tag.textContent=t;
     }
     function next(){ i=(i+1)%list.length; show(); }
@@ -2386,12 +2386,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     setTimeout(function(){ bg.hidden=true; sh.hidden=true; bodyEl.innerHTML=''; },320);
     if(lastFocus) lastFocus.focus({preventScroll:true});
   }
-  var INFO_BTN='<button type="button" class="info-b" aria-label="Uitvoering"><span>i</span></button>';
+  var INFO_BTN='<button type="button" class="info-b" aria-label="How to"><span>i</span></button>';
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;
     var name=n.textContent.replace(/ /g,' ').trim(); if(!NAMES[name]) return;
     n.insertAdjacentHTML('beforeend',INFO_BTN);
-    var b=n.querySelector('.info-b'); b.setAttribute('aria-label','Uitvoering '+name);
+    var b=n.querySelector('.info-b'); b.setAttribute('aria-label','How to '+name);
     b.addEventListener('click',function(e){ e.stopPropagation(); open(name,b); });
   });
   bg.addEventListener('click',close); sh.querySelector('.sheet-x').addEventListener('click',close);

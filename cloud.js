@@ -25,9 +25,9 @@
   function stamp(){
     var el=document.getElementById('syncStamp'); if(!el) return;
     var msg='';
-    if(!navigator.onLine) msg='Offline · wat je invult wordt bewaard zodra je online bent';
-    else if(down) msg='Database niet bereikbaar · je gegevens blijven op dit toestel bewaard';
-    else if(queue.length && pulled) msg='Nog niet bewaard · even geduld';
+    if(!navigator.onLine) msg='Offline · what you enter is saved once you are online';
+    else if(down) msg='Database unreachable · your data stays saved on this device';
+    else if(queue.length && pulled) msg='Not saved yet · one moment';
     if(msg){ el.textContent=msg; el.classList.add('warn'); }
     else if(el.classList.contains('warn')){ el.textContent=''; el.classList.remove('warn'); }
   }
@@ -107,34 +107,34 @@
     o=document.createElement('div'); o.id='p53-login';
     o.innerHTML='<form class="lg-card" novalidate>'+
       '<h1>Protocol <em>53</em></h1>'+
-      '<p class="lg-sub">Log in om je gegevens op al je toestellen te bewaren.</p>'+
-      '<label>E-mail<input type="email" name="email" autocomplete="username" required></label>'+
-      '<label>Wachtwoord<input type="password" name="pw" autocomplete="current-password" required minlength="6"></label>'+
+      '<p class="lg-sub">Log in to save your data across all your devices.</p>'+
+      '<label>Email<input type="email" name="email" autocomplete="username" required></label>'+
+      '<label>Password<input type="password" name="pw" autocomplete="current-password" required minlength="6"></label>'+
       '<p class="lg-msg" role="status"></p>'+
-      '<button type="submit" class="lg-main">Inloggen</button>'+
-      '<button type="button" class="lg-alt">Nog geen account? Account aanmaken</button>'+
+      '<button type="submit" class="lg-main">Log in</button>'+
+      '<button type="button" class="lg-alt">No account yet? Create account</button>'+
     '</form>';
     document.body.appendChild(o);
     var f=o.querySelector('form'), m=o.querySelector('.lg-msg'), signup=false;
     if(msg) m.textContent=msg;
     o.querySelector('.lg-alt').addEventListener('click',function(){
       signup=!signup;
-      o.querySelector('.lg-main').textContent=signup?'Account aanmaken':'Inloggen';
-      this.textContent=signup?'Al een account? Inloggen':'Nog geen account? Account aanmaken';
+      o.querySelector('.lg-main').textContent=signup?'Create account':'Log in';
+      this.textContent=signup?'Already have an account? Log in':'No account yet? Create account';
       f.pw.setAttribute('autocomplete',signup?'new-password':'current-password');
       m.textContent='';
     });
     f.addEventListener('submit',function(e){
       e.preventDefault();
       var email=f.email.value.trim(), pw=f.pw.value;
-      if(!email||pw.length<6){ m.textContent='Vul je e-mail in en een wachtwoord van minstens 6 tekens.'; return; }
-      m.textContent=signup?'Account aanmaken…':'Inloggen…';
+      if(!email||pw.length<6){ m.textContent='Enter your email and a password of at least 6 characters.'; return; }
+      m.textContent=signup?'Creating account…':'Logging in…';
       var p=signup?sb.auth.signUp({email:email,password:pw}):sb.auth.signInWithPassword({email:email,password:pw});
       p.then(function(r){
-        if(r.error){ m.textContent=/Invalid login/i.test(r.error.message)?'E-mail of wachtwoord klopt niet.':/not confirmed/i.test(r.error.message)?'Bevestig eerst je e-mailadres via de mail die je kreeg.':r.error.message; return; }
-        if(signup && !r.data.session){ m.textContent='Account aangemaakt. Bevestig via de mail die je kreeg, en log dan hier in.'; signup=false; o.querySelector('.lg-main').textContent='Inloggen'; return; }
+        if(r.error){ m.textContent=/Invalid login/i.test(r.error.message)?'Email or password is incorrect.':/not confirmed/i.test(r.error.message)?'First confirm your email address via the email you received.':r.error.message; return; }
+        if(signup && !r.data.session){ m.textContent='Account created. Confirm via the email you received, then log in here.'; signup=false; o.querySelector('.lg-main').textContent='Log in'; return; }
         o.hidden=true; start(r.data.user||r.data.session.user);
-      },function(){ m.textContent='Geen verbinding. Probeer opnieuw zodra je online bent.'; });
+      },function(){ m.textContent='No connection. Try again once you are online.'; });
     });
   }
 
@@ -168,7 +168,7 @@
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1000);
   };
   window.p53Logout=function(){
-    if(queue.length && !confirm('Er zijn nog wijzigingen die niet bewaard zijn. Toch uitloggen?')) return;
+    if(queue.length && !confirm('Some changes have not been saved yet. Log out anyway?')) return;
     sb.auth.signOut().then(function(){ ['p53-queue','p53-cache'].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} }); location.reload(); });
   };
 
