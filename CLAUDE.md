@@ -58,7 +58,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
 
 ## Navigatie
-- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 86% met blur 24px en saturate 130%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'target_check', als inline SVG)
+- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 66% (donker 62%) met blur 26px en saturate 160%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'target_check', als inline SVG)
   en **Coverage** (vroeger Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
   `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = naar boven scrollen.
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
@@ -194,7 +194,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
-- De i-knop toont een cursieve 'i' in Fraunces (`INFO_ICON` = `<span class="ib-i">i</span>`, 600 19px), zoals de titel;
+- De i-knop toont een rechte 'i' in Fraunces (`INFO_ICON` = `<span class="ib-i">i</span>`, 600 18px, gecentreerd);
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`) helemaal rechts; in de workout achter het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 4.2rem 36px`; invulveld smal, past '999'/'12,5'/'reps'), op één lijn met het groepspotlood, in het keuzeblad links van het sets-knopje.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
