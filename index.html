@@ -3246,10 +3246,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var main=document.getElementById(TAB[v]||'t-schema');
     var mainActive=main.getAttribute('aria-selected')==='true';
     if(!mainActive) main.click();
-    if(!TAB[v] && window.__ksub){ var want=v==='progress'?1:0; if(mainActive) window.scrollTo({top:0}); setTimeout(function(){ ksub(want); }, mainActive?0:150); }
-    else if(mainActive) window.scrollTo({top:0});
+    if(!TAB[v] && window.__ksub){ var want=v==='progress'?1:0; setTimeout(function(){ ksub(want); toTop(); }, mainActive?0:150); }
     paint(v);
+    /* altijd bovenaan beginnen, ook als het wisselen van tab zelf nog scrolt */
+    toTop(); setTimeout(toTop,200); setTimeout(toTop,450);
   }
+  function toTop(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,0); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
   /* bestaande sprongen (bv. End workout → Progress) volgen */
   var ksub=window.__ksub||function(){};
   window.__ksub=function(i){ ksub(i); if(document.getElementById('t-schema').getAttribute('aria-selected')==='true') paint(i===1?'progress':'workout'); };
