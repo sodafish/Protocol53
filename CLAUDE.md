@@ -113,3 +113,18 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   alle metingen (nieuwste eerst) met een vuilbakje, altijd met bevestiging. Lange lijsten scrollen in het blad.
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
+
+## Oefeningen per groep kiezen (test: alleen groep 1, Front legs)
+- Structuur ligt vast: Warm-up + 8 groepen. Binnen een groep staan álle mogelijke oefeningen als gewone
+  rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
+- Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Minstens
+  één oefening blijft aan. Keuze in localStorage `fitlog-groups` en Supabase collectie `cfg`, doc `groups`
+  (`{g1:[sleutels die aan staan]}`); zonder keuze gelden de rijen die in de HTML niet `ex-off` zijn.
+- Omdat alles per oefeningsleutel wordt bewaard, blijft de geschiedenis van een uitgezette oefening
+  bestaan: Per exercise toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
+  `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
+- Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen.
+- Extra oefeningen groep 1: `x1-leg-press`, `x1-leg-extension`, `x1-db-step-up`, `x1-walking-lunge`,
+  `x1-hack-squat` (met MUSCLES, NAMES, EX-uitleg en foto's). Nieuwe groep uitbreiden: rijen met
+  `data-grp="gN"` + `ex-off` toevoegen, `data-grp` op de kop en een `.grp-edit`-knop, plus MUSCLES/NAMES/EX/IMG.
+
