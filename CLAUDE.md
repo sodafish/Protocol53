@@ -57,7 +57,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
 
 ## Navigatie
-- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 38% oppervlakkleur, blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout**
+- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 26% oppervlakkleur (donker 24%), blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout**
   en **Progress**, plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
   `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = naar boven scrollen.
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
@@ -160,8 +160,11 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (klasse `.over`, hogere z-index).
 - Extra's bevatten bewust ook de klassiekers (barbell squat, deadlift, bench press, rows, overhead press, chin-ups,
   hanging leg raise, skull crusher …), ook als ze minder rug- of kniesparend zijn. Risico's krijgen een label in de
-  accentkleur (`--accent`, geen eigen rood): `<span class="exr-warn">· Back</span>` of `· Knees` (ook `· Shoulders`,
-  `· Elbows`), zonder uitroepteken; onderrug/bovenrug heet gewoon Back. Achteraan in `.exr-s`. Het keuzeblad toont dat label mee.
+  accentkleur (`--accent`, geen eigen rood): `<span class="exr-warn">· Back!</span>` of `· Knees!` (ook `· Shoulders!`,
+  `· Elbows!`), één woord met uitroepteken direct erachter; onderrug/bovenrug heet gewoon Back. Achteraan in `.exr-s`. Het keuzeblad toont dat label mee.
+- Elke groep heeft zowel gangbare gym-oefeningen (machines, kabels, dumbbells, barbell) als calisthenics voor thuis
+  (push-up-varianten, pistol/jump squat, nordic curl, inverted/ring row, pull-ups, handstand push-ups, core op de mat …).
+  Eenheid: kg bij gewicht, reps bij lichaamsgewicht, geen invulveld bij tijd of eenvoudige oefeningen.
 - De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
