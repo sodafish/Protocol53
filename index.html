@@ -3032,7 +3032,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         var TX='font-size="11" fill="var(--muted)" font-family="Work Sans,system-ui,sans-serif"', base='<line x1="0" x2="'+W+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--line)"/>';
         /* nog niets: lege grafiek met uitleg */
         if(none){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="No progress yet">'+base+
-          '<text x="'+(W/2)+'" y="'+((H-B)/2+4)+'" text-anchor="middle" '+TX.replace('11','13')+'>No progress yet · add a value with the pencil</text></svg>'; return; }
+          '<text x="'+(W/2)+'" y="'+((H-B)/2+4)+'" text-anchor="middle" '+TX.replace('11','13')+'>No progress recorded yet</text></svg>'; return; }
         /* één meting: bolletje in het midden, één datum eronder */
         if(pts.length===1){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Progress chart">'+base+
           '<circle cx="'+(W/2)+'" cy="'+((H-B)/2)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'+

@@ -133,7 +133,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   potlood (`window.__progEdit(k)` opent `#pe-sheet` bovenop, klasse `.top`) en een mini-grafiek van de eerste tot de
   laatste meting (geen periodefilter), datums altijd met jaar (`dLabY`). Getekend pas als het venster zichtbaar is, op de
   echte breedte (geen `preserveAspectRatio=none`, anders uitgerekt); het blok staat er bij elke oefening met een invulveld: zonder metingen '–' en een lege grafiek met
-  'No progress yet · add a value with the pencil', bij één meting een bolletje in het midden met één datum. In de grafiek onder Progress komt het jaar
+  'No progress recorded yet', bij één meting een bolletje in het midden met één datum. In de grafiek onder Progress komt het jaar
   erbij zodra een datum niet in dit jaar valt (`dLabYr`). Ververst live via event `p53-prog` (gestuurd door `saveProgLocal`).
 - Potloodknop (`#progEdit`, alleen icoon) rechts op de lijn van het huidige gewicht opent een
   onderblad (`#pe-sheet`, zelfde stijl als de oefeninguitleg; sluiten met kruisje, naast tikken of Esc):
