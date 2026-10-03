@@ -566,7 +566,8 @@ body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
 .exr-s{font-weight:500;font-size:12.5px;letter-spacing:0;}
 .note{border:1.5px solid var(--line);border-radius:10px;background:var(--surface);font-family:'Work Sans',system-ui,sans-serif;}
 .note.exr-in{font-family:'Work Sans',system-ui,sans-serif;font-weight:600;border-radius:10px;min-height:44px;}
-.note:focus{outline:2.5px solid var(--accent);outline-offset:1px;}
+.note:focus{outline:none;border-color:color-mix(in srgb,var(--accent) 50%,var(--line));}
+#s-d3 .note.exr-in:focus,.note.sess-note:focus{outline:none;border-color:color-mix(in srgb,var(--accent) 50%,var(--line));box-shadow:none;}
 .wk-d{font-weight:600;font-size:12px;letter-spacing:.1em;}
 .wk-t{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;}
 .wk-t em{font-family:'Work Sans',system-ui,sans-serif;font-weight:500;font-size:12.5px;}
