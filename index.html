@@ -1755,7 +1755,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
           empty[0].focus(); setTimeout(function(){ empty.forEach(function(x){ x.classList.remove('need'); }); },1600); return; } } if(on) checks[k]=true; else delete checks[k];
       paintChecks(); saveChecksLocal();
       if(chkCol){ (on?chkCol.doc(k).set({done:true,at:Date.now()}):chkCol.doc(k).delete()).catch(function(){}); }
-      if(!on && window.__progDropToday) window.__progDropToday(b.closest('.exr'));
+      if(!on && window.__progDropToday) window.__progDropToday(b.closest('.exr'), window.__lastHistDay?window.__lastHistDay(k):null);
       if(!b.closest('.exr-wu')) bumpCount(k,on?1:-1);
     });
   });
@@ -2062,6 +2062,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     return out;
   }
   document.addEventListener('p53-prog',function(){ renderStats(); });
+  window.__lastHistDay=function(k){ var t=0; Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&e.t>t) t=e.t; });
+    if(!t) return null; var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); };
   window.__exStat=function(k){ var n=0,last=0; events().forEach(function(e){ if(e.k===k){ n++; if(e.t>last) last=e.t; } }); return {n:n,last:last}; };
   /* meting verwijderd in de grafiek: ook de vinkjes-gebeurtenis(sen) van die oefening op die dag weg, zodat alles klopt */
   window.__histDropDay=function(k,d){
@@ -2243,7 +2245,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
   window.__progAll=function(){ return prog; };
   /* uitvinken = deze sessie ongedaan: ook de meting(en) van vandaag van die oefening weg */
-  window.__progDropToday=function(li){ var td=ymd(Date.now()); li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var id=x.dataset.note+'@'+td; if(prog[id]){ progDel(id); } }); saveProgLocal(); if(typeof renderProg==='function') renderProg(); };
+  window.__progDropToday=function(li,day){ var td=day||ymd(Date.now()); li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var id=x.dataset.note+'@'+td; if(prog[id]){ progDel(id); } }); saveProgLocal(); if(typeof renderProg==='function') renderProg(); };
   window.__progRecord=progRecord; window.__renderProg=function(){ renderProg(); };
   function progInputs(){ return [].slice.call(document.querySelectorAll('#s-d3 .exr:not(.exr-wu) .exr-in[data-note]')); }
   function progLabel(inp){ return (inp.getAttribute('aria-label')||inp.dataset.note).replace(/\s+—\s+\S+$/,''); }
@@ -2508,7 +2510,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       }
     },function(){});
     chkCol.onSnapshot(function(snap){
-      var next={}; snap.docs.forEach(function(d){ if(d.exists && (d.data()||{}).done) next[d.id]=true; });
+      /* vinkjes van een vorige dag (vergeten New/Finish workout) vervallen vanzelf; de registratie zelf blijft */
+      var next={}, today=new Date().toDateString();
+      snap.docs.forEach(function(d){ if(!d.exists) return; var x=d.data()||{}; if(!x.done) return;
+        if(!x.at || new Date(x.at).toDateString()!==today){ chkCol.doc(d.id).delete().catch(function(){}); return; }
+        next[d.id]=true; });
       checks=next; saveChecksLocal(); paintChecks();
     },function(){});
     var first=true;
@@ -2545,6 +2551,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
       var last=pts[pts.length-1], key=keyOf(inp), at=(local[key]&&local[key].at)||0;
       if(inp.value.trim() && at>last.t) return;
+      var cur=parseFloat(String(inp.value).replace(',','.')); if(cur===last.v) return; /* zelfde getal (bv. '12,5'): laten staan */
       var v=String(Math.round(last.v*100)/100);
       if(inp.value!==v){ inp.value=v; if(!local[key]) local[key]={}; local[key].t=v; }
     });

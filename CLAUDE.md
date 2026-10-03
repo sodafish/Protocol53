@@ -111,6 +111,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Het invulveld toont de laatste waarde uit de grafiek (`syncFromChart`, bij laden, na de log-snapshot en bij `p53-prog`),
   tenzij je daarna zelf iets typte dat nog niet bevestigd is (`local[key].at` > tijd laatste meting). Typen wordt pas een
   meting bij afvinken; aanpassen kan ook via het potlood.
+- Vinkjes gelden voor één dag: in de `checks`-snapshot vervallen vinkjes van een vorige kalenderdag (of zonder `at`)
+  vanzelf (doc gewist); hist en metingen blijven. Uitvinken wist de meting van de dag van de laatste hist-rij van die
+  oefening (`__lastHistDay`), niet blind 'vandaag' (middernacht).
 - Afvinken kan alleen met een waarde in elk invulveld van de rij (de vorige waarde die er nog staat volstaat): een leeg
   veld licht op in de accentkleur, schudt even (`.need`) en krijgt de focus. Zo heeft elke training een punt in de grafiek.
 - Het getal 'N×' bij een oefening = aantal trainingen in de statistieken (`window.__exStat(k)` uit `events()`: vinkjes +
