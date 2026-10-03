@@ -113,7 +113,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
 
-## Progressie per oefening (onderaan subtab Progress, kop 'Active exercises')
+## Progressie per oefening
+- Het blok 'Active exercises' onder Progress (`#prog`) is verborgen (`hidden`): progressie bekijk je nu onder de uitleg
+  (i-knop). De code erachter blijft, want `#pe-sheet`, `prog` en `window.__progPts` worden ook door het uitlegvenster gebruikt.
 - Schuifbare rij lijntabs (`#progChips`, zoals de subtabs, met spiergroepnummer ertussen; hero en grafiek
   hebben een vaste hoogte zodat niets verspringt) met alle invulvelden van Kracht (`#s-d3 .exr-in`, opwarming niet; supersets = twee
   aparte lijnen). Periodes Maand / 3 maanden / Alles. Keuzes onthouden

@@ -904,6 +904,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 
 /* ════════════ PROGRESSIE ════════════ */
 .prog{margin-top:3.4rem;}
+.prog[hidden]{display:none!important;}
 .prog-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
 .prog-chips{display:flex;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;
   margin:0 -1.4rem 1rem;padding:0 1.4rem;box-shadow:inset 0 -1.5px 0 var(--line);
@@ -1260,7 +1261,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
-      <div class="prog" id="prog">
+      <!-- Active exercises: verborgen, progressie staat nu onder de uitleg (i-knop). Code blijft (o.a. #pe-sheet). -->
+      <div class="prog" id="prog" hidden>
         <h2 class="prog-t">Active exercises</h2>
         <div class="prog-chips" id="progChips" role="tablist" aria-label="Exercise"></div>
         <div class="stats-per prog-per" role="group" aria-label="Progress period">
