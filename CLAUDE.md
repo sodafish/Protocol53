@@ -149,7 +149,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `{k: data-note, d: datum, t: tijdstip, v: getal}`. Geschreven bij afvinken (`bumpCount` → alle
   velden van die oefening) en bij elke wijziging van het veld (na de 500 ms-debounce). Zelfde dag
   = overschrijven; veld leegmaken (bij een afgevinkte rij) = punt van vandaag weg. Getal = eerste getal uit het veld ("12,5" → 12.5). Eenheid = placeholder (kg/reps/sec).
-- Eenmalig bij een lege `prog`: huidige waarden als eerste punt op de `last`-datum uit `counts`.
+- Geen automatische meetpunten meer: vroeger werden bij een lege `prog` alle ingevulde velden (ook warm-up) als meting
+  bewaard; dat is verwijderd, want het maakte metingen zonder afvinken (o.a. na het wissen van alle metingen).
 - Grafiek: eigen SVG in `renderProg()`, één lijn in de accentkleur, tik/sleep toont datum + waarde.
   In beide grafieken loopt de lijn door alle metingen, maar een bolletje staat alleen bij de eerste, de laatste en
   waar de waarde verandert.

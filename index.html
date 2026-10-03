@@ -2524,16 +2524,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       /* lokale punten die nog niet in de database staan meenemen */
       Object.keys(prog).forEach(function(id){ if(!next[id]&&snap.metadata.fromCache) next[id]=prog[id]; });
       prog=next; saveProgLocal(); renderProg();
-      /* eenmalig: huidige waarden als eerste meetpunt (op de laatste trainingsdatum van die oefening) */
-      if(!progReady && !snap.metadata.fromCache){
-        progReady=true;
-        if(!Object.keys(next).length){
-          progInputs().forEach(function(inp){
-            var li=inp.closest('.exr'), c=counts[chkKey(li)];
-            progRecord(inp, c&&c.last?c.last:Date.now());
-          });
-        }
-      }
+      /* (vroeger: bij een lege prog alle ingevulde velden als meting bewaren; weg, want metingen ontstaan alleen bij afvinken of met het potlood) */
     },function(){});
     cntCol.onSnapshot(function(snap){
       var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
