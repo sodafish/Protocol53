@@ -156,7 +156,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Potloodknop (`#progEdit`, alleen icoon) rechts op de lijn van het huidige gewicht opent een
   onderblad (`#pe-sheet`, zelfde stijl als de oefeninguitleg; sluiten met kruisje, naast tikken of Esc):
   bovenaan datum + waarde + Toevoegen (zelfde datum = overschrijven; tijdstip = 12u die dag), daaronder
-  alle metingen (nieuwste eerst) met een vuilbakje, altijd met bevestiging. Lange lijsten scrollen in het blad.
+  alle metingen (nieuwste eerst) met een vuilbakje (verwijdert meteen, zonder bevestiging). Lange lijsten scrollen in het blad.
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 - Alle onderbladen: `overscroll-behavior:contain`; zolang een `.sheet` zichtbaar is én klasse `on` heeft, staat de

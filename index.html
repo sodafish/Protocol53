@@ -2323,13 +2323,13 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
     body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
       var e=prog[b.dataset.id]; if(!e) return;
-      p53Confirm({title:'Delete measurement?',msg:dLab(e.t)+' '+new Date(e.t).getFullYear()+' · '+fmtV(e.v)+' '+D.unit,ok:'Delete',danger:true}).then(function(y){
-        if(!y) return; progDel(b.dataset.id);
+      /* meteen verwijderen, zonder bevestiging */
+ progDel(b.dataset.id);
         var _i=document.querySelector('#s-d3 .exr-in[data-note="'+e.k+'"]'), _li=_i&&_i.closest('.exr'); if(_li&&window.__histDropDay) window.__histDropDay(chkKey(_li),e.d);
         /* meting van vandaag weg terwijl de oefening afgevinkt staat: vinkje ook weg */
         if(_li&&e.d===ymd(Date.now())&&_li.classList.contains('done')){ var _c=_li.querySelector('.chk'); if(_c) _c.click(); }
         renderProg(); renderSheet(true);
-      });
+      
     }); });
     var f=body.querySelector('.pe-add');
     f.addEventListener('submit',function(ev){ ev.preventDefault();
