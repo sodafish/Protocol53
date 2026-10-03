@@ -92,7 +92,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   extension" → triceps.
 - Workout heeft bovenaan één omlijnde knop 'New workout' (`.reset-top`, niet volle breedte, met plus): vinkjes
   leeg en scrollen naar Warm-up; tellingen/hist zijn al bij het afvinken bewaard. (De oude End-knop is weg;
-  `window.__statsPer` bestaat nog.) Onder de laatste groep (Triceps) staat 'Finish workout' (`.finish-b`, zelfde omlijnde stijl,
+  `window.__statsPer` bestaat nog.) Onder de laatste groep (Arms) staat 'Finish workout' (`.finish-b`, zelfde omlijnde stijl,
   vinkje-icoon): na `p53Confirm` alle vinkjes leeg en naar boven scrollen; tellingen, kilo's en progressie blijven. Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
@@ -176,21 +176,15 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Eigen menu (geen native `<select>`: iOS toont dan grote systeemletters): knop `#splitBtn` (pil met chevron, 500 14.5px)
   rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
   accentkleur). Bij tikken en zolang het open is krijgt de knop de lichte vulling `--paper-soft` (zoals de ronde knoppen). Sluit bij keuze, tik ernaast, scrollen of Esc. Full = standaard; keuze in localStorage `fitlog-split`.
-- Upper = groepen 2, 4, 5, 6, 8, 9; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
+- Upper = groepen 2, 4, 5, 7; Lower = 1, 3, 6 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
 - Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; de kop 'Optional' boven Arms is weg). Vinkjes, tellingen, statistieken en progressie veranderen niet.
 
-## Materiaal: Gym / Calisthenics / Calisthenics + (zelfde menu als Full/Upper/Lower)
-- `#splitPop` heeft twee blokken: Body (`data-split`) en Equipment (`data-eq`: gym, cal, calp). Keuze in localStorage `fitlog-eq`
-  (alleen lokaal, zoals `fitlog-split`). Niet-gym toont een tweede regel in de knop (`#splitLbl small`, klasse `.two`).
-- Niveaus in `EQ` (picker-script): 0 = cal (lichaamsgewicht, mat, opstapje, elastiek, springtouw), 1 = cal+ (ook optrek-/dipstang,
-  ringen/TRX, bankje, dumbbells, kettlebell, bal), niet vermeld = gym (machines, kabels, barbells, grote toestellen).
-  Nieuwe oefening: ook in `EQ` zetten als ze zonder gym kan.
-- Elke modus heeft eigen keuzes per groep: cfg/groups-sleutel `g1` (gym), `cal:g1`, `calp:g1`; standaard `DEFM`. Historiek blijft gedeeld.
-  Rijen die niet passen krijgen `ex-off`; een groep zonder passende oefening krijgt `eq-off` (kop + rijen verborgen): bij
-  Calisthenics vallen 4, 6 en 8 weg. Het keuzeblad toont alleen passende oefeningen en een uitlegzin in `.gs-sub`.
-
-## Oefeningen per groep kiezen (Warm-up en groepen 1–9)
-- Structuur ligt vast: Warm-up + 9 groepen (8 Biceps en 9 Triceps waren vroeger samen 'Arms' = g8; supersets staan bij Triceps). Binnen een groep staan álle mogelijke oefeningen als gewone
+## Oefeningen per groep kiezen (Warm-up en groepen 1–7)
+- Structuur ligt vast: Warm-up + 7 groepen (6 à 7 oefeningen per sessie houdt de focus): 1 Front legs, 2 Chest, 3 Back legs, glutes &
+  calves, 4 Back (rows + pulldowns/pull-ups + face pull/bovenrug), 5 Shoulders, 6 Core, 7 Arms (biceps, triceps, onderarmen, supersets).
+  Vroeger 9 groepen: oude 4+6 = nu g4, oude 7 = nu g6, oude 8+9 = nu g7. Rijen dragen `data-og` (oude groep) voor de
+  volgorde (`cat`) en de eenmalige migratie (`migrate()`, vlag `v7` in cfg/groups: keuzes samengevoegd, Calisthenics-keuzes weg).
+  Standaard aan in Back: Chest-Supported Row, Lat Pulldown, Face Pull; in Arms: Dumbbell Biceps Curl, Triceps Rope Pushdown. Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
 - Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Titel + kruisje blijven
   bovenaan staan (sticky `.sheet-head`; bij scrollen klasse `.stuck` = dunne lijn eronder). Minstens
@@ -241,8 +235,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Geen foto's in de Free Exercise DB voor: Copenhagen plank, lateral raise machine, tibialis raise, hollow hold,
   suitcase carry, daarom niet toegevoegd.
 - Later toegevoegd: Smith Machine Bench Press, Dumbbell Bench Press (g2), Stability Ball Leg Curl (g3), Cable/Band External
-  Rotation (g5, rotator cuff, telt als Rear delts), Reverse Crunch, Dumbbell Side Bend (g7), EZ-Bar Curl, Triceps Bar Pushdown,
-  Spider Curl (g8). Bewust niet: Glute-Ham Raise en Smith shoulder press (foto's tonen een verkeerde/riskante variant).
+  Rotation (g5, rotator cuff, telt als Rear delts), Reverse Crunch, Dumbbell Side Bend (nu g6), EZ-Bar Curl, Triceps Bar Pushdown,
+  Spider Curl (nu g7). Bewust niet: Glute-Ham Raise en Smith shoulder press (foto's tonen een verkeerde/riskante variant).
 - Dubbels opgeruimd: `x2-incline-db-press` en `x4-incline-db-row` waren dezelfde oefening als `d1-dumbbell-chest-press`
   (nu schermnaam 'Incline Dumbbell Press', bank 15–30°) en `d3-chest-supported-row`; hun rijen zijn weg, MUSCLES-regels
   blijven voor oude historiek. 'Plank + Side Plank' is gesplitst: `d1-plank` = 'Plank', nieuw `x7-side-plank` = 'Side Plank'
@@ -250,8 +244,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Back!-label alleen bij onondersteund voorover scharnieren met gewicht (deadlifts, RDL, good morning, swing, bent-over rows,
   barbell squats, staande overhead press) en belaste rug-flexie/rotatie in core. Niet bij goblet squat, farmer's carry,
   seated cable row, one-arm DB row (hand op de bank).
-- `sortRows` (`cat`): supersets (twee invulvelden) achteraan, bij Biceps de onderarmen (wrist/reverse) na de curls; daarbinnen laag + `POP`.
-  Bij de splitsing verhuisde `migrate()` de gekozen triceps-sleutels van cfg.g8 naar cfg.g9 (eenmalig, zolang er geen g9 is).
-- Geen tussenkop meer boven de supersets (Triceps): ze sluiten gewoon aan (staan achteraan in `POP`).
+- `sortRows` (`cat`): Back = eerst rows (`data-og` g4), dan verticaal/bovenrug (g6); Arms = curls, onderarmen (wrist/reverse),
+  triceps (g9), supersets (twee invulvelden); daarbinnen laag + `POP`. Calisthenics-filter is weer verwijderd (op vraag van Tom).
+- Geen tussenkop meer boven de supersets (Arms): ze sluiten gewoon aan (staan achteraan in `POP`).
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
