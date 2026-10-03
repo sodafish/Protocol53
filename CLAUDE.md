@@ -106,6 +106,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   die rij) of met het potlood; typen in het veld meet alleen als de rij al afgevinkt is (dan wordt de meting van vandaag
   bijgewerkt). Uitvinken wist de meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet.
   New/Finish workout wissen alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
+- Afvinken kan alleen met een waarde in elk invulveld van de rij (de vorige waarde die er nog staat volstaat): een leeg
+  veld licht op in de accentkleur, schudt even (`.need`) en krijgt de focus. Zo heeft elke training een punt in de grafiek.
 - Het getal 'N×' bij een oefening = aantal trainingen in de statistieken (`window.__exStat(k)` uit `events()`: vinkjes +
   metingen, één per dag); warm-up gebruikt nog `counts`. Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
   Een meting verwijderen wist ook de hist-rij(en) van die oefening op die dag (`__histDropDay`), en is het vandaag en
