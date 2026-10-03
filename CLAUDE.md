@@ -58,8 +58,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
 
 ## Navigatie
-- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 26% oppervlakkleur (donker 24%), blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout** (icoon: lijstje met vinkjes)
-  en **Coverage** (vroeger Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: lichaamssilhouet), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
+- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 26% oppervlakkleur (donker 24%), blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout** (icoon: Material Symbols 'target_check', als inline SVG)
+  en **Coverage** (vroeger Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
   `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = naar boven scrollen.
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
   de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
