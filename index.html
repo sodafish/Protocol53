@@ -2127,8 +2127,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       if(anim){ var p=document.getElementById(tabs[i].getAttribute('aria-controls')); if(i===0&&window.__cascadeSchema) window.__cascadeSchema(); else if(typeof reveal==='function') reveal(p); }
     }
     window.__ksub=function(i){ show(i,true); };
-    var start=0; try{ start=+localStorage.getItem(KEY)||0; }catch(e){}
-    show(start===1?1:0,false);
+    /* de app opent altijd op Workout */
+    show(0,false);
     requestAnimationFrame(function(){ bar.classList.add('ready'); });
     tabs.forEach(function(t,n){ t.addEventListener('click',function(){ show(n,true); }); });
   })();
@@ -3018,7 +3018,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     moreBtn.classList.toggle('on',!!TAB[v]);
     sh.querySelectorAll('[data-view]').forEach(function(b){ if(b.dataset.view===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
     if(title) title.textContent=NAMES[v]||'';
-    try{ localStorage.setItem('fitlog-view',v); }catch(e){}
   }
   function go(v){
     if(v===view){ window.scrollTo({top:0,behavior:'smooth'}); return; }
@@ -3043,10 +3042,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   bg.addEventListener('click',closeMore); sh.querySelector('.sheet-x').addEventListener('click',closeMore);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeMore(); });
   sh.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ closeMore(); var v=b.dataset.view; setTimeout(function(){ if(v===view) window.scrollTo({top:0}); else go(v); },180); }); });
-  /* laatste pagina terug (Cardio, Diet of Info; Workout/Progress onthoudt fitlog-ksub al) */
-  var saved=null; try{ saved=localStorage.getItem('fitlog-view'); }catch(e){}
   paint(current());
-  if(saved && TAB[saved] && saved!==view){ document.getElementById(TAB[saved]).click(); paint(saved); window.scrollTo(0,0); }
 })();
 </script>
 <script>
