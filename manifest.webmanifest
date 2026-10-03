@@ -1,6 +1,6 @@
 {
-  "name": "Protocol 53",
-  "short_name": "Protocol 53",
+  "name": "Protocol",
+  "short_name": "Protocol",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -8,8 +8,8 @@
   "theme_color": "#F7F2EA",
   "lang": "en",
   "icons": [
-    { "src": "icons/p53-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/p53-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icons/p53-1024.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
+    { "src": "icons/app-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/app-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/app-1024.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
   ]
 }

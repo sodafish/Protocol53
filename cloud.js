@@ -104,7 +104,7 @@
     var o=document.getElementById('p53-login'); if(o){ o.hidden=false; if(msg) o.querySelector('.lg-msg').textContent=msg; return; }
     o=document.createElement('div'); o.id='p53-login';
     o.innerHTML='<form class="lg-card" novalidate>'+
-      '<h1>Protocol <em>53</em></h1>'+
+      '<h1>Protocol</h1>'+
       '<p class="lg-sub">Log in to save your data across all your devices.</p>'+
       '<label>Email<input type="email" name="email" autocomplete="username" required></label>'+
       '<label>Password<input type="password" name="pw" autocomplete="current-password" required minlength="6"></label>'+

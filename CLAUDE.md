@@ -13,7 +13,8 @@ vooral op zijn iPhone, als app op het beginscherm.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
 - `sw.js` — service worker (`const VERSION = 'p53-vN';`, let op de spaties bij zoeken/vervangen). Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
   (icons, cloud.js, vendor) zodat de iPhone de nieuwe versie ophaalt.
-- `manifest.webmanifest`, `icons/` — app-naam en icoon (eigen ontwerp van Tom, `p53-*.png`).
+- `manifest.webmanifest`, `icons/` — app-naam 'Protocol' (generiek, ook `apple-mobile-web-app-title` en `<title>`) en
+  icoon `app-*.png` (180/192/512/1024, beeld van Tom: sporter met oranje cirkel). De oude `p53-*.png` worden niet meer gebruikt.
 - `img/` — oefenfoto's (Free Exercise DB, begin/eind), wisselen automatisch onder de i-knop.
 - `vendor/supabase.js` — supabase-js v2, lokaal voor offline gebruik.
 - `seed.json` — oude gegevens van Tom; wordt niet meer geïmporteerd (nieuwe accounts starten leeg). Niet aanpassen.
@@ -46,12 +47,13 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   in `NAMES` (bv. 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
 ## Leeftijd in de titel (Protocol + leeftijd)
-- Kop `<em id="ageNum">`, `document.title` en meta `apple-mobile-web-app-title` tonen 'Protocol' + leeftijd; zonder
-  geboortedatum 53. Berekend bij laden en bij terugkeren naar de app (verjaardag schuift vanzelf op).
+- Alleen in de kop van de app: `Protocol <em id="ageNum">` + leeftijd; zonder geboortedatum 53. App-naam, `<title>` en
+  icoon blijven generiek ('Protocol'). Het inlogscherm toont gewoon 'Protocol'.
+- Tik op het getal = geboortedatum kiezen: een onzichtbaar `<input type="date" id="dobIn">` ligt over het getal
+  (`.age-w`); iOS opent zo de eigen datumkiezer, elders `showPicker()`. Leegmaken = terug naar 53.
 - Geboortedatum: bij 'Create account' verplicht veld (`cloud.js`, `user_metadata.dob` via `signUp`); daarna in
-  collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. Aanpasbaar op Info › App
-  (`#dobIn`). `cloud.js` zet `window.__p53user` en stuurt event `p53-user`.
-- App-icoon blijft voorlopig de vaste 53 (iOS haalt het icoon alleen op bij 'Zet op beginscherm').
+  collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. `cloud.js` zet
+  `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: warm frosted glas, 38% oppervlakkleur, blur 30px, saturate 210%, witte lichtrand — Tom verkiest deze warmere tint boven neutraal): pil met **Workout**
