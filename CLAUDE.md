@@ -195,7 +195,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
 - Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen. Eén oefening gedaan = groep af: kop doorgestreept en de andere
   oefeningen van die groep krijgen `grp-skip` (doorgestreept, 40%, blijven aanklikbaar). Niet bij de opwarming: die is pas af als
-  alles gedaan is en strijpt niets door.
+  alles gedaan is en strijpt niets door. De tussenkoppen (`.exsub`) van een afgevinkte groep worden mee grijs (`sub-off`).
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep, plus MUSCLES/NAMES/EX/IMG.

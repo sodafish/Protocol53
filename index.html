@@ -736,6 +736,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exr.grp-skip .exr-n,.exr.grp-skip .exr-s,.exr.grp-skip .wu-list span,.exr.grp-skip .wu-list em{color:var(--muted-soft);text-decoration:line-through;text-decoration-thickness:1px;}
 .exr.grp-skip .exr-s *{color:inherit;}
 .exr.grp-skip{opacity:.4;}
+.exsub.sub-off{opacity:.45;}
 .exgrp:has(.grp-n),.exgrp:has(.grp-edit){display:flex;align-items:baseline;gap:.6rem;}
 .exgrp[data-grp="g0"]{align-items:center;}
 .grp-n{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:34px;line-height:.9;letter-spacing:0;text-transform:none;color:var(--accent);min-width:1.1ch;}
@@ -1766,6 +1767,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       g.classList.toggle('grp-done',anyDone);
       /* één oefening gedaan = groep af: de andere worden doorgestreept (blijven wel aanklikbaar); niet bij de opwarming */
       rows.forEach(function(r){ r.classList.toggle('grp-skip',!wu && anyDone && !r.classList.contains('done')); });
+      /* tussenkoppen (Biceps, Triceps …) mee grijs */
+      for(var h=g.nextElementSibling; h && !h.classList.contains('exgrp'); h=h.nextElementSibling) if(h.classList.contains('exsub')) h.classList.toggle('sub-off',!wu && anyDone);
     });
   }
   function saveChecksLocal(){ try{ localStorage.setItem(CHKKEY,JSON.stringify(checks)); }catch(e){} }
