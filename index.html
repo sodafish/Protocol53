@@ -743,6 +743,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exr.done .exr-warn{color:var(--muted-soft);}
 
 .info-b{appearance:none;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:.4rem;vertical-align:2px;border-radius:50%;border:1.3px solid var(--muted-soft);background:transparent;color:var(--muted);padding:0;}
+.info-b.nop{color:var(--muted-soft);border-color:var(--line);}
 .info-b span{font:700 11px/1 'Work Sans',system-ui,sans-serif;}
 .info-b::after{content:"";position:absolute;inset:-12px;}
 .info-b:hover{color:var(--ink);border-color:var(--ink);}
@@ -3006,6 +3007,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var b=n.querySelector('.info-b'); b.setAttribute('aria-label','How to '+name);
     b.addEventListener('click',function(e){ e.stopPropagation(); open(name,b); });
   });
+  /* i-knop iets lichter bij oefeningen zonder opgeslagen progressie */
+  function markProg(){
+    if(!window.__progPts) return;
+    document.querySelectorAll('#s-d3 .exr').forEach(function(li){ var b=li.querySelector('.info-b'); if(!b) return;
+      var has=[].some.call(li.querySelectorAll('.exr-in[data-note]'),function(inp){ return window.__progPts(inp.dataset.note).length>0; });
+      b.classList.toggle('nop',!has); });
+  }
+  markProg(); document.addEventListener('p53-prog',markProg);
   bg.addEventListener('click',close); sh.querySelector('.sheet-x').addEventListener('click',close);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !sh.hidden) close(); });
   window.__p53info={has:function(name){ return !!NAMES[name]; },open:function(name,btn){ open(name,btn,true); }};
@@ -3122,7 +3131,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var ordered=rows(cur), safe=ordered.filter(function(li){ return !li.classList.contains('exr-danger'); }), risky=ordered.filter(function(li){ return li.classList.contains('exr-danger'); });
     list.innerHTML=safe.concat(risky).map(function(li){ var k=keyOf(li), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
-      var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'"><span>i</span></button>':'';
+      var rib=li.querySelector('.info-b'), nop=rib&&rib.classList.contains('nop')?' nop':'';
+      var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b'+nop+'" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'"><span>i</span></button>':'';
       return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+ib+'</b><small>'+st+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; }).join('');
     list.querySelectorAll('.info-b').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); window.__p53info.open(b.dataset.n,b); }); });
     list.querySelectorAll('.sw').forEach(function(c){ c.addEventListener('change',function(){

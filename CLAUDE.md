@@ -167,6 +167,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
 - Alleen oefeningen met echte foto's (Free Exercise DB, begin/eind in `IMG`); getekende animaties zonder foto's
   (Torso Rotation, Bird Dog) zijn verwijderd. Nieuwe oefeningen dus altijd met twee foto's.
+- De i-knop is iets lichter (klasse `.nop`) bij oefeningen zonder opgeslagen progressie (`markProg`, ververst bij `p53-prog`),
+  ook in het keuzeblad; zo zie je waar progressie te bekijken valt.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
   (klasse `.over`, hogere z-index).
 - Extra's bevatten bewust ook de klassiekers (barbell squat, deadlift, bench press, rows, overhead press, chin-ups,
