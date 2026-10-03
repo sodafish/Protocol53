@@ -3448,6 +3448,35 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
   var mo=new MutationObserver(sync);
   sheets.forEach(function(s){ mo.observe(s,{attributes:true,attributeFilter:['hidden','class']}); });
+  /* omlaag vegen sluit een onderblad: altijd vanaf de grip/titel, elders alleen als de inhoud bovenaan staat */
+  sheets.forEach(function(sh){
+    var bg=sh.previousElementSibling; if(bg && !bg.classList.contains('sheet-bg')) bg=null;
+    var y0=0,x0=0,t0=0,dy=0,st0=0,handle=false,drag=false,armed=false;
+    sh.addEventListener('touchstart',function(e){
+      if(e.touches.length!==1 || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)){ armed=false; return; }
+      var t=e.touches[0]; y0=t.clientY; x0=t.clientX; t0=Date.now(); dy=0; drag=false; armed=true; st0=sh.scrollTop;
+      handle=!!e.target.closest('.sheet-grip,.sheet-head');
+    },{passive:true});
+    sh.addEventListener('touchmove',function(e){
+      if(!armed) return; var t=e.touches[0], d=t.clientY-y0, dx=Math.abs(t.clientX-x0);
+      if(!drag){
+        if(d<8 && dx<8) return;
+        if(d<=dx || !(handle || (st0<=0 && sh.scrollTop<=0))){ armed=false; return; }
+        drag=true; y0=t.clientY; d=0; sh.style.transition='none'; if(bg) bg.style.transition='none';
+      }
+      e.preventDefault(); dy=Math.max(0,d);
+      sh.style.transform='translateY('+dy+'px)';
+      if(bg) bg.style.opacity=String(Math.max(0,1-dy/(sh.offsetHeight||1)));
+    },{passive:false});
+    function end(){
+      if(!drag){ armed=false; return; }
+      drag=false; armed=false;
+      var v=dy/Math.max(1,Date.now()-t0), close=dy>Math.min(140,sh.offsetHeight*.3) || (v>.6 && dy>30);
+      sh.style.transition=''; sh.style.transform=''; if(bg){ bg.style.transition=''; bg.style.opacity=''; }
+      if(close){ var x=sh.querySelector('.sheet-x'); if(x) x.click(); }
+    }
+    sh.addEventListener('touchend',end); sh.addEventListener('touchcancel',end);
+  });
   /* naast het blad slepen doet niets */
   document.querySelectorAll('.sheet-bg').forEach(function(bg){ bg.addEventListener('touchmove',function(e){ e.preventDefault(); },{passive:false}); });
 })();
