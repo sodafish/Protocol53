@@ -752,7 +752,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 
 .info-b{appearance:none;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:.4rem;vertical-align:2px;border-radius:50%;border:1.3px solid var(--muted-soft);background:transparent;color:var(--muted);padding:0;}
 .exr > .info-b,.gs-list .info-b{width:36px;height:36px;margin:0;vertical-align:0;flex:none;border:1.5px solid var(--muted-soft);color:var(--muted);align-self:center;}
-.exr > .info-b span,.gs-list .info-b span{font-size:13px;}
+.exr > .info-b .ib-i,.gs-list .info-b .ib-i{font:italic 600 19px/1 'Fraunces',Georgia,serif;margin-top:-1px;}
 .exr > .info-b::after,.gs-list .info-b::after{inset:-4px;}
 .info-b span{font:700 11px/1 'Work Sans',system-ui,sans-serif;}
 .info-b::after{content:"";position:absolute;inset:-12px;}
@@ -3089,7 +3089,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     });
   }
   document.addEventListener('p53-prog',function(){ if(!sh.hidden && curName) progBlock(curName); });
-  var INFO_ICON='<svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>'; window.__p53infoIcon=INFO_ICON;
+  var INFO_ICON='<span class="ib-i" aria-hidden="true">i</span>'; window.__p53infoIcon=INFO_ICON;
   var INFO_BTN='<button type="button" class="info-b" aria-label="How to">'+INFO_ICON+'</button>';
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;
