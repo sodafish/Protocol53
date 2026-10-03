@@ -12,6 +12,29 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/p53-180.png">
 <link rel="icon" type="image/png" href="icons/p53-192.png">
+<script>
+/* eigen bevestigingsvenster i.p.v. confirm(): p53Confirm({title,msg,ok,danger}) → Promise<boolean> */
+window.p53Confirm=function(o){
+  o=o||{};
+  return new Promise(function(res){
+    var last=document.activeElement, bg=document.createElement('div');
+    bg.className='cf-bg'; bg.setAttribute('role','alertdialog'); bg.setAttribute('aria-modal','true');
+    bg.innerHTML='<div class="cf-card"><h4></h4><p></p><div class="cf-btns"><button type="button" class="cf-no">Cancel</button><button type="button" class="cf-yes"></button></div></div>';
+    bg.querySelector('h4').textContent=o.title||'Are you sure?';
+    var pEl=bg.querySelector('p'); if(o.msg) pEl.textContent=o.msg; else pEl.remove();
+    var yes=bg.querySelector('.cf-yes'); yes.textContent=o.ok||'OK'; if(o.danger) yes.classList.add('danger');
+    document.body.appendChild(bg);
+    requestAnimationFrame(function(){ bg.classList.add('on'); });
+    yes.focus({preventScroll:true});
+    function done(v){ document.removeEventListener('keydown',key,true); bg.classList.remove('on'); setTimeout(function(){ bg.remove(); },200); if(last&&last.focus) last.focus({preventScroll:true}); res(v); }
+    function key(e){ if(e.key==='Escape'){ e.stopPropagation(); done(false); } }
+    document.addEventListener('keydown',key,true);
+    yes.addEventListener('click',function(){ done(true); });
+    bg.querySelector('.cf-no').addEventListener('click',function(){ done(false); });
+    bg.addEventListener('click',function(e){ if(e.target===bg) done(false); });
+  });
+};
+</script>
 <script src="vendor/supabase.js"></script>
 <script src="cloud.js"></script>
 </head>
@@ -897,17 +920,17 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .tabbar{display:none!important;}
 #p-schema .ksub{display:none!important;}
 .pg-title{flex-basis:100%;margin:.45rem 0 0;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
-.glass{background:rgba(255,255,255,.42);-webkit-backdrop-filter:blur(30px) saturate(140%) brightness(1.06);backdrop-filter:blur(30px) saturate(140%) brightness(1.06);
-  border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 40px rgba(0,0,0,.14),inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(0,0,0,.04);}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:rgba(36,36,38,.42);-webkit-backdrop-filter:blur(30px) saturate(140%) brightness(.9);backdrop-filter:blur(30px) saturate(140%) brightness(.9);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}}
-:root[data-theme="dark"] .glass{background:rgba(36,36,38,.42);-webkit-backdrop-filter:blur(30px) saturate(140%) brightness(.9);backdrop-filter:blur(30px) saturate(140%) brightness(.9);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}
+.glass{background:color-mix(in srgb,var(--surface) 38%,transparent);-webkit-backdrop-filter:blur(30px) saturate(210%) brightness(1.04);backdrop-filter:blur(30px) saturate(210%) brightness(1.04);
+  border:1px solid rgba(255,255,255,.65);box-shadow:0 14px 40px rgba(30,20,12,.18),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(0,0,0,.05);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:color-mix(in srgb,var(--surface) 34%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}}
+:root[data-theme="dark"] .glass{background:color-mix(in srgb,var(--surface) 34%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}
 .gnav{position:fixed;z-index:60;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:10px;
   padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;}
 .gnav>*{pointer-events:auto;}
 .gnav-pill{display:flex;flex:1;max-width:330px;height:64px;padding:5px;border-radius:32px;gap:4px;}
 .gnav-i{flex:1;appearance:none;border:none;cursor:pointer;border-radius:27px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font:600 11px 'Work Sans',system-ui,sans-serif;letter-spacing:.02em;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,color .25s ease,transform .12s ease;}
-.gnav-i[aria-selected="true"]{background:rgba(120,120,128,.16);color:var(--accent);}
+.gnav-i[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--accent);}
 .gnav-i:active{transform:scale(.96);}
 .gnav-more{flex:none;width:64px;height:64px;border-radius:50%;appearance:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,color .2s ease;}
 .gnav-more.on{color:var(--accent);}
@@ -925,6 +948,24 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .more-list button>svg{color:var(--muted-soft);}
 .more-list button[aria-current="page"] .mt b{color:var(--accent);}
 
+
+/* ════════════ EIGEN BEVESTIGINGSVENSTER ════════════ */
+.cf-bg{position:fixed;inset:0;z-index:120;background:rgba(20,14,10,.38);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .18s ease;}
+.cf-bg.on{opacity:1;}
+.cf-card{width:100%;max-width:300px;background:var(--surface);color:var(--ink);border-radius:20px;padding:1.3rem 1.2rem 1.1rem;box-shadow:0 20px 50px rgba(0,0,0,.25);
+  transform:scale(.94);transition:transform .2s cubic-bezier(.22,.61,.36,1);text-align:center;}
+.cf-bg.on .cf-card{transform:none;}
+.cf-card h4{margin:0 0 .4rem;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;line-height:1.2;}
+.cf-card p{margin:0 0 1.1rem;font-size:14px;line-height:1.45;color:var(--muted);}
+.cf-btns{display:flex;gap:.5rem;}
+.cf-btns button{flex:1;appearance:none;cursor:pointer;min-height:46px;border-radius:999px;font:600 14.5px 'Work Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .12s ease;}
+.cf-btns button:active{transform:scale(.97);opacity:.85;}
+.cf-no{border:1.5px solid var(--line);background:transparent;color:var(--ink);}
+.cf-yes{border:none;background:var(--ink);color:var(--paper);}
+.cf-yes.danger{background:#C8361A;color:#fff;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cf-yes.danger{background:#E0573A;}}
+:root[data-theme="dark"] .cf-yes.danger{background:#E0573A;}
+@media (prefers-reduced-motion:reduce){.cf-bg,.cf-card{transition:none;}}
 </style>
 
 <header class="top">
@@ -1854,8 +1895,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
     body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
       var e=prog[b.dataset.id]; if(!e) return;
-      if(!confirm('Delete the measurement of '+dLab(e.t)+' '+new Date(e.t).getFullYear()+' ('+fmtV(e.v)+' '+D.unit+')?')) return;
-      progDel(b.dataset.id); renderProg(); renderSheet(true);
+      p53Confirm({title:'Delete measurement?',msg:dLab(e.t)+' '+new Date(e.t).getFullYear()+' · '+fmtV(e.v)+' '+D.unit,ok:'Delete',danger:true}).then(function(y){
+        if(!y) return; progDel(b.dataset.id); renderProg(); renderSheet(true);
+      });
     }); });
     var f=body.querySelector('.pe-add');
     f.addEventListener('submit',function(ev){ ev.preventDefault();
@@ -2463,8 +2505,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var t=document.getElementById(b.dataset.for); if(!t) return;
     b.addEventListener('click',function(){
       if(!t.value.trim()) return;
-      if(!confirm('Erase this note? This can’t be undone.')) return;
-      t.value=''; t.dispatchEvent(new Event('input',{bubbles:true}));
+      p53Confirm({title:'Erase note?',msg:'This can’t be undone.',ok:'Erase',danger:true}).then(function(y){
+        if(!y) return; t.value=''; t.dispatchEvent(new Event('input',{bubbles:true}));
+      });
     });
   });
 })();

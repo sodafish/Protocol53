@@ -168,8 +168,10 @@
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1000);
   };
   window.p53Logout=function(){
-    if(queue.length && !confirm('Some changes have not been saved yet. Log out anyway?')) return;
-    sb.auth.signOut().then(function(){ ['p53-queue','p53-cache'].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} }); location.reload(); });
+    function out(){ sb.auth.signOut().then(function(){ ['p53-queue','p53-cache'].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} }); location.reload(); }); }
+    if(!queue.length) return out();
+    var ask=window.p53Confirm?window.p53Confirm({title:'Log out?',msg:'Some changes have not been saved yet.',ok:'Log out',danger:true}):Promise.resolve(confirm('Some changes have not been saved yet. Log out anyway?'));
+    ask.then(function(y){ if(y) out(); });
   };
 
   if('serviceWorker' in navigator){ window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
