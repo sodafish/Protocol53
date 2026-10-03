@@ -49,8 +49,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Leeftijd in de titel (Protocol + leeftijd)
 - Alleen in de kop van de app: `Protocol <em id="ageNum">` + leeftijd; zonder geboortedatum 53. App-naam, `<title>` en
   icoon blijven generiek ('Protocol'). Het inlogscherm toont gewoon 'Protocol'.
-- Tik op het getal = geboortedatum kiezen: een onzichtbaar `<input type="date" id="dobIn">` ligt over het getal
-  (`.age-w`); iOS opent zo de eigen datumkiezer, elders `showPicker()`. Leegmaken = terug naar 53.
+- Tik op het getal (`button#ageBtn`) opent onderblad `#dob-sheet` (eigen id; het uitlegvenster sluit het uit met
+  `:not(#dob-sheet)`) met datumveld `#dobIn` + Save. Startwaarde: bewaarde datum, anders die uit de aanmelding
+  (`user_metadata.dob`), anders 1 januari van 53 jaar geleden.
 - Geboortedatum: bij 'Create account' verplicht veld (`cloud.js`, `user_metadata.dob` via `signUp`); daarna in
   collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. `cloud.js` zet
   `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
@@ -127,7 +128,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 
 ## Full / Upper / Lower (dropdown naast New workout)
-- Dropdown `#splitSel` (in `label.split-sel`, pil met chevron, zelfde hoogte als 'New workout') rechts naast
+- Dropdown `#splitSel` (in `label.split-sel`, pil met chevron, zelfde hoogte als 'New workout', tekst 500 14.5px, geen hoofdletters) rechts naast
   'New workout' in `.tools-row`. Full = standaard; keuze in localStorage `fitlog-split`.
 - Upper = groepen 2, 4, 5, 6, 8; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
 - Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; ook `.exsec` 'Optional' en
