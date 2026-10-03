@@ -82,16 +82,9 @@
   }
   var db={collection:collection};
 
-  /* eenmalig: gegevens uit de Claude-versie overnemen */
-  function seedIfEmpty(rows){
-    if(rows && rows.length) return Promise.resolve();
-    if(load('p53-seeded',false)) return Promise.resolve();
-    return fetch('seed.json',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(seed){
-      if(!seed) return;
-      Object.keys(seed).forEach(function(coll){ Object.keys(seed[coll]).forEach(function(id){ queue.push({coll:coll,id:id,data:seed[coll][id]}); }); });
-      save(QKEY,queue); save('p53-seeded',true);
-      return sync();
-    }).catch(function(){});
+  /* alle lokale gegevens van de app (fitlog-*, p53-queue, p53-cache) wissen, bv. bij een andere gebruiker */
+  function wipeLocal(){
+    try{ Object.keys(localStorage).forEach(function(k){ if(/^fitlog-/.test(k)||k===QKEY||k===CKEY||k==='p53-seeded') localStorage.removeItem(k); }); }catch(e){}
   }
 
   /* ---------- inloggen ---------- */
@@ -99,8 +92,12 @@
   window.claude={use:function(name){ return name==='db'?dbReady:Promise.resolve(null); }};
 
   function start(u){
+    /* ander account dan de vorige keer op dit toestel: niets van de vorige gebruiker meenemen */
+    var prev=load('p53-uid',null);
+    if(prev && prev!==u.id){ wipeLocal(); save('p53-uid',u.id); location.reload(); return; }
+    save('p53-uid',u.id);
     user=u; resolveDb(db);
-    flush().then(pull).then(seedIfEmpty);
+    flush().then(pull);
   }
   function showLogin(msg){
     var o=document.getElementById('p53-login'); if(o){ o.hidden=false; if(msg) o.querySelector('.lg-msg').textContent=msg; return; }
@@ -168,7 +165,7 @@
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1000);
   };
   window.p53Logout=function(){
-    function out(){ sb.auth.signOut().then(function(){ ['p53-queue','p53-cache'].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} }); location.reload(); }); }
+    function out(){ sb.auth.signOut().then(function(){ wipeLocal(); try{ localStorage.removeItem('p53-uid'); }catch(e){} location.reload(); }); }
     if(!queue.length) return out();
     var ask=window.p53Confirm?window.p53Confirm({title:'Log out?',msg:'Some changes have not been saved yet.',ok:'Log out',danger:true}):Promise.resolve(confirm('Some changes have not been saved yet. Log out anyway?'));
     ask.then(function(y){ if(y) out(); });

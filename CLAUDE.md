@@ -16,11 +16,13 @@ vooral op zijn iPhone, als app op het beginscherm.
 - `manifest.webmanifest`, `icons/` — app-naam en icoon (eigen ontwerp van Tom, `p53-*.png`).
 - `img/` — oefenfoto's (Free Exercise DB, begin/eind), wisselen automatisch onder de i-knop.
 - `vendor/supabase.js` — supabase-js v2, lokaal voor offline gebruik.
-- `seed.json` — eenmalige import van de oude gegevens; niet meer aanpassen.
+- `seed.json` — oude gegevens van Tom; wordt niet meer geïmporteerd (nieuwe accounts starten leeg). Niet aanpassen.
 
 ## Data
 Supabase-project `protocol53` (Frankfurt), tabel `public.p53 (user_id, coll, id, data jsonb)`,
-RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks` (`{done}`),
+RLS: alleen eigen rijen, dus elk account heeft eigen gegevens (aanmelden via het inlogscherm).
+Meerdere gebruikers: `cloud.js` onthoudt het laatste account in localStorage `p53-uid`; logt er een ander account in,
+dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`wipeLocal`). Uitloggen wist ze ook. Collecties: `log` (kilo's en notities, `{t}`), `checks` (`{done}`),
 `counts` (`{n,last,prev}`), `hist` (statistieken) en `prog` (progressie), zie hieronder. Sleutels van oefeningen
 (`data-note` / `data-key`) nooit hernoemen, anders raakt Tom zijn historiek kwijt.
 
@@ -114,7 +116,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 
-## Oefeningen per groep kiezen (test: alleen groep 1, Front legs)
+## Oefeningen per groep kiezen (groepen 1–8; Warm-up niet)
 - Structuur ligt vast: Warm-up + 8 groepen. Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
 - Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Minstens
@@ -124,7 +126,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   bestaan: Per exercise toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
 - Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen.
-- Extra oefeningen groep 1: `x1-leg-press`, `x1-leg-extension`, `x1-db-step-up`, `x1-walking-lunge`,
-  `x1-hack-squat` (met MUSCLES, NAMES, EX-uitleg en foto's). Nieuwe groep uitbreiden: rijen met
-  `data-grp="gN"` + `ex-off` toevoegen, `data-grp` op de kop en een `.grp-edit`-knop, plus MUSCLES/NAMES/EX/IMG.
+- Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
+  foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
+  Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep (bij Arms vóór de kop Supersets), plus MUSCLES/NAMES/EX/IMG.
+- De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
+- De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
