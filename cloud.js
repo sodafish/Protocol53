@@ -21,13 +21,19 @@
     var m=merged(coll);
     return {metadata:{fromCache:!pulled},docs:Object.keys(m).map(function(id){ var d=m[id]; return {id:id,exists:true,data:function(){ return d; }}; })};
   }
+  var pendSince=0, pendTimer=null;
   var down=false; /* true zolang de database niet antwoordt terwijl het toestel wel online is */
   function stamp(){
     var el=document.getElementById('syncStamp'); if(!el) return;
     var msg='';
     if(!navigator.onLine) msg='Offline · what you enter is saved once you are online';
     else if(down) msg='Database unreachable · your data stays saved on this device';
-    else if(queue.length && pulled) msg='Not saved yet · one moment';
+    else if(queue.length && pulled){
+      /* pas tonen als het na 1 s nog niet bewaard is (anders flikkert het bij elk vinkje) */
+      if(!pendSince){ pendSince=Date.now(); clearTimeout(pendTimer); pendTimer=setTimeout(stamp,1050); }
+      if(Date.now()-pendSince>=1000) msg='Not saved yet · one moment';
+    }
+    if(!queue.length){ pendSince=0; clearTimeout(pendTimer); }
     if(msg){ el.textContent=msg; el.classList.add('warn'); }
     else if(el.classList.contains('warn')){ el.textContent=''; el.classList.remove('warn'); }
   }
