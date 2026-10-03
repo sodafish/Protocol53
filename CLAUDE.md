@@ -140,8 +140,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (klasse `.over`, hogere z-index).
 - Extra's bevatten bewust ook de klassiekers (barbell squat, deadlift, bench press, rows, overhead press, chin-ups,
   hanging leg raise, skull crusher …), ook als ze minder rug- of kniesparend zijn. Risico's krijgen een label in de
-  oranjerode stijl: `<span class="exr-warn">· Back !</span>` (ook Knee / Shoulders / Elbows / Upper back), achteraan
-  in `.exr-s`. Het keuzeblad toont dat label mee.
+  accentkleur (`--accent`, geen eigen rood): `<span class="exr-warn">· Back</span>` of `· Knees` (ook `· Shoulders`,
+  `· Elbows`), zonder uitroepteken; onderrug/bovenrug heet gewoon Back. Achteraan in `.exr-s`. Het keuzeblad toont dat label mee.
 - De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
