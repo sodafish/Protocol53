@@ -3037,7 +3037,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         if(pts.length===1){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Progress chart">'+base+
           '<circle cx="'+(W/2)+'" cy="'+((H-B)/2)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'+
           '<text x="'+(W/2)+'" y="'+(H-4)+'" text-anchor="middle" '+TX+'>'+F.d(last.t)+'</text></svg>'; return; }
-        var x0=first.t, x1=last.t; if(x1-x0<864e5){ x0-=864e5; x1+=864e5; }
+        var x0=first.t, x1=last.t; if(x1<=x0) x1=x0+1; /* altijd van eerste tot laatste meting over de volle breedte */
         var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo-=pad; hi+=pad;
         function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
         var d=pts.map(function(e,i){ return (i?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
