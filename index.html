@@ -2052,7 +2052,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   }
   function setsFor(k,li){
     li=li||liFor(k); var t=li&&li.querySelector('.exr-s'); t=t?t.textContent:'';
-    var m=t.match(/(\d+)\s*(?:×|x|rondes|sets)/i); return m?Math.min(6,parseInt(m[1],10)):3;
+    var m=t.match(/(\d+)\s*(?:×|x|rondes|rounds?|sets)/i); return m?Math.min(6,parseInt(m[1],10)):3;
   }
   var HISTKEY='fitlog-hist', histCol=null, histReady=false;
   var hist={}; try{ hist=JSON.parse(localStorage.getItem(HISTKEY)||'{}'); }catch(e){}

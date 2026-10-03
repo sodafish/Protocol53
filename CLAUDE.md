@@ -124,7 +124,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   metingen, één per dag); warm-up gebruikt nog `counts`. Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
   Een meting verwijderen wist ook de hist-rij(en) van die oefening op die dag (`__histDropDay`), en is het vandaag en
   staat ze afgevinkt, dan gaat ook het vinkje weg. `renderStats` werkt de getallen bij (`paintCounts`).
-- Sets komen uit de tekst onder de oefening (`3 × …`, `2 rondes`, `2 sets`); anders 3.
+- Sets komen uit de tekst onder de oefening (`3 × …`, `2 rounds`, `2 rondes`, `2 sets`); anders 3.
 - Score per spier = som van sets × gewicht binnen de periode (bij Maand/Alles gedeeld door het aantal
   weken vanaf de eerste training in die periode, minstens 1).
 - Rij `seed` (eenmalig): tellingen uit `counts` van vóór de statistieken, geteld op hun `last`-datum.
