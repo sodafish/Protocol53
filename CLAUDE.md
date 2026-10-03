@@ -37,9 +37,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Engelse teksten in JS-strings tussen enkele quotes: gebruik een typografische apostrof (don’t),
   anders breekt de string. Uitzondering: sleutels die exact moeten overeenkomen met schermnamen
   (bv. `"Farmer's Carry"` in `NAMES`).
-- Onder elk notitieveld (`#sessNote`, `#cardioNote`, `#dietNote`) staat een knop 'Erase note'
-  (`.note-erase`, met bevestiging); die maakt het veld leeg en stuurt een `input`-event zodat de gewone
-  opslag het wissen bewaart.
+- Bij elk notitieveld (`#sessNote`, `#cardioNote`, `#dietNote`) staat rechts op de lijn van de titel 'Notes'
+  (`.note-head`) een rond vuilbakje (`.note-erase`, alleen icoon, zelfde stijl als `.grp-edit`, met bevestiging); het
+  maakt het veld leeg en stuurt een `input`-event zodat de gewone opslag het wissen bewaart.
 - Bevestigen nooit met `confirm()`: gebruik `p53Confirm({title,msg,ok,danger})` (Promise<boolean>),
   een eigen venster in de app-stijl.
 - Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals
