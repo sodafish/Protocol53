@@ -3311,7 +3311,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function sortRows(g){ var pop=POP[g]||[], rs=rows(g); if(!rs.length) return rs;
     function rank(li){ var i=pop.indexOf(keyOf(li)); return i<0?999:i; }
     var anchor=rs[0].previousElementSibling;
-    rs.sort(function(a,b){ return tierOf(a)-tierOf(b) || rank(a)-rank(b); });
+    /* Arms: eerst biceps, dan triceps, dan onderarmen, dan supersets; binnen elk blok laag + populariteit */
+    function cat(li){ if(g!=='g8') return 0; if(li.querySelectorAll('.exr-in').length>1) return 3;
+      var n=li.querySelector('.exr-n').textContent;
+      if(/wrist|reverse/i.test(n)) return 2; if(/curl/i.test(n)) return 0; return 1; }
+    rs.sort(function(a,b){ return cat(a)-cat(b) || tierOf(a)-tierOf(b) || rank(a)-rank(b); });
     rs.forEach(function(li){ anchor.after(li); anchor=li; }); return rs; }
   Object.keys(POP).forEach(sortRows);
   /* onderblad */

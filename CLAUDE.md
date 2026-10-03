@@ -240,6 +240,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Back!-label alleen bij onondersteund voorover scharnieren met gewicht (deadlifts, RDL, good morning, swing, bent-over rows,
   barbell squats, staande overhead press) en belaste rug-flexie/rotatie in core. Niet bij goblet squat, farmer's carry,
   seated cable row, one-arm DB row (hand op de bank).
+- Arms (g8) sorteert eerst per soort (`cat` in `sortRows`): biceps (naam met 'curl'), triceps, onderarmen (wrist/reverse),
+  supersets (twee invulvelden); daarbinnen laag + `POP`.
 - Geen tussenkop meer boven de supersets (Arms): ze sluiten gewoon aan (staan achteraan in `POP`).
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
