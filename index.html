@@ -883,6 +883,9 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   border:1.5px solid var(--line);background:transparent;color:var(--ink);font:500 14.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.01em;-webkit-tap-highlight-color:transparent;}
 #splitBtn svg{color:var(--muted);transition:transform .2s ease;}
 #splitBtn[aria-expanded="true"] svg{transform:rotate(180deg);}
+#splitBtn{transition:background-color .15s ease,transform .12s ease;}
+#splitBtn:active,#splitBtn[aria-expanded="true"]{background:var(--paper-soft);}
+#splitBtn:active{transform:scale(.97);}
 #splitBtn:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .split-pop{position:absolute;right:0;top:calc(100% + 6px);z-index:40;min-width:168px;padding:.35rem;border-radius:16px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 14px 34px rgba(30,20,12,.16);display:flex;flex-direction:column;
