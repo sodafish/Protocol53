@@ -899,7 +899,15 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .split-pop button[aria-checked="true"]{font-weight:600;}
 .split-pop button[aria-checked="true"] .sm-ck{visibility:visible;}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
-#s-d3 .split-off{display:none!important;}
+#s-d3 .split-off,#s-d3 .eq-off{display:none!important;}
+.split-pop .sm-h{padding:.55rem .8rem .25rem;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.split-pop .sm-sep{height:1px;background:var(--line);margin:.35rem .4rem;}
+#splitLbl{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;}
+#splitLbl small{font-size:11.5px;font-weight:500;color:var(--accent);letter-spacing:.01em;}
+.split-pop button span{white-space:nowrap;}
+#splitBtn.two{gap:.45rem;padding:0 .85rem 0 1.05rem;}
+#splitLbl small{font-size:11px;white-space:nowrap;}
+#s-d3 .reset-top{white-space:nowrap;}
 .stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
 .stats-fig{display:grid;grid-template-columns:1fr 1fr;gap:2.2rem;margin:1.6rem auto 0;max-width:21rem;}
 .stats-fig figure{margin:0;text-align:center;}
@@ -1118,9 +1126,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       <div class="split-sel">
         <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Full body</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="split-pop" id="splitPop" role="menu" hidden>
+          <div class="sm-h" aria-hidden="true">Body</div>
           <button type="button" role="menuitemradio" data-split="full"><span>Full body</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <button type="button" role="menuitemradio" data-split="upper"><span>Upper body</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <button type="button" role="menuitemradio" data-split="lower"><span>Lower body</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <div class="sm-sep" role="separator"></div><div class="sm-h" aria-hidden="true">Equipment</div>
+          <button type="button" role="menuitemradio" data-eq="gym"><span>Gym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-eq="cal"><span>Calisthenics</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-eq="calp"><span>Calisthenics +</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
         </div>
       </div>
     </div>
@@ -3277,9 +3290,26 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function keyOf(li){ var i=li.querySelector('.exr-in[data-note]'); return li.dataset.key||(i&&i.dataset.note); }
   function defaults(g){ return rows(g).filter(function(li){ return !li.classList.contains('ex-off'); }).map(keyOf); }
   var DEF={}; document.querySelectorAll('.grp-edit').forEach(function(b){ DEF[b.dataset.grp]=defaults(b.dataset.grp); });
-  function on(g){ return cfg[g]||DEF[g]||[]; }
+  /* materiaal: Gym (alles), Calisthenics (lichaamsgewicht, mat, opstapje, elastiek), Calisthenics + (ook optrek-/dipstang, ringen,
+     bankje, dumbbells, kettlebell, bal). Nooit machines, kabels of barbells. Niveau per sleutel: 0 = cal, 1 = cal+, anders gym. */
+  var EQ={}; 'w0-bodyweight-squats w0-arm-circles w0-glute-bridge w0-pull-aparts w0-worlds-greatest w0-cat-cow w0-hip-circles w0-inchworm w0-jump-rope x1-split-squat x1-bw-walking-lunge x1-jump-squat x1-pistol-squat x1-sissy-squat d3-push-ups x2-incline-pushup x2-decline-pushup x2-plyo-pushup x3-sl-glute-bridge x3-donkey-kick x3-band-adduction x3-nordic-curl x5-band-lateral x5-band-ext-rot x5-handstand-pushup d1-plank x7-side-plank x7-crunches x7-reverse-crunch x7-bicycle-crunch x7-mountain-climbers x7-dead-bug x7-superman x7-sit-ups x7-lying-leg-raise x7-v-up x7-flutter-kicks x8-diamond-pushup'.split(' ').forEach(function(k){ EQ[k]=0; }); 'd1-goblet-squat d3-bulgarian-split-squat d2-dumbbell-reverse-lunges x1-db-step-up x1-walking-lunge x1-db-forward-lunge x2-db-bench d1-dumbbell-chest-press x2-decline-db-press x2-db-floor-press x2-db-fly x2-dips x3-hip-thrust x3-db-calf-raise d3-single-leg-calf-raise x3-single-leg-rdl x3-ball-leg-curl d1-dumbbell-romanian-deadlift x3-kb-swing d3-eenarmige-dumbbell-row d3-chest-supported-row x4-inverted-row x4-ring-row x4-db-bent-row d2-dumbbell-lateral-raise d1-seated-dumbbell-shoulder-press x5-arnold-press x5-front-raise x5-db-shrug x5-rear-delt-raise x5-db-upright-row x6-pull-ups x6-chin-ups d3-assisted-pull-ups d1-dead-hang x6-scap-pullup x6-db-pullover d1-farmers-carry x7-knee-raise x7-hanging-leg-raise x7-russian-twist x7-ab-wheel x7-side-bend d3-dumbbell-biceps-curl x8-hammer-curl x8-spider-curl x8-incline-curl x8-concentration-curl x8-wrist-curl x8-db-overhead-ext x8-kickback x8-bench-dips'.split(' ').forEach(function(k){ EQ[k]=1; });
+  var MAXL={gym:9,cal:0,calp:1}, mode='gym'; try{ mode=localStorage.getItem('fitlog-eq')||'gym'; }catch(e){} if(!MAXL.hasOwnProperty(mode)) mode='gym';
+  function lvl(k){ return EQ.hasOwnProperty(k)?EQ[k]:2; }
+  function okLi(li){ return lvl(keyOf(li))<=MAXL[mode]; }
+  function ck(g){ return mode==='gym'?g:mode+':'+g; }
+  var DEFM={cal:{g0:'w0-bodyweight-squats w0-glute-bridge w0-pull-aparts',g1:'x1-split-squat x1-bw-walking-lunge',g2:'d3-push-ups x2-incline-pushup',g3:'x3-sl-glute-bridge x3-donkey-kick',g5:'x5-band-lateral x5-band-ext-rot',g7:'d1-plank x7-side-plank x7-dead-bug',g9:'x8-diamond-pushup'},calp:{g0:'w0-bodyweight-squats w0-glute-bridge w0-pull-aparts',g1:'d3-bulgarian-split-squat d1-goblet-squat',g2:'d3-push-ups x2-db-bench',g3:'d1-dumbbell-romanian-deadlift x3-sl-glute-bridge d3-single-leg-calf-raise',g4:'d3-eenarmige-dumbbell-row x4-inverted-row',g5:'d1-seated-dumbbell-shoulder-press d2-dumbbell-lateral-raise',g6:'d3-assisted-pull-ups d1-dead-hang',g7:'d1-plank x7-side-plank d1-farmers-carry',g8:'d3-dumbbell-biceps-curl x8-hammer-curl',g9:'x8-db-overhead-ext x8-kickback'}};
+  function on(g){
+    if(mode==='gym') return cfg[g]||DEF[g]||[];
+    var a=(cfg[ck(g)]||(DEFM[mode][g]||'').split(' ')).filter(function(k){ return k && lvl(k)<=MAXL[mode]; });
+    if(!a.length){ var r=rows(g).filter(okLi)[0]; if(r) a=[keyOf(r)]; }
+    return a; }
+  window.__eqMode=function(){ return mode; };
+  window.__setEq=function(m){ if(!MAXL.hasOwnProperty(m)) return; mode=m; try{ localStorage.setItem('fitlog-eq',m); }catch(e){} apply(); };
   function apply(){
-    Object.keys(DEF).forEach(function(g){ var act=on(g); rows(g).forEach(function(li){ li.classList.toggle('ex-off',act.indexOf(keyOf(li))<0); }); });
+    Object.keys(DEF).forEach(function(g){ var act=on(g), any=false;
+      rows(g).forEach(function(li){ var ok=okLi(li); if(ok) any=true; li.classList.toggle('ex-off',!ok||act.indexOf(keyOf(li))<0); });
+      /* geen enkele oefening met dit materiaal: hele groep weg */
+      document.querySelectorAll('#s-d3 .exl > li[data-grp="'+g+'"]').forEach(function(li){ li.classList.toggle('eq-off',!any); }); });
     /* tussenkop (bv. Supersets) verbergen als er geen zichtbare oefening onder staat */
     document.querySelectorAll('#s-d3 .exsub').forEach(function(h){ var n=h.nextElementSibling, vis=false;
       while(n && n.classList.contains('exr')){ if(!n.classList.contains('ex-off')) vis=true; n=n.nextElementSibling; } h.hidden=!vis; });
@@ -3328,7 +3358,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function render(){
     var act=on(cur);
     /* volgorde: eerst zonder aandachtspunt, dan met label (Back!, Knees! …), dan gevaarlijk (driehoekje); binnen elke laag op populariteit (POP) */
-    var ordered=rows(cur); /* al gesorteerd door sortRows */
+    var ordered=rows(cur).filter(okLi); /* al gesorteerd door sortRows; alleen wat bij het gekozen materiaal past */
+    var sub=sh.querySelector('.gs-sub'); if(sub){ if(!sub.dataset.t) sub.dataset.t=sub.textContent; sub.textContent=mode==='gym'?sub.dataset.t:(mode==='cal'?'Calisthenics: body weight, mat, step and bands only.':'Calisthenics +: also bars, rings, a bench and dumbbells.')+' Your gym choice is kept separately.'; }
     list.innerHTML=ordered.map(function(li){ var k=keyOf(li), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
       var rib=li.querySelector('.info-b'), nop=rib&&rib.classList.contains('nop')?' nop':'';
@@ -3342,7 +3373,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       else{ if(act.length<=1){ c.checked=true; msg.textContent='Keep at least one exercise in this group.'; return; } if(i>=0) act.splice(i,1); }
       msg.textContent='';
       var order=rows(cur).map(keyOf); act.sort(function(a,b){ return order.indexOf(a)-order.indexOf(b); });
-      cfg[cur]=act; save(); apply(); c.closest('li').classList.toggle('off',!c.checked);
+      cfg[ck(cur)]=act; save(); apply(); c.closest('li').classList.toggle('off',!c.checked);
     }); });
   }
   /* blad sets & reps */
@@ -3381,14 +3412,18 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 (function(){
   var KEY='fitlog-split', SPLIT={upper:['g2','g4','g5','g6','g8','g9'],lower:['g1','g3','g7']};
   var btn=document.getElementById('splitBtn'), pop=document.getElementById('splitPop'), lbl=document.getElementById('splitLbl'); if(!btn||!pop) return;
-  var NAME={full:'Full body',upper:'Upper body',lower:'Lower body'};
+  var NAME={full:'Full body',upper:'Upper body',lower:'Lower body'}, EQN={gym:'Gym',cal:'Calisthenics',calp:'Calisthenics +'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(cur!=='upper'&&cur!=='lower') cur='full';
   function apply(){
     var keep=SPLIT[cur];
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',!!keep && g!=='g0' && keep.indexOf(g)<0); });
-    lbl.textContent=NAME[cur];
+    var eq=window.__eqMode?window.__eqMode():'gym';
+    lbl.innerHTML=''; lbl.appendChild(document.createTextNode(NAME[cur]));
+    if(eq!=='gym'){ var sm=document.createElement('small'); sm.textContent=EQN[eq]; lbl.appendChild(sm); }
+    btn.classList.toggle('two',eq!=='gym');
     pop.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.split===cur?'true':'false'); });
+    pop.querySelectorAll('[data-eq]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.eq===eq?'true':'false'); });
   }
   var open=false;
   function show(){ open=true; pop.hidden=false; btn.setAttribute('aria-expanded','true'); requestAnimationFrame(function(){ pop.classList.add('on'); }); }
@@ -3396,6 +3431,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   btn.addEventListener('click',function(e){ e.stopPropagation(); open?hide():show(); });
   pop.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
     cur=b.dataset.split; try{ localStorage.setItem(KEY,cur); }catch(x){} apply(); hide(); btn.focus({preventScroll:true}); }); });
+  pop.querySelectorAll('[data-eq]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
+    if(window.__setEq) window.__setEq(b.dataset.eq); apply(); hide(); btn.focus({preventScroll:true}); }); });
   document.addEventListener('click',function(e){ if(open && !pop.contains(e.target)) hide(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') hide(); });
   window.addEventListener('scroll',function(){ if(open) hide(); },{passive:true});

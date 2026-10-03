@@ -179,6 +179,16 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Upper = groepen 2, 4, 5, 6, 8, 9; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
 - Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; de kop 'Optional' boven Arms is weg). Vinkjes, tellingen, statistieken en progressie veranderen niet.
 
+## Materiaal: Gym / Calisthenics / Calisthenics + (zelfde menu als Full/Upper/Lower)
+- `#splitPop` heeft twee blokken: Body (`data-split`) en Equipment (`data-eq`: gym, cal, calp). Keuze in localStorage `fitlog-eq`
+  (alleen lokaal, zoals `fitlog-split`). Niet-gym toont een tweede regel in de knop (`#splitLbl small`, klasse `.two`).
+- Niveaus in `EQ` (picker-script): 0 = cal (lichaamsgewicht, mat, opstapje, elastiek, springtouw), 1 = cal+ (ook optrek-/dipstang,
+  ringen/TRX, bankje, dumbbells, kettlebell, bal), niet vermeld = gym (machines, kabels, barbells, grote toestellen).
+  Nieuwe oefening: ook in `EQ` zetten als ze zonder gym kan.
+- Elke modus heeft eigen keuzes per groep: cfg/groups-sleutel `g1` (gym), `cal:g1`, `calp:g1`; standaard `DEFM`. Historiek blijft gedeeld.
+  Rijen die niet passen krijgen `ex-off`; een groep zonder passende oefening krijgt `eq-off` (kop + rijen verborgen): bij
+  Calisthenics vallen 4, 6 en 8 weg. Het keuzeblad toont alleen passende oefeningen en een uitlegzin in `.gs-sub`.
+
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–9)
 - Structuur ligt vast: Warm-up + 9 groepen (8 Biceps en 9 Triceps waren vroeger samen 'Arms' = g8; supersets staan bij Triceps). Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
