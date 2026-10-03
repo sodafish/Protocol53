@@ -619,6 +619,9 @@ td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
 
 /* afvinken */
 #s-d1 .exr,#s-d2 .exr,#s-d3 .exr{grid-template-columns:2.4rem 1fr 5.6rem;}
+#s-d3 .exr.has-info{grid-template-columns:2.4rem 1fr 36px 5.2rem;column-gap:.6rem;}
+#s-d3 .exr.has-info > .info-b{grid-column:3;}
+#s-d3 .exr.has-info > .exr-in,#s-d3 .exr.has-info > .exr-in2{grid-column:4;}
 .chk{appearance:none;cursor:pointer;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);
   color:transparent;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;
   transition:background-color .2s ease,border-color .2s ease,color .2s ease;}
@@ -743,6 +746,10 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exr.done .exr-warn{color:var(--muted-soft);}
 
 .info-b{appearance:none;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:.4rem;vertical-align:2px;border-radius:50%;border:1.3px solid var(--muted-soft);background:transparent;color:var(--muted);padding:0;}
+.exr > .info-b,.gs-list .info-b{width:36px;height:36px;margin:0;vertical-align:0;flex:none;border:1.5px solid var(--muted-soft);color:var(--muted);align-self:center;}
+.exr > .info-b span,.gs-list .info-b span{font-size:13px;}
+.exr > .info-b::after,.gs-list .info-b::after{inset:-4px;}
+.exr > .info-b.nop,.gs-list .info-b.nop{border-color:var(--line);color:var(--muted-soft);}
 .info-b.nop{color:var(--muted-soft);border-color:var(--line);}
 .info-b span{font:700 11px/1 'Work Sans',system-ui,sans-serif;}
 .info-b::after{content:"";position:absolute;inset:-12px;}
@@ -3035,8 +3042,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;
     var name=n.textContent.replace(/ /g,' ').trim(); if(!NAMES[name]) return;
-    n.insertAdjacentHTML('beforeend',INFO_BTN);
-    var b=n.querySelector('.info-b'); b.setAttribute('aria-label','How to '+name);
+    /* i-knop als ronde knop rechts, links van het invulveld */
+    var li=n.closest('.exr'), tmp=document.createElement('div'); tmp.innerHTML=INFO_BTN; var b=tmp.firstChild;
+    var anchor=li&&(li.querySelector(':scope > .exr-in2')||li.querySelector(':scope > .exr-in'));
+    if(li){ if(anchor) li.insertBefore(b,anchor); else li.appendChild(b); li.classList.add('has-info'); } else n.appendChild(b); b.setAttribute('aria-label','How to '+name);
     b.addEventListener('click',function(e){ e.stopPropagation(); open(name,b); });
   });
   /* i-knop iets lichter bij oefeningen zonder opgeslagen progressie */
@@ -3176,7 +3185,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
       var rib=li.querySelector('.info-b'), nop=rib&&rib.classList.contains('nop')?' nop':'';
       var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b'+nop+'" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'"><span>i</span></button>':'';
-      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+ib+'</b><small>'+st+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span><button type="button" class="gs-set'+(sets[k]?' custom':'')+'" data-k="'+k+'" aria-label="Sets and reps for '+n.replace(/"/g,'&quot;')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; }).join('');
+      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+'</b><small>'+st+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span>'+ib+'<button type="button" class="gs-set'+(sets[k]?' custom':'')+'" data-k="'+k+'" aria-label="Sets and reps for '+n.replace(/"/g,'&quot;')+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; }).join('');
     list.querySelectorAll('.info-b').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); window.__p53info.open(b.dataset.n,b); }); });
     list.querySelectorAll('.gs-set').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); openSet(b.dataset.k,b); }); });
     list.querySelectorAll('.sw').forEach(function(c){ c.addEventListener('change',function(){

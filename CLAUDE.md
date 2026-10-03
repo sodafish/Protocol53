@@ -179,6 +179,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
+- De i-knop is een rond knopje (36 px, zoals `.gs-set`) rechts in de rij: in de workout links van het invulveld
+  (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 5.2rem`), in het keuzeblad links van het sets-knopje.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
   (klasse `.over`, hogere z-index).
 - Extra's bevatten bewust ook de klassiekers (barbell squat, deadlift, bench press, rows, overhead press, chin-ups,
