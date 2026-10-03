@@ -1070,6 +1070,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .sw:checked::after{transform:translateX(20px);}
 .sw:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .gs-msg{min-height:1.2em;margin:.7rem 0 0;font-size:13px;color:#C8361A;}
+/* alle ronde icoonknoppen: zelfde maat (36 px), zelfde cirkel, zelfde druk-effect */
+.sheet-x,.prog-edit,.pe-del,.grp-edit,.note-erase,.gs-set,.exr > .info-b,.gs-list .info-b{width:36px;height:36px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;
+  display:inline-flex;align-items:center;justify-content:center;flex:none;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
+.sheet-x,.prog-edit,.pe-del{color:var(--muted);position:relative;}
+.sheet-x{margin:0;}
+.sheet-x::after,.prog-edit::after,.pe-del::after{content:"";position:absolute;inset:-4px;}
+.sheet-x:hover{color:var(--muted);}
+.sheet-x:active,.prog-edit:active,.pe-del:active{background:var(--paper-soft);transform:scale(.95);}
+.sheet-x:focus-visible,.prog-edit:focus-visible,.pe-del:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 </style>
 
 <header class="top">
@@ -1306,7 +1315,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         <div class="stats-per prog-per" role="group" aria-label="Progress period">
           <button type="button" data-d="30">Month</button><button type="button" data-d="90">3 months</button><button type="button" data-d="all">All</button>
         </div>
-        <div class="prog-head"><div class="prog-hero" id="progHero"></div><button type="button" class="prog-edit" id="progEdit" aria-haspopup="dialog" aria-label="Edit measurements" title="Edit measurements"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div>
+        <div class="prog-head"><div class="prog-hero" id="progHero"></div><button type="button" class="prog-edit" id="progEdit" aria-haspopup="dialog" aria-label="Edit measurements" title="Edit measurements"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div>
         <div class="prog-chart" id="progChart"></div>
       </div>
     </section>
@@ -1576,19 +1585,19 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet-bg" id="pe-bg" hidden></div>
 <div class="sheet pe-sheet" id="pe-sheet" role="dialog" aria-modal="true" aria-labelledby="pe-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="pe-t">Measurements</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="pe-t">Measurements</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="pe-body"></div>
 </div>
 <div class="sheet-bg" hidden></div>
 <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="sheet-t"></h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="sheet-t"></h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="sheet-body"></div>
 </div>
 <div class="sheet-bg" id="grp-bg" hidden></div>
 <div class="sheet" id="grp-sheet" role="dialog" aria-modal="true" aria-labelledby="grp-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="grp-t">Exercises</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="grp-t">Exercises</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <p class="gs-sub">Choose which exercises show up in this group. Switching one off keeps its history.</p>
   <ul class="gs-list"></ul>
   <p class="gs-msg" role="status"></p>
@@ -1596,7 +1605,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet-bg" id="dob-bg" hidden></div>
 <div class="sheet" id="dob-sheet" role="dialog" aria-modal="true" aria-labelledby="dob-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="dob-t">Date of birth</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="dob-t">Date of birth</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <p class="gs-sub">The number after Protocol is your age.</p>
   <div class="pe-add dob-add"><input type="date" id="dobIn" aria-label="Date of birth"><button type="button" id="dobSave">Save</button></div>
   <p class="gs-msg" id="dobMsg" role="status"></p>
@@ -1604,7 +1613,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet-bg top" id="set-bg" hidden></div>
 <div class="sheet top" id="set-sheet" role="dialog" aria-modal="true" aria-labelledby="set-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="set-t">Sets &amp; reps</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="set-t">Sets &amp; reps</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <p class="gs-sub">Set your own sets and reps for this exercise.</p>
   <div class="set-row"><span class="set-lab">Sets</span>
     <div class="set-step"><button type="button" data-d="-1" aria-label="One set less">−</button><output id="setN" aria-live="polite">3</output><button type="button" data-d="1" aria-label="One set more">+</button></div></div>
@@ -1615,7 +1624,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet-bg" id="more-bg" hidden></div>
 <div class="sheet more-sheet" id="more-sheet" role="dialog" aria-modal="true" aria-labelledby="more-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="more-t">More</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="more-t">More</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <ul class="more-list">
     <li><button type="button" data-view="cardio"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg></span><span class="mt"><b>Cardio</b><small>Zone 2, walking, VO2max</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     <li><button type="button" data-view="voeding"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg></span><span class="mt"><b>Diet</b><small>Food list, protein, measuring</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
@@ -2325,7 +2334,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var rows=D.all.map(function(e){
       var dt=new Date(e.t);
       return '<li><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>'+
-        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
+        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
     }).join('');
     body.innerHTML='<p class="pe-sub">'+(D.all.length?D.all.length+(D.all.length===1?' measurement':' measurements')+'. Add or delete.':'No measurements yet. Add one.')+'</p>'+
       '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
@@ -3105,7 +3114,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var box=document.createElement('div'); box.className='ip-box';
       box.innerHTML='<p class="ip-t">Your progress'+(lab?' · '+lab:'')+'</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(none?'–':F.v(last.v))+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
         (none?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div>'+
-        '<button type="button" class="prog-edit ip-edit" aria-label="Edit measurements"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div><div class="ip-chart"></div>';
+        '<button type="button" class="prog-edit ip-edit" aria-label="Edit measurements"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></div><div class="ip-chart"></div>';
       wrap.appendChild(box);
       box.querySelector('.ip-edit').addEventListener('click',function(){ if(window.__progEdit) window.__progEdit(k); });
       /* tekenen zodra het venster zichtbaar is, op de echte breedte (anders wordt alles uitgerekt) */
