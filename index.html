@@ -1001,6 +1001,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   display:inline-flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;text-decoration:none;}
 .grp-edit:active{background:var(--paper-soft);transform:scale(.95);}
 .exgrp.grp-done .grp-edit{text-decoration:none;}
+/* keuzeblad: titel + kruisje blijven staan, de lijst schuift eronder door */
+#grp-sheet .sheet-head{position:sticky;top:-.6rem;z-index:3;background:var(--surface);margin:0 -1.25rem .9rem;padding:.6rem 1.25rem .5rem;transition:box-shadow .2s ease;}
+#grp-sheet.stuck .sheet-head{box-shadow:0 1px 0 var(--line);}
 .gs-sub{margin:-.5rem 0 1rem;font-size:13.5px;color:var(--muted);line-height:1.45;}
 .gs-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
 .gs-list li{display:flex;align-items:center;gap:.8rem;min-height:60px;padding:.5rem 0;border-bottom:1px solid var(--line-soft);}
@@ -3050,7 +3053,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       cfg[cur]=act; save(); apply(); c.closest('li').classList.toggle('off',!c.checked);
     }); });
   }
-  function openSheet(g,btn){ cur=g; open=true; last=btn; msg.textContent='';
+  sh.addEventListener('scroll',function(){ sh.classList.toggle('stuck',sh.scrollTop>20); },{passive:true});
+  function openSheet(g,btn){ cur=g; open=true; last=btn; msg.textContent=''; sh.classList.remove('stuck');
     var gt=document.querySelector('.exgrp[data-grp="'+g+'"] .grp-t'); sh.querySelector('#grp-t').textContent=gt?gt.textContent:'Exercises';
     render(); bg.hidden=false; sh.hidden=false; sh.scrollTop=0;
     requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
