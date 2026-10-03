@@ -1547,16 +1547,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var k=chkKey(li), on=!!checks[k], b=li.querySelector('.chk');
       li.classList.toggle('done',on); if(b) b.setAttribute('aria-pressed',on?'true':'false');
     });
-    /* één oefening per spiergroep: is er één gedaan, dan is de hele groep af */
+    /* groepkop: af zodra één oefening gedaan is (opwarming: alles) */
     document.querySelectorAll('#s-d3 .exgrp').forEach(function(g){
       var rows=[], li=g.nextElementSibling;
       while(li && !li.classList.contains('exgrp')){ if(li.classList.contains('exr') && !li.classList.contains('ex-off')) rows.push(li); li=li.nextElementSibling; }
+      /* andere oefeningen blijven actief: je mag er meerdere per groep doen */
       var anyDone=rows.some(function(r){ return r.classList.contains('done'); });
-      if(g.dataset.grp==='g0'){ /* opwarming: alles doen, niets doorstrepen */
-        g.classList.toggle('grp-done',rows.length>0 && rows.every(function(r){ return r.classList.contains('done'); }));
-        rows.forEach(function(r){ r.classList.remove('grp-skip'); }); return; }
+      if(g.dataset.grp==='g0') anyDone=rows.length>0 && rows.every(function(r){ return r.classList.contains('done'); }); /* opwarming: pas af als alles gedaan is */
       g.classList.toggle('grp-done',anyDone);
-      rows.forEach(function(r){ r.classList.toggle('grp-skip', anyDone && !r.classList.contains('done')); });
+      rows.forEach(function(r){ r.classList.remove('grp-skip'); });
     });
   }
   function saveChecksLocal(){ try{ localStorage.setItem(CHKKEY,JSON.stringify(checks)); }catch(e){} }

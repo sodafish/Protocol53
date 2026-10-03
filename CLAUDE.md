@@ -125,7 +125,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Omdat alles per oefeningsleutel wordt bewaard, blijft de geschiedenis van een uitgezette oefening
   bestaan: Per exercise toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
-- Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen.
+- Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen. Andere oefeningen van een groep worden niet meer doorgestreept
+  als er één gedaan is (geen `grp-skip`): meerdere oefeningen per groep mag.
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep (bij Arms vóór de kop Supersets), plus MUSCLES/NAMES/EX/IMG.
