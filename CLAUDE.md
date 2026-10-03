@@ -34,6 +34,9 @@ RLS: alleen eigen rijen. Collecties: `log` (kilo's en notities, `{t}`), `checks`
 - Engelse teksten in JS-strings tussen enkele quotes: gebruik een typografische apostrof (don’t),
   anders breekt de string. Uitzondering: sleutels die exact moeten overeenkomen met schermnamen
   (bv. `"Farmer's Carry"` in `NAMES`).
+- Onder elk notitieveld (`#sessNote`, `#cardioNote`, `#dietNote`) staat een knop 'Erase note'
+  (`.note-erase`, met bevestiging); die maakt het veld leeg en stuurt een `input`-event zodat de gewone
+  opslag het wissen bewaart.
 - Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals
   `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
   in `NAMES` (bv. 'Torso Rotation', 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').

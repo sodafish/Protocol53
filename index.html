@@ -773,7 +773,11 @@ textarea.sess-note:focus{outline:none;border-color:var(--accent);}
 textarea.sess-note::placeholder{color:var(--muted-soft);}
 .sheet-tip{margin:.8rem 0 0;padding:.7rem .85rem;border-radius:12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px;line-height:1.45;}
 #s-d3 .exl .exgrp:first-child{padding-top:1.8rem;}
-#dietNote{margin-bottom:2rem;}
+.note-tools{display:flex;justify-content:flex-end;margin:.6rem 0 0;}
+.note-erase{display:inline-flex;align-items:center;gap:.4rem;appearance:none;cursor:pointer;min-height:36px;padding:0 .85rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;
+  font:600 12.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);-webkit-tap-highlight-color:transparent;transition:background-color .15s ease,transform .12s ease;}
+.note-erase:active{background:var(--paper-soft);transform:scale(.97);}
+#p-voeding .note-tools{margin-bottom:2rem;}
 
 #p53-login{position:fixed;inset:0;z-index:200;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px));}
 #p53-login[hidden]{display:none;}
@@ -972,6 +976,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     <button type="button" class="reset reset-chk reset-end" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>End workout</span></button>
     <label class="sess-note-l" for="sessNote">Notes</label>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
+    <div class="note-tools"><button type="button" class="note-erase" data-for="sessNote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg><span>Erase note</span></button></div>
   </div>
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
@@ -1015,6 +1020,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 
   <label class="sess-note-l" for="cardioNote">Notes</label>
   <textarea id="cardioNote" class="note sess-note" data-note="cardio-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
+  <div class="note-tools"><button type="button" class="note-erase" data-for="cardioNote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg><span>Erase note</span></button></div>
 </section>
 
 <!-- ════════════ VOEDING & GEWICHT ════════════ -->
@@ -1118,6 +1124,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 
   <label class="sess-note-l" for="dietNote">Notes</label>
   <textarea id="dietNote" class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
+  <div class="note-tools"><button type="button" class="note-erase" data-for="dietNote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg><span>Erase note</span></button></div>
 
 
   <div class="section">
@@ -2415,6 +2422,19 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 (function(){
   ['gesturestart','gesturechange','gestureend'].forEach(function(t){ document.addEventListener(t,function(e){ e.preventDefault(); },{passive:false}); });
   document.addEventListener('touchmove',function(e){ if(e.touches&&e.touches.length>1) e.preventDefault(); },{passive:false});
+})();
+</script>
+<script>
+/* notities wissen (met bevestiging); het input-event laat de gewone opslag en hoogte-aanpassing lopen */
+(function(){
+  document.querySelectorAll('.note-erase').forEach(function(b){
+    var t=document.getElementById(b.dataset.for); if(!t) return;
+    b.addEventListener('click',function(){
+      if(!t.value.trim()) return;
+      if(!confirm('Erase this note? This can’t be undone.')) return;
+      t.value=''; t.dispatchEvent(new Event('input',{bubbles:true}));
+    });
+  });
 })();
 </script>
 </body>
