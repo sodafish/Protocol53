@@ -897,10 +897,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .tabbar{display:none!important;}
 #p-schema .ksub{display:none!important;}
 .pg-title{flex-basis:100%;margin:.45rem 0 0;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
-.glass{background:color-mix(in srgb,var(--surface) 70%,transparent);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
-  border:1px solid color-mix(in srgb,var(--ink) 9%,transparent);box-shadow:0 10px 30px rgba(30,20,12,.16),inset 0 1px 0 rgba(255,255,255,.55);}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:color-mix(in srgb,var(--surface) 66%,transparent);border-color:rgba(255,255,255,.09);box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07);}}
-:root[data-theme="dark"] .glass{background:color-mix(in srgb,var(--surface) 66%,transparent);border-color:rgba(255,255,255,.09);box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07);}
+.glass{background:color-mix(in srgb,var(--surface) 38%,transparent);-webkit-backdrop-filter:blur(30px) saturate(210%) brightness(1.04);backdrop-filter:blur(30px) saturate(210%) brightness(1.04);
+  border:1px solid rgba(255,255,255,.65);box-shadow:0 14px 40px rgba(30,20,12,.18),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(0,0,0,.05);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:color-mix(in srgb,var(--surface) 34%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}}
+:root[data-theme="dark"] .glass{background:color-mix(in srgb,var(--surface) 34%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}
 .gnav{position:fixed;z-index:60;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:10px;
   padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;}
 .gnav>*{pointer-events:auto;}
@@ -925,26 +925,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .more-list button>svg{color:var(--muted-soft);}
 .more-list button[aria-current="page"] .mt b{color:var(--accent);}
 
-/* ════════════ TIJDELIJK: glasvarianten B en C om te vergelijken ════════════ */
-body.glass-compare{padding-bottom:calc(270px + env(safe-area-inset-bottom));}
-.gnav.v-b{bottom:calc(86px + env(safe-area-inset-bottom,0px));}
-.gnav.v-c{bottom:calc(162px + env(safe-area-inset-bottom,0px));}
-.gnav .v-tag{position:absolute;left:calc(6px + env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%);pointer-events:none;
-  z-index:3;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--paper);font:700 10px/18px 'Work Sans',system-ui,sans-serif;text-align:center;}
-/* B: frosted, sterker gefilterd */
-.v-b .glass{background:color-mix(in srgb,var(--surface) 38%,transparent);-webkit-backdrop-filter:blur(30px) saturate(210%) brightness(1.04);backdrop-filter:blur(30px) saturate(210%) brightness(1.04);
-  border:1px solid rgba(255,255,255,.65);box-shadow:0 14px 40px rgba(30,20,12,.18),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(0,0,0,.05);}
-/* C: liquid glass, bijna helder met lichtrand */
-.v-c .glass{background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,.08) 55%,rgba(255,255,255,.18));
-  -webkit-backdrop-filter:blur(12px) saturate(240%);backdrop-filter:blur(12px) saturate(240%);
-  border:1px solid rgba(255,255,255,.7);box-shadow:0 10px 28px rgba(30,20,12,.14),inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(255,255,255,.35),inset 0 -10px 18px rgba(255,255,255,.12);}
-.v-c .gnav-i[aria-selected="true"]{background:rgba(255,255,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 2px 8px rgba(30,20,12,.08);}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]) .v-b .glass{background:color-mix(in srgb,var(--surface) 34%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}
-  :root:not([data-theme="light"]) .v-c .glass{background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03) 55%,rgba(255,255,255,.07));border-color:rgba(255,255,255,.2);
-    box-shadow:0 10px 28px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.28),inset 0 -10px 18px rgba(255,255,255,.04);}
-  :root:not([data-theme="light"]) .v-c .gnav-i[aria-selected="true"]{background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);}
-}
 </style>
 
 <header class="top">
@@ -2534,25 +2514,6 @@ body.glass-compare{padding-bottom:calc(270px + env(safe-area-inset-bottom));}
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeMore(); });
   sh.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ closeMore(); var v=b.dataset.view; setTimeout(function(){ if(v===view) window.scrollTo({top:0}); else go(v); },180); }); });
   paint(current());
-})();
-</script>
-<script>
-/* TIJDELIJK: kopieën van de navbar met andere glasstijl (B, C) om te vergelijken */
-(function(){
-  var orig=document.querySelector('.gnav:not(.v-b):not(.v-c)'); if(!orig) return;
-  document.body.classList.add('glass-compare');
-  orig.insertAdjacentHTML('afterbegin','<span class="v-tag">A</span>');
-  ['b','c'].forEach(function(v){
-    var c=orig.cloneNode(true); c.classList.add('v-'+v); c.setAttribute('aria-hidden','true');
-    c.querySelector('.v-tag').textContent=v.toUpperCase();
-    c.querySelector('.gnav-more').removeAttribute('id');
-    c.querySelectorAll('.gnav-i').forEach(function(b){ b.addEventListener('click',function(){ orig.querySelector('.gnav-i[data-view="'+b.dataset.view+'"]').click(); }); });
-    c.querySelector('.gnav-more').addEventListener('click',function(){ document.getElementById('gnavMore').click(); });
-    orig.parentNode.insertBefore(c,orig);
-    function sync(){ orig.querySelectorAll('.gnav-i').forEach(function(o){ c.querySelector('.gnav-i[data-view="'+o.dataset.view+'"]').setAttribute('aria-selected',o.getAttribute('aria-selected')); });
-      c.querySelector('.gnav-more').classList.toggle('on',document.getElementById('gnavMore').classList.contains('on')); }
-    new MutationObserver(sync).observe(orig,{attributes:true,subtree:true,attributeFilter:['aria-selected','class']}); sync();
-  });
 })();
 </script>
 </body>
