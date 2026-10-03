@@ -76,9 +76,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Last (knop, vroeger Day) = de laatste trainingsdag, Week = laatste 7 dagen → totaal aantal sets.
-- Month = laatste 30 dagen, All = sinds de eerste afvinking → gemiddeld aantal sets per week.
-(interne waarden van `per` blijven 'dag'/'week'/'maand'/'alles').
+- Drie knoppen: Last workout (`dag`, de laatste trainingsdag → totaal aantal sets), Last month (`maand`, laatste 30 dagen) en
+  All time (`alles`, sinds de eerste afvinking) → gemiddeld aantal sets per week. De Week-knop is weg (code voor 'week' blijft,
+  een bewaarde 'week' valt terug op maand).
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
