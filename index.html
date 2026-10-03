@@ -3118,7 +3118,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var bg=document.getElementById('grp-bg'), sh=document.getElementById('grp-sheet'), list=sh.querySelector('.gs-list'), msg=sh.querySelector('.gs-msg'), cur=null, open=false, last=null;
   function render(){
     var act=on(cur);
-    list.innerHTML=rows(cur).map(function(li){ var k=keyOf(li), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;
+    /* gevaarlijk gemarkeerde oefeningen (driehoekje) altijd onderaan de lijst */
+    var ordered=rows(cur), safe=ordered.filter(function(li){ return !li.classList.contains('exr-danger'); }), risky=ordered.filter(function(li){ return li.classList.contains('exr-danger'); });
+    list.innerHTML=safe.concat(risky).map(function(li){ var k=keyOf(li), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
       var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'"><span>i</span></button>':'';
       return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+ib+'</b><small>'+st+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; }).join('');
