@@ -1074,7 +1074,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .sheet-x,.prog-edit,.pe-del,.grp-edit,.note-erase,.gs-set,.exr > .info-b,.gs-list .info-b{width:36px;height:36px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;
   display:inline-flex;align-items:center;justify-content:center;flex:none;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
 .sheet-x,.prog-edit,.pe-del{color:var(--muted);position:relative;}
-.sheet-x{margin:0;}
+.sheet-x{margin:-5.5px 0;} /* gecentreerd op de eerste regel van de titel (22px × 1.15 ≈ 25px vs 36px) */
 .sheet-x::after,.prog-edit::after,.pe-del::after{content:"";position:absolute;inset:-4px;}
 .sheet-x:hover{color:var(--muted);}
 .sheet-x:active,.prog-edit:active,.pe-del:active{background:var(--paper-soft);transform:scale(.95);}
