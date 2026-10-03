@@ -187,8 +187,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
 - Alleen oefeningen met echte foto's (Free Exercise DB, begin/eind in `IMG`); getekende animaties zonder foto's
   (Torso Rotation, Bird Dog) zijn verwijderd. Nieuwe oefeningen dus altijd met twee foto's.
-- De i-knop is iets lichter (klasse `.nop`) bij oefeningen zonder opgeslagen progressie (`markProg`, ververst bij `p53-prog`),
-  ook in het keuzeblad; zo zie je waar progressie te bekijken valt.
+- Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
+  `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
 - Sets & reps per oefening: in het keuzeblad een rond knopje met schuifjes (`.gs-set`; standaard lichter, aangepast = gewone tint, zoals de i-knop) opent
   `#set-sheet` (bovenop, klasse `.top`) met stepper Sets (0–10, 0 = geen 'N ×') en tekstveld 'Reps or time', voorbeeld
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
