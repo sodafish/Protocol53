@@ -845,12 +845,23 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .stats-per button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 /* Full / Upper / Lower: dropdown naast New workout */
 #s-d3 .tools-row{display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;}
-.split-sel{position:relative;display:inline-flex;align-items:center;flex:none;}
-.split-sel select{appearance:none;-webkit-appearance:none;cursor:pointer;min-height:48px;padding:0 2.6rem 0 1.3rem;border-radius:999px;
-  border:1.5px solid var(--line);background:transparent;color:var(--ink);font:500 14.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.01em;
-  -webkit-tap-highlight-color:transparent;}
-.split-sel select:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
-.split-sel svg{position:absolute;right:1.1rem;pointer-events:none;color:var(--muted);}
+.split-sel{position:relative;flex:none;}
+#splitBtn{appearance:none;-webkit-appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:.7rem;min-height:48px;padding:0 1.1rem 0 1.3rem;border-radius:999px;
+  border:1.5px solid var(--line);background:transparent;color:var(--ink);font:500 14.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.01em;-webkit-tap-highlight-color:transparent;}
+#splitBtn svg{color:var(--muted);transition:transform .2s ease;}
+#splitBtn[aria-expanded="true"] svg{transform:rotate(180deg);}
+#splitBtn:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+.split-pop{position:absolute;right:0;top:calc(100% + 6px);z-index:40;min-width:168px;padding:.35rem;border-radius:16px;background:var(--surface);
+  border:1px solid var(--line);box-shadow:0 14px 34px rgba(30,20,12,.16);display:flex;flex-direction:column;
+  opacity:0;transform:translateY(-4px) scale(.98);transform-origin:top right;transition:opacity .16s ease,transform .16s ease;}
+.split-pop[hidden]{display:none;}
+.split-pop.on{opacity:1;transform:none;}
+.split-pop button{appearance:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:44px;padding:0 .8rem;
+  border:0;border-radius:10px;background:transparent;color:var(--ink);font:500 14.5px 'Work Sans',system-ui,sans-serif;text-align:left;-webkit-tap-highlight-color:transparent;}
+.split-pop button:active,.split-pop button:hover{background:var(--paper-soft);}
+.split-pop .sm-ck{color:var(--accent);visibility:hidden;}
+.split-pop button[aria-checked="true"]{font-weight:600;}
+.split-pop button[aria-checked="true"] .sm-ck{visibility:visible;}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 #s-d3 .split-off{display:none!important;}
 .stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
@@ -1037,9 +1048,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   <div class="pane" id="s-d3">
     <div class="tools-row">
       <button type="button" class="reset reset-chk reset-top" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>New workout</span></button>
-      <label class="split-sel"><span class="vh">Workout type</span><select id="splitSel">
-        <option value="full">Full</option><option value="upper">Upper</option><option value="lower">Lower</option>
-      </select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></label>
+      <div class="split-sel">
+        <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Full</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="split-pop" id="splitPop" role="menu" hidden>
+          <button type="button" role="menuitemradio" data-split="full"><span>Full</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-split="upper"><span>Upper</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-split="lower"><span>Lower</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+        </div>
+      </div>
     </div>
     <ol class="exl">
       <li class="exgrp" data-grp="g0"><span class="grp-n">0</span><span class="grp-t">Warm-up</span><button type="button" class="grp-edit" data-grp="g0" aria-label="Choose exercises for Warm-up"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></li>
@@ -2918,15 +2934,25 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* ---- Full / Upper / Lower: verbergt groepen die je vandaag niet traint (Warm-up altijd). Keuze in localStorage fitlog-split ---- */
 (function(){
   var KEY='fitlog-split', SPLIT={upper:['g2','g4','g5','g6','g8'],lower:['g1','g3','g7']};
-  var sel=document.getElementById('splitSel'); if(!sel) return;
+  var btn=document.getElementById('splitBtn'), pop=document.getElementById('splitPop'), lbl=document.getElementById('splitLbl'); if(!btn||!pop) return;
+  var NAME={full:'Full',upper:'Upper',lower:'Lower'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(cur!=='upper'&&cur!=='lower') cur='full';
   function apply(){
     var keep=SPLIT[cur];
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',!!keep && g!=='g0' && keep.indexOf(g)<0); });
-    sel.value=cur;
+    lbl.textContent=NAME[cur];
+    pop.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.split===cur?'true':'false'); });
   }
-  sel.addEventListener('change',function(){ cur=sel.value; try{ localStorage.setItem(KEY,cur); }catch(e){} apply(); });
+  var open=false;
+  function show(){ open=true; pop.hidden=false; btn.setAttribute('aria-expanded','true'); requestAnimationFrame(function(){ pop.classList.add('on'); }); }
+  function hide(){ if(!open) return; open=false; pop.classList.remove('on'); btn.setAttribute('aria-expanded','false'); setTimeout(function(){ if(!open) pop.hidden=true; },170); }
+  btn.addEventListener('click',function(e){ e.stopPropagation(); open?hide():show(); });
+  pop.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
+    cur=b.dataset.split; try{ localStorage.setItem(KEY,cur); }catch(x){} apply(); hide(); btn.focus({preventScroll:true}); }); });
+  document.addEventListener('click',function(e){ if(open && !pop.contains(e.target)) hide(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') hide(); });
+  window.addEventListener('scroll',function(){ if(open) hide(); },{passive:true});
   apply();
 })();
 </script>
