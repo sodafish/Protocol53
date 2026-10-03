@@ -89,7 +89,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   leeg en scrollen naar Warm-up; tellingen/hist zijn al bij het afvinken bewaard. (De oude End-knop is weg;
   `window.__statsPer` bestaat nog.) Onder de laatste groep (Arms) staat 'Finish workout' (`.finish-b`, zelfde omlijnde stijl,
   vinkje-icoon): na `p53Confirm` alle vinkjes leeg en naar boven scrollen; tellingen, kilo's en progressie blijven. Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
-- Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 450): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
+- Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
+  geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
   randen; de naden en de buitenomtrek komen van een tweede laag met dikke lijn (`.o`). Een gat tussen
   vlakken wordt dus zichtbaar als achtergrond: altijd randen laten aansluiten.

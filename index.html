@@ -2156,10 +2156,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 };
     var MIR=' transform="matrix(-1 0 0 1 200 0)"';
     fig.innerHTML=[['front','Front'],['back','Back']].map(function(v){
-      var d=B[v[0]], half='';
-      d.parts.forEach(function(x){ half+='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; });
-      var all='<g>'+half+'</g><g'+MIR+'>'+half+'</g>'+d.head;
-      return '<figure><svg viewBox="28 0 144 450" role="img" aria-label="Body, '+v[1].toLowerCase()+'"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg></figure>';
+      var d=B[v[0]], half='', ear='';
+      /* lichaam iets minder hoog (factor SY rond de kin), hoofd en oor ongewijzigd */
+      var SY=.86, CY=55, SC=' transform="translate(0 '+CY+') scale(1 '+SY+') translate(0 '+(-CY)+')"';
+      d.parts.forEach(function(x,i){ var p='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; if(i===0) ear+=p; else half+=p; });
+      var side='<g'+SC+'>'+half+'</g>'+ear;
+      var all='<g>'+side+'</g><g'+MIR+'>'+side+'</g>'+d.head;
+      var VH=Math.ceil(CY+(450-CY)*SY)+4;
+      return '<figure><svg viewBox="28 0 144 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+'"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg></figure>';
     }).join('');
   })();
   renderStats();
