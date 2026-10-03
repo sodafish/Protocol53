@@ -160,7 +160,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 
 ## Full / Upper / Lower (dropdown naast New workout)
 - Eigen menu (geen native `<select>`: iOS toont dan grote systeemletters): knop `#splitBtn` (pil met chevron, 500 14.5px)
-  rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full/Upper/Lower (`menuitemradio`, vinkje in
+  rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
   accentkleur). Sluit bij keuze, tik ernaast, scrollen of Esc. Full = standaard; keuze in localStorage `fitlog-split`.
 - Upper = groepen 2, 4, 5, 6, 8; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
 - Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; ook de tussenkop
