@@ -3468,6 +3468,25 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 })();
 </script>
 <script>
+/* ---- invulveld aantikken: veld netjes boven het toetsenbord houden (iOS schuift de pagina anders soms te ver of de verkeerde kant op) ---- */
+(function(){
+  var vv=window.visualViewport; if(!vv) return;
+  var cur=null, tm=null;
+  function fit(){
+    if(!cur || document.activeElement!==cur) return;
+    var r=cur.getBoundingClientRect(), top=vv.offsetTop, h=vv.height;
+    var lo=top+70, hi=top+h-24; /* zichtbare zone boven het toetsenbord */
+    if(r.top>=lo && r.bottom<=hi) return;
+    var d=(r.top+r.height/2)-(top+h*.42), html=document.documentElement;
+    html.style.scrollBehavior='auto'; window.scrollBy(0,d); requestAnimationFrame(function(){ html.style.scrollBehavior=''; });
+  }
+  document.addEventListener('focusin',function(e){
+    var t=e.target; if(!t.matches || !t.matches('input,textarea') || t.closest('.sheet') || t.closest('#p53-login')) return;
+    cur=t; clearTimeout(tm); tm=setTimeout(fit,320); setTimeout(fit,650);
+  });
+  document.addEventListener('focusout',function(){ cur=null; });
+  vv.addEventListener('resize',function(){ if(cur){ clearTimeout(tm); tm=setTimeout(fit,60); } });
+})();
 /* ---- achterliggende pagina vastzetten zolang er een onderblad open is (iOS scrolt anders de pagina i.p.v. de lijst) ---- */
 (function(){
   var sheets=[].slice.call(document.querySelectorAll('.sheet')), locked=false, y=0, b=document.body;
