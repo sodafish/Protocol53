@@ -753,7 +753,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 
 .info-b{appearance:none;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:.4rem;vertical-align:2px;border-radius:50%;border:1.3px solid var(--muted-soft);background:transparent;color:var(--muted);padding:0;}
 .exr > .info-b,.gs-list .info-b{width:36px;height:36px;margin:0;vertical-align:0;flex:none;border:1.5px solid var(--muted-soft);color:var(--muted);align-self:center;}
-.exr > .info-b .ib-i,.gs-list .info-b .ib-i{display:block;font:600 18px/18px 'Fraunces',Georgia,serif;height:18px;transform:translateY(1px);}
+.exr > .info-b .ib-i,.gs-list .info-b .ib-i{display:block;}
 .exr > .info-b::after,.gs-list .info-b::after{inset:-4px;}
 .info-b span{font:700 11px/1 'Work Sans',system-ui,sans-serif;}
 .info-b::after{content:"";position:absolute;inset:-12px;}
@@ -2440,7 +2440,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     inp.addEventListener('keydown',function(e){ e.stopPropagation(); });
     inp.addEventListener('input',function(){
       if(!local[key]) local[key]={};
-      local[key].t=inp.value; saveLocal(local);
+      local[key].t=inp.value; local[key].at=Date.now(); saveLocal(local);
       if(!col) return;
       clearTimeout(timers[key]); setStamp('Saving…');
       timers[key]=setTimeout(function(){
@@ -2504,17 +2504,18 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var first=true;
     col.onSnapshot(function(snap){
       var remote={};
-      snap.docs.forEach(function(d){ if(d.exists) remote[d.id]=(d.data()||{}).t; });
+      var remoteAt={};
+      snap.docs.forEach(function(d){ if(d.exists){ var x=d.data()||{}; remote[d.id]=x.t; remoteAt[d.id]=x.updatedAt||0; } });
       inputs.forEach(function(inp){
         var key=keyOf(inp);
         if(document.activeElement===inp) return;
         if(remote[key]!=null){
           if(inp.value!==remote[key]) inp.value=remote[key];
           if(!local[key]) local[key]={};
-          local[key].t=remote[key];
+          local[key].t=remote[key]; local[key].at=Math.max(local[key].at||0,remoteAt[key]||0);
         }
       });
-      saveLocal(local);
+      saveLocal(local); syncFromChart();
       if(first && !snap.metadata.fromCache){
         first=false;
         /* eenmalig: gewichten die enkel in deze browser stonden mee naar de database */
@@ -2526,6 +2527,21 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       setStamp('Saved on all your devices');
     },function(){ setStamp('Connection lost — reload'); });
   });
+  /* het invulveld toont de laatste waarde uit de grafiek, tenzij je daarna zelf iets typte (nog niet bevestigd) */
+  function syncFromChart(){
+    if(!window.__progPts) return;
+    inputs.forEach(function(inp){
+      if(!inp.classList.contains('exr-in') || document.activeElement===inp) return;
+      var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
+      var last=pts[pts.length-1], key=keyOf(inp), at=(local[key]&&local[key].at)||0;
+      if(inp.value.trim() && at>last.t) return;
+      var v=String(Math.round(last.v*100)/100);
+      if(inp.value!==v){ inp.value=v; if(!local[key]) local[key]={}; local[key].t=v; }
+    });
+    saveLocal(local);
+  }
+  document.addEventListener('p53-prog',syncFromChart);
+  setTimeout(syncFromChart,0);
 
 })();
 </script>
@@ -3090,7 +3106,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     });
   }
   document.addEventListener('p53-prog',function(){ if(!sh.hidden && curName) progBlock(curName); });
-  var INFO_ICON='<span class="ib-i" aria-hidden="true">i</span>'; window.__p53infoIcon=INFO_ICON;
+  var INFO_ICON='<svg class="ib-i" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12.1" cy="5.6" r="1.75"/><path d="M9.4 10.3 13.3 9.9V17.4L14.9 17.65V19H9.3V17.65L10.9 17.4V11.75L9.4 11.6Z"/></svg>'; window.__p53infoIcon=INFO_ICON;
   var INFO_BTN='<button type="button" class="info-b" aria-label="How to">'+INFO_ICON+'</button>';
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;

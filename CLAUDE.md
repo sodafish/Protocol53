@@ -106,6 +106,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   die rij) of met het potlood; typen in het veld meet alleen als de rij al afgevinkt is (dan wordt de meting van vandaag
   bijgewerkt). Uitvinken wist de meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet.
   New/Finish workout wissen alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
+- Het invulveld toont de laatste waarde uit de grafiek (`syncFromChart`, bij laden, na de log-snapshot en bij `p53-prog`),
+  tenzij je daarna zelf iets typte dat nog niet bevestigd is (`local[key].at` > tijd laatste meting). Typen wordt pas een
+  meting bij afvinken; aanpassen kan ook via het potlood.
 - Afvinken kan alleen met een waarde in elk invulveld van de rij (de vorige waarde die er nog staat volstaat): een leeg
   veld licht op in de accentkleur, schudt even (`.need`) en krijgt de focus. Zo heeft elke training een punt in de grafiek.
 - Het getal 'N×' bij een oefening = aantal trainingen in de statistieken (`window.__exStat(k)` uit `events()`: vinkjes +
@@ -194,7 +197,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
-- De i-knop toont een rechte 'i' in Fraunces (`INFO_ICON` = `<span class="ib-i">i</span>`, 600 18px, gecentreerd);
+- De i-knop toont een getekende 'i' in de stijl van Fraunces (inline SVG `INFO_ICON`, schreefvoetje, wat meer ruimte
+  tussen punt en beentje), gecentreerd;
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`) helemaal rechts; in de workout achter het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 4.2rem 36px`; invulveld smal, past '999'/'12,5'/'reps'), op één lijn met het groepspotlood, in het keuzeblad links van het sets-knopje.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
