@@ -172,8 +172,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
   accentkleur). Bij tikken en zolang het open is krijgt de knop de lichte vulling `--paper-soft` (zoals de ronde knoppen). Sluit bij keuze, tik ernaast, scrollen of Esc. Full = standaard; keuze in localStorage `fitlog-split`.
 - Upper = groepen 2, 4, 5, 6, 8; Lower = 1, 3, 7 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
-- Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; ook de tussenkop
-  `.exsub` 'Supersets' heeft `data-grp="g8"`; de kop 'Optional' boven Arms is weg). Vinkjes, tellingen, statistieken en progressie veranderen niet.
+- Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; de kop 'Optional' boven Arms is weg). Vinkjes, tellingen, statistieken en progressie veranderen niet.
 
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–8)
 - Structuur ligt vast: Warm-up + 8 groepen. Binnen een groep staan álle mogelijke oefeningen als gewone
@@ -189,7 +188,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   als er één gedaan is (geen `grp-skip`): meerdere oefeningen per groep mag.
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
-  Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep (bij Arms vóór de kop Supersets), plus MUSCLES/NAMES/EX/IMG.
+  Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep, plus MUSCLES/NAMES/EX/IMG.
 - Warm-up (groep 0, `data-grp="g0"`, kop zonder nummer) bestaat uit losse rijen met sleutels `w0-…` (zonder invulveld): 4 standaard
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
@@ -220,12 +219,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Oefeningen met ongevalsrisico (vrije barbell boven lichaam/gezicht, leg press, hack squat, smith, handstand …) staan in
   `RISK` (sleutel → veiligheidstip, in het uitleg-script): rij krijgt klasse `exr-danger` en een oranje driehoekje
   (`.exr-risk`) na de naam, ook in het keuzeblad; de uitleg toont de tip in een kader met driehoek (`EX[..].risk`, `.sheet-risk`).
-  Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad (de workout niet): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
+  Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad én in de workout (`sortRows` herschikt de rijen bij het laden): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
   dan gevaarlijke; binnen elke laag op populariteit volgens `POP` (per groep een lijst sleutels, meest gedaan eerst).
   Nieuwe oefening: ook haar sleutel op de juiste plek in `POP` zetten.
 - Groep 3 heeft ook adductie (Hip Adduction Machine, Cable/Band Hip Adduction) en Leg Press Calf Raise (in `RISK`).
   Geen foto's in de Free Exercise DB voor: Copenhagen plank, lateral raise machine, tibialis raise, hollow hold,
   suitcase carry, daarom niet toegevoegd.
-- De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
+- Geen tussenkop meer boven de supersets (Arms): ze sluiten gewoon aan (staan achteraan in `POP`).
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
