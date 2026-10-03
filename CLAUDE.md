@@ -80,7 +80,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
-- `MLAB` — de spiergroepen en hun (Engelse) schermnaam (17 stuks).
+- `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
+  hoofdspier van de adductie-oefeningen in groep 3 en hulpspier bij squats/sumo deadlift).
 - `MUSCLES` — per oefeningsleutel welke spieren meetellen: `1` = hoofdspier, `.5` = werkt flink mee,
   `.25` = helpt een beetje. Bv. `'d1-goblet-squat':{quad:1,bil:.5,buik:.25,onderrug:.25}`.
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
@@ -222,6 +223,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad (de workout niet): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
   dan gevaarlijke; binnen elke laag op populariteit volgens `POP` (per groep een lijst sleutels, meest gedaan eerst).
   Nieuwe oefening: ook haar sleutel op de juiste plek in `POP` zetten.
+- Groep 3 heeft ook adductie (Hip Adduction Machine, Cable/Band Hip Adduction) en Leg Press Calf Raise (in `RISK`).
+  Geen foto's in de Free Exercise DB voor: Copenhagen plank, lateral raise machine, tibialis raise, hollow hold,
+  suitcase carry, daarom niet toegevoegd.
 - De tussenkop Supersets (`.exsub`) verdwijnt als er geen zichtbare oefening onder staat.
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
