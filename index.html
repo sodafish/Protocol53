@@ -901,6 +901,8 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 .split-pop button[aria-checked="true"] .sm-ck{visibility:visible;}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 #s-d3 .split-off{display:none!important;}
+/* heel smal scherm (320 px): beide knoppen naast elkaar laten passen */
+@media (max-width:350px){ #s-d3 .tools-row .reset-chk.reset-top{padding-left:.85rem!important;padding-right:.9rem!important;letter-spacing:.06em!important;gap:.4rem!important;} #s-d3 #splitBtn{padding:0 .75rem 0 .95rem;gap:.4rem;font-size:13.5px;} }
 .split-pop button span{white-space:nowrap;}
 #s-d3 .reset-top{white-space:nowrap;}
 .stats-sub{margin:.7rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
@@ -2498,11 +2500,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     inp.addEventListener('input',function(){
       if(!local[key]) local[key]={};
       local[key].t=inp.value; local[key].at=Date.now(); saveLocal(local);
-      if(!col) return;
-      clearTimeout(timers[key]); setStamp('Saving…');
+      clearTimeout(timers[key]); if(col) setStamp('Saving…');
       timers[key]=setTimeout(function(){
-        /* alleen meten als de oefening afgevinkt is (dan telt ze ook mee in Coverage); anders enkel het veld bewaren */
+        /* alleen meten als de oefening afgevinkt is (dan telt ze ook mee in Coverage); anders enkel het veld bewaren.
+           Ook zonder database (offline zonder sessie): de meting gaat dan in de lokale wachtrij */
         var _row=inp.closest('.exr'); if(window.__progRecord && inp.classList.contains('exr-in') && _row && _row.classList.contains('done')) window.__progRecord(inp);
+        if(!col) return;
         col.doc(key).set({t:inp.value, updatedAt:Date.now()})
           .then(function(){ setStamp('Saved on all your devices'); })
           .catch(function(){ setStamp('Not saved — try again'); });

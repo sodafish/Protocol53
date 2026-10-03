@@ -7,7 +7,8 @@ vooral op zijn iPhone, als app op het beginscherm.
 
 ## Bestanden
 - `index.html` — de hele app (HTML, CSS en JS in één bestand). Hier gebeuren bijna alle aanpassingen.
-- `cloud.js` — opslag in Supabase met offline wachtrij, inlogscherm, back-up en uitloggen.
+- `cloud.js` — opslag in Supabase met offline wachtrij, inlogscherm, back-up (`p53Backup`: alle collecties log, checks, counts,
+  hist, prog, cfg als JSON) en uitloggen.
   Statusregel onder de titel (`#syncStamp`, klasse `warn`): offline / database niet bereikbaar
   (bv. gepauzeerd Supabase-project) / nog niet bewaard (pas na 1 s wachtrij, anders flikkert het); bij problemen elke minuut opnieuw proberen.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
@@ -175,6 +176,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   bovenaan staat; blad + achtergrond volgen de vinger, los na > 30% hoogte (max 140 px) of snelle veeg = klik op `.sheet-x`, anders terugveren.
 
 ## Full / Upper / Lower (dropdown naast New workout)
+- Op heel smalle schermen (≤ 350 px) krijgen New workout en `#splitBtn` minder padding/letterspatiëring zodat ze naast elkaar passen.
 - Eigen menu (geen native `<select>`: iOS toont dan grote systeemletters): knop `#splitBtn` (pil met chevron, 500 14.5px)
   rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
   accentkleur). Bij tikken en zolang het open is krijgt de knop de lichte vulling `--paper-soft` (zoals de ronde knoppen). Sluit bij keuze, tik ernaast, scrollen of Esc. Full = standaard; keuze in localStorage `fitlog-split`.
