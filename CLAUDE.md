@@ -273,6 +273,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   NAMES → `ssN`, `EX.ssN`, `IMG.ssN` (4 foto's: begin/eind van beide), `SSL.ssN` (namen voor de foto-labels en progressieblokken), POP.
 - Kabeloefeningen tonen het hulpstuk achter de sets: `<span class="exr-eqp">· rope</span>` (ook V-handle, D-handle(s), wide bar,
   close-grip bar, straight bar, straight or EZ bar, ankle strap); het keuzeblad toont het mee. Nieuwe kabeloefening: hulpstuk erbij.
-- Warm-up-kop: 'Warm-up' + `<em class="grp-opt">(Optional)</em>` (cursief, zelfde stijl als de kop).
+- Arms-kop: 'Arms' + `<em class="grp-opt">(Optional)</em>` (cursief, zelfde stijl als de kop): in een full-body training zijn armen
+  een extraatje (ze werken al mee bij rows/presses). Warm-up heeft geen 'Optional' meer.
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
