@@ -225,8 +225,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
 - De i-knop toont een getekende 'i' in de stijl van Fraunces (inline SVG `INFO_ICON`, schreefvoetje, wat meer ruimte
   tussen punt en beentje), gecentreerd;
-  ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`) helemaal rechts; in de workout achter het invulveld
-  (rij krijgt `.has-info`, grid `2.4rem 1fr 4.2rem 36px`; invulveld smal, past '999'/'12,5'/'reps'), op één lijn met het groepspotlood, in het keuzeblad links van het sets-knopje.
+  ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
+  (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
   (klasse `.over`, hogere z-index).
 - Extra's bevatten bewust ook de klassiekers (barbell squat, deadlift, bench press, rows, overhead press, chin-ups,
