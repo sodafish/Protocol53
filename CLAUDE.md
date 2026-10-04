@@ -45,6 +45,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Ronde icoonknoppen overal gelijk (blok onderaan de CSS 'alle ronde icoonknoppen'): 36 px, cirkel 1.5px `--line`, icoon 15 px
   (kruisje 14), druk = `--paper-soft` + scale(.95). Geldt voor `.sheet-x` (sluiten), `.prog-edit`/`.ip-edit`, `.pe-del`, `.grp-edit`,
   `.note-erase`, `.gs-set` en de i-knop. Nieuwe icoonknop: zelfde maat en cirkel.
+  Bewerk-icoon (groepspotlood `.grp-edit`, `#progEdit`, `.ip-edit`): Material Symbols 'edit_note' (lijntjes + potlood) als inline SVG,
+  20 px (viewBox 0 -960 960 960, `fill=currentColor`), zodat het optisch even groot is als de andere iconen.
 - Focus op invulvelden en notities: geen dikke rand, enkel een dunne rand die zacht oplicht (40% inktkleur: in donker lichter/witter, in licht iets donkerder).
 - Invulveld aantikken: geen eigen scroll-code (een visualViewport-correctie liet de lijst flikkeren op iOS, teruggedraaid).
   Wel `html:has(input:focus,textarea:focus){scroll-behavior:auto}` zodat iOS het veld zonder 'smooth' in beeld schuift.
