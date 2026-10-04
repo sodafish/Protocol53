@@ -227,8 +227,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
-- De i-knop toont een getekende 'i' in de stijl van Fraunces (inline SVG `INFO_ICON`, schreefvoetje, wat meer ruimte
-  tussen punt en beentje), gecentreerd;
+- De i-knop (intern nog zo genoemd) toont Material Symbols 'visibility' (oog) als inline SVG `INFO_ICON`, 20 px,
+  viewBox `0 -980 960 960` zodat het oog verticaal gecentreerd staat (vroeger een getekende Fraunces-'i');
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
