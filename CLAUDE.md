@@ -193,10 +193,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   volgorde (`cat`) en de eenmalige migratie (`migrate()`, vlag `v7` in cfg/groups: keuzes samengevoegd, Calisthenics-keuzes weg).
   Standaardkeuze voor een nieuwe gebruiker = Toms vaste indeling (rijen zonder `ex-off` in de HTML):
   Warm-up: Bodyweight Squats, Arm Circles, Band Pull-Aparts, Cat-Cow · 1: Goblet Squat, Bulgarian Split Squat, DB Reverse Lunges ·
-  2: Push-Ups, Chest Press Machine, Chest Fly Machine, Incline DB Press · 3: Seated Leg Curl, Cable Pull-Through ·
-  4: Seated Cable Row, One-Arm DB Row, Lat Pulldown, Face Pull · 5: DB Lateral Raise, Shoulder Press Machine, Reverse Fly Machine ·
-  6: Plank + Side Plank, Weighted Back Extension, Farmer's Carry · 7: DB Biceps Curl, Cable Biceps Curl, Rope Pushdown,
-  Overhead Cable Triceps Extension + beide supersets. Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
+  2: Push-Ups, Chest Press Machine · 3: Seated Leg Curl, DB Romanian Deadlift · 4: Seated Cable Row, One-Arm DB Row, Lat Pulldown,
+  Face Pull · 5: DB Lateral Raise, Shoulder Press Machine · 6: Plank + Side Plank, Weighted Back Extension, Farmer's Carry ·
+  7: supersets rope only, bar only, mix. Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
 - Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Titel + kruisje blijven
   bovenaan staan (sticky `.sheet-head`; bij scrollen klasse `.stuck` = dunne lijn eronder). Minstens
