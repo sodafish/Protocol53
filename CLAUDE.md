@@ -264,7 +264,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Back = Rows / Vertical pull & upper back; Arms = Biceps /
   Forearms / Triceps / Supersets. Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
   koppen (`li.gs-sub-h`, uit `data-sub` op de rij).
-- Supersets (Arms, achteraan, standaard uit behalve de eerste twee): ss1 Overhead Extension + Biceps Curl, ss2 Rope Pushdown +
+- Supersets (Arms, achteraan; volgorde in POP: rope only (ss2), bar only (ss3), mix rope + bar (ss1), reverse (ss4), single-arm (ss5);
+  standaard aan: ss2, ss3, ss1; elke superset gebruikt altijd dezelfde hulpstukken zodat de gewichten vergelijkbaar blijven): ss1 Overhead Extension + Biceps Curl, ss2 Rope Pushdown +
   Hammer Curl, ss3 Bar Pushdown + Bar Curl (`x7-ss-bar`), ss4 Reverse-Grip Pushdown + Reverse Curl (`x7-ss-reverse`), ss5
   Single-Arm Pushdown + Single-Arm Curl (`x7-ss-single`). Per superset: rij met `.exr-in2` (twee velden, sleutel + `-b`), MUSCLES,
   NAMES → `ssN`, `EX.ssN`, `IMG.ssN` (4 foto's: begin/eind van beide), `SSL.ssN` (namen voor de foto-labels en progressieblokken), POP.
