@@ -180,7 +180,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Omlaag vegen sluit een blad (onderaan `index.html`, bij de scroll-lock): vanaf grip/titel altijd, op de inhoud alleen als die
   bovenaan staat; blad + achtergrond volgen de vinger, los na > 30% hoogte (max 140 px) of snelle veeg = klik op `.sheet-x`, anders terugveren.
 
-## Full / Upper / Lower (dropdown naast New workout)
+## Full / Upper / Lower (dropdown naast Start/End workout)
 - Op heel smalle schermen (≤ 350 px) krijgen Start/End workout en `#splitBtn` minder padding/letterspatiëring zodat ze naast elkaar passen.
 - Eigen menu (geen native `<select>`: iOS toont dan grote systeemletters): knop `#splitBtn` (pil met chevron, 500 14.5px)
   rechts naast 'Start/End workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
