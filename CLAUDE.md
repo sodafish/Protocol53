@@ -264,6 +264,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Back = Rows / Vertical pull & upper back; Arms = Biceps /
   Forearms / Triceps / Supersets. Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
   koppen (`li.gs-sub-h`, uit `data-sub` op de rij).
+- Supersets (Arms, achteraan, standaard uit behalve de eerste twee): ss1 Overhead Extension + Biceps Curl, ss2 Rope Pushdown +
+  Hammer Curl, ss3 Bar Pushdown + Bar Curl (`x7-ss-bar`), ss4 Reverse-Grip Pushdown + Reverse Curl (`x7-ss-reverse`), ss5
+  Single-Arm Pushdown + Single-Arm Curl (`x7-ss-single`). Per superset: rij met `.exr-in2` (twee velden, sleutel + `-b`), MUSCLES,
+  NAMES → `ssN`, `EX.ssN`, `IMG.ssN` (4 foto's: begin/eind van beide), `SSL.ssN` (namen voor de foto-labels en progressieblokken), POP.
+- Kabeloefeningen tonen het hulpstuk achter de sets: `<span class="exr-eqp">· rope</span>` (ook V-handle, D-handle(s), wide bar,
+  close-grip bar, straight bar, straight or EZ bar, ankle strap); het keuzeblad toont het mee. Nieuwe kabeloefening: hulpstuk erbij.
 - Warm-up-kop: 'Warm-up' + `<em class="grp-opt">(Optional)</em>` (cursief, zelfde stijl als de kop).
 - De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
 
