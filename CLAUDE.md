@@ -95,10 +95,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
   ze staat (Chest, Shoulders …, regexen op de Engelse koppen) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
-- Workout heeft bovenaan één omlijnde knop 'New workout' (`.reset-top`, niet volle breedte, met plus): vinkjes
-  leeg en scrollen naar Warm-up; tellingen/hist zijn al bij het afvinken bewaard. (De oude End-knop is weg;
-  `window.__statsPer` bestaat nog.) Onder de laatste groep (Arms) staat 'Finish workout' (`.finish-b`, zelfde omlijnde stijl,
-  vinkje-icoon): na `p53Confirm` alle vinkjes leeg en naar boven scrollen; tellingen, kilo's en progressie blijven. Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
+- Workout heeft bovenaan (`.reset-top`, in `.tools-row` naast de split-knop) en onderaan na Arms (`.reset-end.finish-b`) dezelfde
+  omlijnde knop (`.wo-btn`, altijd in sync via `paintWoBtns`, aangeroepen vanuit `paintChecks`). Geen vinkje vandaag in Workout =
+  'Start workout' (play-icoon): scrollt naar Warm-up, wist niets. Minstens één vinkje (ook warm-up, ook verborgen/uitgezette rijen) =
+  'End workout' (vinkje-icoon): `p53Confirm`, dan alle vinkjes leeg, periode Last workout (`__statsPer('dag')`) en naar Coverage
+  (klik op de navbar). Tellingen, hist, kilo's en metingen blijven (al bewaard bij afvinken). Vinkjes vervallen ook vanzelf de volgende dag.
+  Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
   worden, als `[spier|null, pad]`. `null` = neutraal vlak (hoofd, handen, knieën …). Vlakken delen hun
@@ -116,7 +118,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   toegevoegde sessie mee. Sets/spieren van zo'n meting = de huidige van de oefening. Een meting ontstaat alleen bij afvinken (alle velden van
   die rij) of met het potlood; typen in het veld meet alleen als de rij al afgevinkt is (dan wordt de meting van vandaag
   bijgewerkt). Uitvinken wist de meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet.
-  New/Finish workout wissen alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
+  End workout wist alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
 - Het invulveld toont de laatste waarde uit de grafiek (`syncFromChart`, bij laden, na de log-snapshot en bij `p53-prog`),
   tenzij je daarna zelf iets typte dat nog niet bevestigd is (`local[key].at` > tijd laatste meting). Typen wordt pas een
   meting bij afvinken; aanpassen kan ook via het potlood.
@@ -179,9 +181,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   bovenaan staat; blad + achtergrond volgen de vinger, los na > 30% hoogte (max 140 px) of snelle veeg = klik op `.sheet-x`, anders terugveren.
 
 ## Full / Upper / Lower (dropdown naast New workout)
-- Op heel smalle schermen (≤ 350 px) krijgen New workout en `#splitBtn` minder padding/letterspatiëring zodat ze naast elkaar passen.
+- Op heel smalle schermen (≤ 350 px) krijgen Start/End workout en `#splitBtn` minder padding/letterspatiëring zodat ze naast elkaar passen.
 - Eigen menu (geen native `<select>`: iOS toont dan grote systeemletters): knop `#splitBtn` (pil met chevron, 500 14.5px)
-  rechts naast 'New workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
+  rechts naast 'Start/End workout' in `.tools-row`, opent kaartje `#splitPop` met Full body / Upper body / Lower body (`menuitemradio`, vinkje in
   accentkleur). Bij tikken en zolang het open is krijgt de knop de lichte vulling `--paper-soft` (zoals de ronde knoppen). Sluit bij keuze, tik ernaast, scrollen of Esc. Full = standaard; keuze in localStorage `fitlog-split`.
 - Upper = groepen 2, 4, 5, 7; Lower = 1, 3, 6 (Core bij Lower); Warm-up altijd zichtbaar. Groepsnummers blijven.
 - Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]` (koppen, rijen; de kop 'Optional' boven Arms is weg). Vinkjes, tellingen, statistieken en progressie veranderen niet.
