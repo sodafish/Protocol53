@@ -256,6 +256,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (eenmalige migratie `migrate()` in cfg/groups, vlag `sp`: wie plank aan had krijgt side plank erbij).
   Daarnaast opnieuw een gecombineerde 'Plank + Side Plank' als eigen oefening (`x7-plank-combo`, standaard uit, '2 × 30 sec front ·
   30 sec per side', zelfde tijd voor elke houding; foto's = eindbeeld plank + side plank).
+- 'Leg Curl Machine' (`d2-leg-curl-machine`) was dezelfde oefening als 'Seated Leg Curl Machine' (`x3-seated-leg-curl`): rij weg,
+  metingen (prog) en hist-rijen verhuizen automatisch naar x3 (`MIGK` in de snapshots), keuzes in cfg/groups ook (`migrate()`, vlag `lc`).
+  Zelfde patroon gebruiken bij een volgende dubbel.
 - Back!-label alleen bij onondersteund voorover scharnieren met gewicht (deadlifts, RDL, good morning, swing, bent-over rows,
   barbell squats, staande overhead press) en belaste rug-flexie/rotatie in core. Niet bij goblet squat, farmer's carry,
   seated cable row, one-arm DB row (hand op de bank).
