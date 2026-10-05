@@ -104,15 +104,15 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Workout heeft bovenaan (`.reset-top`, in `.tools-row` naast de split-knop) en onderaan na Arms (`.reset-end.finish-b`) dezelfde
   omlijnde knop (`.wo-btn`, altijd in sync via `paintWoBtns`, aangeroepen vanuit `paintChecks`). Geen vinkje vandaag in Workout =
   'Start workout' (play-icoon): scrollt naar Warm-up, wist niets. Minstens één vinkje (ook warm-up, ook verborgen/uitgezette rijen) =
-  'End workout' (vinkje-icoon): `p53Confirm`, dan alle vinkjes leeg, periode Last workout (`__statsPer('dag')`) en naar Coverage
+  'End workout' (vinkje-icoon): zonder bevestiging meteen alle vinkjes leeg, periode Last workout (`__statsPer('dag')`) en naar Coverage
   (klik op de navbar). Tellingen, hist, kilo's en metingen blijven (al bewaard bij afvinken). Vinkjes vervallen ook vanzelf de volgende dag.
   Timer: 'Start workout' (of het eerste vinkje) start hem (`woRun`, starttijd in localStorage `fitlog-wo-start`, overleeft herladen,
   vervalt na 12 u); zolang hij loopt staat de knop op 'End workout' (ook zonder vinkjes) en toont de navbar onder het Workout-icoon
-  de verstreken tijd (m:ss / u:mm:ss, `.wo-time`) i.p.v. 'Workout'. End workout toont 'Time: N min.' in de bevestiging en stopt hem.
+  de verstreken tijd (m:ss / u:mm:ss, `.wo-time`) i.p.v. 'Workout'. End workout stopt hem (duur staat in de felicitatie).
   Bij End workout wordt de sessie bewaard in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`: dag, start, einde, aantal
   oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
   Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
-  (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg. Bij reduced motion zonder vuurwerk.
+  (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst). Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een training uit `window.__events()` (hist + metingen, geen warm-up, niet de `seed`-beginstand),
