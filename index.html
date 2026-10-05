@@ -1835,13 +1835,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function saveCountsLocal(){ try{ localStorage.setItem(CNTKEY,JSON.stringify(counts)); }catch(e){} }
   function fmtDate(t){ var d=new Date(t); return d.getDate()+'/'+(d.getMonth()+1); }
   /* hoe vaak gedaan = aantal trainingen in de statistieken (vinkjes + metingen, één per dag); warm-up: de teller */
-  function statOf(k){
-    if(!/^w0-/.test(k)) return window.__exStat ? window.__exStat(k) : counts[k];
-    /* warm-up: aantal dagen met een meting in de grafiek (zelfde bron als de grafiek, dus altijd in sync) */
-    var P=window.__progAll?window.__progAll():{}, days={}, last=0;
-    Object.keys(P).forEach(function(id){ var p=P[id]; if(p&&p.k===k&&typeof p.v==='number'){ days[p.d||new Date(p.t).toDateString()]=1; if(p.t>last) last=p.t; } });
-    return {n:Object.keys(days).length,last:last};
-  }
+  /* aantal trainingen = dagen met een meting in de grafiek (ook warm-up) */
+  function statOf(k){ return window.__exStat ? window.__exStat(k) : counts[k]; }
   function paintCounts(){
     document.querySelectorAll('#s-d3 .exr:not(.exr-wu)').forEach(function(li){
       var k=chkKey(li), c=statOf(k), line=li.querySelector('.exr-s'); if(!line) return;
@@ -2125,7 +2120,16 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   document.addEventListener('p53-prog',function(){ renderStats(); });
   window.__lastHistDay=function(k){ var t=0; Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&e.t>t) t=e.t; });
     if(!t) return null; var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); };
-  window.__exStat=function(k){ var n=0,last=0; events().forEach(function(e){ if(e.k===k){ n++; if(e.t>last) last=e.t; } }); return {n:n,last:last}; };
+  /* 'N×' bij een oefening = aantal dagen met een meting in de grafiek (alle invulvelden van die rij), dus altijd gelijk aan
+     wat de grafiek toont. Oude vinkjes zonder meting tellen nog wel in Coverage (hist), niet in dit getal. */
+  window.__exStat=function(k){
+    var li=null; document.querySelectorAll('#s-d3 .exr').forEach(function(x){ if(!li&&chkKey(x)===k) li=x; });
+    var notes={}; notes[k]=1; notes[k+'-b']=1;
+    if(li) li.querySelectorAll('[data-note]').forEach(function(x){ notes[x.dataset.note]=1; });
+    var P=window.__progAll?window.__progAll():{}, days={}, last=0;
+    Object.keys(P).forEach(function(id){ var p=P[id]; if(p&&notes[p.k]&&typeof p.v==='number'){ days[p.d||new Date(p.t).toDateString()]=1; if(p.t>last) last=p.t; } });
+    return {n:Object.keys(days).length,last:last};
+  };
   /* meting verwijderd in de grafiek: ook de vinkjes-gebeurtenis(sen) van die oefening op die dag weg, zodat alles klopt */
   window.__histDropDay=function(k,d){
     function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
@@ -3388,7 +3392,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
       var rib=li.querySelector('.info-b'), nop=rib&&rib.classList.contains('nop')?' nop':'';
       var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b'+nop+'" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'">'+window.__p53infoIcon+'</button>':'';
-      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+'</b><small>'+st+(eqp?' <span class="exr-eqp">'+eqp.textContent+'</span>':'')+(function(){ var c=window.__exStat&&!/^w0-/.test(k)?window.__exStat(k):null; if(!c){ var ce=li.querySelector('.exr-cnt .cnt-n'); return ce?' <span class="exr-cnt">'+ce.textContent+'</span>':''; } return c.n?' <span class="exr-cnt">· '+c.n+'×</span>':''; })()+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span>'+ib+'<button type="button" class="gs-set'+(sets[k]?' custom':'')+'" data-k="'+k+'" aria-label="Sets and reps for '+n.replace(/"/g,'&quot;')+'"><svg width="24" height="24" viewBox="120 -840 720 720" fill="currentColor" aria-hidden="true"><path d="M220-360v-192h-60v-48h108v240h-48Zm132 0v-110q0-15 9.5-24.5T386-504h98v-48H352v-48h146q15 0 24.5 9.5T532-566v76q0 15-9.5 24.5T498-456h-98v48h132v48H352Zm248 0v-48h132v-48h-92v-48h92v-48H600v-48h146q15 0 24.5 9.5T780-566v172q0 15-9.5 24.5T746-360H600Z"/></svg></button><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; })(); }).join('');
+      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+'</b><small>'+st+(eqp?' <span class="exr-eqp">'+eqp.textContent+'</span>':'')+(function(){ var c=window.__exStat?window.__exStat(k):null; if(!c){ var ce=li.querySelector('.exr-cnt .cnt-n'); return ce?' <span class="exr-cnt">'+ce.textContent+'</span>':''; } return c.n?' <span class="exr-cnt">· '+c.n+'×</span>':''; })()+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span>'+ib+'<button type="button" class="gs-set'+(sets[k]?' custom':'')+'" data-k="'+k+'" aria-label="Sets and reps for '+n.replace(/"/g,'&quot;')+'"><svg width="24" height="24" viewBox="120 -840 720 720" fill="currentColor" aria-hidden="true"><path d="M220-360v-192h-60v-48h108v240h-48Zm132 0v-110q0-15 9.5-24.5T386-504h98v-48H352v-48h146q15 0 24.5 9.5T532-566v76q0 15-9.5 24.5T498-456h-98v48h132v48H352Zm248 0v-48h132v-48h-92v-48h92v-48H600v-48h146q15 0 24.5 9.5T780-566v172q0 15-9.5 24.5T746-360H600Z"/></svg></button><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; })(); }).join('');
     list.querySelectorAll('.info-b').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); window.__p53info.open(b.dataset.n,b); }); });
     list.querySelectorAll('.gs-set').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); openSet(b.dataset.k,b); }); });
     list.querySelectorAll('.sw').forEach(function(c){ c.addEventListener('change',function(){
