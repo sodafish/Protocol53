@@ -3309,11 +3309,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     bg.hidden=false; sh.hidden=false;
     requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); });
     var fig=bodyEl.querySelector('.sheet-fig');
-    /* foto's (links, wisselen start/eind) + animatie (rechts) naast elkaar; alleen animatie; of niets (geen getekende figuren meer) */
-    if(IMG[k]){ cur=photos(fig,k); if(ANIM[k]){ fig.classList.add('duo'); var fr=fig.querySelector('.ph-frame'), w=document.createElement('div'); w.className='ph-duo'; fr.parentNode.insertBefore(w,fr); w.appendChild(fr);
-        w.insertAdjacentHTML('beforeend','<div class="ph-anim"><img alt="Animation" src="'+ANIM[k]+'"></div>'); } }
-    else if(VID[k]){ fig.classList.add('sheet-mov'); fig.innerHTML='<video src="'+VID[k]+'" poster="'+VID[k].replace(/\.mp4$/,'.jpg')+'" autoplay muted loop playsinline preload="auto" aria-label="Video"></video>'; cur=null; } /* echte video (MuscleWiki), enkel waar geen foto/animatie is */
-    else if(ANIM[k]){ fig.classList.add('sheet-gif'); fig.innerHTML='<img alt="Animation" src="'+ANIM[k]+'">'; cur=null; }
+    /* animatie (Gym visual) heeft voorrang en staat alleen; anders video (MuscleWiki); anders foto's (Free Exercise DB) */
+    if(ANIM[k]){ fig.classList.add('sheet-gif'); fig.innerHTML='<img alt="Animation" src="'+ANIM[k]+'">'; cur=null; }
+    else if(VID[k]){ fig.classList.add('sheet-mov'); fig.innerHTML='<video src="'+VID[k]+'" poster="'+VID[k].replace(/\.mp4$/,'.jpg')+'" autoplay muted loop playsinline preload="auto" aria-label="Video"></video>'; cur=null; }
+    else if(IMG[k]){ cur=photos(fig,k); }
     else if(k==='birddog'&&EX[k].poses) cur=player(fig,k); /* uitzondering op vraag van Tom: eigen getekende animatie */
     else { fig.remove(); cur=null; }
     sh.querySelector('.sheet-x').focus({preventScroll:true});

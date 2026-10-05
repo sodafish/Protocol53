@@ -270,11 +270,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
-- Beelden in het uitlegblad: links de foto's (Free Exercise DB, `IMG`, wisselen start/eind), rechts een animatie (`ANIM`, GIF 180 px uit
-  github.com/hasaneyldrm/exercises-dataset, © Gym visual, alleen voor eigen gebruik) in `img/anim/<EX-sleutel>.gif`, naast elkaar in
-  vierkante vakken (`.sheet-photo.duo` › `.ph-duo` met `.ph-frame` (cover) + `.ph-anim` (wit, contain)). 144 oefeningen hebben een
+- Beelden in het uitlegblad, in volgorde van voorrang (op vraag van Tom): 1) animatie alleen (`ANIM`, GIF 180 px uit
+  github.com/hasaneyldrm/exercises-dataset, © Gym visual, alleen voor eigen gebruik, `img/anim/<EX-sleutel>.gif`, `.sheet-gif`);
+  2) video (`VID`, zie onder); 3) foto's (Free Exercise DB, `IMG`, wisselen start/eind). Foto's en animatie staan dus niet meer naast
+  elkaar (de `.duo`-CSS bestaat nog maar wordt niet gebruikt). 145 oefeningen hebben een
   animatie (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
-  Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's. Alleen animatie zonder foto = `.sheet-gif`.
+  Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's.
   Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
   Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov`, poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink): echte
   video's van MuscleWiki die Tom zelf uit hun Playground haalt (gratis plan = geen API vanuit code; watermerk laten staan), alleen voor
