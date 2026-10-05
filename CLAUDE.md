@@ -270,16 +270,17 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
-- Beelden in het uitlegblad, in volgorde van voorrang (op vraag van Tom): 1) animatie alleen (`ANIM`, GIF 180 px uit
+- Beelden in het uitlegblad, in volgorde van voorrang (op vraag van Tom): 1) video (`VID`, zie onder); 2) animatie alleen (`ANIM`, GIF 180 px uit
   github.com/hasaneyldrm/exercises-dataset, © Gym visual, alleen voor eigen gebruik, `img/anim/<EX-sleutel>.gif`, `.sheet-gif`);
-  2) video (`VID`, zie onder); 3) foto's (Free Exercise DB, `IMG`, wisselen start/eind). Foto's en animatie staan dus niet meer naast
+  3) foto's (Free Exercise DB, `IMG`, wisselen start/eind). Foto's en animatie staan dus niet meer naast
   elkaar (de `.duo`-CSS bestaat nog maar wordt niet gebruikt). 145 oefeningen hebben een
   animatie (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
   Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's.
   Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
   Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov`, poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink): echte
-  video's van MuscleWiki die Tom zelf uit hun Playground haalt (gratis plan = geen API vanuit code; watermerk laten staan), alleen voor
-  oefeningen zonder foto én animatie. Nu: Face Pull (`facepull`), Bird Dog (`d3-bird-dog`, g6, standaard uit; de getekende `player`-animatie blijft als terugval).
+  video's van MuscleWiki die Tom zelf uit hun Playground haalt (gratis plan = geen API vanuit code; watermerk laten staan); een video
+  wint van animatie en foto's. Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical). Nu: Arm Circles, Elliptical/Cross Trainer,
+  Goblet Squat, Bulgarian Split Squat, Face Pull, Bird Dog (`d3-bird-dog`, g6, standaard uit; de getekende `player`-animatie blijft als terugval).
   Padel staat er zonder beeld. Torso Rotation blijft weg.
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
