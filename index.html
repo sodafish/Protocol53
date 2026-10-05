@@ -1855,7 +1855,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var k=chkKey(b.closest('.exr')); if(!k) return;
       var on=!checks[k];
       /* afvinken kan alleen met een waarde: leeg veld (nog nooit ingevuld) → veld oplichten en focussen */
-      if(on){ var empty=[].filter.call(b.closest('.exr').querySelectorAll('.exr-in'),function(x){ return !x.value.trim(); });
+      if(on){ var empty=[].filter.call(b.closest('.exr').querySelectorAll('.exr-in'),function(x){ return !/\d/.test(x.value); }); /* een getal nodig, anders geen meting */
         if(empty.length){ empty.forEach(function(x){ x.classList.remove('need'); void x.offsetWidth; x.classList.add('need'); });
           empty[0].focus(); setTimeout(function(){ empty.forEach(function(x){ x.classList.remove('need'); }); },1600); return; } } if(on) checks[k]=true; else delete checks[k];
       if(on&&window.__woRun) window.__woRun(true);
@@ -1910,6 +1910,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       }
       var dur=woStart?Math.max(1,Math.round((Date.now()-woStart)/60000)):null;
       /* geen bevestiging: meteen afronden, naar Coverage en vuurwerk */
+      if(window.__cgAudioUnlock) window.__cgAudioUnlock(); /* iOS: geluid mag alleen starten vanuit een tik */
       Promise.resolve(true).then(function(y){
         var _n=0; pane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)) _n++; });
         if(woStart&&window.__sessAdd) window.__sessAdd(woStart,Date.now(),_n);
@@ -2190,27 +2191,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     saveHistLocal(); renderStats();
   }
   /* alle gebeurtenissen, plus de tellingen van vóór deze functie (één keer vastgelegd in 'seed') */
+  /* één bron: de grafiekdata (prog). Elke oefening met een meting op een dag = één training die dag (supersets: één keer),
+     met de sets en spieren zoals de oefening nu staat. hist wordt nog geschreven maar telt niet meer mee. */
   function events(){
-    var out=[], seenHist={};
-    Object.keys(hist).forEach(function(id){
-      var e=hist[id]; if(!e) return;
-      if(id==='seed'){
-        Object.keys(e.base||{}).forEach(function(k){ var b=e.base[k];
-          for(var i=0;i<b.n;i++) out.push({k:k,t:b.last||e.t,s:setsFor(k),m:musclesFor(k),seed:1}); });
-      } else {
-        /* maximaal één training per oefening per dag (opnieuw afvinken na New workout telt niet dubbel) */
-        var dk=e.k+'|'+new Date(e.t).toDateString(); if(seenHist[dk]) return; seenHist[dk]=1; out.push(e);
-      }
-    });
-    /* metingen in de progressiegrafiek tellen ook als training: één per oefening per dag, ook zonder vinkje
-       (zo vul je achteraf een vergeten sessie aan met het potlood) */
-    var P=window.__progAll?window.__progAll():{};
-    function day(t){ var d=new Date(t); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-    var seen={}; out.forEach(function(e){ seen[e.k+'|'+day(e.t)]=1; });
+    var out=[], seen={}, P=window.__progAll?window.__progAll():{};
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number') return;
-      var inp=document.querySelector('#s-d3 .exr-in[data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?chkKey(li):p.k;
+      var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?chkKey(li):p.k;
       if(!k||/^w0-/.test(k)) return;
-      var key=k+'|'+day(p.t); if(seen[key]) return; seen[key]=1;
+      var key=k+'|'+(p.d||new Date(p.t).toDateString()); if(seen[key]) return; seen[key]=1;
       out.push({k:k,t:p.t,s:setsFor(k,li),m:musclesFor(k,li)});
     });
     return out;
@@ -2506,7 +2494,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return b.t-a.t; });
     /* trainingen die in Coverage meetellen maar geen meting hebben (oude vinkjes): ook tonen, om te verwijderen of een waarde te geven */
     var li=inp&&inp.closest('.exr'), rk=li?chkKey(li):k, have={}; all.forEach(function(e){ have[e.d]=1; });
-    var gaps=(window.__histDays&&!/^w0-/.test(rk))?window.__histDays(rk).filter(function(h){ return !have[h.d]; }):[];
+    var gaps=[]; /* alles komt uit de grafiek: geen 'No value'-dagen meer */
     gaps.forEach(function(h){ all.push({k:k,d:h.d,t:h.t,v:null,gap:1,seed:h.seed,rk:rk}); });
     all.sort(function(a,b){ return b.t-a.t; });
     return {k:k,unit:unit,all:all,gaps:gaps.length,name:inp?progLabel(inp):k};
@@ -3314,7 +3302,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       /* trainingen die in Coverage meetellen maar geen waarde hebben: vermelden, aanvullen of wissen via het potlood */
       var rk=li.dataset.key||(li.querySelector('[data-note]')||{}).dataset&&li.querySelector('[data-note]').dataset.note, have={}, gaps=0;
       pts.forEach(function(e){ var x=new Date(e.t); have[x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2)]=1; });
-      if(window.__histDays&&rk&&!/^w0-/.test(rk)) gaps=window.__histDays(rk).filter(function(h){ return !have[h.d]; }).length;
+
       if(gaps) box.insertAdjacentHTML('beforeend','<p class="ip-gap">'+gaps+(gaps===1?' earlier session has':' earlier sessions have')+' no value. Tap the edit button to fill '+(gaps===1?'it':'them')+' in or delete '+(gaps===1?'it':'them')+'.</p>');
       wrap.appendChild(box);
       box.querySelector('.ip-edit').addEventListener('click',function(){ if(window.__progEdit) window.__progEdit(k); });
@@ -3714,6 +3702,28 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 })();
 
 /* ---- felicitaties na End workout: vuurwerk (canvas) + 'Congratulations!', tik of 4,5 s = weg ---- */
+/* subtiel vuurwerkgeluid: korte gefilterde 'pop' + wat knetter, zacht. iOS: audiosessie 'ambient' = volgt de stille modus */
+(function(){
+  var ac=null;
+  window.__cgAudioUnlock=function(){
+    try{ if(navigator.audioSession) navigator.audioSession.type='ambient'; }catch(e){}
+    try{ if(!ac){ var A=window.AudioContext||window.webkitAudioContext; if(A) ac=new A(); } if(ac&&ac.state==='suspended') ac.resume(); }catch(e){}
+  };
+  function noise(dur){ var n=Math.floor(ac.sampleRate*dur), b=ac.createBuffer(1,n,ac.sampleRate), d=b.getChannelData(0); for(var i=0;i<n;i++) d[i]=Math.random()*2-1; return b; }
+  window.__cgPop=function(){
+    if(!ac||ac.state!=='running') return;
+    if(ac.currentTime-(window.__cgLast||0)<.2) return; window.__cgLast=ac.currentTime;
+    var t=ac.currentTime, out=ac.createGain(); out.gain.value=.09; out.connect(ac.destination);
+    /* pop */
+    var s=ac.createBufferSource(); s.buffer=noise(.25); var f=ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value=900+Math.random()*500;
+    var g=ac.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(1,t+.005); g.gain.exponentialRampToValueAtTime(.001,t+.22);
+    s.connect(f); f.connect(g); g.connect(out); s.start(t); s.stop(t+.25);
+    /* knetter */
+    for(var i=0;i<7;i++){ var tt=t+.18+Math.random()*.55, c=ac.createBufferSource(); c.buffer=noise(.03); var hf=ac.createBiquadFilter(); hf.type='highpass'; hf.frequency.value=2500+Math.random()*2500;
+      var cg=ac.createGain(); cg.gain.setValueAtTime(.0001,tt); cg.gain.linearRampToValueAtTime(.35*Math.random()+.1,tt+.002); cg.gain.exponentialRampToValueAtTime(.001,tt+.03);
+      c.connect(hf); hf.connect(cg); cg.connect(out); c.start(tt); c.stop(tt+.04); }
+  };
+})();
 window.__congrats=function(o){
   o=o||{}; var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var el=document.createElement('div'); el.className='cg'; el.setAttribute('role','status');
@@ -3726,7 +3736,7 @@ window.__congrats=function(o){
   size();
   var cs=getComputedStyle(document.documentElement), acc=(cs.getPropertyValue('--accent')||'#b4532a').trim();
   var COLS=[acc,'#e8a33d','#f3d27a','#d9734a','#f6e7c8'];
-  function burst(){ var x=W*(.15+Math.random()*.7), y=H*(.12+Math.random()*.4), c=COLS[Math.floor(Math.random()*COLS.length)], n=46+Math.floor(Math.random()*24);
+  function burst(){ if(window.__cgPop) window.__cgPop(); var x=W*(.15+Math.random()*.7), y=H*(.12+Math.random()*.4), c=COLS[Math.floor(Math.random()*COLS.length)], n=46+Math.floor(Math.random()*24);
     for(var i=0;i<n;i++){ var a=Math.PI*2*i/n+Math.random()*.2, v=1.6+Math.random()*3.2; parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:Math.random()<.25?COLS[4]:c,r:1.4+Math.random()*1.6}); } }
   var next=0;
   function frame(now){ if(!alive) return; var el2=now-t0;

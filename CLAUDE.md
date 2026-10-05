@@ -114,7 +114,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Bij End workout wordt de sessie bewaard in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`: dag, start, einde, aantal
   oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
   Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
-  (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst). Bij reduced motion zonder vuurwerk.
+  (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst).
+  Subtiel geluid per burst (`window.__cgPop`: Web Audio, gefilterde ruis-pop + knetter, volume .09, max. één per 0,2 s), de audio
+  wordt ontgrendeld in de tik op End workout (`__cgAudioUnlock`, iOS); `navigator.audioSession.type='ambient'` = volgt de stille modus. Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
@@ -128,6 +130,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   vlakken wordt dus zichtbaar als achtergrond: altijd randen laten aansluiten.
 
 **Hoe het telt:**
+- ÉÉN BRON: Coverage (`events()`), het getal N×, de kalender en de grafiek komen allemaal uit `prog` (de grafiekdata). Een meting
+  ontstaat door af te vinken (één per veld per dag; opnieuw afvinken dezelfde dag overschrijft) of met 'Add' in het edit-blad; weg
+  met het vuilbakje daar of door uit te vinken (zet de vorige stand van die dag terug). Afvinken vraagt een getal in elk veld.
+  `hist` wordt nog geschreven (oude code) maar telt nergens meer mee; de 'No value'-dagen (`.pe-gap`/`.ip-gap`) zijn uitgeschakeld.
 - Elke afvinking (via `bumpCount`, dus zoals de teller) schrijft een rij in collectie `hist`:
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de
   laatste rij van die oefening; zakt de teller via de min-knop naar 0, dan gaan alle rijen van die
