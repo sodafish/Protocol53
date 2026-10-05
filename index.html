@@ -931,6 +931,26 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* ════════════ PROGRESSIE ════════════ */
 .prog{margin-top:3.4rem;}
 .prog[hidden]{display:none!important;}
+.cal{margin:3rem 0 0;}
+.cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
+.cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
+.cal-title b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
+.cal-title span{font-size:13px;color:var(--muted);}
+.cal-nav{width:36px;height:36px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
+.cal-nav:active{background:var(--paper-soft);transform:scale(.95);}
+.cal-nav:disabled{opacity:.3;cursor:default;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:.2rem;text-align:center;}
+.cal-wd{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:.3rem 0 .4rem;}
+.cal-d{appearance:none;border:0;background:transparent;font:inherit;color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;padding:0;-webkit-tap-highlight-color:transparent;}
+.cal-d.out{visibility:hidden;}
+.cal-d.fut{color:var(--muted);opacity:.5;}
+.cal-d i{width:6px;height:6px;border-radius:50%;background:transparent;}
+.cal-d.on i{background:var(--accent);}
+.cal-d.on{cursor:pointer;font-weight:600;}
+.cal-d.today span{color:var(--accent);font-weight:700;}
+.cal-d.sel{background:var(--paper-soft);box-shadow:inset 0 0 0 1.5px var(--line);}
+.cal-day{margin:.9rem 0 0;padding:.9rem 0 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted);line-height:1.5;min-height:3.2em;}
+.cal-day b{color:var(--ink);font-weight:600;}
 .prog-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
 .prog-chips{display:flex;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;
   margin:0 -1.4rem 1rem;padding:0 1.4rem;box-shadow:inset 0 -1.5px 0 var(--line);
@@ -1334,6 +1354,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
+      <section class="cal" id="cal" aria-label="Workout calendar">
+        <h2 class="prog-t">Workouts</h2>
+        <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <div class="cal-title"><b id="calMonth"></b><span id="calSum"></span></div>
+          <button type="button" class="cal-nav" data-m="1" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+        <div class="cal-grid" id="calGrid" role="grid"></div>
+        <div class="cal-day" id="calDay" aria-live="polite"></div>
+      </section>
       <!-- Active exercises: verborgen, progressie staat nu onder de uitleg (i-knop). Code blijft (o.a. #pe-sheet). -->
       <div class="prog" id="prog" hidden>
         <h2 class="prog-t">Active exercises</h2>
@@ -1845,6 +1873,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       var dur=woStart?Math.round((Date.now()-woStart)/60000):null;
       p53Confirm({title:'End workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'All ticks are cleared. Your counts, weights and progress are kept.',ok:'End workout'}).then(function(y){
         if(!y) return;
+        if(woStart&&window.__sessAdd){ var _n=0; pane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)) _n++; }); window.__sessAdd(woStart,Date.now(),_n); }
         woRun(false);
         pane.querySelectorAll('.exr').forEach(function(li){
           var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
@@ -2150,6 +2179,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     if(!t) return null; var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); };
   /* 'N×' bij een oefening = aantal dagen met een meting in de grafiek (alle invulvelden van die rij), dus altijd gelijk aan
      wat de grafiek toont. Oude vinkjes zonder meting tellen nog wel in Coverage (hist), niet in dit getal. */
+  window.__events=function(){ return events(); };
   window.__exStat=function(k){
     var li=null; document.querySelectorAll('#s-d3 .exr').forEach(function(x){ if(!li&&chkKey(x)===k) li=x; });
     var notes={}; notes[k]=1; notes[k+'-b']=1;
@@ -2197,7 +2227,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var DAGEN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
       MAANDEN=['January','February','March','April','May','June','July','August','September','October','November','December'];
   function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
-  function renderStats(){ setTimeout(paintCounts,0);
+  function renderStats(){ setTimeout(paintCounts,0); if(window.__renderCal) setTimeout(window.__renderCal,0);
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var now=Date.now(), score={}, first=now, days={}, evs=events().filter(function(e){ return e.t; }), last=0;
     evs.forEach(function(e){ if(e.t>last) last=e.t; });
@@ -3606,6 +3636,63 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   });
   /* naast het blad slepen doet niets */
   document.querySelectorAll('.sheet-bg').forEach(function(bg){ bg.addEventListener('touchmove',function(e){ e.preventDefault(); },{passive:false}); });
+})();
+
+/* ---- kalender (Coverage, onderaan): bolletje op elke trainingsdag; duur uit collectie 'sess' (End workout) ---- */
+(function(){
+  var SKEY='fitlog-sess', sess={}, sCol=null;
+  try{ sess=JSON.parse(localStorage.getItem(SKEY)||'{}'); }catch(e){}
+  function saveLocal(){ try{ localStorage.setItem(SKEY,JSON.stringify(sess)); }catch(e){} }
+  function ymd(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+  window.__sessAdd=function(s,e,n){ var id=ymd(s)+'@'+s, ev={d:ymd(s),s:s,e:e,n:n}; sess[id]=ev; saveLocal(); if(sCol) sCol.doc(id).set(ev).catch(function(){}); render(); };
+  var grid=document.getElementById('calGrid'); if(!grid) return;
+  var MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var now=new Date(), ym={y:now.getFullYear(),m:now.getMonth()}, sel=null;
+  function nameOf(k){
+    var li=document.querySelector('#s-d3 .exr[data-key="'+k+'"]')||(function(){ var i=document.querySelector('#s-d3 [data-note="'+k+'"]'); return i&&i.closest('.exr'); })();
+    var n=li&&li.querySelector('.exr-n'); return n?n.firstChild.textContent.trim():null;
+  }
+  function data(){
+    var days={};
+    (window.__events?window.__events():[]).forEach(function(e){ if(!e.t) return; var d=ymd(e.t); (days[d]=days[d]||{ex:{},min:0}).ex[e.k]=1; });
+    Object.keys(sess).forEach(function(id){ var x=sess[id]; if(!x||!x.d) return; var o=days[x.d]=days[x.d]||{ex:{},min:0}; o.min+=Math.max(0,Math.round((x.e-x.s)/60000)); });
+    return days;
+  }
+  function dur(m){ return m<60?m+' min':Math.floor(m/60)+' h '+('0'+m%60).slice(-2)+' min'; }
+  function render(){
+    var days=data(), y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
+    document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
+    var cnt=0, mins=0, lastOn=null, html='';
+    ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
+    for(var i=0;i<lead;i++) html+='<span class="cal-d out"></span>';
+    for(var d=1;d<=n;d++){
+      var key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2), on=!!days[key], fut=key>today;
+      if(on){ cnt++; mins+=days[key].min; lastOn=key; }
+      html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
+    }
+    grid.innerHTML=html;
+    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts')+(mins?' · '+dur(mins):''):'No workouts';
+    var cur=new Date(), atNow=(y===cur.getFullYear()&&m===cur.getMonth());
+    document.querySelector('.cal-nav[data-m="1"]').disabled=atNow;
+    if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
+    grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
+      b.addEventListener('click',function(){ sel=b.dataset.d; render(); }); });
+    var box=document.getElementById('calDay');
+    if(!sel){ box.innerHTML=cnt?'':'Days you train get a dot.'; return; }
+    var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
+    var names=Object.keys(o.ex).map(nameOf).filter(Boolean);
+    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+(o.min?' · '+dur(o.min):'')+' · '+names.length+(names.length===1?' exercise':' exercises')+
+      (names.length?'<br>'+names.join(', '):'');
+  }
+  window.__renderCal=render;
+  document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
+    var m=ym.m+(+b.dataset.m), y=ym.y; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } ym={y:y,m:m}; sel=null; render(); }); });
+  render();
+  if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; sCol=db.collection('sess');
+    sCol.onSnapshot(function(snap){ var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
+      if(snap.metadata&&snap.metadata.fromCache) Object.keys(sess).forEach(function(id){ if(!next[id]) next[id]=sess[id]; });
+      sess=next; saveLocal(); render(); },function(){}); });
 })();
 </script>
 </body>

@@ -166,7 +166,7 @@
   /* ---------- back-up en uitloggen ---------- */
   window.p53Backup=function(){
     var data={exported:new Date().toISOString()}, k;
-    ['log','checks','counts','hist','prog','cfg'].forEach(function(c){ data[c]=merged(c); }); /* alles: ook statistieken, metingen en instellingen */
+    ['log','checks','counts','hist','prog','cfg','sess'].forEach(function(c){ data[c]=merged(c); }); /* alles: ook statistieken, metingen en instellingen */
     var name='protocol53-backup-'+new Date().toISOString().slice(0,10)+'.json';
     var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
     try{

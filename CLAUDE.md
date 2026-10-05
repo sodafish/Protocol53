@@ -8,7 +8,7 @@ vooral op zijn iPhone, als app op het beginscherm.
 ## Bestanden
 - `index.html` — de hele app (HTML, CSS en JS in één bestand). Hier gebeuren bijna alle aanpassingen.
 - `cloud.js` — opslag in Supabase met offline wachtrij, inlogscherm, back-up (`p53Backup`: alle collecties log, checks, counts,
-  hist, prog, cfg als JSON) en uitloggen.
+  hist, prog, cfg, sess als JSON) en uitloggen.
   Statusregel onder de titel (`#syncStamp`, klasse `warn`): offline / database niet bereikbaar
   (bv. gepauzeerd Supabase-project) / nog niet bewaard (pas na 1 s wachtrij, anders flikkert het); bij problemen elke minuut opnieuw proberen.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
@@ -105,6 +105,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Timer: 'Start workout' (of het eerste vinkje) start hem (`woRun`, starttijd in localStorage `fitlog-wo-start`, overleeft herladen,
   vervalt na 12 u); zolang hij loopt staat de knop op 'End workout' (ook zonder vinkjes) en toont de navbar onder het Workout-icoon
   de verstreken tijd (m:ss / u:mm:ss, `.wo-time`) i.p.v. 'Workout'. End workout toont 'Time: N min.' in de bevestiging en stopt hem.
+  Bij End workout wordt de sessie bewaard in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`: dag, start, einde, aantal
+  oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
+- Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
+  `renderStats`): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje in de accentkleur op elke dag met
+  een training uit `window.__events()` (hist + metingen, dus ook oude sessies, geen warm-up), vandaag in accentkleur. Bovenaan
+  'N workouts · duur' (duur = som van `sess`). Tik op een dag = details eronder (dag, duur, oefeningen); standaard de laatste trainingsdag.
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
