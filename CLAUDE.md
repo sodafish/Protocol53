@@ -22,7 +22,6 @@ vooral op zijn iPhone, als app op het beginscherm.
   Pagina's/JS worden met `cache: 'no-cache'` opgehaald (anders houdt de HTTP-cache van GitHub Pages ze tot 10 min vast).
 - `manifest.webmanifest`, `icons/` — app-naam 'Protocol' (generiek, ook `apple-mobile-web-app-title` en `<title>`) en
   icoon `app-*.png` (180/192/512/1024, beeld van Tom: sporter met oranje cirkel). De oude `p53-*.png` worden niet meer gebruikt.
-- `sounds/fireworks-soft.mp3` — geluid bij het vuurwerk na End workout (Toms bestand, 20 dB stiller gemaakt in het bestand zelf).
 - `img/` — oefenfoto's (Free Exercise DB, begin/eind), wisselen automatisch onder de i-knop.
 - `vendor/supabase.js` — supabase-js v2, lokaal voor offline gebruik.
 - `seed.json` — oude gegevens van Tom; wordt niet meer geïmporteerd (nieuwe accounts starten leeg). Niet aanpassen.
@@ -105,21 +104,17 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - `GROUPDEF` — terugval voor een oefening zonder eigen regel in `MUSCLES`: de spiergroep-kop waaronder
   ze staat (Chest, Shoulders …, regexen op de Engelse koppen) bepaalt de spieren. Namen met "curl" → biceps, "triceps/pushdown/
   extension" → triceps.
-- Workout heeft bovenaan (`.reset-top`, in `.tools-row` naast de split-knop) en onderaan na Arms (`.reset-end.finish-b`) dezelfde
-  omlijnde knop (`.wo-btn`, altijd in sync via `paintWoBtns`, aangeroepen vanuit `paintChecks`). Geen vinkje vandaag in Workout =
-  'Start workout' (play-icoon): scrollt naar Warm-up, wist niets. Minstens één vinkje (ook warm-up, ook verborgen/uitgezette rijen) =
-  'End workout' (vinkje-icoon): zonder bevestiging meteen alle vinkjes leeg, periode Last workout (`__statsPer('dag')`) en naar Coverage
-  (klik op de navbar). Tellingen, hist, kilo's en metingen blijven (al bewaard bij afvinken). Vinkjes vervallen ook vanzelf de volgende dag.
-  Timer: 'Start workout' (of het eerste vinkje) start hem (`woRun`, starttijd in localStorage `fitlog-wo-start`, overleeft herladen,
-  vervalt na 12 u); zolang hij loopt staat de knop op 'End workout' (ook zonder vinkjes) en toont de navbar onder het Workout-icoon
-  de verstreken tijd (m:ss / u:mm:ss, `.wo-time`) i.p.v. 'Workout'. End workout stopt hem (duur staat in de felicitatie).
-  Bij End workout wordt de sessie bewaard in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`: dag, start, einde, aantal
-  oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
-  Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
-  (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst).
-  Geluid: `sounds/fireworks-soft.mp3` (van Tom, 6 s, 128 kbps, −20 dB in het bestand; nieuwe naam = geen oude cache) via Web Audio (`__cgSound`, gain 1), bij sluiten 0,5 s uitfaden
-  (`__cgSoundStop`). Audio ontgrendeld in de tik op End workout (`__cgAudioUnlock`, iOS); `navigator.audioSession.type='ambient'` =
-  volgt de stille modus. Het mp3 wordt bij het laden al opgehaald (de service worker bewaart het daarna in de cache). Bij reduced motion zonder vuurwerk.
+- Workout heeft bovenaan (`.reset-top`, in `.tools-row` naast de split-knop) de omlijnde knop 'Start workout' (`.wo-btn`, play-icoon):
+  start de timer en scrolt naar Warm-up. Tijdens een workout (timer loopt of er staat een vinkje: `woActive`) is die knop uitgegrijsd
+  (`aria-disabled`, 35%) en staat rechtsonder boven de navbar een zwevende donkere pil 'End' + verstreken tijd (`#woEnd`, `#woEndT`,
+  m:ss / u:mm:ss; body krijgt `wo-on` = extra ruimte onderaan), op elke pagina. De onderste End-knop is weg; de navbar toont altijd 'Workout'.
+  Tik op End → `p53Confirm` ('End workout?', met de tijd) → sessie bewaren, alle vinkjes leeg, timer stop, periode Last workout
+  (`__statsPer('dag')`), naar Coverage, `__woY=0`, daarna vuurwerk. Alles wat afgevinkt was, is al bewaard (grafiek). Na End kun je niet
+  meer uitvinken; corrigeren via het edit-blad van de grafiek. Vinkjes vervallen ook vanzelf de volgende dag.
+  Timer: starttijd in localStorage `fitlog-wo-start` (overleeft herladen, vervalt na 12 u); het eerste vinkje start hem ook.
+  Sessie in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`; cache `fitlog-sess`, ook in de back-up).
+  Vuurwerk `window.__congrats({min,n})`: overlay `.cg` met canvas-vuurwerk (accent/goud/crème), 'Congratulations!' (Fraunces, één regel)
+  + duur · oefeningen; tik of 4,5 s = weg. Geen geluid (op vraag van Tom weggehaald). Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
@@ -248,7 +243,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   oefeningen van die groep krijgen `grp-skip` (doorgestreept, 40%, blijven aanklikbaar). Niet bij de opwarming: die is pas af als
   alles gedaan is en strijpt niets door. De tussenkoppen (`.exsub`) van een afgevinkte groep worden mee grijs (`sub-off`).
   Wordt een groep af door een vinkje, dan scrolt de pagina na 450 ms zacht tot de volgende zichtbare, nog niet afgewerkte groepskop
-  bovenaan staat (12 px marge; `nextGroup`, toetsenbord gaat dicht); geen volgende groep meer = naar de End workout-knop onderaan.
+  bovenaan staat (12 px marge; `nextGroup`, toetsenbord gaat dicht); geen volgende groep meer = niet scrollen.
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep, plus MUSCLES/NAMES/EX/IMG.

@@ -692,7 +692,6 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 
 .reset-chk.reset-top{margin:.2rem 0 1rem;}
 .reset-chk.reset-end{margin:2.4rem 0 0;}
-#s-d3 .finish-b{margin:2rem 0 .4rem;}
 #s-d3 .tools-row{display:block;margin:0 0 1rem;}
 #s-d3 .exl{border-top:none;}
 #s-d3 .reset-chk.reset-top,#s-d3 .reset-chk.reset-end{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;width:auto;min-height:48px;padding:0 1.3rem;
@@ -1037,11 +1036,20 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   border:1px solid rgba(255,255,255,.65);box-shadow:0 14px 40px rgba(30,20,12,.18),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(0,0,0,.05);}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:color-mix(in srgb,var(--surface) 62%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}}
 :root[data-theme="dark"] .glass{background:color-mix(in srgb,var(--surface) 62%,transparent);border-color:rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.14);}
+.wo-end{position:fixed;z-index:61;right:16px;bottom:calc(10px + 64px + 12px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:.5rem;
+  min-height:48px;padding:0 1.15rem 0 1rem;border:0;border-radius:999px;background:var(--ink);color:var(--paper);cursor:pointer;
+  font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 20px rgba(0,0,0,.18);
+  -webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .25s ease;}
+.wo-end:active{transform:scale(.96);}
+.wo-end svg{color:var(--accent);}
+.wo-end-t{font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:500;opacity:.85;}
+.wo-end-t:empty{display:none;}
+#s-d3 .reset-chk.reset-top[aria-disabled="true"]{opacity:.35;pointer-events:none;}
+body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gnav{position:fixed;z-index:60;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:10px;
   padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;}
 .gnav>*{pointer-events:auto;}
 .gnav-pill{display:flex;flex:1;max-width:330px;height:64px;padding:5px;border-radius:32px;gap:4px;}
-.gnav-i .wo-time{font-variant-numeric:tabular-nums;}
 .gnav-i{flex:1;appearance:none;border:none;cursor:pointer;border-radius:27px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font:600 11px 'Work Sans',system-ui,sans-serif;letter-spacing:.02em;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,color .25s ease,transform .12s ease;}
 .gnav-i[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--accent);}
@@ -1360,7 +1368,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       <li data-eq="c" class="exr ex-off" data-grp="g7" data-og="g9"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Reverse-Grip Pushdown + Reverse Curl</div><div class="exr-s">Superset · 2 rounds × 10–15 · same straight bar</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-ss-reverse" placeholder="kg" aria-label="Reverse-Grip Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-ss-reverse-b" placeholder="kg" aria-label="Reverse Curl — kg"></div></li>
       <li data-eq="c" class="exr ex-off" data-grp="g7" data-og="g9"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Single-Arm Pushdown + Single-Arm Curl</div><div class="exr-s">Superset · 2 rounds × 10–15 per arm · D-handle</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-ss-single" placeholder="kg" aria-label="Single-Arm Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-ss-single-b" placeholder="kg" aria-label="Single-Arm Curl — kg"></div></li>
     </ol>
-    <button type="button" class="reset reset-chk reset-end finish-b wo-btn" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Start workout</span></button>
     <div class="note-head"><label class="sess-note-l" for="sessNote">Notes</label><button type="button" class="note-erase" data-for="sessNote" aria-label="Erase note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></div>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
   </div>
@@ -1709,6 +1716,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     <li><button type="button" id="moreProfile"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span><span class="mt"><b>Settings</b><small>Date of birth, backup, data</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
   </ul>
 </div>
+<button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End</span><span class="wo-end-t" id="woEndT"></span></button>
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg><span>Workout</span></button>
@@ -1824,12 +1832,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var g=row.previousElementSibling; while(g&&!g.classList.contains('exgrp')) g=g.previousElementSibling;
     if(!g||!g.classList.contains('grp-done')) return;
     var t=g.nextElementSibling; while(t&&!(t.classList.contains('exgrp')&&t.offsetParent!==null&&!t.classList.contains('grp-done'))) t=t.nextElementSibling;
-    if(!t) t=document.querySelector('#s-d3 .finish-b');
     if(!t) return;
     setTimeout(function(){
       if(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)) document.activeElement.blur(); /* toetsenbord weg */
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
-      var y=t.classList.contains('finish-b')?t.getBoundingClientRect().top+window.scrollY-window.innerHeight*.4:t.getBoundingClientRect().top+window.scrollY-12;
+      var y=t.getBoundingClientRect().top+window.scrollY-12;
       window.scrollTo({top:Math.max(0,y),behavior:smooth});
     },450);
   }
@@ -1881,11 +1888,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function woSave(){ try{ if(woStart) localStorage.setItem(WOKEY,String(woStart)); else localStorage.removeItem(WOKEY); }catch(e){} }
   function woFmt(ms){ var t=Math.max(0,Math.floor(ms/1000)), h=Math.floor(t/3600), m=Math.floor(t%3600/60), x=t%60;
     return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+x).slice(-2); }
-  function woPaintTime(){
-    var lab=document.querySelector('.gnav-i[data-view="workout"] span'); if(!lab) return;
-    if(woStart){ lab.textContent=woFmt(Date.now()-woStart); lab.classList.add('wo-time'); }
-    else { lab.textContent='Workout'; lab.classList.remove('wo-time'); }
-  }
+  /* tijd staat in de zwevende End-knop rechtsonder (niet meer in de navbar) */
+  function woPaintTime(){ var t=document.getElementById('woEndT'); if(t) t.textContent=woStart?woFmt(Date.now()-woStart):''; }
   function woRun(on){
     if(on&&!woStart){ woStart=Date.now(); woSave(); }
     if(!on){ woStart=0; woSave(); }
@@ -1894,40 +1898,39 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   window.__woRun=woRun;
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) woPaintTime(); });
   function woActive(){ if(woStart) return true; var on=false; document.querySelectorAll('#s-d3 .exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) on=true; }); return on; }
+  /* bovenaan altijd 'Start workout'; tijdens een workout uitgegrijsd. Rechtsonder dan een zwevende 'End'-knop met de tijd. */
   function paintWoBtns(){
-    var on=woActive();
-    document.querySelectorAll('.wo-btn').forEach(function(btn){
-      if(btn.dataset.st===(on?'end':'start')) return; btn.dataset.st=on?'end':'start';
-      btn.querySelector('svg').innerHTML=on?WO_END:WO_PLAY; btn.querySelector('span').textContent=on?'End workout':'Start workout';
-    });
+    var on=woActive(), top=document.querySelector('#s-d3 .wo-btn'), fl=document.getElementById('woEnd');
+    if(top){ top.setAttribute('aria-disabled',on?'true':'false'); top.tabIndex=on?-1:0; }
+    if(fl) fl.hidden=!on; document.body.classList.toggle('wo-on',on);
   }
   window.__paintWoBtns=paintWoBtns;
   setTimeout(function(){ woRun(!!woStart); paintWoBtns(); },0);
+  var woPane=document.getElementById('s-d3');
   document.querySelectorAll('.wo-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
-      var pane=document.getElementById(btn.dataset.reset);
+      if(woActive()) return;
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
-      if(!woActive()){
-        woRun(true); paintWoBtns();
-        var g=pane.querySelector('.exgrp'); window.scrollTo({top:g?g.getBoundingClientRect().top+window.scrollY+2:0,behavior:smooth});
-        return;
-      }
-      var dur=woStart?Math.max(1,Math.round((Date.now()-woStart)/60000)):null;
-      /* geen bevestiging: meteen afronden, naar Coverage en vuurwerk */
-      if(window.__cgAudioUnlock) window.__cgAudioUnlock(); /* iOS: geluid mag alleen starten vanuit een tik */
-      Promise.resolve(true).then(function(y){
-        var _n=0; pane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)) _n++; });
-        if(woStart&&window.__sessAdd) window.__sessAdd(woStart,Date.now(),_n);
-        if(window.__congrats) setTimeout(function(){ window.__congrats({min:dur,n:_n}); },350);
-        woRun(false);
-        pane.querySelectorAll('.exr').forEach(function(li){
-          var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
-        });
-        paintChecks(); saveChecksLocal();
-        if(window.__statsPer) window.__statsPer('dag');
-        var cov=document.querySelector('.gnav-i[data-view="progress"]'); if(cov) cov.click();
-        window.__woY=0; /* na End workout begint Workout weer bovenaan */
+      woRun(true); paintWoBtns();
+      var g=woPane.querySelector('.exgrp'); window.scrollTo({top:g?g.getBoundingClientRect().top+window.scrollY+2:0,behavior:smooth});
+    });
+  });
+  var woEnd=document.getElementById('woEnd');
+  if(woEnd) woEnd.addEventListener('click',function(){
+    var dur=woStart?Math.max(1,Math.round((Date.now()-woStart)/60000)):null;
+    p53Confirm({title:'End workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'Your ticks are cleared; everything you ticked stays saved.',ok:'End workout'}).then(function(y){
+      if(!y) return;
+      var _n=0; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)) _n++; });
+      if(woStart&&window.__sessAdd) window.__sessAdd(woStart,Date.now(),_n);
+      woRun(false);
+      woPane.querySelectorAll('.exr').forEach(function(li){
+        var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
       });
+      paintChecks(); saveChecksLocal();
+      if(window.__statsPer) window.__statsPer('dag');
+      var cov=document.querySelector('.gnav-i[data-view="progress"]'); if(cov) cov.click();
+      window.__woY=0; /* na End workout begint Workout weer bovenaan */
+      if(window.__congrats) setTimeout(function(){ window.__congrats({min:dur,n:_n}); },350);
     });
   });
   paintChecks();
@@ -3706,25 +3709,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 })();
 
 /* ---- felicitaties na End workout: vuurwerk (canvas) + 'Congratulations!', tik of 4,5 s = weg ---- */
-/* vuurwerkgeluid: sounds/fireworks.mp3 (van Tom), via Web Audio. iOS: audio pas ontgrendelen in de tik op End workout;
-   audiosessie 'ambient' = volgt de stille modus. Bij het sluiten van het vuurwerk zacht uitfaden. */
-(function(){
-  var ac=null, buf=null, raw=null, cur=null;
-  try{ fetch('sounds/fireworks-soft.mp3').then(function(r){ return r.ok?r.arrayBuffer():null; }).then(function(a){ raw=a; }).catch(function(){}); }catch(e){}
-  function decode(){ if(buf||!raw||!ac) return Promise.resolve(buf);
-    return new Promise(function(res){ try{ ac.decodeAudioData(raw.slice(0),function(b){ buf=b; res(b); },function(){ res(null); }); }catch(e){ res(null); } }); }
-  window.__cgAudioUnlock=function(){
-    try{ if(navigator.audioSession) navigator.audioSession.type='ambient'; }catch(e){}
-    try{ if(!ac){ var A=window.AudioContext||window.webkitAudioContext; if(A) ac=new A(); } if(ac&&ac.state==='suspended') ac.resume(); }catch(e){}
-    decode();
-  };
-  window.__cgSound=function(){
-    if(!ac) return; var t0=performance.now();
-    decode().then(function(b){ if(!b||performance.now()-t0>1500) return;
-      var s=ac.createBufferSource(), g=ac.createGain(); s.buffer=b; g.gain.value=1; s.connect(g); g.connect(ac.destination); s.start(); cur={s:s,g:g}; });
-  };
-  window.__cgSoundStop=function(){ if(!cur||!ac) return; var c=cur; cur=null; try{ var t=ac.currentTime; c.g.gain.setValueAtTime(c.g.gain.value,t); c.g.gain.linearRampToValueAtTime(0,t+.5); c.s.stop(t+.55); }catch(e){} };
-})();
 window.__congrats=function(o){
   o=o||{}; var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var el=document.createElement('div'); el.className='cg'; el.setAttribute('role','status');
@@ -3747,9 +3731,8 @@ window.__congrats=function(o){
     parts.forEach(function(p){ p.vx*=.985; p.vy=p.vy*.985+.045; p.x+=p.vx; p.y+=p.vy; p.l-=.0105;
       cx.globalAlpha=Math.max(0,p.l); cx.fillStyle=p.c; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,6.283); cx.fill(); });
     cx.globalAlpha=1; raf=requestAnimationFrame(frame); }
-  if(window.__cgSound) window.__cgSound();
   if(!reduce){ burst(); raf=requestAnimationFrame(frame); }
-  function close(){ if(!alive) return; alive=false; if(window.__cgSoundStop) window.__cgSoundStop(); cancelAnimationFrame(raf); el.classList.remove('on'); setTimeout(function(){ el.remove(); },380); }
+  function close(){ if(!alive) return; alive=false; cancelAnimationFrame(raf); el.classList.remove('on'); setTimeout(function(){ el.remove(); },380); }
   el.addEventListener('click',close); setTimeout(close,4500);
 };
 
