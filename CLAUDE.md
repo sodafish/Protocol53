@@ -130,7 +130,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Afvinken kan alleen met een waarde in elk invulveld van de rij (de vorige waarde die er nog staat volstaat): een leeg
   veld licht op in de accentkleur, schudt even (`.need`) en krijgt de focus. Zo heeft elke training een punt in de grafiek.
 - Het getal 'N×' bij een oefening = aantal trainingen in de statistieken (`window.__exStat(k)` uit `events()`: vinkjes +
-  metingen, één per dag); warm-up gebruikt nog `counts`. Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
+  metingen, één per dag); warm-up (telt niet in hist) = aantal dagen met een meting in `prog` (`statOf`), dus altijd gelijk
+  aan de grafiek (vroeger `counts`, wat oude afvinkingen zonder meting meetelde). Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
   Een meting verwijderen wist ook de hist-rij(en) van die oefening op die dag (`__histDropDay`), en is het vandaag en
   staat ze afgevinkt, dan gaat ook het vinkje weg. `renderStats` werkt de getallen bij (`paintCounts`).
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rounds`, `2 rondes`, `2 sets`); anders 3.

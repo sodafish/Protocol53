@@ -1835,7 +1835,13 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function saveCountsLocal(){ try{ localStorage.setItem(CNTKEY,JSON.stringify(counts)); }catch(e){} }
   function fmtDate(t){ var d=new Date(t); return d.getDate()+'/'+(d.getMonth()+1); }
   /* hoe vaak gedaan = aantal trainingen in de statistieken (vinkjes + metingen, één per dag); warm-up: de teller */
-  function statOf(k){ return (!/^w0-/.test(k) && window.__exStat) ? window.__exStat(k) : counts[k]; }
+  function statOf(k){
+    if(!/^w0-/.test(k)) return window.__exStat ? window.__exStat(k) : counts[k];
+    /* warm-up: aantal dagen met een meting in de grafiek (zelfde bron als de grafiek, dus altijd in sync) */
+    var P=window.__progAll?window.__progAll():{}, days={}, last=0;
+    Object.keys(P).forEach(function(id){ var p=P[id]; if(p&&p.k===k&&typeof p.v==='number'){ days[p.d||new Date(p.t).toDateString()]=1; if(p.t>last) last=p.t; } });
+    return {n:Object.keys(days).length,last:last};
+  }
   function paintCounts(){
     document.querySelectorAll('#s-d3 .exr:not(.exr-wu)').forEach(function(li){
       var k=chkKey(li), c=statOf(k), line=li.querySelector('.exr-s'); if(!line) return;
