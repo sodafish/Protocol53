@@ -3710,7 +3710,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
    audiosessie 'ambient' = volgt de stille modus. Bij het sluiten van het vuurwerk zacht uitfaden. */
 (function(){
   var ac=null, buf=null, raw=null, cur=null;
-  try{ fetch('sounds/fireworks.mp3').then(function(r){ return r.ok?r.arrayBuffer():null; }).then(function(a){ raw=a; }).catch(function(){}); }catch(e){}
+  try{ fetch('sounds/fireworks-soft.mp3').then(function(r){ return r.ok?r.arrayBuffer():null; }).then(function(a){ raw=a; }).catch(function(){}); }catch(e){}
   function decode(){ if(buf||!raw||!ac) return Promise.resolve(buf);
     return new Promise(function(res){ try{ ac.decodeAudioData(raw.slice(0),function(b){ buf=b; res(b); },function(){ res(null); }); }catch(e){ res(null); } }); }
   window.__cgAudioUnlock=function(){
@@ -3721,7 +3721,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   window.__cgSound=function(){
     if(!ac) return; var t0=performance.now();
     decode().then(function(b){ if(!b||performance.now()-t0>1500) return;
-      var s=ac.createBufferSource(), g=ac.createGain(); s.buffer=b; g.gain.value=.18; s.connect(g); g.connect(ac.destination); s.start(); cur={s:s,g:g}; });
+      var s=ac.createBufferSource(), g=ac.createGain(); s.buffer=b; g.gain.value=1; s.connect(g); g.connect(ac.destination); s.start(); cur={s:s,g:g}; });
   };
   window.__cgSoundStop=function(){ if(!cur||!ac) return; var c=cur; cur=null; try{ var t=ac.currentTime; c.g.gain.setValueAtTime(c.g.gain.value,t); c.g.gain.linearRampToValueAtTime(0,t+.5); c.s.stop(t+.55); }catch(e){} };
 })();

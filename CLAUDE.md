@@ -22,7 +22,7 @@ vooral op zijn iPhone, als app op het beginscherm.
   Pagina's/JS worden met `cache: 'no-cache'` opgehaald (anders houdt de HTTP-cache van GitHub Pages ze tot 10 min vast).
 - `manifest.webmanifest`, `icons/` — app-naam 'Protocol' (generiek, ook `apple-mobile-web-app-title` en `<title>`) en
   icoon `app-*.png` (180/192/512/1024, beeld van Tom: sporter met oranje cirkel). De oude `p53-*.png` worden niet meer gebruikt.
-- `sounds/fireworks.mp3` — geluid bij het vuurwerk na End workout.
+- `sounds/fireworks-soft.mp3` — geluid bij het vuurwerk na End workout (Toms bestand, 20 dB stiller gemaakt in het bestand zelf).
 - `img/` — oefenfoto's (Free Exercise DB, begin/eind), wisselen automatisch onder de i-knop.
 - `vendor/supabase.js` — supabase-js v2, lokaal voor offline gebruik.
 - `seed.json` — oude gegevens van Tom; wordt niet meer geïmporteerd (nieuwe accounts starten leeg). Niet aanpassen.
@@ -117,7 +117,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
   Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
   (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst).
-  Geluid: `sounds/fireworks.mp3` (van Tom, 6 s, 128 kbps) via Web Audio (`__cgSound`, volume .18, op vraag van Tom stil gehouden), bij sluiten 0,5 s uitfaden
+  Geluid: `sounds/fireworks-soft.mp3` (van Tom, 6 s, 128 kbps, −20 dB in het bestand; nieuwe naam = geen oude cache) via Web Audio (`__cgSound`, gain 1), bij sluiten 0,5 s uitfaden
   (`__cgSoundStop`). Audio ontgrendeld in de tik op End workout (`__cgAudioUnlock`, iOS); `navigator.audioSession.type='ambient'` =
   volgt de stille modus. Het mp3 wordt bij het laden al opgehaald (de service worker bewaart het daarna in de cache). Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
