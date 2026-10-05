@@ -273,8 +273,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Beelden in het uitlegblad, in volgorde van voorrang (op vraag van Tom): 1) video (`VID`, zie onder); 2) animatie alleen (`ANIM`, GIF 180 px uit
   github.com/hasaneyldrm/exercises-dataset, © Gym visual, alleen voor eigen gebruik, `img/anim/<EX-sleutel>.gif`, `.sheet-gif`);
   3) foto's (Free Exercise DB, `IMG`, wisselen start/eind). Foto's en animatie staan dus niet meer naast
-  elkaar (de `.duo`-CSS bestaat nog maar wordt niet gebruikt). 145 oefeningen hebben een
-  animatie (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
+  elkaar (de `.duo`-CSS bestaat nog maar wordt niet gebruikt). 144 oefeningen hebben een
+  animatie (Curl Machine bewust niet: vreemde animatie, toont de foto's) (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
   Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's.
   Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
   Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov`, poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink): echte
