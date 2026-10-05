@@ -3307,6 +3307,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     if(IMG[k]){ cur=photos(fig,k); if(ANIM[k]){ fig.classList.add('duo'); var fr=fig.querySelector('.ph-frame'), w=document.createElement('div'); w.className='ph-duo'; fr.parentNode.insertBefore(w,fr); w.appendChild(fr);
         w.insertAdjacentHTML('beforeend','<div class="ph-anim"><img alt="Animation" src="'+ANIM[k]+'"></div>'); } }
     else if(ANIM[k]){ fig.classList.add('sheet-gif'); fig.innerHTML='<img alt="Animation" src="'+ANIM[k]+'">'; cur=null; }
+    else if(k==='birddog'&&EX[k].poses) cur=player(fig,k); /* uitzondering op vraag van Tom: eigen getekende animatie */
     else { fig.remove(); cur=null; }
     sh.querySelector('.sheet-x').focus({preventScroll:true});
   }
