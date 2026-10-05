@@ -220,23 +220,24 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   bovenaan staat; blad + achtergrond volgen de vinger, los na > 30% hoogte (max 140 px) of snelle veeg = klik op `.sheet-x`, anders terugveren.
 
 ## Full / Upper / Lower / Cardio (dropdown naast Start)
-- Bovenaan Workout (`.tools-row`): links 'Start' (`.wo-btn`, play-icoon; label kort 'Start' zodat alles op één lijn past), rechts
-  (`.split-sel` met margin-left:auto) de keuzeknop `#splitBtn` en, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde
-  notitieknop `#noteJump` (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
+- Bovenaan Workout (`.tools-row`): links 'Start' (`.wo-btn`, play-icoon; label kort 'Start' zodat alles op één lijn past), meteen rechts
+  daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
+  de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
 - Eigen menu (geen native `<select>`): `#splitPop` met Full body / Upper body / Lower body / Cardio (`menuitemradio`, vinkje in accentkleur).
   Keuze in localStorage `fitlog-split` (onbekend = full).
 - `SPLIT`: full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, cardio = g8. Warm-up (g0) zichtbaar behalve bij Cardio; g8 alleen bij
   Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.
   'Start' scrolt naar de eerste zichtbare groepskop.
-- Groep 8 'Cardio' (onderaan in `#s-d3`, kop zonder nummer, met potlood/keuzeblad zoals de andere groepen, uitleg-regel `li.exnote`):
-  rijen met sleutels `c-…` en een invulveld in minuten (`placeholder="min"`, data-note = sleutel): standaard aan Brisk Walk (`c-walk`),
-  Walk-Jog Outdoors (`c-walkjog`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`), Cycling (`c-bike`);
+- Groep 8 'Cardio' (onderaan in `#s-d3`, kop zonder nummer, met potlood/keuzeblad zoals de andere groepen, geen uitleg-regel):
+  rijen met sleutels `c-…` en een invulveld in minuten (`placeholder="min"`, data-note = sleutel): standaard aan Walking (`c-walk`,
+  foto's walking = loopband), Walk-Jog Outdoors (`c-walkjog`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`),
+  Cycling (`c-bike`), Padel (`c-padel`, 'Intervals · 60–90 min', geen foto's: het uitlegblad toont dan enkel tekst + tip);
   uit: Incline Walk (`c-incline`), Stairmaster (`c-stairs`), Recumbent Bike (`c-recumbent`). Labels '· impact' / '· outdoors' via `.exr-eqp`.
   Eigen namen (uniek t.o.v. de warm-up!) met EX-uitleg (zone 2) en foto's (`cwalk`… in NAMES/EX/IMG; nieuw: trail, jogtread, recumbent).
   Werkt als kracht: afvinken (getal verplicht) = meting per workout, oog-knop = uitleg + grafiek + edit, timer/End, N×.
-  Telt NIET in Coverage (spieren: `events()` slaat `w0-` en `c-` over); de kalender telt cardio als minuten ('· 45 min cardio' per dag en
-  per maand) i.p.v. sets. Een cardio-oefening streept de andere cardio-rijen niet door (je mag combineren). End workout met alleen cardio
+  Telt NIET in Coverage (spieren: `events()` slaat `w0-` en `c-` over); de kalender telt cardio als minuten i.p.v. sets: '17 sets + 20 min cardio' (plus als er
+  kracht én cardio was; `amount()`), per dag en per maand. Een cardio-oefening streept de andere cardio-rijen niet door (je mag combineren). End workout met alleen cardio
   blijft op Workout (geen sprong naar Coverage), wel vuurwerk. De pagina Cardio onder More blijft als uitleg.
 
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–7)
@@ -269,8 +270,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
-- Alleen oefeningen met echte foto's (Free Exercise DB, begin/eind in `IMG`); getekende animaties zonder foto's
-  (Torso Rotation, Bird Dog) zijn verwijderd. Nieuwe oefeningen dus altijd met twee foto's.
+- Alleen oefeningen met echte foto's (Free Exercise DB, begin/eind in `IMG`), met twee uitzonderingen op vraag van Tom: Bird Dog
+  (`d3-bird-dog`, g6, standaard uit, getekende animatie uit `EX.birddog`) en Padel (cardio, alleen tekst). Torso Rotation blijft weg.
+  Uitlegblad zonder foto én zonder animatie (`poses`): figuur weg, enkel tekst.
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
 - Sets & reps per oefening: in het keuzeblad een rond knopje met icoon '123' (Material Symbols, inline SVG 24 px, viewBox bijgesneden tot `120 -840 720 720`, glyph verticaal gecentreerd) (`.gs-set`; standaard lichter, aangepast = gewone tint, zoals de i-knop) opent
