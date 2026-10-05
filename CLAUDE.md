@@ -22,6 +22,7 @@ vooral op zijn iPhone, als app op het beginscherm.
   Pagina's/JS worden met `cache: 'no-cache'` opgehaald (anders houdt de HTTP-cache van GitHub Pages ze tot 10 min vast).
 - `manifest.webmanifest`, `icons/` — app-naam 'Protocol' (generiek, ook `apple-mobile-web-app-title` en `<title>`) en
   icoon `app-*.png` (180/192/512/1024, beeld van Tom: sporter met oranje cirkel). De oude `p53-*.png` worden niet meer gebruikt.
+- `sounds/fireworks.mp3` — geluid bij het vuurwerk na End workout.
 - `img/` — oefenfoto's (Free Exercise DB, begin/eind), wisselen automatisch onder de i-knop.
 - `vendor/supabase.js` — supabase-js v2, lokaal voor offline gebruik.
 - `seed.json` — oude gegevens van Tom; wordt niet meer geïmporteerd (nieuwe accounts starten leeg). Niet aanpassen.
@@ -116,12 +117,13 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
   Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
   (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst).
-  Subtiel geluid per burst (`window.__cgPop`: Web Audio, gefilterde ruis-pop + knetter, volume .09, max. één per 0,2 s), de audio
-  wordt ontgrendeld in de tik op End workout (`__cgAudioUnlock`, iOS); `navigator.audioSession.type='ambient'` = volgt de stille modus. Bij reduced motion zonder vuurwerk.
+  Geluid: `sounds/fireworks.mp3` (van Tom, 6 s, 128 kbps) via Web Audio (`__cgSound`, volume .7), bij sluiten 0,5 s uitfaden
+  (`__cgSoundStop`). Audio ontgrendeld in de tik op End workout (`__cgAudioUnlock`, iOS); `navigator.audioSession.type='ambient'` =
+  volgt de stille modus. Het mp3 wordt bij het laden al opgehaald (de service worker bewaart het daarna in de cache). Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
-  vandaag in accentkleur, bovenaan 'N workouts'. Tik op een dag = eronder enkel 'Dag datum · N sets' (som van de sets van elke oefening
+  vandaag in accentkleur, bovenaan 'N workouts · N sets' (sets van die maand). Tik op een dag = eronder enkel 'Dag datum · N sets' (som van de sets van elke oefening
   die dag, één keer per oefening). Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal

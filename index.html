@@ -3706,27 +3706,24 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 })();
 
 /* ---- felicitaties na End workout: vuurwerk (canvas) + 'Congratulations!', tik of 4,5 s = weg ---- */
-/* subtiel vuurwerkgeluid: korte gefilterde 'pop' + wat knetter, zacht. iOS: audiosessie 'ambient' = volgt de stille modus */
+/* vuurwerkgeluid: sounds/fireworks.mp3 (van Tom), via Web Audio. iOS: audio pas ontgrendelen in de tik op End workout;
+   audiosessie 'ambient' = volgt de stille modus. Bij het sluiten van het vuurwerk zacht uitfaden. */
 (function(){
-  var ac=null;
+  var ac=null, buf=null, raw=null, cur=null;
+  try{ fetch('sounds/fireworks.mp3').then(function(r){ return r.ok?r.arrayBuffer():null; }).then(function(a){ raw=a; }).catch(function(){}); }catch(e){}
+  function decode(){ if(buf||!raw||!ac) return Promise.resolve(buf);
+    return new Promise(function(res){ try{ ac.decodeAudioData(raw.slice(0),function(b){ buf=b; res(b); },function(){ res(null); }); }catch(e){ res(null); } }); }
   window.__cgAudioUnlock=function(){
     try{ if(navigator.audioSession) navigator.audioSession.type='ambient'; }catch(e){}
     try{ if(!ac){ var A=window.AudioContext||window.webkitAudioContext; if(A) ac=new A(); } if(ac&&ac.state==='suspended') ac.resume(); }catch(e){}
+    decode();
   };
-  function noise(dur){ var n=Math.floor(ac.sampleRate*dur), b=ac.createBuffer(1,n,ac.sampleRate), d=b.getChannelData(0); for(var i=0;i<n;i++) d[i]=Math.random()*2-1; return b; }
-  window.__cgPop=function(){
-    if(!ac||ac.state!=='running') return;
-    if(ac.currentTime-(window.__cgLast||0)<.2) return; window.__cgLast=ac.currentTime;
-    var t=ac.currentTime, out=ac.createGain(); out.gain.value=.09; out.connect(ac.destination);
-    /* pop */
-    var s=ac.createBufferSource(); s.buffer=noise(.25); var f=ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value=900+Math.random()*500;
-    var g=ac.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(1,t+.005); g.gain.exponentialRampToValueAtTime(.001,t+.22);
-    s.connect(f); f.connect(g); g.connect(out); s.start(t); s.stop(t+.25);
-    /* knetter */
-    for(var i=0;i<7;i++){ var tt=t+.18+Math.random()*.55, c=ac.createBufferSource(); c.buffer=noise(.03); var hf=ac.createBiquadFilter(); hf.type='highpass'; hf.frequency.value=2500+Math.random()*2500;
-      var cg=ac.createGain(); cg.gain.setValueAtTime(.0001,tt); cg.gain.linearRampToValueAtTime(.35*Math.random()+.1,tt+.002); cg.gain.exponentialRampToValueAtTime(.001,tt+.03);
-      c.connect(hf); hf.connect(cg); cg.connect(out); c.start(tt); c.stop(tt+.04); }
+  window.__cgSound=function(){
+    if(!ac) return; var t0=performance.now();
+    decode().then(function(b){ if(!b||performance.now()-t0>1500) return;
+      var s=ac.createBufferSource(), g=ac.createGain(); s.buffer=b; g.gain.value=.7; s.connect(g); g.connect(ac.destination); s.start(); cur={s:s,g:g}; });
   };
+  window.__cgSoundStop=function(){ if(!cur||!ac) return; var c=cur; cur=null; try{ var t=ac.currentTime; c.g.gain.setValueAtTime(c.g.gain.value,t); c.g.gain.linearRampToValueAtTime(0,t+.5); c.s.stop(t+.55); }catch(e){} };
 })();
 window.__congrats=function(o){
   o=o||{}; var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -3740,7 +3737,7 @@ window.__congrats=function(o){
   size();
   var cs=getComputedStyle(document.documentElement), acc=(cs.getPropertyValue('--accent')||'#b4532a').trim();
   var COLS=[acc,'#e8a33d','#f3d27a','#d9734a','#f6e7c8'];
-  function burst(){ if(window.__cgPop) window.__cgPop(); var x=W*(.15+Math.random()*.7), y=H*(.12+Math.random()*.4), c=COLS[Math.floor(Math.random()*COLS.length)], n=46+Math.floor(Math.random()*24);
+  function burst(){ var x=W*(.15+Math.random()*.7), y=H*(.12+Math.random()*.4), c=COLS[Math.floor(Math.random()*COLS.length)], n=46+Math.floor(Math.random()*24);
     for(var i=0;i<n;i++){ var a=Math.PI*2*i/n+Math.random()*.2, v=1.6+Math.random()*3.2; parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:Math.random()<.25?COLS[4]:c,r:1.4+Math.random()*1.6}); } }
   var next=0;
   function frame(now){ if(!alive) return; var el2=now-t0;
@@ -3750,8 +3747,9 @@ window.__congrats=function(o){
     parts.forEach(function(p){ p.vx*=.985; p.vy=p.vy*.985+.045; p.x+=p.vx; p.y+=p.vy; p.l-=.0105;
       cx.globalAlpha=Math.max(0,p.l); cx.fillStyle=p.c; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,6.283); cx.fill(); });
     cx.globalAlpha=1; raf=requestAnimationFrame(frame); }
+  if(window.__cgSound) window.__cgSound();
   if(!reduce){ burst(); raf=requestAnimationFrame(frame); }
-  function close(){ if(!alive) return; alive=false; cancelAnimationFrame(raf); el.classList.remove('on'); setTimeout(function(){ el.remove(); },380); }
+  function close(){ if(!alive) return; alive=false; if(window.__cgSoundStop) window.__cgSoundStop(); cancelAnimationFrame(raf); el.classList.remove('on'); setTimeout(function(){ el.remove(); },380); }
   el.addEventListener('click',close); setTimeout(close,4500);
 };
 
@@ -3785,16 +3783,16 @@ window.__congrats=function(o){
   function render(){
     var days=data(), y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
-    var cnt=0, lastOn=null, html='', key='';
+    var cnt=0, msets=0, lastOn=null, html='', key='';
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
     for(var i=0;i<lead;i++) html+='<span class="cal-d out"></span>';
     for(var d=1;d<=n;d++){
       key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2); var on=!!days[key], fut=key>today;
-      if(on){ cnt++; lastOn=key; }
+      if(on){ cnt++; msets+=days[key].sets; lastOn=key; }
       html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
     }
     grid.innerHTML=html;
-    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts'):'No workouts';
+    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts')+' · '+msets+(msets===1?' set':' sets'):'No workouts';
     var cur=new Date(); document.querySelector('.cal-nav[data-m="1"]').disabled=(y===cur.getFullYear()&&m===cur.getMonth());
     if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
     grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
