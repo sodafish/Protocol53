@@ -1898,6 +1898,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
         paintChecks(); saveChecksLocal();
         if(window.__statsPer) window.__statsPer('dag');
         var cov=document.querySelector('.gnav-i[data-view="progress"]'); if(cov) cov.click();
+        window.__woY=0; /* na End workout begint Workout weer bovenaan */
       });
     });
   });
@@ -3380,15 +3381,20 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     sh.querySelectorAll('[data-view]').forEach(function(b){ if(b.dataset.view===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
     if(title) title.textContent=NAMES[v]||'';
   }
+  /* terug naar Workout = verder waar je was (scrollpositie onthouden); andere pagina's beginnen bovenaan */
+  window.__woY=0;
   function go(v){
     if(v===view){ window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(view==='workout') window.__woY=window.scrollY;
     var main=document.getElementById(TAB[v]||'t-schema');
     var mainActive=main.getAttribute('aria-selected')==='true';
     if(!mainActive) main.click();
-    if(!TAB[v] && window.__ksub){ var want=v==='progress'?1:0; setTimeout(function(){ ksub(want); toTop(); }, mainActive?0:150); }
+    if(!TAB[v] && window.__ksub){ var want=v==='progress'?1:0; setTimeout(function(){ ksub(want); }, mainActive?0:150); }
     paint(v);
     /* altijd bovenaan beginnen, ook als het wisselen van tab zelf nog scrolt */
-    toTop(); setTimeout(toTop,200); setTimeout(toTop,450);
+    var y=v==='workout'?(window.__woY||0):0;
+    function place(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
+    place(); setTimeout(place,200); setTimeout(place,450);
   }
   function toTop(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,0); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
   /* bestaande sprongen (bv. End workout → Progress) volgen */
