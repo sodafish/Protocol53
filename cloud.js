@@ -114,19 +114,13 @@
       '<p class="lg-sub">Log in to save your data across all your devices.</p>'+
       '<label>Email<input type="email" name="email" autocomplete="username" required></label>'+
       '<label>Password<input type="password" name="pw" autocomplete="current-password" required minlength="6"></label>'+
-      '<div class="lg-dob" hidden>'+
-        '<label>Date of birth<input type="date" name="dob"></label>'+
-        '<div class="lg-f"><span>Sex</span><div class="pf-seg lg-sex" role="radiogroup" aria-label="Sex"><button type="button" role="radio" data-sex="m" aria-checked="false">Male</button><button type="button" role="radio" data-sex="f" aria-checked="false">Female</button></div></div>'+
-        '<div class="lg-two"><label>Height (cm)<input type="text" name="h" inputmode="numeric" placeholder="180"></label><label>Weight (kg)<input type="text" name="w" inputmode="decimal" placeholder="80"></label></div>'+
-      '</div>'+
+      '<label class="lg-dob" hidden>Date of birth<input type="date" name="dob"></label>'+
       '<p class="lg-msg" role="status"></p>'+
       '<button type="submit" class="lg-main">Log in</button>'+
       '<button type="button" class="lg-alt">No account yet? Create account</button>'+
     '</form>';
     document.body.appendChild(o);
-    var f=o.querySelector('form'), m=o.querySelector('.lg-msg'), signup=false, sex=null;
-    o.querySelectorAll('.lg-sex button').forEach(function(b){ b.addEventListener('click',function(){ sex=b.dataset.sex;
-      o.querySelectorAll('.lg-sex button').forEach(function(x){ x.setAttribute('aria-checked',x===b?'true':'false'); }); }); });
+    var f=o.querySelector('form'), m=o.querySelector('.lg-msg'), signup=false;
     if(msg) m.textContent=msg;
     o.querySelector('.lg-alt').addEventListener('click',function(){
       signup=!signup;
@@ -142,13 +136,8 @@
       if(!email||pw.length<6){ m.textContent='Enter your email and a password of at least 6 characters.'; return; }
       var dob=f.dob.value;
       if(signup && !/^\d{4}-\d{2}-\d{2}$/.test(dob)){ m.textContent='Enter your date of birth.'; return; }
-      function n1(v){ var x=/(\d+(?:[.,]\d+)?)/.exec(v||''); return x?parseFloat(x[1].replace(',','.')):null; }
-      var h=n1(f.h.value), w=n1(f.w.value);
-      if(signup && !sex){ m.textContent='Choose your sex.'; return; }
-      if(signup && !(h>=120&&h<=230)){ m.textContent='Enter your height in cm.'; f.h.focus(); return; }
-      if(signup && !(w>=35&&w<=250)){ m.textContent='Enter your weight in kg.'; f.w.focus(); return; }
       m.textContent=signup?'Creating account…':'Logging in…';
-      var p=signup?sb.auth.signUp({email:email,password:pw,options:{data:{dob:dob,sex:sex,h:h,w:w}}}):sb.auth.signInWithPassword({email:email,password:pw});
+      var p=signup?sb.auth.signUp({email:email,password:pw,options:{data:{dob:dob}}}):sb.auth.signInWithPassword({email:email,password:pw});
       p.then(function(r){
         if(r.error){ m.textContent=/Invalid login/i.test(r.error.message)?'Email or password is incorrect.':/not confirmed/i.test(r.error.message)?'First confirm your email address via the email you received.':r.error.message; return; }
         if(signup && !r.data.session){ m.textContent='Account created. Confirm via the email you received, then log in here.'; signup=false; o.querySelector('.lg-main').textContent='Log in'; o.querySelector('.lg-dob').hidden=true; o.querySelector('.lg-alt').textContent='No account yet? Create account'; return; }

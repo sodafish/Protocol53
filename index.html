@@ -851,11 +851,6 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 #p53-login label{display:flex;flex-direction:column;gap:.35rem;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 #p53-login input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.8rem .9rem;min-height:48px;}
 #p53-login input:focus{outline:none;border-color:var(--accent);}
-#p53-login .lg-dob:not([hidden]){display:flex;flex-direction:column;gap:.9rem;}
-#p53-login .lg-f{display:flex;flex-direction:column;gap:.35rem;}
-#p53-login .lg-f>span{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-#p53-login .lg-two{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
-#p53-login .lg-two input{width:100%;box-sizing:border-box;min-width:0;}
 #p53-login .lg-msg{min-height:1.2em;margin:0;font-size:13.5px;color:var(--accent);}
 #p53-login .lg-main{appearance:none;cursor:pointer;min-height:50px;border:none;border-radius:999px;background:var(--ink);color:var(--surface);font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;}
 #p53-login .lg-alt{appearance:none;cursor:pointer;background:none;border:none;color:var(--muted);font:500 14px 'Work Sans',system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;min-height:44px;}
@@ -964,13 +959,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pf-f{display:flex;flex-direction:column;gap:.4rem;}
 .pf-form input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;min-height:48px;width:100%;box-sizing:border-box;-webkit-appearance:none;}
 .pf-form input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
-.pf-two{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
-.pf-u{position:relative;display:block;}
-.pf-u i{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);font-style:normal;font-size:14px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--muted);pointer-events:none;}
-.pf-u input{padding-right:2.6rem;}
-.pf-seg{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--line);border-radius:999px;padding:3px;gap:3px;}
-.pf-seg button{appearance:none;border:0;background:transparent;border-radius:999px;min-height:40px;font:500 15px 'Work Sans',system-ui,sans-serif;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.pf-seg button[aria-checked="true"]{background:var(--ink);color:var(--paper);}
 #dob-sheet .gs-msg:empty{display:none;}
 /* felicitaties na End workout */
 .cg{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--paper) 55%,transparent);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;transition:opacity .35s ease;cursor:pointer;}
@@ -1693,12 +1681,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet" id="dob-sheet" role="dialog" aria-modal="true" aria-labelledby="dob-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
   <div class="sheet-head"><h3 id="dob-t">Profile</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <p class="gs-sub">Your age shows after Protocol. With your sex, height and weight the app estimates the calories of a workout.</p>
+  <p class="gs-sub">Your age shows after Protocol.</p>
   <form class="pf-form" id="pfForm" novalidate>
     <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
-    <div class="pf-f"><span class="set-lab">Sex</span><div class="pf-seg" role="radiogroup" aria-label="Sex"><button type="button" role="radio" data-sex="m" aria-checked="false">Male</button><button type="button" role="radio" data-sex="f" aria-checked="false">Female</button></div></div>
-    <div class="pf-two"><label class="set-lab pf-f">Height<span class="pf-u"><input type="text" id="pfH" inputmode="numeric" placeholder="180"><i>cm</i></span></label>
-    <label class="set-lab pf-f">Weight<span class="pf-u"><input type="text" id="pfW" inputmode="decimal" placeholder="80"><i>kg</i></span></label></div>
     <p class="gs-msg" id="dobMsg" role="status"></p>
     <div class="set-act"><span></span><button type="submit" id="dobSave" class="set-save">Save</button></div>
   </form>
@@ -1721,7 +1706,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   <ul class="more-list">
     <li><button type="button" data-view="cardio"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg></span><span class="mt"><b>Cardio</b><small>Zone 2, walking, VO2max</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     <li><button type="button" data-view="voeding"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg></span><span class="mt"><b>Diet</b><small>Food list, protein, measuring</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-    <li><button type="button" id="moreProfile"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg></span><span class="mt"><b>Profile</b><small>Age, sex, height, weight</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+    <li><button type="button" id="moreProfile"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg></span><span class="mt"><b>Profile</b><small>Date of birth</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     <li><button type="button" data-view="kracht"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></span><span class="mt"><b>Info</b><small>Intensity, tempo, sleep, app</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
   </ul>
 </div>
@@ -1932,9 +1917,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       p53Confirm({title:'End workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'All ticks are cleared. Your counts, weights and progress are kept.',ok:'End workout'}).then(function(y){
         if(!y) return;
         var _n=0; pane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)) _n++; });
-        var _end=Date.now(), _kc=woStart&&window.__kcal?window.__kcal(_end-woStart):null;
-        if(woStart&&window.__sessAdd) window.__sessAdd(woStart,_end,_n,_kc);
-        if(window.__congrats) setTimeout(function(){ window.__congrats({min:dur,n:_n,kcal:_kc}); },350);
+        if(woStart&&window.__sessAdd) window.__sessAdd(woStart,Date.now(),_n);
+        if(window.__congrats) setTimeout(function(){ window.__congrats({min:dur,n:_n}); },350);
         woRun(false);
         pane.querySelectorAll('.exr').forEach(function(li){
           var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
@@ -3635,30 +3619,25 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 })();
 </script>
 <script>
-/* ---- profiel: leeftijd in de titel (Protocol + leeftijd) + geslacht, lengte, gewicht voor de calorieën.
-   cfg/profile {dob, sex:'m'|'f', h:cm, w:kg} (bij aanmelden uit user_metadata), cache fitlog-dob + fitlog-profile.
-   Openen: tik op het getal of More › Profile. window.__p53profile() geeft {dob,age,sex,h,w}. ---- */
+/* ---- profiel: leeftijd in de titel (Protocol + leeftijd). cfg/profile {dob} (bij aanmelden uit user_metadata), cache fitlog-dob.
+   Openen: tik op het getal of More › Profile. ---- */
 (function(){
-  var KEY='fitlog-dob', PKEY='fitlog-profile', dob=null, pf={}, col=null, got=false;
-  try{ dob=localStorage.getItem(KEY); pf=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}; }catch(e){}
-  var num=document.getElementById('ageNum'), inp=document.getElementById('dobIn'), hIn=document.getElementById('pfH'), wIn=document.getElementById('pfW');
+  var KEY='fitlog-dob', PKEY='fitlog-profile', dob=null, col=null, got=false;
+  try{ dob=localStorage.getItem(KEY); }catch(e){}
+  var num=document.getElementById('ageNum'), inp=document.getElementById('dobIn');
   function age(d){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); if(!m) return null;
     var now=new Date(), a=now.getFullYear()-(+m[1]); if(now.getMonth()+1<+m[2]||(now.getMonth()+1===+m[2]&&now.getDate()<+m[3])) a--;
     return a>=10&&a<=110?a:null; }
   function paint(){ var a=age(dob), n=a==null?53:a; if(num) num.textContent=n; }
-  window.__p53profile=function(){ return {dob:dob,age:age(dob),sex:pf.sex||null,h:pf.h||null,w:pf.w||null}; };
-  function doc(){ var d={}; if(dob) d.dob=dob; if(pf.sex) d.sex=pf.sex; if(pf.h) d.h=pf.h; if(pf.w) d.w=pf.w; return d; }
-  function store(save){ try{ if(dob) localStorage.setItem(KEY,dob); else localStorage.removeItem(KEY); localStorage.setItem(PKEY,JSON.stringify(pf)); }catch(e){} paint();
+  window.__p53profile=function(){ return {dob:dob,age:age(dob)}; };
+  function doc(){ var d={}; if(dob) d.dob=dob; return d; }
+  function store(save){ try{ if(dob) localStorage.setItem(KEY,dob); else localStorage.removeItem(KEY); localStorage.removeItem(PKEY); }catch(e){} paint();
     if(save && col) col.doc('profile').set(doc()).catch(function(){}); }
-  function num1(v){ var m=/(\d+(?:[.,]\d+)?)/.exec(String(v||'')); return m?parseFloat(m[1].replace(',','.')):null; }
-  var btn=document.getElementById('ageBtn'), bg=document.getElementById('dob-bg'), sh=document.getElementById('dob-sheet'), msg=document.getElementById('dobMsg'), open=false, sex=null;
+  var btn=document.getElementById('ageBtn'), bg=document.getElementById('dob-bg'), sh=document.getElementById('dob-sheet'), msg=document.getElementById('dobMsg'), open=false;
   function meta(){ var u=window.__p53user; return u&&u.user_metadata||{}; }
-  function paintSex(){ sh.querySelectorAll('.pf-seg button').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.sex===sex?'true':'false'); }); }
   function openSheet(){ open=true; msg.textContent='';
     inp.max=new Date().toISOString().slice(0,10);
     inp.value=dob||meta().dob||((new Date().getFullYear()-53)+'-01-01');
-    sex=pf.sex||meta().sex||null; paintSex();
-    hIn.value=pf.h||meta().h||''; wIn.value=pf.w||meta().w||'';
     bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); }
   function closeSheet(){ if(!open) return; open=false; bg.classList.remove('on'); sh.classList.remove('on');
     setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); }
@@ -3667,26 +3646,21 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     btn.addEventListener('click',openSheet);
     bg.addEventListener('click',closeSheet); sh.querySelector('.sheet-x').addEventListener('click',closeSheet);
     document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeSheet(); });
-    sh.querySelectorAll('.pf-seg button').forEach(function(b){ b.addEventListener('click',function(){ sex=b.dataset.sex; paintSex(); }); });
     document.getElementById('pfForm').addEventListener('submit',function(e){ e.preventDefault();
-      var v=inp.value, h=num1(hIn.value), w=num1(wIn.value);
+      var v=inp.value;
       if(age(v)==null){ msg.textContent='Enter a valid date of birth.'; inp.focus(); return; }
-      if(hIn.value.trim() && !(h>=120&&h<=230)){ msg.textContent='Enter your height in cm (120–230).'; hIn.focus(); return; }
-      if(wIn.value.trim() && !(w>=35&&w<=250)){ msg.textContent='Enter your weight in kg (35–250).'; wIn.focus(); return; }
-      dob=v; pf={sex:sex||null,h:h||null,w:w?Math.round(w*10)/10:null}; store(true); closeSheet(); });
+      dob=v; store(true); closeSheet(); });
   }
   var mp=document.getElementById('moreProfile');
   if(mp) mp.addEventListener('click',function(){ var x=document.querySelector('#more-sheet .sheet-x'); if(x) x.click(); setTimeout(openSheet,250); });
   /* uit de aanmelding: wat nog ontbreekt aanvullen */
-  function fromUser(u){ var m=u&&u.user_metadata; if(!m||!got) return; var ch=false;
-    if(m.dob&&!dob){ dob=m.dob; ch=true; } if(m.sex&&!pf.sex){ pf.sex=m.sex; ch=true; } if(m.h&&!pf.h){ pf.h=+m.h; ch=true; } if(m.w&&!pf.w){ pf.w=+m.w; ch=true; }
-    if(ch) store(true); }
+  function fromUser(u){ var m=u&&u.user_metadata; if(!m||!got) return; if(m.dob&&!dob){ dob=m.dob; store(true); } }
   paint();
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('cfg');
     col.onSnapshot(function(snap){ var d=null; snap.docs.forEach(function(x){ if(x.id==='profile') d=x.data(); });
       if(snap.metadata&&snap.metadata.fromCache) return;
       got=true;
-      if(d&&d.dob){ dob=d.dob; pf={sex:d.sex||pf.sex||null,h:d.h||pf.h||null,w:d.w||pf.w||null}; store((!d.sex&&pf.sex)||(!d.h&&pf.h)||(!d.w&&pf.w)); }
+      if(d&&d.dob){ if(d.dob!==dob){ dob=d.dob; store(false); } }
       else if(dob) store(true);
       fromUser(window.__p53user); },function(){}); });
   document.addEventListener('p53-user',function(e){ fromUser(e.detail); });
@@ -3748,7 +3722,7 @@ window.__congrats=function(o){
   o=o||{}; var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var el=document.createElement('div'); el.className='cg'; el.setAttribute('role','status');
   var bits=[]; if(o.min!=null) bits.push('<b>'+(o.min<60?o.min+' min':Math.floor(o.min/60)+' h '+('0'+o.min%60).slice(-2)+' min')+'</b>');
-  if(o.n) bits.push('<b>'+o.n+'</b> '+(o.n===1?'exercise':'exercises')); if(o.kcal) bits.push('<b>~'+o.kcal+'</b> kcal');
+  if(o.n) bits.push('<b>'+o.n+'</b> '+(o.n===1?'exercise':'exercises'));
   el.innerHTML='<canvas aria-hidden="true"></canvas><div class="cg-card"><h2>Congratulations<em>!</em></h2><p>'+(bits.join(' · ')||'Workout done.')+'</p><small>Tap to continue</small></div>';
   document.body.appendChild(el); requestAnimationFrame(function(){ el.classList.add('on'); });
   var cv=el.querySelector('canvas'), cx=cv.getContext('2d'), dpr=Math.min(2,window.devicePixelRatio||1), W=0, H=0, parts=[], raf=0, t0=performance.now(), alive=true;
@@ -3777,16 +3751,7 @@ window.__congrats=function(o){
   try{ sess=JSON.parse(localStorage.getItem(SKEY)||'{}'); }catch(e){}
   function saveLocal(){ try{ localStorage.setItem(SKEY,JSON.stringify(sess)); }catch(e){} }
   function ymd(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
-  /* calorieën: MET-methode, gecorrigeerd met je rustverbruik (Mifflin-St Jeor: leeftijd, geslacht, lengte, gewicht).
-     Krachttraining met meerdere oefeningen, 8–15 reps, rust tussen sets = 3,5 MET (Compendium of Physical Activities). Schatting. */
-  var MET=3.5;
-  window.__kcal=function(ms){
-    var p=window.__p53profile?window.__p53profile():{}, w=+p.w; if(!w||!(ms>0)) return null;
-    var hrs=ms/3600e3, per=w; /* zonder lengte/geslacht: 1 MET = 1 kcal per kg per uur */
-    if(p.h&&p.sex){ var a=p.age||53, rmr=10*w+6.25*p.h-5*a+(p.sex==='f'?-161:5); per=rmr/24; }
-    return Math.round(MET*per*hrs);
-  };
-  window.__sessAdd=function(s,e,n,k){ var id=ymd(s)+'@'+s, ev={d:ymd(s),s:s,e:e,n:n}; if(k) ev.k=k; sess[id]=ev; saveLocal(); if(sCol) sCol.doc(id).set(ev).catch(function(){}); render(); };
+  window.__sessAdd=function(s,e,n){ var id=ymd(s)+'@'+s, ev={d:ymd(s),s:s,e:e,n:n}; sess[id]=ev; saveLocal(); if(sCol) sCol.doc(id).set(ev).catch(function(){}); render(); };
   var grid=document.getElementById('calGrid'); if(!grid) return;
   var MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -3798,25 +3763,24 @@ window.__congrats=function(o){
   function data(){
     var days={};
     /* zonder de eenmalige beginstand ('seed': oude tellers, allemaal op één datum gezet, dus geen echte trainingsdag) */
-    (window.__events?window.__events():[]).forEach(function(e){ if(!e.t||e.seed) return; var d=ymd(e.t); (days[d]=days[d]||{ex:{},min:0,kc:0}).ex[e.k]=1; });
-    Object.keys(sess).forEach(function(id){ var x=sess[id]; if(!x||!x.d) return; var o=days[x.d]=days[x.d]||{ex:{},min:0,kc:0}; o.sc=(o.sc||0)+1; o.min+=Math.max(0,Math.round((x.e-x.s)/60000));
-      o.kc+=x.k||(window.__kcal?window.__kcal(x.e-x.s)||0:0); });
+    (window.__events?window.__events():[]).forEach(function(e){ if(!e.t||e.seed) return; var d=ymd(e.t); (days[d]=days[d]||{ex:{},min:0}).ex[e.k]=1; });
+    Object.keys(sess).forEach(function(id){ var x=sess[id]; if(!x||!x.d) return; var o=days[x.d]=days[x.d]||{ex:{},min:0}; o.sc=(o.sc||0)+1; o.min+=Math.max(0,Math.round((x.e-x.s)/60000)); });
     return days;
   }
   function dur(m){ return m<60?m+' min':Math.floor(m/60)+' h '+('0'+m%60).slice(-2)+' min'; }
   function render(){
     var days=data(), y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
-    var cnt=0, mins=0, kcal=0, lastOn=null, html='';
+    var cnt=0, mins=0, lastOn=null, html='';
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
     for(var i=0;i<lead;i++) html+='<span class="cal-d out"></span>';
     for(var d=1;d<=n;d++){
       var key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2), on=!!days[key], fut=key>today;
-      if(on){ cnt+=Math.max(1,days[key].sc||0); mins+=days[key].min; kcal+=days[key].kc; lastOn=key; }
+      if(on){ cnt+=Math.max(1,days[key].sc||0); mins+=days[key].min; lastOn=key; }
       html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
     }
     grid.innerHTML=html;
-    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts')+(mins?' · '+dur(mins):'')+(kcal?' · ~'+kcal.toLocaleString('en')+' kcal':''):'No workouts';
+    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts')+(mins?' · '+dur(mins):''):'No workouts';
     var cur=new Date(), atNow=(y===cur.getFullYear()&&m===cur.getMonth());
     document.querySelector('.cal-nav[data-m="1"]').disabled=atNow;
     if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
@@ -3828,21 +3792,21 @@ window.__congrats=function(o){
     var names=Object.keys(o.ex).map(nameOf).filter(Boolean);
     function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
     /* namen aantikken = uitleg + metingen van die oefening (daar kun je een training ook verwijderen) */
-    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+(o.min?' · '+dur(o.min):'')+(o.kc?' · ~'+o.kc+' kcal':'')+' · '+names.length+(names.length===1?' exercise':' exercises')+
+    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+(o.min?' · '+dur(o.min):'')+' · '+names.length+(names.length===1?' exercise':' exercises')+
       (names.length?'<br>'+names.map(function(n){ return window.__p53info&&window.__p53info.has(n)?'<button type="button" class="cal-ex" data-n="'+esc(n)+'">'+esc(n)+'</button>':esc(n); }).join(', '):'');
     box.querySelectorAll('.cal-ex').forEach(function(b){ b.addEventListener('click',function(){ window.__p53info.open(b.dataset.n,b); }); });
     /* sessies van die dag (duur): verwijderen of er zelf één toevoegen (bv. vergeten op End workout te tikken) */
     var TRASH='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></svg>';
     var ss=Object.keys(sess).filter(function(id){ return sess[id]&&sess[id].d===sel; }).sort(function(a,b){ return sess[a].s-sess[b].s; });
     var hm=function(t){ var x=new Date(t); return x.getHours()+':'+('0'+x.getMinutes()).slice(-2); };
-    box.insertAdjacentHTML('beforeend','<ul class="cal-sess">'+ss.map(function(id){ var x=sess[id], m=Math.max(0,Math.round((x.e-x.s)/60000)), kc=x.k||(window.__kcal?window.__kcal(x.e-x.s):null);
-      return '<li><span>'+(x.manual?'Added':'Started '+hm(x.s))+' · <b>'+dur(m)+'</b>'+(kc?' · ~'+kc+' kcal':'')+'</span><button type="button" class="pe-del" data-id="'+id+'" aria-label="Delete this session">'+TRASH+'</button></li>'; }).join('')+'</ul>'+
+    box.insertAdjacentHTML('beforeend','<ul class="cal-sess">'+ss.map(function(id){ var x=sess[id], m=Math.max(0,Math.round((x.e-x.s)/60000));
+      return '<li><span>'+(x.manual?'Added':'Started '+hm(x.s))+' · <b>'+dur(m)+'</b></span><button type="button" class="pe-del" data-id="'+id+'" aria-label="Delete this session">'+TRASH+'</button></li>'; }).join('')+'</ul>'+
       '<form class="pe-add cal-add"><input type="text" name="m" inputmode="numeric" placeholder="Minutes" aria-label="Workout time in minutes"><button type="submit">Add time</button></form>');
     box.querySelectorAll('.cal-sess .pe-del').forEach(function(b){ b.addEventListener('click',function(){
       if(window.p53Confirm) window.p53Confirm({title:'Delete this session?',msg:'Only the time is removed. Your exercises, weights and progress stay.',ok:'Delete',danger:true}).then(function(y){ if(y) delSess(b.dataset.id); });
       else delSess(b.dataset.id); }); });
     var af=box.querySelector('.cal-add'); af.addEventListener('submit',function(e){ e.preventDefault(); var m=parseInt(af.m.value,10); if(!(m>0&&m<=300)){ af.m.focus(); return; }
-      var pp=sel.split('-'), st=new Date(+pp[0],+pp[1]-1,+pp[2],12).getTime(), id=sel+'@'+st+'m', ev={d:sel,s:st,e:st+m*60000,n:0,manual:1}, kc=window.__kcal?window.__kcal(m*60000):null; if(kc) ev.k=kc;
+      var pp=sel.split('-'), st=new Date(+pp[0],+pp[1]-1,+pp[2],12).getTime(), id=sel+'@'+st+'m', ev={d:sel,s:st,e:st+m*60000,n:0,manual:1};
       sess[id]=ev; saveLocal(); if(sCol) sCol.doc(id).set(ev).catch(function(){}); render(); });
   }
   function delSess(id){ delete sess[id]; saveLocal(); if(sCol) sCol.doc(id).delete().catch(function(){}); render(); }
