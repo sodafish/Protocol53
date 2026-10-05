@@ -1040,6 +1040,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   min-height:48px;padding:0 1.15rem 0 1rem;border:0;border-radius:999px;background:var(--ink);color:var(--paper);cursor:pointer;
   font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 20px rgba(0,0,0,.18);
   -webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .25s ease;}
+.wo-end[hidden]{display:none;}
 .wo-end:active{transform:scale(.96);}
 .wo-end svg{color:var(--accent);}
 .wo-end-t{font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:500;opacity:.85;}
@@ -1375,7 +1376,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
     <section class="stats" aria-label="Progress">
       <div class="stats-per" role="group" aria-label="Period">
-        <button type="button" data-d="dag">Last workout</button><button type="button" data-d="maand">Last month</button><button type="button" data-d="alles">All time</button>
+        <button type="button" data-d="dag">Last</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="alles">All</button>
       </div>
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
@@ -2247,7 +2248,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
     Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&ymdL(e.t)===d){ delete hist[id]; if(histCol) histCol.doc(id).delete().catch(function(){}); } });
     saveHistLocal(); renderStats(); };
-  var PERKEY='fitlog-stats-per', PERS=['dag','maand','alles']; /* Week is weg (bewaard 'week' valt terug op maand) */
+  var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','alles']; /* Last · Week · Month · All */
   var per='maand'; try{ per=localStorage.getItem(PERKEY)||'maand'; }catch(e){}
   if(PERS.indexOf(per)<0) per='maand';
   document.querySelectorAll('.stats-per button').forEach(function(b){

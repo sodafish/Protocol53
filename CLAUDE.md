@@ -90,9 +90,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Drie knoppen: Last workout (`dag`, de laatste trainingsdag → totaal aantal sets), Last month (`maand`, laatste 30 dagen) en
-  All time (`alles`, sinds de eerste afvinking) → gemiddeld aantal sets per week. De Week-knop is weg (code voor 'week' blijft,
-  een bewaarde 'week' valt terug op maand).
+- Vier knoppen: Last (`dag`, de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
+  Month (`maand`, laatste 30 dagen) en All (`alles`, sinds de eerste afvinking) → gemiddeld aantal sets per week.
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
@@ -107,7 +106,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Workout heeft bovenaan (`.reset-top`, in `.tools-row` naast de split-knop) de omlijnde knop 'Start workout' (`.wo-btn`, play-icoon):
   start de timer en scrolt naar Warm-up. Tijdens een workout (timer loopt of er staat een vinkje: `woActive`) is die knop uitgegrijsd
   (`aria-disabled`, 35%) en staat rechtsonder boven de navbar een zwevende donkere pil 'End' + verstreken tijd (`#woEnd`, `#woEndT`,
-  m:ss / u:mm:ss; body krijgt `wo-on` = extra ruimte onderaan), op elke pagina. De onderste End-knop is weg; de navbar toont altijd 'Workout'.
+  m:ss / u:mm:ss; body krijgt `wo-on` = extra ruimte onderaan), op elke pagina. Vóór de start is de pil verborgen
+  (`.wo-end[hidden]{display:none}` nodig, want `display:inline-flex` overschreef anders het `hidden`-attribuut). De onderste End-knop is weg; de navbar toont altijd 'Workout'.
   Tik op End → `p53Confirm` ('End workout?', met de tijd) → sessie bewaren, alle vinkjes leeg, timer stop, periode Last workout
   (`__statsPer('dag')`), naar Coverage, `__woY=0`, daarna vuurwerk. Alles wat afgevinkt was, is al bewaard (grafiek). Na End kun je niet
   meer uitvinken; corrigeren via het edit-blad van de grafiek. Vinkjes vervallen ook vanzelf de volgende dag.
