@@ -128,9 +128,15 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   vlakken wordt dus zichtbaar als achtergrond: altijd randen laten aansluiten.
 
 **Hoe het telt:**
-- ÉÉN BRON: Coverage (`events()`), het getal N×, de kalender en de grafiek komen allemaal uit `prog` (de grafiekdata). Een meting
-  ontstaat door af te vinken (één per veld per dag; opnieuw afvinken dezelfde dag overschrijft) of met 'Add' in het edit-blad; weg
-  met het vuilbakje daar of door uit te vinken (zet de vorige stand van die dag terug). Afvinken vraagt een getal in elk veld.
+- ÉÉN BRON: Coverage (`events()`), het getal N×, de kalender en de grafiek komen allemaal uit `prog` (de grafiekdata).
+- Eén meting per veld per WORKOUT: id `<veld>@<jjjj-mm-dd>@<woStart>` met `w` = start van de workout (`window.__woStart()`, `sessId`).
+  Twee workouts op één dag = twee metingen = 2× / 2 trainingen in Coverage en kalender ('2 workouts', sets opgeteld). Opnieuw afvinken
+  binnen dezelfde workout overschrijft. Uitvinken zet alleen de meting van de lopende workout terug (`__progSnap`/`__progDropToday`,
+  `fitlog-undo` met `{d,w,p}`); eerdere workouts worden nooit aangeraakt. Handmatig 'Add' in het edit-blad: id `<veld>@<dag>@m`
+  (`w:'m'`, één per veld per dag, naast de workouts). Oude metingen `<veld>@<dag>` (zonder w) blijven geldig. Groeperen (N×, Coverage,
+  kalender) gebeurt per oefening per `dag|w` (supersets: beide velden één keer). Het edit-blad toont het uur als er die dag meer dan één
+  workout-meting is, en wist per meting (`e.id`); is het de lopende workout en staat de rij afgevinkt, dan gaat het vinkje mee weg.
+  Afvinken vraagt een getal in elk veld. MIGK-migratie houdt het id-achtervoegsel.
   `hist` wordt nog geschreven (oude code) maar telt nergens meer mee; de 'No value'-dagen (`.pe-gap`/`.ip-gap`) zijn uitgeschakeld.
 - Elke afvinking (via `bumpCount`, dus zoals de teller) schrijft een rij in collectie `hist`:
   `{k: oefeningsleutel, t: tijdstip, s: aantal sets, m: {spier: gewicht}}`. Uitvinken verwijdert de

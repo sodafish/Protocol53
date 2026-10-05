@@ -1897,6 +1897,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     clearInterval(woTick); woTick=woStart?setInterval(woPaintTime,1000):null; woPaintTime();
   }
   window.__woRun=woRun;
+  window.__woStart=function(){ return woStart||0; };
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) woPaintTime(); });
   function woActive(){ if(woStart) return true; var on=false; document.querySelectorAll('#s-d3 .exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) on=true; }); return on; }
   /* bovenaan altijd 'Start workout'; tijdens een workout uitgegrijsd. Rechtsonder dan een zwevende 'End'-knop met de tijd. */
@@ -2206,7 +2207,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number') return;
       var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?chkKey(li):p.k;
       if(!k||/^w0-/.test(k)) return;
-      var key=k+'|'+(p.d||new Date(p.t).toDateString()); if(seen[key]) return; seen[key]=1;
+      var key=k+'|'+(p.d||new Date(p.t).toDateString())+'|'+(p.w||''); if(seen[key]) return; seen[key]=1; /* één training per oefening per workout */
       out.push({k:k,t:p.t,s:setsFor(k,li),m:musclesFor(k,li)});
     });
     return out;
@@ -2223,7 +2224,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     var notes={}; notes[k]=1; notes[k+'-b']=1;
     if(li) li.querySelectorAll('[data-note]').forEach(function(x){ notes[x.dataset.note]=1; });
     var P=window.__progAll?window.__progAll():{}, days={}, last=0;
-    Object.keys(P).forEach(function(id){ var p=P[id]; if(p&&notes[p.k]&&typeof p.v==='number'){ days[p.d||new Date(p.t).toDateString()]=1; if(p.t>last) last=p.t; } });
+    Object.keys(P).forEach(function(id){ var p=P[id]; if(p&&notes[p.k]&&typeof p.v==='number'){ days[(p.d||new Date(p.t).toDateString())+'|'+(p.w||'')]=1; if(p.t>last) last=p.t; } }); /* per workout (supersets: één keer) */
     return {n:Object.keys(days).length,last:last};
   };
   /* meting verwijderd in de grafiek: ook de vinkjes-gebeurtenis(sen) van die oefening op die dag weg, zodat alles klopt */
@@ -2411,33 +2412,33 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function saveProgLocal(){ try{ localStorage.setItem(PROGKEY,JSON.stringify(prog)); }catch(e){} try{ document.dispatchEvent(new Event('p53-prog')); }catch(e){} }
   function ymd(t){ var d=new Date(t); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function numOf(txt){ var m=String(txt||'').replace(',','.').match(/\d+(?:\.\d+)?/); return m?parseFloat(m[0]):null; }
+  /* één meting per veld per WORKOUT (niet per dag): id <veld>@<dag>@<start van de workout>, met w = start.
+     Een tweede workout op dezelfde dag = een tweede meting. Opnieuw afvinken binnen dezelfde workout = overschrijven.
+     Oude metingen (id <veld>@<dag>, zonder w) en handmatige ('Add', id <veld>@<dag>@m, w='m') blijven gewoon geldig. */
+  function sessId(k,d,w){ return w?k+'@'+d+'@'+w:k+'@'+d; }
+  function curW(){ return window.__woStart?window.__woStart():0; }
   function progRecord(inp,when){
     var v=numOf(inp.value), k=inp.dataset.note; if(!k) return;
-    var t=when||Date.now(), id=k+'@'+ymd(t);
-    /* veld leeggemaakt: het meetpunt van vandaag vervalt */
+    var t=when||Date.now(), w=curW(), id=sessId(k,ymd(t),w);
+    /* veld leeggemaakt: de meting van deze workout vervalt */
     if(v==null){ if(!when&&prog[id]){ delete prog[id]; saveProgLocal(); renderProg(); if(progCol) progCol.doc(id).delete().catch(function(){}); } return; }
-    var ev={k:k,d:ymd(t),t:t,v:v};
+    var ev={k:k,d:ymd(t),t:(prog[id]&&prog[id].t)||t,v:v}; if(w) ev.w=w;
     var old=prog[id]; if(old&&old.v===v) return;
     prog[id]=ev; saveProgLocal(); renderProg();
     if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   window.__progAll=function(){ return prog; };
-  /* uitvinken = deze sessie ongedaan: ook de meting(en) van vandaag van die oefening weg */
-  /* uitvinken mag nooit een meting van een eerdere training (dezelfde dag) wissen: bij afvinken bewaren we wat er die dag al stond
-     (fitlog-undo) en bij uitvinken zetten we precies dat terug. Zonder bewaarde stand (ander toestel): alleen wissen als dit de
-     enige training van die oefening op die dag was. */
+  /* uitvinken = de meting van DEZE workout ongedaan maken (zet terug wat er binnen deze workout al stond, meestal niets).
+     Metingen van een eerdere workout (ook dezelfde dag) worden nooit aangeraakt. */
   var UKEY='fitlog-undo', undo={}; try{ undo=JSON.parse(localStorage.getItem(UKEY)||'{}')||{}; }catch(e){}
   function saveUndo(){ try{ localStorage.setItem(UKEY,JSON.stringify(undo)); }catch(e){} }
-  window.__progSnap=function(li,k){ var d=ymd(Date.now()), sn={d:d,p:{}};
-    li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var o=prog[x.dataset.note+'@'+d]; sn.p[x.dataset.note]=o?{k:o.k,d:o.d,t:o.t,v:o.v}:null; });
+  window.__progSnap=function(li,k){ var d=ymd(Date.now()), w=curW(), sn={d:d,w:w,p:{}};
+    li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var o=prog[sessId(x.dataset.note,d,w)]; sn.p[x.dataset.note]=o?JSON.parse(JSON.stringify(o)):null; });
     undo[k]=sn; saveUndo(); };
-  window.__progDropToday=function(li,day,k){ var td=day||ymd(Date.now()), sn=k&&undo[k];
-    if(sn&&sn.d===td){
-      Object.keys(sn.p).forEach(function(n){ var id=n+'@'+td, o=sn.p[n];
-        if(o){ prog[id]=o; if(progCol) progCol.doc(id).set(o).catch(function(){}); } else if(prog[id]) progDel(id); });
-      delete undo[k]; saveUndo(); saveProgLocal(); if(typeof renderProg==='function') renderProg(); return; }
-    if(k&&window.__histCountDay&&window.__histCountDay(k,td)>1) return; /* er was die dag al een training: meting laten staan */
-    li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var id=x.dataset.note+'@'+td; if(prog[id]){ progDel(id); } }); saveProgLocal(); if(typeof renderProg==='function') renderProg(); };
+  window.__progDropToday=function(li,day,k){ var sn=k&&undo[k], w=sn?sn.w:curW(), td=sn?sn.d:ymd(Date.now());
+    li.querySelectorAll('.exr-in[data-note]').forEach(function(x){ var n=x.dataset.note, id=sessId(n,td,w), o=sn&&sn.p[n];
+      if(o){ prog[id]=o; if(progCol) progCol.doc(id).set(o).catch(function(){}); } else if(prog[id]) progDel(id); });
+    if(sn){ delete undo[k]; saveUndo(); } saveProgLocal(); if(typeof renderProg==='function') renderProg(); };
   window.__progRecord=progRecord; window.__renderProg=function(){ renderProg(); };
   function progInputs(){ return [].slice.call(document.querySelectorAll('#s-d3 .exr:not(.exr-wu) .exr-in[data-note]')); }
   function progLabel(inp){ return (inp.getAttribute('aria-label')||inp.dataset.note).replace(/\s+—\s+\S+$/,''); }
@@ -2493,19 +2494,20 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   }
   var peBg=document.getElementById('pe-bg'), peSh=document.getElementById('pe-sheet'), peOpen=false, peLast=null, peKey=null;
   function progPut(k,d,v){
-    var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d, ev={k:k,d:d,t:t,v:v};
+    var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d+'@m', ev={k:k,d:d,t:t,v:v,w:'m'}; /* handmatig: één per veld per dag, naast de workouts */
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
   function peData(){
     var k=peKey||progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
-    var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return b.t-a.t; });
+    var all=Object.keys(prog).filter(function(id){ var e=prog[id]; return e&&e.k===k&&typeof e.v==='number'; }).map(function(id){ return Object.assign({id:id},prog[id]); }).sort(function(a,b){ return b.t-a.t; });
+    var perDay={}; all.forEach(function(e){ perDay[e.d]=(perDay[e.d]||0)+1; });
     /* trainingen die in Coverage meetellen maar geen meting hebben (oude vinkjes): ook tonen, om te verwijderen of een waarde te geven */
     var li=inp&&inp.closest('.exr'), rk=li?chkKey(li):k, have={}; all.forEach(function(e){ have[e.d]=1; });
     var gaps=[]; /* alles komt uit de grafiek: geen 'No value'-dagen meer */
     gaps.forEach(function(h){ all.push({k:k,d:h.d,t:h.t,v:null,gap:1,seed:h.seed,rk:rk}); });
     all.sort(function(a,b){ return b.t-a.t; });
-    return {k:k,unit:unit,all:all,gaps:gaps.length,name:inp?progLabel(inp):k};
+    return {k:k,unit:unit,all:all,gaps:gaps.length,perDay:perDay,name:inp?progLabel(inp):k};
   }
   function renderSheet(keepForm){
     if(!peOpen) return;
@@ -2514,12 +2516,13 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     var fv=keepForm&&body.querySelector('.pe-add')?{d:body.querySelector('[name=d]').value}:null;
     var rows=D.all.map(function(e){
       var dt=new Date(e.t);
-      return '<li'+(e.gap?' class="pe-gap" data-d="'+e.d+'"':'')+'><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span>'+
+      var tm=(D.perDay[e.d]>1&&typeof e.w==='number')?' · '+dt.getHours()+':'+('0'+dt.getMinutes()).slice(-2):''; /* twee workouts die dag: uur erbij */
+      return '<li'+(e.gap?' class="pe-gap" data-d="'+e.d+'"':'')+'><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+'</span>'+
         (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+
-        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
+        '<button type="button" class="pe-del" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
     }).join('');
     var nm=D.all.length-D.gaps;
-    body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Add, fill in or delete.':'No measurements yet. Add one.')+'</p>'+
+    body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Add or delete.':'No measurements yet. Add one.')+'</p>'+
       '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
     body.querySelectorAll('.pe-fill').forEach(function(b){ b.addEventListener('click',function(){
@@ -2531,9 +2534,9 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       var e=prog[b.dataset.id]; if(!e) return;
       /* meteen verwijderen, zonder bevestiging */
  progDel(b.dataset.id);
-        var _i=document.querySelector('#s-d3 .exr-in[data-note="'+e.k+'"]'), _li=_i&&_i.closest('.exr'); if(_li&&window.__histDropDay) window.__histDropDay(chkKey(_li),e.d);
-        /* meting van vandaag weg terwijl de oefening afgevinkt staat: vinkje ook weg */
-        if(_li&&e.d===ymd(Date.now())&&_li.classList.contains('done')){ var _c=_li.querySelector('.chk'); if(_c) _c.click(); }
+        var _i=document.querySelector('#s-d3 .exr-in[data-note="'+e.k+'"]'), _li=_i&&_i.closest('.exr');
+        /* meting van de lopende workout weg terwijl de oefening afgevinkt staat: vinkje ook weg */
+        if(_li&&e.w&&e.w===curW()&&_li.classList.contains('done')){ var _c=_li.querySelector('.chk'); if(_c) _c.click(); }
         renderProg(); renderSheet(true);
       
     }); });
@@ -2686,7 +2689,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       Object.keys(prog).forEach(function(id){ if(!next[id]&&snap.metadata.fromCache) next[id]=prog[id]; });
       /* dubbele oefening samengevoegd: metingen van een oude sleutel verhuizen naar de blijvende (MIGK) */
       if(!snap.metadata.fromCache) Object.keys(next).forEach(function(id){ var e=next[id], to=e&&MIGK[e.k]; if(!to) return;
-        var nid=to+'@'+e.d; if(!next[nid]){ next[nid]=Object.assign({},e,{k:to}); progCol.doc(nid).set(next[nid]).catch(function(){}); }
+        var nid=to+id.slice(id.indexOf('@')); if(!next[nid]){ next[nid]=Object.assign({},e,{k:to}); progCol.doc(nid).set(next[nid]).catch(function(){}); }
         delete next[id]; progCol.doc(id).delete().catch(function(){}); });
       prog=next; saveProgLocal(); renderProg();
       /* (vroeger: bij een lege prog alle ingevulde velden als meting bewaren; weg, want metingen ontstaan alleen bij afvinken of met het potlood) */
@@ -3760,7 +3763,7 @@ window.__congrats=function(o){
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number'||!p.d) return;
       var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
       if(!k||/^w0-/.test(k)) return;
-      var o=days[p.d]=days[p.d]||{ex:{},sets:0}; if(o.ex[k]) return; o.ex[k]=1;
+      var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{}}; o.ws[p.w||'']=1; var ek=k+'|'+(p.w||''); if(o.ex[ek]) return; o.ex[ek]=1;
       o.sets+=window.__setsFor?(+window.__setsFor(k,li)||0):3; });
     return days;
   }
@@ -3772,7 +3775,7 @@ window.__congrats=function(o){
     for(var i=0;i<lead;i++) html+='<span class="cal-d out"></span>';
     for(var d=1;d<=n;d++){
       key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2); var on=!!days[key], fut=key>today;
-      if(on){ cnt++; msets+=days[key].sets; lastOn=key; }
+      if(on){ cnt+=Object.keys(days[key].ws).length; msets+=days[key].sets; lastOn=key; }
       html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
     }
     grid.innerHTML=html;
