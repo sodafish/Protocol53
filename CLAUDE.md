@@ -57,15 +57,19 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
   in `NAMES` (bv. 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
-## Leeftijd in de titel (Protocol + leeftijd)
+## Profiel (leeftijd in de titel + gegevens voor calorieën)
 - Alleen in de kop van de app: `Protocol <em id="ageNum">` + leeftijd; zonder geboortedatum 53. App-naam, `<title>` en
   icoon blijven generiek ('Protocol'). Het inlogscherm toont gewoon 'Protocol'.
-- Tik op het getal (`button#ageBtn`) opent onderblad `#dob-sheet` (eigen id; het uitlegvenster sluit het uit met
-  `:not(#dob-sheet)`) met datumveld `#dobIn` + Save. Startwaarde: bewaarde datum, anders die uit de aanmelding
-  (`user_metadata.dob`), anders 1 januari van 53 jaar geleden.
-- Geboortedatum: bij 'Create account' verplicht veld (`cloud.js`, `user_metadata.dob` via `signUp`); daarna in
-  collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. `cloud.js` zet
-  `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
+- Onderblad 'Profile' (`#dob-sheet`, id bleef; het uitlegvenster sluit het uit met `:not(#dob-sheet)`): geboortedatum `#dobIn`,
+  Sex (segmentknop `.pf-seg`, Male/Female), Height `#pfH` (cm, 120–230), Weight `#pfW` (kg, 35–250), Save. Openen via tik op het
+  getal (`button#ageBtn`) of More › Profile (`#moreProfile`, `window.__p53profileOpen`).
+- Opslag: collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd', sex:'m'|'f', h, w}`), cache localStorage `fitlog-dob` + `fitlog-profile`.
+  `window.__p53profile()` → `{dob,age,sex,h,w}`. Bij 'Create account' zijn geboortedatum, sex, lengte en gewicht verplicht
+  (`cloud.js`, `user_metadata.{dob,sex,h,w}` via `signUp`); ontbrekende velden worden daaruit aangevuld (`fromUser`).
+  `cloud.js` zet `window.__p53user` en stuurt event `p53-user`. Leeftijd herberekend bij laden en bij terugkeren naar de app.
+- Calorieën (`window.__kcal(ms)`, in het kalender-script): MET-methode, 3,5 MET (Compendium: krachttraining, meerdere oefeningen,
+  8–15 reps) × rustverbruik per uur (Mifflin-St Jeor met leeftijd/geslacht/lengte/gewicht; zonder lengte of geslacht 1 kcal/kg/u)
+  × duur. Zonder gewicht geen kcal. Wordt bij End workout in `sess` bewaard (`k`); getoond in de felicitatie, kalendermaand en -dag.
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
@@ -107,10 +111,14 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   vervalt na 12 u); zolang hij loopt staat de knop op 'End workout' (ook zonder vinkjes) en toont de navbar onder het Workout-icoon
   de verstreken tijd (m:ss / u:mm:ss, `.wo-time`) i.p.v. 'Workout'. End workout toont 'Time: N min.' in de bevestiging en stopt hem.
   Bij End workout wordt de sessie bewaard in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`: dag, start, einde, aantal
-  oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
+  oefeningen zonder warm-up, `k` = geschatte kcal; cache localStorage `fitlog-sess`, ook in de back-up).
+  Daarna `window.__congrats({min,n,kcal})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
+  (Fraunces, één regel) + duur · oefeningen · kcal; tik of 4,5 s = weg. Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje in de accentkleur op elke dag met
-  een training uit `window.__events()` (hist + metingen, dus ook oude sessies, geen warm-up), vandaag in accentkleur. Bovenaan
+  een training uit `window.__events()` (hist + metingen, dus ook oude sessies, geen warm-up; niet de `seed`-beginstand, events met
+  `seed:1`, want die zette alle oude tellingen op één datum), vandaag in accentkleur. Oefeningnamen in de dagdetails openen het
+  uitlegvenster (daar kun je een training verwijderen). Bovenaan
   'N workouts · duur' (duur = som van `sess`). Tik op een dag = details eronder (dag, duur, oefeningen); standaard de laatste trainingsdag.
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
