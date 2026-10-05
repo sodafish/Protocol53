@@ -115,7 +115,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   een training uit `window.__events()` (hist + metingen, dus ook oude sessies, geen warm-up; niet de `seed`-beginstand, events met
   `seed:1`, want die zette alle oude tellingen op één datum), vandaag in accentkleur. Oefeningnamen in de dagdetails openen het
   uitlegvenster (daar kun je een training verwijderen).
-  Onder de dagdetails: de sessies van die dag ('Started 17:21 · 1 min · ~5 kcal' of 'Added …') met vuilbakje (`p53Confirm`, wist
+  Onder de dagdetails: de sessies van die dag ('Started 17:21 · 1 min' of 'Added …') met vuilbakje (`p53Confirm`, wist
   alleen de tijd) en een veld 'Minutes' + 'Add time' (handmatige sessie om 12u, `manual:1`). Meerdere sessies per dag kunnen;
   'N workouts' telt per dag het aantal sessies (minstens 1). Bovenaan
   'N workouts · duur' (duur = som van `sess`). Tik op een dag = details eronder (dag, duur, oefeningen); standaard de laatste trainingsdag.
