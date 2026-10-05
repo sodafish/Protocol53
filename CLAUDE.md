@@ -284,6 +284,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   viewBox `0 -980 960 960` zodat het oog verticaal gecentreerd staat (vroeger een getekende Fraunces-'i');
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.
+- Tik op een oefeningsrij in de workout (niet op vinkje, invulveld of een knop) = zelfde als de oog-knop (uitleg + grafiek); rijen met
+  `.has-info` krijgen `cursor:pointer` (script onderaan `index.html`).
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
   (klasse `.over`, hogere z-index).
 - Extra's bevatten bewust ook de klassiekers (barbell squat, deadlift, bench press, rows, overhead press, chin-ups,
