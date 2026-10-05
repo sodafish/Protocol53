@@ -2221,6 +2221,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* 'N×' bij een oefening = aantal dagen met een meting in de grafiek (alle invulvelden van die rij), dus altijd gelijk aan
      wat de grafiek toont. Oude vinkjes zonder meting tellen nog wel in Coverage (hist), niet in dit getal. */
   window.__events=function(){ return events(); };
+  window.__setsFor=function(k,li){ return setsFor(k,li); };
   window.__exStat=function(k){
     var li=null; document.querySelectorAll('#s-d3 .exr').forEach(function(x){ if(!li&&chkKey(x)===k) li=x; });
     var notes={}; notes[k]=1; notes[k+'-b']=1;
@@ -3756,10 +3757,15 @@ window.__congrats=function(o){
     var n=li&&li.querySelector('.exr-n'); return n?n.firstChild.textContent.trim():null;
   }
   /* per dag: welke oefeningen en hoeveel sets (uit de trainingen in de statistieken, één per oefening per dag, zonder de seed-beginstand) */
+  /* bron = de grafiekdata (prog), net als 'N×': een dag met een meting = training; sets = sets van elke oefening met een meting
+     die dag (supersets: één keer), zoals ze nu onder de oefening staan */
   function data(){
-    var days={};
-    (window.__events?window.__events():[]).forEach(function(e){ if(!e.t||e.seed) return; var d=ymd(e.t), o=days[d]=days[d]||{ex:{},sets:0};
-      if(o.ex[e.k]) return; o.ex[e.k]=1; o.sets+=(+e.s||0); });
+    var days={}, P=window.__progAll?window.__progAll():{};
+    Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number'||!p.d) return;
+      var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
+      if(!k||/^w0-/.test(k)) return;
+      var o=days[p.d]=days[p.d]||{ex:{},sets:0}; if(o.ex[k]) return; o.ex[k]=1;
+      o.sets+=window.__setsFor?(+window.__setsFor(k,li)||0):3; });
     return days;
   }
   function render(){
@@ -3785,6 +3791,7 @@ window.__congrats=function(o){
     box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+o.sets+(o.sets===1?' set':' sets');
   }
   window.__renderCal=render;
+  document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
     var m=ym.m+(+b.dataset.m), y=ym.y; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } ym={y:y,m:m}; sel=null; render(); }); });
   render();

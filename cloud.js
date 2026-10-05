@@ -56,19 +56,26 @@
       if(r.error){ setDown(true); stamp(); return; }
       setDown(false);
       queue.shift(); save(QKEY,queue);
+      recent.push({op:op,t:Date.now()}); if(recent.length>200) recent.splice(0,recent.length-200);
       var c=cache[op.coll]=cache[op.coll]||{};
       if(op.data===null) delete c[op.id]; else c[op.id]=op.data;
       save(CKEY,cache);
       return flush();
     },function(){ flushing=false; setDown(true); stamp(); });
   }
+  /* wat tijdens een lopende pull bewaard werd, staat nog niet in het antwoord van die pull: opnieuw toepassen, anders verdwijnt
+     een vinkje/meting die je net zette (race tussen pull en flush) */
+  var recent=[];
   function pull(){
     if(!user) return Promise.resolve();
+    var t0=Date.now()-2000;
     return sb.from('p53').select('coll,id,data').then(function(r){
       if(r.error){ setDown(true); return; }
       setDown(false);
       var next={};
       (r.data||[]).forEach(function(row){ (next[row.coll]=next[row.coll]||{})[row.id]=row.data; });
+      recent=recent.filter(function(x){ return x.t>Date.now()-120000; });
+      recent.forEach(function(x){ if(x.t<t0) return; var o=x.op, c=next[o.coll]=next[o.coll]||{}; if(o.data===null) delete c[o.id]; else c[o.id]=o.data; });
       cache=next; save(CKEY,cache); pulled=true; emitAll();
       return r.data||[];
     },function(){ setDown(true); });

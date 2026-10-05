@@ -12,6 +12,8 @@ vooral op zijn iPhone, als app op het beginscherm.
   Statusregel onder de titel (`#syncStamp`, klasse `warn`): offline / database niet bereikbaar
   (bv. gepauzeerd Supabase-project) / nog niet bewaard (pas na 1 s wachtrij, anders flikkert het); bij problemen elke minuut opnieuw proberen.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
+  Race pull/flush opgelost: wat tijdens een lopende pull naar de server ging (lijst `recent`, 2 min) wordt na het pull-antwoord opnieuw
+  toegepast, anders verdween een net gezet vinkje/meting uit de snapshot.
   `p53ResetData(logIds)`: wist op de server (alleen online) alle rijen van checks, counts, hist, prog, sess + de log-rijen van de
   invulvelden, plus cache/wachtrij/localStorage daarvan; knop 'Reset data' onder Info › App (`#resetData`, `p53Confirm` danger), daarna
   herladen. Notities, cfg (oefeningkeuze, sets, profiel) blijven.
@@ -115,9 +117,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst). Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
-  in de accentkleur op elke dag met een training uit `window.__events()` (hist + metingen, geen warm-up, niet de `seed`-beginstand),
+  in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
   vandaag in accentkleur, bovenaan 'N workouts'. Tik op een dag = eronder enkel 'Dag datum · N sets' (som van de sets van elke oefening
-  die dag, één keer per oefening). Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
+  die dag, één keer per oefening). Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
