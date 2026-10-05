@@ -1002,6 +1002,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;}
 .gnav>*{pointer-events:auto;}
 .gnav-pill{display:flex;flex:1;max-width:330px;height:64px;padding:5px;border-radius:32px;gap:4px;}
+.gnav-i .wo-time{font-variant-numeric:tabular-nums;}
 .gnav-i{flex:1;appearance:none;border:none;cursor:pointer;border-radius:27px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font:600 11px 'Work Sans',system-ui,sans-serif;letter-spacing:.02em;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,color .25s ease,transform .12s ease;}
 .gnav-i[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--accent);}
@@ -1793,6 +1794,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       if(on){ var empty=[].filter.call(b.closest('.exr').querySelectorAll('.exr-in'),function(x){ return !x.value.trim(); });
         if(empty.length){ empty.forEach(function(x){ x.classList.remove('need'); void x.offsetWidth; x.classList.add('need'); });
           empty[0].focus(); setTimeout(function(){ empty.forEach(function(x){ x.classList.remove('need'); }); },1600); return; } } if(on) checks[k]=true; else delete checks[k];
+      if(on&&window.__woRun) window.__woRun(true);
       paintChecks(); saveChecksLocal();
       if(chkCol){ (on?chkCol.doc(k).set({done:true,at:Date.now()}):chkCol.doc(k).delete()).catch(function(){}); }
       if(!on && window.__progDropToday) window.__progDropToday(b.closest('.exr'), window.__lastHistDay?window.__lastHistDay(k):null);
@@ -1802,7 +1804,26 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   /* Start/End workout: beide knoppen (boven en onder) in sync. Geen vinkje vandaag = Start (scrollt naar Warm-up),
      minstens één vinkje in Workout (ook verborgen rijen) = End (bevestigen, vinkjes weg, naar Coverage › Last workout) */
   var WO_PLAY='<path d="M8 5.5v13l10.5-6.5z"/>', WO_END='<path d="M5 12.5l4.5 4.5L19 7.5"/>';
-  function woActive(){ var on=false; document.querySelectorAll('#s-d3 .exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) on=true; }); return on; }
+  /* timer: start bij 'Start workout' (of bij het eerste vinkje), stopt bij 'End workout'; tijd in de navbar onder Workout */
+  var WOKEY='fitlog-wo-start', woStart=0, woTick=null;
+  try{ woStart=+localStorage.getItem(WOKEY)||0; }catch(e){}
+  if(woStart && Date.now()-woStart>12*3600e3) woStart=0; /* vergeten te stoppen: na 12 uur vervalt hij */
+  function woSave(){ try{ if(woStart) localStorage.setItem(WOKEY,String(woStart)); else localStorage.removeItem(WOKEY); }catch(e){} }
+  function woFmt(ms){ var t=Math.max(0,Math.floor(ms/1000)), h=Math.floor(t/3600), m=Math.floor(t%3600/60), x=t%60;
+    return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+x).slice(-2); }
+  function woPaintTime(){
+    var lab=document.querySelector('.gnav-i[data-view="workout"] span'); if(!lab) return;
+    if(woStart){ lab.textContent=woFmt(Date.now()-woStart); lab.classList.add('wo-time'); }
+    else { lab.textContent='Workout'; lab.classList.remove('wo-time'); }
+  }
+  function woRun(on){
+    if(on&&!woStart){ woStart=Date.now(); woSave(); }
+    if(!on){ woStart=0; woSave(); }
+    clearInterval(woTick); woTick=woStart?setInterval(woPaintTime,1000):null; woPaintTime();
+  }
+  window.__woRun=woRun;
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) woPaintTime(); });
+  function woActive(){ if(woStart) return true; var on=false; document.querySelectorAll('#s-d3 .exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) on=true; }); return on; }
   function paintWoBtns(){
     var on=woActive();
     document.querySelectorAll('.wo-btn').forEach(function(btn){
@@ -1811,16 +1832,20 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     });
   }
   window.__paintWoBtns=paintWoBtns;
+  setTimeout(function(){ woRun(!!woStart); paintWoBtns(); },0);
   document.querySelectorAll('.wo-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
       var pane=document.getElementById(btn.dataset.reset);
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
       if(!woActive()){
+        woRun(true); paintWoBtns();
         var g=pane.querySelector('.exgrp'); window.scrollTo({top:g?g.getBoundingClientRect().top+window.scrollY+2:0,behavior:smooth});
         return;
       }
-      p53Confirm({title:'End workout?',msg:'All ticks are cleared. Your counts, weights and progress are kept.',ok:'End workout'}).then(function(y){
+      var dur=woStart?Math.round((Date.now()-woStart)/60000):null;
+      p53Confirm({title:'End workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'All ticks are cleared. Your counts, weights and progress are kept.',ok:'End workout'}).then(function(y){
         if(!y) return;
+        woRun(false);
         pane.querySelectorAll('.exr').forEach(function(li){
           var k=chkKey(li); if(k&&checks[k]){ delete checks[k]; if(chkCol) chkCol.doc(k).delete().catch(function(){}); }
         });

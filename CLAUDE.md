@@ -102,6 +102,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   'Start workout' (play-icoon): scrollt naar Warm-up, wist niets. Minstens één vinkje (ook warm-up, ook verborgen/uitgezette rijen) =
   'End workout' (vinkje-icoon): `p53Confirm`, dan alle vinkjes leeg, periode Last workout (`__statsPer('dag')`) en naar Coverage
   (klik op de navbar). Tellingen, hist, kilo's en metingen blijven (al bewaard bij afvinken). Vinkjes vervallen ook vanzelf de volgende dag.
+  Timer: 'Start workout' (of het eerste vinkje) start hem (`woRun`, starttijd in localStorage `fitlog-wo-start`, overleeft herladen,
+  vervalt na 12 u); zolang hij loopt staat de knop op 'End workout' (ook zonder vinkjes) en toont de navbar onder het Workout-icoon
+  de verstreken tijd (m:ss / u:mm:ss, `.wo-time`) i.p.v. 'Workout'. End workout toont 'Time: N min.' in de bevestiging en stopt hem.
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld
