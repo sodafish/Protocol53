@@ -1793,6 +1793,22 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   var checks={}; try{ checks=JSON.parse(localStorage.getItem(CHKKEY)||'{}'); }catch(e){}
   var chkCol=null;
   function chkKey(li){ if(li.dataset.key) return li.dataset.key; var inp=li.querySelector('.note[data-note]'); return inp?inp.dataset.note:null; }
+  /* groep af na afvinken: zacht doorscrollen tot de volgende (nog niet afgewerkte, zichtbare) groep bovenaan staat;
+     geen volgende meer = naar de End workout-knop onderaan */
+  function nextGroup(row){
+    if(!row||!row.closest('#s-d3')) return;
+    var g=row.previousElementSibling; while(g&&!g.classList.contains('exgrp')) g=g.previousElementSibling;
+    if(!g||!g.classList.contains('grp-done')) return;
+    var t=g.nextElementSibling; while(t&&!(t.classList.contains('exgrp')&&t.offsetParent!==null&&!t.classList.contains('grp-done'))) t=t.nextElementSibling;
+    if(!t) t=document.querySelector('#s-d3 .finish-b');
+    if(!t) return;
+    setTimeout(function(){
+      if(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)) document.activeElement.blur(); /* toetsenbord weg */
+      var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+      var y=t.classList.contains('finish-b')?t.getBoundingClientRect().top+window.scrollY-window.innerHeight*.4:t.getBoundingClientRect().top+window.scrollY-12;
+      window.scrollTo({top:Math.max(0,y),behavior:smooth});
+    },450);
+  }
   function paintChecks(){
     if(window.__paintWoBtns) window.__paintWoBtns();
     document.querySelectorAll('#s-d1 .exr,#s-d2 .exr,#s-d3 .exr').forEach(function(li){
@@ -1824,6 +1840,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
           empty[0].focus(); setTimeout(function(){ empty.forEach(function(x){ x.classList.remove('need'); }); },1600); return; } } if(on) checks[k]=true; else delete checks[k];
       if(on&&window.__woRun) window.__woRun(true);
       paintChecks(); saveChecksLocal();
+      if(on) nextGroup(b.closest('.exr'));
       if(chkCol){ (on?chkCol.doc(k).set({done:true,at:Date.now()}):chkCol.doc(k).delete()).catch(function(){}); }
       if(!on && window.__progDropToday) window.__progDropToday(b.closest('.exr'), window.__lastHistDay?window.__lastHistDay(k):null);
       if(!b.closest('.exr-wu')) bumpCount(k,on?1:-1);
