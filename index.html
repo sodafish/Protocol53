@@ -952,6 +952,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .cal-day{margin:.9rem 0 0;padding:.9rem 0 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted);line-height:1.5;min-height:3.2em;}
 .cal-day b{color:var(--ink);font-weight:600;}
 .pf-form{display:flex;flex-direction:column;gap:1rem;}
+.st-note{margin:-.4rem 0 0;font-size:13.5px;line-height:1.45;color:var(--muted);}
+.st-sec{margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:.6rem;}
+.st-sec .st-note{margin:0;}
+.st-sec .app-tools{margin-top:.2rem;}
 .pf-f{display:flex;flex-direction:column;gap:.4rem;}
 .pf-form input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;min-height:48px;width:100%;box-sizing:border-box;-webkit-appearance:none;}
 .pf-form input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
@@ -1639,15 +1643,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     </div>
   </div>
 
-  <div class="superhead">App</div>
-  <div class="section" style="margin-top:.3rem">
-    <p class="section-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
-    <div class="app-tools">
-      <button type="button" onclick="p53Backup()">Export backup</button>
-      <button type="button" onclick="p53Logout()">Log out</button>
-      <button type="button" id="resetData">Reset data</button>
-    </div>
-  </div>
 
 </section>
 
@@ -1675,13 +1670,22 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 <div class="sheet-bg" id="dob-bg" hidden></div>
 <div class="sheet" id="dob-sheet" role="dialog" aria-modal="true" aria-labelledby="dob-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="dob-t">Profile</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <p class="gs-sub">Your age shows after Protocol.</p>
+  <div class="sheet-head"><h3 id="dob-t">Settings</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <form class="pf-form" id="pfForm" novalidate>
     <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
+    <p class="st-note">Your age shows after Protocol.</p>
     <p class="gs-msg" id="dobMsg" role="status"></p>
     <div class="set-act"><span></span><button type="submit" id="dobSave" class="set-save">Save</button></div>
   </form>
+  <div class="st-sec">
+    <p class="set-lab">Your data</p>
+    <p class="st-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
+    <div class="app-tools">
+      <button type="button" onclick="p53Backup()">Export backup</button>
+      <button type="button" onclick="p53Logout()">Log out</button>
+      <button type="button" id="resetData">Reset data</button>
+    </div>
+  </div>
 </div>
 <div class="sheet-bg top" id="set-bg" hidden></div>
 <div class="sheet top" id="set-sheet" role="dialog" aria-modal="true" aria-labelledby="set-t" hidden>
@@ -1701,8 +1705,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   <ul class="more-list">
     <li><button type="button" data-view="cardio"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg></span><span class="mt"><b>Cardio</b><small>Zone 2, walking, VO2max</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
     <li><button type="button" data-view="voeding"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg></span><span class="mt"><b>Diet</b><small>Food list, protein, measuring</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-    <li><button type="button" id="moreProfile"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.2-3.8 4-5.6 7.5-5.6s6.3 1.8 7.5 5.6"/></svg></span><span class="mt"><b>Profile</b><small>Date of birth</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-    <li><button type="button" data-view="kracht"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></span><span class="mt"><b>Info</b><small>Intensity, tempo, sleep, app</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+    <li><button type="button" data-view="kracht"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></span><span class="mt"><b>Info</b><small>Intensity, tempo, sleep</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
+    <li><button type="button" id="moreProfile"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span><span class="mt"><b>Settings</b><small>Date of birth, backup, data</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
   </ul>
 </div>
 <nav class="gnav" aria-label="Main">

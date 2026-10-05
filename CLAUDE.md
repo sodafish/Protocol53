@@ -15,7 +15,7 @@ vooral op zijn iPhone, als app op het beginscherm.
   Race pull/flush opgelost: wat tijdens een lopende pull naar de server ging (lijst `recent`, 2 min) wordt na het pull-antwoord opnieuw
   toegepast, anders verdween een net gezet vinkje/meting uit de snapshot.
   `p53ResetData(logIds)`: wist op de server (alleen online) alle rijen van checks, counts, hist, prog, sess + de log-rijen van de
-  invulvelden, plus cache/wachtrij/localStorage daarvan; knop 'Reset data' onder Info › App (`#resetData`, `p53Confirm` danger), daarna
+  invulvelden, plus cache/wachtrij/localStorage daarvan; knop 'Reset data' onder Settings › Your data (`#resetData`, `p53Confirm` danger), daarna
   herladen. Notities, cfg (oefeningkeuze, sets, profiel) blijven.
 - `sw.js` — service worker (`const VERSION = 'p53-vN';`, let op de spaties bij zoeken/vervangen). Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
   (icons, cloud.js, vendor) zodat de iPhone de nieuwe versie ophaalt.
@@ -65,8 +65,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Profiel (leeftijd in de titel)
 - Alleen in de kop van de app: `Protocol <em id="ageNum">` + leeftijd; zonder geboortedatum 53. App-naam, `<title>` en
   icoon blijven generiek ('Protocol'). Het inlogscherm toont gewoon 'Protocol'.
-- Onderblad 'Profile' (`#dob-sheet`, id bleef; het uitlegvenster sluit het uit met `:not(#dob-sheet)`): alleen geboortedatum `#dobIn`
-  + Save. Openen via tik op het getal (`button#ageBtn`) of More › Profile (`#moreProfile`, `window.__p53profileOpen`).
+- Onderblad 'Settings' (`#dob-sheet`, id bleef; het uitlegvenster sluit het uit met `:not(#dob-sheet)`): geboortedatum `#dobIn` + Save,
+  daaronder 'Your data' (`.st-sec`) met Export backup, Log out en Reset data (`#resetData`); die stonden vroeger onder Info › App (weg).
+  Openen via tik op het getal (`button#ageBtn`) of More › Settings (`#moreProfile`, `window.__p53profileOpen`).
 - Opslag: collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. Bij 'Create account' is de
   geboortedatum verplicht (`cloud.js`, `user_metadata.dob` via `signUp`). `cloud.js` zet `window.__p53user` en stuurt event `p53-user`.
   Leeftijd herberekend bij laden en bij terugkeren naar de app.
@@ -75,7 +76,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
   en **Coverage** (vroeger Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
-  `#more-sheet` opent met Cardio, Diet en Info. Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
+  `#more-sheet` opent met Cardio, Diet, Info en als laatste Settings (`#moreProfile`, tandwiel). Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
   begint bovenaan (meteen + na 200/450 ms, omdat het wisselen van tab zelf nog kan scrollen), behalve terug naar Workout: die
   komt terug op de onthouden scrollpositie (`window.__woY`, bewaard bij het verlaten van Workout, op 0 gezet na End workout).
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
