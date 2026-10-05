@@ -270,9 +270,14 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
   Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
   als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
-- Alleen oefeningen met echte foto's (Free Exercise DB, begin/eind in `IMG`), met twee uitzonderingen op vraag van Tom: Bird Dog
-  (`d3-bird-dog`, g6, standaard uit, getekende animatie uit `EX.birddog`) en Padel (cardio, alleen tekst). Torso Rotation blijft weg.
-  Uitlegblad zonder foto én zonder animatie (`poses`): figuur weg, enkel tekst.
+- Beelden in het uitlegblad: links de foto's (Free Exercise DB, `IMG`, wisselen start/eind), rechts een animatie (`ANIM`, GIF 180 px uit
+  github.com/hasaneyldrm/exercises-dataset, © Gym visual, alleen voor eigen gebruik) in `img/anim/<EX-sleutel>.gif`, naast elkaar in
+  vierkante vakken (`.sheet-photo.duo` › `.ph-duo` met `.ph-frame` (cover) + `.ph-anim` (wit, contain)). 144 oefeningen hebben een
+  animatie (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
+  Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's. Alleen animatie zonder foto = `.sheet-gif`.
+  Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
+  Bird Dog (`d3-bird-dog`, g6, standaard uit) en Padel staan er zo zonder beeld. Torso Rotation blijft weg.
+  Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
 - Sets & reps per oefening: in het keuzeblad een rond knopje met icoon '123' (Material Symbols, inline SVG 24 px, viewBox bijgesneden tot `120 -840 720 720`, glyph verticaal gecentreerd) (`.gs-set`; standaard lichter, aangepast = gewone tint, zoals de i-knop) opent
