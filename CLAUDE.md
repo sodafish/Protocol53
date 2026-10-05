@@ -117,7 +117,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   oefeningen zonder warm-up; cache localStorage `fitlog-sess`, ook in de back-up).
   Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
   (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg (geen 'Tap to continue'-tekst).
-  Geluid: `sounds/fireworks.mp3` (van Tom, 6 s, 128 kbps) via Web Audio (`__cgSound`, volume .7), bij sluiten 0,5 s uitfaden
+  Geluid: `sounds/fireworks.mp3` (van Tom, 6 s, 128 kbps) via Web Audio (`__cgSound`, volume .18, op vraag van Tom stil gehouden), bij sluiten 0,5 s uitfaden
   (`__cgSoundStop`). Audio ontgrendeld in de tik op End workout (`__cgAudioUnlock`, iOS); `navigator.audioSession.type='ambient'` =
   volgt de stille modus. Het mp3 wordt bij het laden al opgehaald (de service worker bewaart het daarna in de cache). Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
