@@ -131,7 +131,11 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   veld licht op in de accentkleur, schudt even (`.need`) en krijgt de focus. Zo heeft elke training een punt in de grafiek.
 - Het getal 'N×' bij een oefening (workout én keuzeblad, ook warm-up) = aantal dagen met een meting in `prog` voor de
   invulvelden van die rij (`window.__exStat(k)`, supersets: beide velden samen, één per dag), dus altijd gelijk aan de grafiek.
-  Oude vinkjes zonder meting (hist-rijen van vóór de verplichte invulvelden) tellen wel in Coverage, niet in N×. Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
+  Oude vinkjes zonder meting (hist-rijen of `seed` van vóór de verplichte invulvelden) tellen wel in Coverage, niet in N×.
+  Zodat alles wat in Coverage telt ook te zien/aan te passen is: `#pe-sheet` toont zulke dagen als 'No value · Add' (`.pe-gap`,
+  uit `window.__histDays(rijsleutel)`); tik = datum in het formulier + focus op waarde (toevoegen = gewone meting, telt dan ook in N×),
+  vuilbakje = `window.__histDropDayAll` (hist-rijen van die dag + eventueel de seed-beginstand). Onder 'Your progress' staat dan
+  'N earlier sessions have no value…' (`.ip-gap`). Geen min-knop meer: corrigeren doe je in de grafiek (potlood).
   Een meting verwijderen wist ook de hist-rij(en) van die oefening op die dag (`__histDropDay`), en is het vandaag en
   staat ze afgevinkt, dan gaat ook het vinkje weg. `renderStats` werkt de getallen bij (`paintCounts`).
 - Sets komen uit de tekst onder de oefening (`3 × …`, `2 rounds`, `2 rondes`, `2 sets`); anders 3.

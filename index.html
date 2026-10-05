@@ -979,6 +979,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pe-list .pe-v{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
 .pe-del{appearance:none;cursor:pointer;width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:var(--muted-soft);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .pe-del:active{background:var(--paper-soft);}
+.pe-list .pe-fill{appearance:none;border:0;background:transparent;padding:.4rem 0;font:inherit;font-size:14px;color:var(--accent);cursor:pointer;}
+.pe-list .pe-gap .pe-d{opacity:.75;}
+.ip-gap{margin:.6rem 0 0;font-size:13px;color:var(--muted);}
 .pe-empty{padding:.9rem 0;color:var(--muted);font-size:14px;}
 .pe-add{display:grid;grid-template-columns:1fr 6.5rem auto;gap:.5rem;align-items:center;}
 .pe-add input{min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 16px 'Work Sans',system-ui,sans-serif;padding:0 .7rem;min-width:0;-webkit-appearance:none;}
@@ -2131,6 +2134,21 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     return {n:Object.keys(days).length,last:last};
   };
   /* meting verwijderd in de grafiek: ook de vinkjes-gebeurtenis(sen) van die oefening op die dag weg, zodat alles klopt */
+  /* trainingen in Coverage (hist + seed) per dag voor één oefening, zodat ze ook in de metingenlijst staan */
+  window.__histDays=function(k){
+    function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+    var by={};
+    Object.keys(hist).forEach(function(id){ var e=hist[id]; if(!e) return;
+      if(id==='seed'){ var b=e.base&&e.base[k]; if(b&&b.n){ var d=ymdL(b.last||Date.now()); by[d]=by[d]||{d:d,t:b.last||Date.now(),seed:0}; by[d].seed=b.n; } return; }
+      if(e.k===k){ var d2=ymdL(e.t); by[d2]=by[d2]||{d:d2,t:e.t,seed:0}; } });
+    return Object.keys(by).map(function(d){ return by[d]; });
+  };
+  /* oude training zonder meting verwijderen: hist-rijen van die dag en, als die dag de beginstand is, ook die */
+  window.__histDropDayAll=function(k,d){
+    function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+    var sd=hist.seed; if(sd&&sd.base&&sd.base[k]&&ymdL(sd.base[k].last||Date.now())===d){ delete sd.base[k]; if(histCol) histCol.doc('seed').set(sd).catch(function(){}); }
+    window.__histDropDay(k,d);
+  };
   window.__histDropDay=function(k,d){
     function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
     Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&ymdL(e.t)===d){ delete hist[id]; if(histCol) histCol.doc(id).delete().catch(function(){}); } });
@@ -2373,7 +2391,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   function peData(){
     var k=peKey||progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
     var all=Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return b.t-a.t; });
-    return {k:k,unit:unit,all:all,name:inp?progLabel(inp):k};
+    /* trainingen die in Coverage meetellen maar geen meting hebben (oude vinkjes): ook tonen, om te verwijderen of een waarde te geven */
+    var li=inp&&inp.closest('.exr'), rk=li?chkKey(li):k, have={}; all.forEach(function(e){ have[e.d]=1; });
+    var gaps=(window.__histDays&&!/^w0-/.test(rk))?window.__histDays(rk).filter(function(h){ return !have[h.d]; }):[];
+    gaps.forEach(function(h){ all.push({k:k,d:h.d,t:h.t,v:null,gap:1,seed:h.seed,rk:rk}); });
+    all.sort(function(a,b){ return b.t-a.t; });
+    return {k:k,unit:unit,all:all,gaps:gaps.length,name:inp?progLabel(inp):k};
   }
   function renderSheet(keepForm){
     if(!peOpen) return;
@@ -2382,13 +2405,18 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     var fv=keepForm&&body.querySelector('.pe-add')?{d:body.querySelector('[name=d]').value}:null;
     var rows=D.all.map(function(e){
       var dt=new Date(e.t);
-      return '<li><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span><span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>'+
-        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'" aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
+      return '<li'+(e.gap?' class="pe-gap" data-d="'+e.d+'"':'')+'><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+'</span>'+
+        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+
+        '<button type="button" class="pe-del" data-id="'+e.k+'@'+e.d+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
     }).join('');
-    body.innerHTML='<p class="pe-sub">'+(D.all.length?D.all.length+(D.all.length===1?' measurement':' measurements')+'. Add or delete.':'No measurements yet. Add one.')+'</p>'+
+    var nm=D.all.length-D.gaps;
+    body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Add, fill in or delete.':'No measurements yet. Add one.')+'</p>'+
       '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
+    body.querySelectorAll('.pe-fill').forEach(function(b){ b.addEventListener('click',function(){
+      var f=body.querySelector('.pe-add'); f.d.value=b.dataset.d; f.v.focus(); }); });
     body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
+      if(b.dataset.gap){ var dd=b.dataset.id.split('@').pop(); if(window.__histDropDayAll) window.__histDropDayAll(b.dataset.gap,dd); renderProg(); renderSheet(true); try{ document.dispatchEvent(new Event('p53-prog')); }catch(_e){} return; }
       var e=prog[b.dataset.id]; if(!e) return;
       /* meteen verwijderen, zonder bevestiging */
  progDel(b.dataset.id);
@@ -3168,6 +3196,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
       box.innerHTML='<p class="ip-t">Your progress'+(lab?' · '+lab:'')+'</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(none?'–':F.v(last.v))+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
         (none?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(first.t))+'</span></div>'+
         '<button type="button" class="prog-edit ip-edit" aria-label="Edit measurements"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div><div class="ip-chart"></div>';
+      /* trainingen die in Coverage meetellen maar geen waarde hebben: vermelden, aanvullen of wissen via het potlood */
+      var rk=li.dataset.key||(li.querySelector('[data-note]')||{}).dataset&&li.querySelector('[data-note]').dataset.note, have={}, gaps=0;
+      pts.forEach(function(e){ var x=new Date(e.t); have[x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2)]=1; });
+      if(window.__histDays&&rk&&!/^w0-/.test(rk)) gaps=window.__histDays(rk).filter(function(h){ return !have[h.d]; }).length;
+      if(gaps) box.insertAdjacentHTML('beforeend','<p class="ip-gap">'+gaps+(gaps===1?' earlier session has':' earlier sessions have')+' no value. Tap the edit button to fill '+(gaps===1?'it':'them')+' in or delete '+(gaps===1?'it':'them')+'.</p>');
       wrap.appendChild(box);
       box.querySelector('.ip-edit').addEventListener('click',function(){ if(window.__progEdit) window.__progEdit(k); });
       /* tekenen zodra het venster zichtbaar is, op de echte breedte (anders wordt alles uitgerekt) */
