@@ -118,7 +118,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `renderStats`): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje in de accentkleur op elke dag met
   een training uit `window.__events()` (hist + metingen, dus ook oude sessies, geen warm-up; niet de `seed`-beginstand, events met
   `seed:1`, want die zette alle oude tellingen op één datum), vandaag in accentkleur. Oefeningnamen in de dagdetails openen het
-  uitlegvenster (daar kun je een training verwijderen). Bovenaan
+  uitlegvenster (daar kun je een training verwijderen).
+  Onder de dagdetails: de sessies van die dag ('Started 17:21 · 1 min · ~5 kcal' of 'Added …') met vuilbakje (`p53Confirm`, wist
+  alleen de tijd) en een veld 'Minutes' + 'Add time' (handmatige sessie om 12u, `manual:1`). Meerdere sessies per dag kunnen;
+  'N workouts' telt per dag het aantal sessies (minstens 1). Bovenaan
   'N workouts · duur' (duur = som van `sess`). Tik op een dag = details eronder (dag, duur, oefeningen); standaard de laatste trainingsdag.
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
@@ -142,6 +145,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Het invulveld toont de laatste waarde uit de grafiek (`syncFromChart`, bij laden, na de log-snapshot en bij `p53-prog`),
   tenzij je daarna zelf iets typte dat nog niet bevestigd is (`local[key].at` > tijd laatste meting). Typen wordt pas een
   meting bij afvinken; aanpassen kan ook via het potlood.
+- Twee trainingen op één dag: een meting is er één per veld per dag (de laatste waarde telt). Afvinken bewaart eerst wat er die
+  dag al stond (`window.__progSnap`, localStorage `fitlog-undo`); uitvinken zet precies dat terug (`__progDropToday(li,dag,k)`), zodat een
+  tweede (test)training nooit de meting van een eerdere training wist. Zonder bewaarde stand: alleen wissen als het de enige hist-rij
+  van die dag is (`window.__histCountDay`). 'No value · Add' in `#pe-sheet` stelt de waarde uit het invulveld voor.
 - Vinkjes gelden voor één dag: in de `checks`-snapshot vervallen vinkjes van een vorige kalenderdag (of zonder `at`)
   vanzelf (doc gewist); hist en metingen blijven. Uitvinken wist de meting van de dag van de laatste hist-rij van die
   oefening (`__lastHistDay`), niet blind 'vandaag' (middernacht).
