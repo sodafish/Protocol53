@@ -12,6 +12,9 @@ vooral op zijn iPhone, als app op het beginscherm.
   Statusregel onder de titel (`#syncStamp`, klasse `warn`): offline / database niet bereikbaar
   (bv. gepauzeerd Supabase-project) / nog niet bewaard (pas na 1 s wachtrij, anders flikkert het); bij problemen elke minuut opnieuw proberen.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
+  `p53ResetData(logIds)`: wist op de server (alleen online) alle rijen van checks, counts, hist, prog, sess + de log-rijen van de
+  invulvelden, plus cache/wachtrij/localStorage daarvan; knop 'Reset data' onder Info › App (`#resetData`, `p53Confirm` danger), daarna
+  herladen. Notities, cfg (oefeningkeuze, sets, profiel) blijven.
 - `sw.js` — service worker (`const VERSION = 'p53-vN';`, let op de spaties bij zoeken/vervangen). Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
   (icons, cloud.js, vendor) zodat de iPhone de nieuwe versie ophaalt.
   Pagina's/JS worden met `cache: 'no-cache'` opgehaald (anders houdt de HTTP-cache van GitHub Pages ze tot 10 min vast).

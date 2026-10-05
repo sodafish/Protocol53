@@ -1651,6 +1651,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
     <div class="app-tools">
       <button type="button" onclick="p53Backup()">Export backup</button>
       <button type="button" onclick="p53Logout()">Log out</button>
+      <button type="button" id="resetData">Reset data</button>
     </div>
   </div>
 
@@ -3818,6 +3819,21 @@ window.__congrats=function(o){
     sCol.onSnapshot(function(snap){ var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
       if(snap.metadata&&snap.metadata.fromCache) Object.keys(sess).forEach(function(id){ if(!next[id]) next[id]=sess[id]; });
       sess=next; saveLocal(); render(); },function(){}); });
+})();
+
+/* ---- Reset data (Info › App): alle trainingsgegevens wissen en opnieuw beginnen; notities en instellingen blijven ---- */
+(function(){
+  var b=document.getElementById('resetData'); if(!b) return;
+  b.addEventListener('click',function(){
+    p53Confirm({title:'Reset all data?',msg:'This deletes all workouts, ticks, counts, measurements, charts, calendar sessions and the values in the exercise fields, on all your devices. Your exercise choices, sets & reps, date of birth and notes stay. This can’t be undone — export a backup first if you want one.',ok:'Reset',danger:true}).then(function(y){
+      if(!y) return;
+      var ids=[].map.call(document.querySelectorAll('#s-d3 .exr-in[data-note]'),function(x){ return x.dataset.note; });
+      (window.p53ResetData?window.p53ResetData(ids):Promise.reject()).then(function(){
+        try{ var v=JSON.parse(localStorage.getItem('fitlog-v1')||'{}'); ids.forEach(function(k){ delete v[k]; }); localStorage.setItem('fitlog-v1',JSON.stringify(v)); }catch(e){}
+        location.reload();
+      },function(){ p53Confirm({title:'Not reset',msg:'Resetting needs an internet connection. Try again once you are online.',ok:'OK'}); });
+    });
+  });
 })();
 </script>
 </body>

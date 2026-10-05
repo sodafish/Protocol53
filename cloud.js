@@ -175,6 +175,24 @@
     }catch(e){}
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1000);
   };
+  /* alle trainingsgegevens wissen (opnieuw beginnen): vinkjes, tellers, statistieken, metingen, sessies en de waarden in de
+     invulvelden (logIds). Notities en instellingen (cfg: oefeningkeuze, sets, profiel) blijven. Alleen online. */
+  window.p53ResetData=function(logIds){
+    var COLLS=['checks','counts','hist','prog','sess'];
+    if(!user||!navigator.onLine) return Promise.reject(new Error('offline'));
+    var ids=(logIds||[]).filter(Boolean);
+    return sb.from('p53').delete().eq('user_id',user.id).in('coll',COLLS).then(function(r){
+      if(r.error) throw r.error;
+      return ids.length?sb.from('p53').delete().eq('user_id',user.id).eq('coll','log').in('id',ids):{};
+    }).then(function(r){
+      if(r&&r.error) throw r.error;
+      COLLS.forEach(function(c){ delete cache[c]; });
+      if(cache.log) ids.forEach(function(id){ delete cache.log[id]; });
+      queue=queue.filter(function(op){ return COLLS.indexOf(op.coll)<0 && !(op.coll==='log'&&ids.indexOf(op.id)>=0); });
+      save(QKEY,queue); save(CKEY,cache);
+      try{ ['fitlog-checks','fitlog-counts','fitlog-hist','fitlog-prog','fitlog-sess','fitlog-undo','fitlog-wo-start'].forEach(function(k){ localStorage.removeItem(k); }); }catch(e){}
+    });
+  };
   window.p53Logout=function(){
     function out(){ sb.auth.signOut().then(function(){ wipeLocal(); try{ localStorage.removeItem('p53-uid'); }catch(e){} location.reload(); }); }
     if(!queue.length) return out();
