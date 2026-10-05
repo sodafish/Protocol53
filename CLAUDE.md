@@ -114,14 +114,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Daarna `window.__congrats({min,n})`: overlay `.cg` met vuurwerk op canvas (accent/goud/crème, ~3 s bursts), 'Congratulations!'
   (Fraunces, één regel) + duur · oefeningen; tik of 4,5 s = weg. Bij reduced motion zonder vuurwerk.
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
-  `renderStats`): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje in de accentkleur op elke dag met
-  een training uit `window.__events()` (hist + metingen, dus ook oude sessies, geen warm-up; niet de `seed`-beginstand, events met
-  `seed:1`, want die zette alle oude tellingen op één datum), vandaag in accentkleur. Oefeningnamen in de dagdetails openen het
-  uitlegvenster (daar kun je een training verwijderen).
-  Onder de dagdetails: de sessies van die dag ('Started 17:21 · 1 min' of 'Added …') met vuilbakje (`p53Confirm`, wist
-  alleen de tijd) en een veld 'Minutes' + 'Add time' (handmatige sessie om 12u, `manual:1`). Meerdere sessies per dag kunnen;
-  'N workouts' telt per dag het aantal sessies (minstens 1). Bovenaan
-  'N workouts · duur' (duur = som van `sess`). Tik op een dag = details eronder (dag, duur, oefeningen); standaard de laatste trainingsdag.
+  `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
+  in de accentkleur op elke dag met een training uit `window.__events()` (hist + metingen, geen warm-up, niet de `seed`-beginstand),
+  vandaag in accentkleur, bovenaan 'N workouts'. Tik op een dag = eronder enkel 'Dag datum · N sets' (som van de sets van elke oefening
+  die dag, één keer per oefening). Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld

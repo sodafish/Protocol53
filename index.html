@@ -950,10 +950,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .cal-d.today span{color:var(--accent);font-weight:700;}
 .cal-d.sel{background:var(--paper-soft);box-shadow:inset 0 0 0 1.5px var(--line);}
 .cal-day{margin:.9rem 0 0;padding:.9rem 0 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted);line-height:1.5;min-height:3.2em;}
-.cal-sess{list-style:none;margin:.7rem 0 .6rem;padding:0;border-top:1px solid var(--line-soft);}
-.cal-sess li{display:flex;align-items:center;justify-content:space-between;gap:.6rem;min-height:46px;border-bottom:1px solid var(--line-soft);}
-.cal-sess b{color:var(--ink);font-weight:600;}
-.cal-add{grid-template-columns:1fr auto;}
 .cal-day b{color:var(--ink);font-weight:600;}
 .pf-form{display:flex;flex-direction:column;gap:1rem;}
 .pf-f{display:flex;flex-direction:column;gap:.4rem;}
@@ -971,7 +967,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .cg-card p{margin:0;font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums;}
 .cg-card p b{color:var(--ink);font-weight:600;}
 .cg-card small{display:block;margin-top:1rem;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-soft);}
-.cal-day .cal-ex{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;cursor:pointer;}
 .prog-t{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line);}
 .prog-chips{display:flex;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x pan-y;
   margin:0 -1.4rem 1rem;padding:0 1.4rem;box-shadow:inset 0 -1.5px 0 var(--line);
@@ -3761,56 +3756,35 @@ window.__congrats=function(o){
     var li=document.querySelector('#s-d3 .exr[data-key="'+k+'"]')||(function(){ var i=document.querySelector('#s-d3 [data-note="'+k+'"]'); return i&&i.closest('.exr'); })();
     var n=li&&li.querySelector('.exr-n'); return n?n.firstChild.textContent.trim():null;
   }
+  /* per dag: welke oefeningen en hoeveel sets (uit de trainingen in de statistieken, één per oefening per dag, zonder de seed-beginstand) */
   function data(){
     var days={};
-    /* zonder de eenmalige beginstand ('seed': oude tellers, allemaal op één datum gezet, dus geen echte trainingsdag) */
-    (window.__events?window.__events():[]).forEach(function(e){ if(!e.t||e.seed) return; var d=ymd(e.t); (days[d]=days[d]||{ex:{},min:0}).ex[e.k]=1; });
-    Object.keys(sess).forEach(function(id){ var x=sess[id]; if(!x||!x.d) return; var o=days[x.d]=days[x.d]||{ex:{},min:0}; o.sc=(o.sc||0)+1; o.min+=Math.max(0,Math.round((x.e-x.s)/60000)); });
+    (window.__events?window.__events():[]).forEach(function(e){ if(!e.t||e.seed) return; var d=ymd(e.t), o=days[d]=days[d]||{ex:{},sets:0};
+      if(o.ex[e.k]) return; o.ex[e.k]=1; o.sets+=(+e.s||0); });
     return days;
   }
-  function dur(m){ return m<60?m+' min':Math.floor(m/60)+' h '+('0'+m%60).slice(-2)+' min'; }
   function render(){
     var days=data(), y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
-    var cnt=0, mins=0, lastOn=null, html='';
+    var cnt=0, lastOn=null, html='', key='';
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
     for(var i=0;i<lead;i++) html+='<span class="cal-d out"></span>';
     for(var d=1;d<=n;d++){
-      var key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2), on=!!days[key], fut=key>today;
-      if(on){ cnt+=Math.max(1,days[key].sc||0); mins+=days[key].min; lastOn=key; }
+      key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2); var on=!!days[key], fut=key>today;
+      if(on){ cnt++; lastOn=key; }
       html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
     }
     grid.innerHTML=html;
-    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts')+(mins?' · '+dur(mins):''):'No workouts';
-    var cur=new Date(), atNow=(y===cur.getFullYear()&&m===cur.getMonth());
-    document.querySelector('.cal-nav[data-m="1"]').disabled=atNow;
+    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts'):'No workouts';
+    var cur=new Date(); document.querySelector('.cal-nav[data-m="1"]').disabled=(y===cur.getFullYear()&&m===cur.getMonth());
     if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
     grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
       b.addEventListener('click',function(){ sel=b.dataset.d; render(); }); });
     var box=document.getElementById('calDay');
     if(!sel){ box.innerHTML=cnt?'':'Days you train get a dot.'; return; }
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
-    var names=Object.keys(o.ex).map(nameOf).filter(Boolean);
-    function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
-    /* namen aantikken = uitleg + metingen van die oefening (daar kun je een training ook verwijderen) */
-    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+(o.min?' · '+dur(o.min):'')+' · '+names.length+(names.length===1?' exercise':' exercises')+
-      (names.length?'<br>'+names.map(function(n){ return window.__p53info&&window.__p53info.has(n)?'<button type="button" class="cal-ex" data-n="'+esc(n)+'">'+esc(n)+'</button>':esc(n); }).join(', '):'');
-    box.querySelectorAll('.cal-ex').forEach(function(b){ b.addEventListener('click',function(){ window.__p53info.open(b.dataset.n,b); }); });
-    /* sessies van die dag (duur): verwijderen of er zelf één toevoegen (bv. vergeten op End workout te tikken) */
-    var TRASH='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></svg>';
-    var ss=Object.keys(sess).filter(function(id){ return sess[id]&&sess[id].d===sel; }).sort(function(a,b){ return sess[a].s-sess[b].s; });
-    var hm=function(t){ var x=new Date(t); return x.getHours()+':'+('0'+x.getMinutes()).slice(-2); };
-    box.insertAdjacentHTML('beforeend','<ul class="cal-sess">'+ss.map(function(id){ var x=sess[id], m=Math.max(0,Math.round((x.e-x.s)/60000));
-      return '<li><span>'+(x.manual?'Added':'Started '+hm(x.s))+' · <b>'+dur(m)+'</b></span><button type="button" class="pe-del" data-id="'+id+'" aria-label="Delete this session">'+TRASH+'</button></li>'; }).join('')+'</ul>'+
-      '<form class="pe-add cal-add"><input type="text" name="m" inputmode="numeric" placeholder="Minutes" aria-label="Workout time in minutes"><button type="submit">Add time</button></form>');
-    box.querySelectorAll('.cal-sess .pe-del').forEach(function(b){ b.addEventListener('click',function(){
-      if(window.p53Confirm) window.p53Confirm({title:'Delete this session?',msg:'Only the time is removed. Your exercises, weights and progress stay.',ok:'Delete',danger:true}).then(function(y){ if(y) delSess(b.dataset.id); });
-      else delSess(b.dataset.id); }); });
-    var af=box.querySelector('.cal-add'); af.addEventListener('submit',function(e){ e.preventDefault(); var m=parseInt(af.m.value,10); if(!(m>0&&m<=300)){ af.m.focus(); return; }
-      var pp=sel.split('-'), st=new Date(+pp[0],+pp[1]-1,+pp[2],12).getTime(), id=sel+'@'+st+'m', ev={d:sel,s:st,e:st+m*60000,n:0,manual:1};
-      sess[id]=ev; saveLocal(); if(sCol) sCol.doc(id).set(ev).catch(function(){}); render(); });
+    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+o.sets+(o.sets===1?' set':' sets');
   }
-  function delSess(id){ delete sess[id]; saveLocal(); if(sCol) sCol.doc(id).delete().catch(function(){}); render(); }
   window.__renderCal=render;
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
     var m=ym.m+(+b.dataset.m), y=ym.y; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } ym={y:y,m:m}; sel=null; render(); }); });
