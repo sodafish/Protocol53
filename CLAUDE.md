@@ -276,8 +276,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   animatie (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
   Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's. Alleen animatie zonder foto = `.sheet-gif`.
   Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
-  Enige uitzondering: Bird Dog (`d3-bird-dog`, g6, standaard uit) toont op vraag van Tom wél de eigen getekende animatie (`EX.birddog`,
-  `player`). Padel staat er zonder beeld. Torso Rotation blijft weg.
+  Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov`, poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink): echte
+  video's van MuscleWiki die Tom zelf uit hun Playground haalt (gratis plan = geen API vanuit code; watermerk laten staan), alleen voor
+  oefeningen zonder foto én animatie. Nu: Bird Dog (`d3-bird-dog`, g6, standaard uit; de getekende `player`-animatie blijft als terugval).
+  Padel staat er zonder beeld. Torso Rotation blijft weg.
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
