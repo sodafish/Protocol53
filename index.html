@@ -3578,6 +3578,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     var anchor=rs[0].previousElementSibling;
     /* binnen een groep: supersets achteraan, bij Biceps de onderarmen na de curls; daarbinnen laag + populariteit */
     function cat(li){ var og=li.dataset.og;
+      if(g==='g0') return /^w0-(bike|rowing|incline-walk|cross-trainer|jump-rope|stair-climber)$/.test(keyOf(li))?0:1; /* Warm-up: eerst cardio, dan mobiliteit/activatie */
       if(g==='g4') return og==='g6'?1:0; /* Back: eerst rows (horizontaal), dan pulldowns/pull-ups en bovenrug */
       if(g!=='g7') return 0;
       if(li.querySelectorAll('.exr-in').length>1) return 3; /* Arms: supersets achteraan */
@@ -3589,7 +3590,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     rs.forEach(function(li){ var c=cat(li);
       if(lab){ li.dataset.sub=lab[c]; if(c!==last){ var h=document.createElement('li'); h.className='exsub'; h.dataset.grp=g; h.setAttribute('aria-hidden','true'); h.textContent=lab[c]; anchor.after(h); anchor=h; last=c; } }
       anchor.after(li); anchor=li; }); return rs; }
-  var SUBS={g4:['Rows','Vertical pull & upper back'],g7:['Biceps','Forearms','Triceps','Supersets']};
+  var SUBS={g0:['Cardio','Mobility & activation'],g4:['Rows','Vertical pull & upper back'],g7:['Biceps','Forearms','Triceps','Supersets']};
   Object.keys(POP).forEach(sortRows);
   apply(); /* tussenkoppen zonder zichtbare oefening verbergen */
   /* onderblad */

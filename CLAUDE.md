@@ -340,7 +340,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   seated cable row, one-arm DB row (hand op de bank).
 - `sortRows` (`cat`): Back = eerst rows (`data-og` g4), dan verticaal/bovenrug (g6); Arms = curls, onderarmen (wrist/reverse),
   triceps (g9), supersets (twee invulvelden); daarbinnen laag + `POP`. Calisthenics-filter is weer verwijderd (op vraag van Tom).
-- Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Back = Rows / Vertical pull & upper back; Arms = Biceps /
+- Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Warm-up = Cardio (bike, rowing, incline walk, cross trainer,
+  jump rope, stair climber) / Mobility & activation (de rest); Back = Rows / Vertical pull & upper back; Arms = Biceps /
   Forearms / Triceps / Supersets. Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
   koppen (`li.gs-sub-h`, uit `data-sub` op de rij).
 - Supersets (Arms, achteraan; volgorde in POP: rope only (ss2), bar only (ss3), mix rope + bar (ss1), reverse (ss4), single-arm (ss5);
