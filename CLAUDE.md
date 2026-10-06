@@ -312,8 +312,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad én in de workout (`sortRows` herschikt de rijen bij het laden): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
   dan gevaarlijke; binnen elke laag op populariteit volgens `POP` (per groep een lijst sleutels, meest gedaan eerst).
   Nieuwe oefening: ook haar sleutel op de juiste plek in `POP` zetten.
-- Glute Kickback Machine (`x3-kickback-machine`, g3, standaard uit, kg): geen foto in de Free Exercise DB, alleen animatie
-  (`kickbackmachine`, dataset-id 2286 'lever hip extension v. 2', geknield toestel).
+- Glute Kickback Machine (`x3-kickback-machine`, g3, standaard uit, kg): geen foto in de Free Exercise DB. Beeld = schermopname van Tom
+  (staand toestel), bijgesneden tot één naadloze cyclus (frames gezocht op kleinste verschil), wit gemaakt, 360 px vierkant
+  `img/vid/kickbackmachine.mp4` (86 kB; als GIF was het 1,6 MB). Vierkante video's staan in `VSQ` en tonen op wit zoals een animatie (`.sheet-gif video`).
 - Groep 3 heeft ook adductie (Hip Adduction Machine, Cable/Band Hip Adduction) en Leg Press Calf Raise (in `RISK`).
   Geen foto's in de Free Exercise DB voor: Copenhagen plank, lateral raise machine, tibialis raise, hollow hold,
   suitcase carry, daarom niet toegevoegd.
