@@ -279,8 +279,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
   Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov`, poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink): echte
   video's van MuscleWiki die Tom zelf uit hun Playground haalt (gratis plan = geen API vanuit code; watermerk laten staan); een video
-  wint van animatie en foto's. Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical). Nu: Arm Circles, Elliptical/Cross Trainer,
-  Goblet Squat, Bulgarian Split Squat, Face Pull, Bird Dog (`d3-bird-dog`, g6, standaard uit; de getekende `player`-animatie blijft als terugval).
+  wint van animatie en foto's. Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical, `VID.legcurl` = seatedlegcurl). Nu: Arm Circles, Elliptical/Cross Trainer,
+  Seated Leg Curl Machine, Chest Press Machine, Goblet Squat, Bulgarian Split Squat, Face Pull, Bird Dog (`d3-bird-dog`, g6, standaard uit; de getekende `player`-animatie blijft als terugval).
   Padel staat er zonder beeld. Torso Rotation blijft weg.
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
