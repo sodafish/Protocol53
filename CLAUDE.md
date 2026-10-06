@@ -277,10 +277,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   animatie (Curl Machine bewust niet: vreemde animatie, toont de foto's) (manueel gekozen en nagekeken); zonder goede match (o.a. Bulgarian Split Squat, Face Pull, Dead Hang, Band Pull-Aparts,
   Arm Circles, Cat-Cow, Plank-varianten, Bird Dog, Rower, Padel, supersets) enkel de foto's.
   Geen foto én geen animatie = niets tonen, enkel tekst: getekende figuren (`player`/`poses`) worden niet meer gebruikt (op vraag van Tom).
-  Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov`, poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink): echte
-  video's van MuscleWiki die Tom zelf uit hun Playground haalt (gratis plan = geen API vanuit code; watermerk laten staan); een video
-  wint van animatie en foto's. Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical, `VID.legcurl` = seatedlegcurl). Nu: Arm Circles, Elliptical/Cross Trainer,
-  Seated Leg Curl Machine, Chest Press Machine, Goblet Squat, Bulgarian Split Squat, Face Pull, Bird Dog (`d3-bird-dog`, g6, standaard uit; de getekende `player`-animatie blijft als terugval).
+  Video's (`VID`, `img/vid/<EX-sleutel>.mp4`, 640 px, zonder geluid, autoplay/muted/loop/playsinline, klasse `.sheet-mov` (witte achtergrond),
+  poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink); een video wint van animatie en foto's.
+  Bron: de originele Gym visual-video's (720 px, zelfde stijl als de GIF's, naadloze lus) die Tom aanlevert, voor al zijn actieve oefeningen;
+  enkel Arm Circles is nog een MuscleWiki-video (watermerk laten staan). Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical,
+  `VID.legcurl` = seatedlegcurl). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
+  `VSQ` (vierkante video op wit) bestaat nog maar is leeg. Bird Dog: video; de getekende `player`-animatie blijft als terugval.
   Padel staat er zonder beeld. Torso Rotation blijft weg.
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
@@ -312,9 +314,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad én in de workout (`sortRows` herschikt de rijen bij het laden): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
   dan gevaarlijke; binnen elke laag op populariteit volgens `POP` (per groep een lijst sleutels, meest gedaan eerst).
   Nieuwe oefening: ook haar sleutel op de juiste plek in `POP` zetten.
-- Glute Kickback Machine (`x3-kickback-machine`, g3, standaard uit, kg): geen foto in de Free Exercise DB. Beeld = schermopname van Tom
-  (staand toestel), bijgesneden tot één naadloze cyclus (frames gezocht op kleinste verschil), wit gemaakt, 360 px vierkant
-  `img/vid/kickbackmachine.mp4` (86 kB; als GIF was het 1,6 MB). Vierkante video's staan in `VSQ` en tonen op wit zoals een animatie (`.sheet-gif video`).
+- Glute Kickback Machine (`x3-kickback-machine`, g3, standaard uit, kg): geen foto in de Free Exercise DB. Beeld = Gym visual-video (staand toestel)
+  `img/vid/kickbackmachine.mp4`.
 - Groep 3 heeft ook adductie (Hip Adduction Machine, Cable/Band Hip Adduction) en Leg Press Calf Raise (in `RISK`).
   Geen foto's in de Free Exercise DB voor: Copenhagen plank, lateral raise machine, tibialis raise, hollow hold,
   suitcase carry, daarom niet toegevoegd.
