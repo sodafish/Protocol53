@@ -284,7 +284,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `VID.legcurl` = seatedlegcurl; ook Band Pull-Aparts `pullapart` en Dead Hang `hang`). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
   `VSQ` (vierkante video op wit) bestaat nog maar is leeg. Bird Dog: video; de getekende `player`-animatie blijft als terugval.
   Padel staat er zonder beeld. Torso Rotation (`w0-torso-rotation`, g0, reps) is op vraag van Tom terug, standaard aan; wie al een
-  opwarmingskeuze had krijgt ze erbij via `migrate()` (vlag `tr` in cfg/groups); nog zonder beeld (geen staande variant in de dataset).
+  opwarmingskeuze had krijgt ze erbij via `migrate()` (vlag `tr` in cfg/groups); foto's `img/rotation-0/1.jpg` = afbeelding van Tom (handen op de heupen), in twee
+  gesplitst en op wit 3:2 gezet.
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
