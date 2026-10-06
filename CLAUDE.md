@@ -246,12 +246,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Vroeger 9 groepen: oude 4+6 = nu g4, oude 7 = nu g6, oude 8+9 = nu g7. Rijen dragen `data-og` (oude groep) voor de
   volgorde (`cat`) en de eenmalige migratie (`migrate()`, vlag `v7` in cfg/groups: keuzes samengevoegd, Calisthenics-keuzes weg).
   Standaardkeuze voor een nieuwe gebruiker = Toms indeling van 6 okt 2026 (rijen zonder `ex-off` in de HTML; op vraag van Tom, met lege
-  invul- en notitievelden): Warm-up: Cross Trainer, Arm Circles, Torso Rotation · 1: Goblet Squat, Bulgarian Split Squat, DB Reverse Lunges,
-  DB Forward Lunges · 2: Push-Ups, Chest Press Machine · 3: Seated Leg Curl Machine, Glute Kickback Machine · 4: Seated Cable Row, Seated Row
-  Machine, Cable Face Pull, Wide-Grip Lat Pulldown, V-Bar Pulldown · 5: DB Lateral Raise, Seated DB Shoulder Press, Shoulder Press Machine,
-  Reverse Fly Machine · 6: Plank, Weighted Back Extension, Dead Bug, Bird Dog · 7: Cable Biceps Curl, Curl Machine, Triceps Rope Pushdown,
-  Triceps Bar Pushdown, Overhead Cable Triceps Extension (geen supersets). Cardio (g8) ongewijzigd. Toms eigen keuze staat in cfg/groups en
-  verandert hier niet door. Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
+  invul- en notitievelden): Warm-up: Rowing Machine, Cross Trainer, Bodyweight Squats, Band Pull-Aparts, Torso Rotation · 1: Goblet Squat,
+  Bulgarian Split Squat, DB Reverse Lunges, DB Forward Lunges · 2: Push-Ups, Chest Press Machine · 3: Seated Leg Curl Machine, Glute Kickback
+  Machine · 4: Seated Cable Row, Seated Row Machine, Cable Face Pull, Wide-Grip Lat Pulldown, V-Bar Pulldown, Dead Hang · 5: DB Lateral Raise,
+  Seated DB Shoulder Press, Shoulder Press Machine, Reverse Fly Machine · 6: Plank, Side Plank, Weighted Back Extension, Dead Bug, Bird Dog ·
+  7: Cable Biceps Curl, Curl Machine, Triceps Rope Pushdown, Triceps Bar Pushdown, Overhead Cable Triceps Extension (geen supersets).
+  Cardio (g8) ongewijzigd. Toms eigen keuze staat in cfg/groups en verandert hier niet door. Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
 - Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Titel + kruisje blijven
   bovenaan staan (sticky `.sheet-head`; bij scrollen klasse `.stuck` = dunne lijn eronder). Minstens
