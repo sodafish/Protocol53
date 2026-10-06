@@ -1877,18 +1877,20 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       var k=chkKey(li), on=!!checks[k], b=li.querySelector('.chk');
       li.classList.toggle('done',on); if(b) b.setAttribute('aria-pressed',on?'true':'false');
     });
-    /* groepkop: af zodra één oefening gedaan is (opwarming: alles) */
+    /* groepkop: af zodra één oefening gedaan is (opwarming: één cardio of alle mobility) */
     document.querySelectorAll('#s-d3 .exgrp').forEach(function(g){
       var rows=[], li=g.nextElementSibling;
       while(li && !li.classList.contains('exgrp')){ if(li.classList.contains('exr') && !li.classList.contains('ex-off')) rows.push(li); li=li.nextElementSibling; }
       var anyDone=rows.some(function(r){ return r.classList.contains('done'); }), wu=g.dataset.grp==='g0';
-      if(wu) anyDone=rows.length>0 && rows.every(function(r){ return r.classList.contains('done'); }); /* opwarming: pas af als alles gedaan is */
+      /* opwarming: cardio óf mobiliteit. Af zodra één cardio-oefening gedaan is, of alle actieve Mobility & activation-oefeningen */
+      if(wu){ var dn=function(r){ return r.classList.contains('done'); }, car=rows.filter(function(r){ return r.dataset.sub==='Cardio'; }), mob=rows.filter(function(r){ return r.dataset.sub!=='Cardio'; });
+        anyDone=car.some(dn) || (mob.length>0 && mob.every(dn)); }
       g.classList.toggle('grp-done',anyDone);
       /* één oefening gedaan = groep af: de andere worden doorgestreept (blijven wel aanklikbaar); niet bij de opwarming */
-      var multi=wu||g.dataset.grp==='g8'; /* cardio: je kunt er meerdere combineren, dus niets doorstrepen */
+      var multi=g.dataset.grp==='g8'; /* cardio: je kunt er meerdere combineren, dus niets doorstrepen */
       rows.forEach(function(r){ r.classList.toggle('grp-skip',!multi && anyDone && !r.classList.contains('done')); });
       /* tussenkoppen (Biceps, Triceps …) mee grijs */
-      for(var h=g.nextElementSibling; h && !h.classList.contains('exgrp'); h=h.nextElementSibling) if(h.classList.contains('exsub')) h.classList.toggle('sub-off',!wu && anyDone);
+      for(var h=g.nextElementSibling; h && !h.classList.contains('exgrp'); h=h.nextElementSibling) if(h.classList.contains('exsub')) h.classList.toggle('sub-off',anyDone);
     });
   }
   function saveChecksLocal(){ try{ localStorage.setItem(CHKKEY,JSON.stringify(checks)); }catch(e){} }

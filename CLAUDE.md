@@ -261,8 +261,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   bestaan: Active exercises toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
 - Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen. Eén oefening gedaan = groep af: kop doorgestreept en de andere
-  oefeningen van die groep krijgen `grp-skip` (doorgestreept, 40%, blijven aanklikbaar). Niet bij de opwarming: die is pas af als
-  alles gedaan is en strijpt niets door. De tussenkoppen (`.exsub`) van een afgevinkte groep worden mee grijs (`sub-off`).
+  oefeningen van die groep krijgen `grp-skip` (doorgestreept, 40%, blijven aanklikbaar). Opwarming (op vraag van Tom: cardio óf mobility):
+  af zodra één oefening onder 'Cardio' gedaan is, of alle actieve oefeningen onder 'Mobility & activation' (`data-sub`); dan worden de
+  andere warm-up-rijen ook doorgestreept (`grp-skip`) en scrolt de pagina door naar groep 1. De tussenkoppen (`.exsub`) van een afgevinkte groep worden mee grijs (`sub-off`).
   Wordt een groep af door een vinkje, dan scrolt de pagina na 450 ms zacht tot de volgende zichtbare, nog niet afgewerkte groepskop
   bovenaan staat (12 px marge; `nextGroup`, toetsenbord gaat dicht); geen volgende groep meer = niet scrollen.
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
@@ -270,8 +271,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep, plus MUSCLES/NAMES/EX/IMG.
 - Warm-up (groep 0, `data-grp="g0"`, kop zonder nummer) bestaat uit losse rijen met sleutels `w0-…` (zonder invulveld): 4 standaard
   (pull-aparts, squats, glute bridge) + uit: 5 min rowing / cross trainer / bike / incline walk, arm circles.
-  Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is pas 'af'
-  als alle actieve rijen gedaan zijn en wordt nooit doorgestreept. De oude sleutel `d3-wu` wordt niet meer gebruikt.
+  Ze tellen wel in `counts` (teller per oefening), nooit in `hist` (`histAdd` slaat `w0-` over). Groep 0 is 'af' na één cardio-oefening of alle
+  mobility-oefeningen (zie groep-af-logica). De oude sleutel `d3-wu` wordt niet meer gebruikt.
 - Beelden in het uitlegblad, in volgorde van voorrang (op vraag van Tom): 1) video (`VID`, zie onder); 2) animatie alleen (`ANIM`, GIF 180 px uit
   github.com/hasaneyldrm/exercises-dataset, © Gym visual, alleen voor eigen gebruik, `img/anim/<EX-sleutel>.gif`, `.sheet-gif`);
   3) foto's (Free Exercise DB, `IMG`, wisselen start/eind). Foto's en animatie staan dus niet meer naast
