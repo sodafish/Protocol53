@@ -281,9 +281,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink); een video wint van animatie en foto's.
   Bron: de originele Gym visual-video's (720 px, zelfde stijl als de GIF's, naadloze lus) die Tom aanlevert, voor al zijn actieve oefeningen;
   enkel Arm Circles is nog een MuscleWiki-video (watermerk laten staan). Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical,
-  `VID.legcurl` = seatedlegcurl). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
+  `VID.legcurl` = seatedlegcurl; ook Band Pull-Aparts `pullapart` en Dead Hang `hang`). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
   `VSQ` (vierkante video op wit) bestaat nog maar is leeg. Bird Dog: video; de getekende `player`-animatie blijft als terugval.
-  Padel staat er zonder beeld. Torso Rotation blijft weg.
+  Padel staat er zonder beeld. Torso Rotation (`w0-torso-rotation`, g0, reps) is op vraag van Tom terug, standaard aan; wie al een
+  opwarmingskeuze had krijgt ze erbij via `migrate()` (vlag `tr` in cfg/groups); nog zonder beeld (geen staande variant in de dataset).
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
