@@ -284,7 +284,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink); een video wint van animatie en foto's.
   Bron: de originele Gym visual-video's (720 px, zelfde stijl als de GIF's, naadloze lus) die Tom aanlevert, voor al zijn actieve oefeningen;
   enkel Arm Circles is nog een MuscleWiki-video (watermerk laten staan). Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical,
-  `VID.legcurl` = seatedlegcurl; ook Band Pull-Aparts `pullapart`, Dead Hang `hang` , Bodyweight Squats `squat` , Rowing Machine `rowing` = ook cardio Rower via `VID.crow`, en Side Plank `sideplank`). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
+  `VID.legcurl` = seatedlegcurl; ook Band Pull-Aparts `pullapart`, Dead Hang `hang` , Bodyweight Squats `squat` , Rowing Machine `rowing` = ook cardio Rower via `VID.crow`, Side Plank `sideplank`, SkiErg `skierg` en Glute Bridge `bridge`). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
   `VSQ` (vierkante video op wit) bestaat nog maar is leeg. Vervang je een bestaande video, verhoog dan `VIDV` (cache-buster `?v=` op video + poster, anders toont iOS de oude). Bird Dog: video; de getekende `player`-animatie blijft als terugval.
   Padel staat er zonder beeld. Torso Rotation (`w0-torso-rotation`, g0, reps) is op vraag van Tom terug, standaard aan; wie al een
   opwarmingskeuze had krijgt ze erbij via `migrate()` (vlag `tr` in cfg/groups); foto's `img/rotation-0/1.jpg` = afbeelding van Tom (handen op de heupen), in twee
@@ -342,7 +342,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - `sortRows` (`cat`): Back = eerst rows (`data-og` g4), dan verticaal/bovenrug (g6); Arms = curls, onderarmen (wrist/reverse),
   triceps (g9), supersets (twee invulvelden); daarbinnen laag + `POP`. Calisthenics-filter is weer verwijderd (op vraag van Tom).
 - Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Warm-up = Cardio (bike, rowing, incline walk, cross trainer,
-  jump rope, stair climber) / Mobility & activation (de rest); Back = Rows / Vertical pull & upper back; Arms = Biceps /
+  SkiErg (`w0-skierg`, standaard uit, uitleg + tip over de rug), jump rope, stair climber) / Mobility & activation (de rest); Back = Rows / Vertical pull & upper back; Arms = Biceps /
   Forearms / Triceps / Supersets. Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
   koppen (`li.gs-sub-h`, uit `data-sub` op de rij).
 - Supersets (Arms, achteraan; volgorde in POP: rope only (ss2), bar only (ss3), mix rope + bar (ss1), reverse (ss4), single-arm (ss5);
