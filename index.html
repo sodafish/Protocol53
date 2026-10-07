@@ -1861,6 +1861,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
      geen volgende meer = naar de End workout-knop onderaan */
   function nextGroup(row){
     if(!row||!row.closest('#s-d3')) return;
+    if(window.__split && window.__split!=='full') return; /* alleen bij Full body doorscrollen (op vraag van Tom); Upper/Lower/Cardio niet */
     var g=row.previousElementSibling; while(g&&!g.classList.contains('exgrp')) g=g.previousElementSibling;
     if(!g||!g.classList.contains('grp-done')) return;
     var t=g.nextElementSibling; while(t&&!(t.classList.contains('exgrp')&&t.offsetParent!==null&&!t.classList.contains('grp-done'))) t=t.nextElementSibling;
@@ -3665,6 +3666,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',g==='g0'?cur==='cardio':keep.indexOf(g)<0); });
     document.body.classList.toggle('split-cardio',cur==='cardio');
+    window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
     lbl.textContent=NAME[cur];
     pop.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.split===cur?'true':'false'); });
   }

@@ -266,6 +266,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   andere warm-up-rijen ook doorgestreept (`grp-skip`) en scrolt de pagina door naar groep 1. De tussenkoppen (`.exsub`) van een afgevinkte groep worden mee grijs (`sub-off`).
   Wordt een groep af door een vinkje, dan scrolt de pagina na 450 ms zacht tot de volgende zichtbare, nog niet afgewerkte groepskop
   bovenaan staat (12 px marge; `nextGroup`, toetsenbord gaat dicht); geen volgende groep meer = niet scrollen.
+  Doorscrollen gebeurt alleen bij Full body (`window.__split`, gezet door het split-script); bij Upper/Lower/Cardio niet (op vraag van Tom).
 - Extra oefeningen (standaard uit) hebben sleutels `xN-…` (N = groepnummer), elk met MUSCLES, NAMES, EX-uitleg en
   foto's (Free Exercise DB, 640 px). Uitzondering: Crunch Machine gebruikt de oude sleutel `d3-crunch-machine`.
   Extra oefening toevoegen: rij met `data-grp="gN"` + `ex-off` in de groep, plus MUSCLES/NAMES/EX/IMG.
