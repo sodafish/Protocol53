@@ -241,8 +241,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   blijft op Workout (geen sprong naar Coverage), wel vuurwerk. De pagina Cardio onder More blijft als uitleg.
 
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–7)
-- Structuur ligt vast: Warm-up + 7 groepen (6 à 7 oefeningen per sessie houdt de focus): 1 Front legs, 2 Chest, 3 Back legs, glutes &
-  calves, 4 Back (rows + pulldowns/pull-ups + face pull/bovenrug), 5 Shoulders, 6 Core, 7 Arms (biceps, triceps, onderarmen, supersets).
+- Structuur ligt vast: Warm-up + 7 groepen (6 à 7 oefeningen per sessie houdt de focus): 1 Quads (vroeger 'Front legs'), 2 Chest,
+  3 Hamstrings, glutes & calves (vroeger 'Back legs, glutes & calves'; GROUPDEF-regex kent beide namen), 4 Back (rows + pulldowns/pull-ups + face pull/bovenrug), 5 Shoulders, 6 Core, 7 Arms (biceps, triceps, onderarmen, supersets).
   Vroeger 9 groepen: oude 4+6 = nu g4, oude 7 = nu g6, oude 8+9 = nu g7. Rijen dragen `data-og` (oude groep) voor de
   volgorde (`cat`) en de eenmalige migratie (`migrate()`, vlag `v7` in cfg/groups: keuzes samengevoegd, Calisthenics-keuzes weg).
   Standaardkeuze voor een nieuwe gebruiker = Toms indeling van 6 okt 2026 (rijen zonder `ex-off` in de HTML; op vraag van Tom, met lege
