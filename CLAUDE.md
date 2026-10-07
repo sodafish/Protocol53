@@ -286,7 +286,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   poster = `<sleutel>.jpg` (frame uit de video); `.sheet-vid` is de bestaande videolink); een video wint van animatie en foto's.
   Bron: de originele Gym visual-video's (720 px, zelfde stijl als de GIF's, naadloze lus) die Tom aanlevert, voor al zijn actieve oefeningen;
   enkel Arm Circles is nog een MuscleWiki-video (watermerk laten staan). Lijst in `VID` (spatielijst EX-sleutels; `VID.cell` = elliptical,
-  `VID.legcurl` = seatedlegcurl; ook Band Pull-Aparts `pullapart`, Dead Hang `hang` , Bodyweight Squats `squat` , Rowing Machine `rowing` = ook cardio Rower via `VID.crow`, Side Plank `sideplank`, SkiErg `skierg`, Glute Bridge `bridge` en Single-Leg RDL `slrdl`). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
+  `VID.legcurl` = seatedlegcurl; ook Band Pull-Aparts `pullapart`, Dead Hang `hang` , Bodyweight Squats `squat` , Rowing Machine `rowing` = ook cardio Rower via `VID.crow`, Side Plank `sideplank`, SkiErg `skierg`, Glute Bridge `bridge`, Single-Leg RDL `slrdl` en Cable Rope Hammer Curl `ropehammer`). Encoderen: `ffmpeg -nostdin` (anders eet ffmpeg de stdin van een lus op), `-an`, scale 640, crf 26.
   `VSQ` (vierkante video op wit) bestaat nog maar is leeg. Vervang je een bestaande video, verhoog dan `VIDV` (cache-buster `?v=` op video + poster, anders toont iOS de oude). Bird Dog: video; de getekende `player`-animatie blijft als terugval.
   Padel staat er zonder beeld. Torso Rotation (`w0-torso-rotation`, g0, reps) is op vraag van Tom terug, standaard aan; wie al een
   opwarmingskeuze had krijgt ze erbij via `migrate()` (vlag `tr` in cfg/groups); foto's `img/rotation-0/1.jpg` = afbeelding van Tom (handen op de heupen), in twee
@@ -328,7 +328,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   suitcase carry, daarom niet toegevoegd.
 - Later toegevoegd: Smith Machine Bench Press, Dumbbell Bench Press (g2), Stability Ball Leg Curl (g3), Cable/Band External
   Rotation (g5, rotator cuff, telt als Rear delts), Reverse Crunch, Dumbbell Side Bend (nu g6), EZ-Bar Curl, Triceps Bar Pushdown,
-  Spider Curl (nu g7). Bewust niet: Glute-Ham Raise en Smith shoulder press (foto's tonen een verkeerde/riskante variant).
+  Spider Curl (nu g7), Cable Rope Hammer Curl (`x7-rope-hammer-curl`, g7 Biceps, standaard uit, · rope; de oude sleutel
+  `d3-cable-hammer-curl` bestaat enkel nog in MUSCLES/seed, niet hergebruikt). Bewust niet: Glute-Ham Raise en Smith shoulder press (foto's tonen een verkeerde/riskante variant).
 - Dubbels opgeruimd: `x2-incline-db-press` en `x4-incline-db-row` waren dezelfde oefening als `d1-dumbbell-chest-press`
   (nu schermnaam 'Incline Dumbbell Press', bank 15–30°) en `d3-chest-supported-row`; hun rijen zijn weg, MUSCLES-regels
   blijven voor oude historiek. 'Plank + Side Plank' is gesplitst: `d1-plank` = 'Plank', nieuw `x7-side-plank` = 'Side Plank'
