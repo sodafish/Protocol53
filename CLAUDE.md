@@ -118,8 +118,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
-  vandaag in accentkleur, bovenaan 'N workouts · N sets' (sets van die maand). Tik op een dag = eronder enkel 'Dag datum · N sets' (som van de sets van elke oefening
-  die dag, één keer per oefening). Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
+  vandaag in accentkleur, bovenaan 'N workouts · N sets' (sets van die maand). Tik op een dag = eronder 'Dag datum · Programma · N sets' (som van de sets van elke oefening
+  die dag, één keer per oefening). Programma (`prog()` in het kalenderscript) wordt per workout afgeleid uit de groepen met een meting: enkel g8 = Cardio,
+  enkel g2/g4/g5/g7 = Upper body, enkel g1/g3/g6 = Lower body, anders Full body; meerdere workouts op één dag = 'Upper body + Cardio'. Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
   geschaald met `SY` = .86 rond de kin `CY` = 55, hoofd en oor (eerste deel) niet; paden zelf blijven in 450-coördinaten): halve vormen (kijkerslinks, x ≤ 100) die rond x = 100 gespiegeld

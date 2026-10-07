@@ -3832,11 +3832,20 @@ window.__congrats=function(o){
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number'||!p.d) return;
       var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
       if(!k||/^w0-/.test(k)) return;
-      var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0}; o.ws[p.w||'']=1; var ek=k+'|'+(p.w||''); if(o.ex[ek]) return; o.ex[ek]=1;
+      var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w; if(o.ex[ek]) return; o.ex[ek]=1;
       if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
       else o.sets+=window.__setsFor?(+window.__setsFor(k,li)||0):3; });
     return days;
   }
+  /* programma per workout, afgeleid uit de groepen met een meting: enkel cardio = Cardio; enkel g2/g4/g5/g7 = Upper body;
+     enkel g1/g3/g6 = Lower body; anders Full body (cardio náást kracht staat al als '+ N min cardio') */
+  var UP={g2:1,g4:1,g5:1,g7:1}, LO={g1:1,g3:1,g6:1};
+  function prog(gs){ var g=Object.keys(gs).filter(function(x){ return x!=='g0'&&x!=='g8'; });
+    if(!g.length) return gs.g8?'Cardio':'';
+    if(g.every(function(x){ return UP[x]; })) return 'Upper body';
+    if(g.every(function(x){ return LO[x]; })) return 'Lower body';
+    return 'Full body'; }
+  function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
   /* '17 sets + 20 min cardio' (plus als er kracht én cardio was) */
   function amount(st,mn){ return [st?st+(st===1?' set':' sets'):'',mn?Math.round(mn)+' min cardio':''].filter(Boolean).join(' + '); }
   function render(){
@@ -3859,7 +3868,7 @@ window.__congrats=function(o){
     var box=document.getElementById('calDay');
     if(!sel){ box.innerHTML=cnt?'':'Days you train get a dot.'; return; }
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
-    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+amount(o.sets,o.min);
+    var pg=progs(o); box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+(pg?pg+' · ':'')+amount(o.sets,o.min);
   }
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
