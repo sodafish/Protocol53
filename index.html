@@ -3874,7 +3874,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   window.__setSplit=function(v){ if(SPLIT[v]) set(v); };
   function set(v){ cur=v; try{ localStorage.setItem(KEY,cur); if(cur!=='warmup') localStorage.setItem(LKEY,cur); }catch(x){} apply(); }
   /* warm-up af door een vinkje → door naar het programma van de vorige keer (standaard Open Gym), bovenaan de lijst */
-  document.addEventListener('p53-grpdone',function(e){ if(e.detail!=='g0'||cur!=='warmup') return;
+  document.addEventListener('p53-grpdone',function(e){ return; /* uitgeschakeld op vraag van Tom: na afvinken nooit meer vanzelf van tab wisselen */ if(e.detail!=='g0'||cur!=='warmup') return;
     var nx='full'; try{ nx=localStorage.getItem(LKEY)||'full'; }catch(x){} if(!SPLIT[nx]||nx==='warmup') nx='full';
     setTimeout(function(){ set(nx);
       var g=[].filter.call(document.querySelectorAll('#s-d3 .exgrp'),function(x){ return x.offsetParent!==null; })[0];

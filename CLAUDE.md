@@ -248,6 +248,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Keuze in localStorage `fitlog-split` (onbekend = full).
 - `SPLIT`: warmup = g0, full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. De warm-up is een eigen keuze (op vraag van Tom:
   ze hoort bij elk programma) en staat in geen enkel ander programma. Laatst gekozen programma (niet warm-up) in localStorage `fitlog-split-last`.
+  UITGESCHAKELD (op vraag van Tom, 8 okt): na afvinken wisselt de tab nooit meer vanzelf (de `p53-grpdone`-luisteraar keert meteen terug). Vroeger:
   Is de warm-up af door een vinkje (vinkje-handler stuurt event `p53-grpdone` met de groep zodra die groep `grp-done` wordt), dan schakelt de
   dropdown na 700 ms vanzelf naar dat laatste programma (standaard Open Gym) en scrolt zacht naar de eerste groep. g8 alleen bij Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.
   'Start' scrolt naar de eerste zichtbare groepskop.
