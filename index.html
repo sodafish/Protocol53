@@ -4013,7 +4013,8 @@ window.__congrats=function(o){
     if(g.every(function(x){ return UP[x]; })) return 'Upper body';
     if(g.every(function(x){ return LO[x]; })) return 'Lower body';
     return 'Open Gym'; }
-  function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
+  /* programma's van de dag; 'Cardio' niet apart, de minuten staan al in '+ N min cardio' */
+  function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&n!=='Cardio'&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
   /* '17 sets + 20 min cardio' (plus als er kracht én cardio was) */
   function amount(st,mn){ return [st?st+(st===1?' set':' sets'):'',mn?Math.round(mn)+' min cardio':''].filter(Boolean).join(' + '); }
   function render(){
@@ -4036,7 +4037,7 @@ window.__congrats=function(o){
     var box=document.getElementById('calDay');
     if(!sel){ box.innerHTML=cnt?'':'Days you train get a dot.'; return; }
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
-    var pg=progs(o); box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+(pg?pg+' · ':'')+amount(o.sets,o.min);
+    var pg=progs(o); box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+(pg?pg+' · '+amount(o.sets,o.min):'Cardio · '+Math.round(o.min)+' min'); /* alleen cardio: ‘Cardio · 40 min’ */
   }
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
