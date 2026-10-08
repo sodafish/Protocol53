@@ -237,8 +237,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
 - Keuze via tabs (op vraag van Tom, vervangt de dropdown): `#wtabs` (pil met 4 knoppen `role=tab`, `data-split`): Warm-up · Open Gym · EGYM · Cardio,
-  direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 20px`, zodat ze onder de iOS-vervaging bovenaan blijft; z-index 45; ring in `--paper` + een vlak van
-  20 px erboven zodat er niets door schemert; klasse `.stuck` = schaduw). Actieve tab: zelfde pil als de actieve navbar-knop (`--ink` 9% + accentkleur, 600). Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open
+  direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 20px`, zodat ze onder de iOS-vervaging bovenaan blijft; z-index 45; ring in `--paper` + (alleen als `.stuck`) een vlak van
+  20 px erboven zodat er niets door schemert — niet altijd, anders bedekt het de onderkant van 'Start workout'; klasse `.stuck` = schaduw). Actieve tab: zelfde pil als de actieve navbar-knop (`--ink` 9% + accentkleur, 600). Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open
   Gym); de kalender kan ze nog wel tonen. Wisselen terwijl de tabs plakken = tabs blijven op exact dezelfde hoogte, de nieuwe lijst begint eronder (`toList`: natuurlijke plaats gemeten met
   tijdelijk `position:static`; bij een korte lijst krijgt `#s-d3` een `min-height` zodat er tot daar gescrold kan worden, weg zodra je bovenaan bent).
   `window.__wtabsH()` = hoogte van de plakkende tabs; Start, `nextGroup` en het doorschakelen na de warm-up trekken die af bij het scrollen.
