@@ -1088,9 +1088,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
 .wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 20px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
-.wtabs.stuck{box-shadow:0 0 0 8px var(--paper),0 10px 22px -10px rgba(0,0,0,.28);}
-/* geplakt: een effen vlak van de tabs tot helemaal bovenaan (ook achter de statusbalk), zodat er niets meer door schijnt */
-.wtabs.stuck::before{content:"";position:absolute;z-index:-1;left:-24px;right:-24px;top:-400px;bottom:calc(100% + 1px);background:var(--paper);pointer-events:none;}
+.wtabs.stuck{box-shadow:0 0 0 8px var(--paper),0 -20px 0 8px var(--paper),0 10px 22px -10px rgba(0,0,0,.28);}
 .wtabs button{appearance:none;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;flex:1 1 0;min-width:0;min-height:44px;padding:0 .3rem;border:0;border-radius:999px;
   background:transparent;color:var(--muted);font:500 14.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .12s ease;}
 .wtabs button[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--accent);font-weight:600;} /* zelfde pil als de actieve navbar-knop */
