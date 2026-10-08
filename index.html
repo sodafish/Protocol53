@@ -994,7 +994,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pf-f{display:flex;flex-direction:column;gap:.4rem;}
 .pf-form input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;min-height:48px;width:100%;box-sizing:border-box;-webkit-appearance:none;}
 .pf-form input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
-#dob-sheet .gs-msg:empty{display:none;}
+#dobMsg:empty{display:none;}
+.st-page{margin-top:0;}
+.st-page .st-sec{margin-top:2rem;}
+#dobMsg.ok{color:var(--accent);}
 /* felicitaties na End workout */
 .cg{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--paper) 55%,transparent);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;transition:opacity .35s ease;cursor:pointer;}
 .cg.on{opacity:1;}
@@ -1116,7 +1119,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gnav{position:fixed;z-index:60;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:10px;
   padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;}
 .gnav>*{pointer-events:auto;}
-.gnav-pill{display:flex;flex:1;max-width:330px;height:64px;padding:5px;border-radius:32px;gap:4px;}
+.gnav-pill{display:flex;flex:1;max-width:440px;height:64px;padding:5px;border-radius:32px;gap:4px;}
 .gnav-i{flex:1;appearance:none;border:none;cursor:pointer;border-radius:27px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font:600 11px 'Work Sans',system-ui,sans-serif;letter-spacing:.02em;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,color .25s ease,transform .12s ease;}
 .gnav-i[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--accent);}
@@ -1231,7 +1234,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <button class="tab" role="tab" id="t-schema"  aria-controls="p-schema"  aria-selected="true"><span class="label">Strength</span></button>
       <button class="tab" role="tab" id="t-cardio"  aria-controls="p-cardio"  aria-selected="false"><span class="label">Cardio</span></button>
       <button class="tab" role="tab" id="t-voeding" aria-controls="p-voeding" aria-selected="false"><span class="label">Diet</span></button>
-      <button class="tab" role="tab" id="t-kracht"  aria-controls="p-kracht"  aria-selected="false"><span class="label">Info</span></button>
+      <button class="tab" role="tab" id="t-kracht"  aria-controls="p-kracht"  aria-selected="false"><span class="label">Guide</span></button>
     </div>
   </div>
 </nav>
@@ -1781,6 +1784,25 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   </div>
 
 
+  <div class="superhead" id="settings">Settings</div>
+  <div class="section st-page">
+  <form class="pf-form" id="pfForm" novalidate>
+      <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
+      <p class="st-note">Your age shows after Protocol.</p>
+      <p class="gs-msg" id="dobMsg" role="status"></p>
+      <div class="set-act"><span></span><button type="submit" id="dobSave" class="set-save">Save</button></div>
+    </form>
+    <div class="st-sec">
+      <p class="set-lab">Your data</p>
+      <p class="st-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
+      <div class="app-tools">
+        <button type="button" onclick="p53Backup()">Export backup</button>
+        <button type="button" onclick="p53Logout()">Log out</button>
+        <button type="button" id="resetData">Reset data</button>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 </main>
@@ -1804,26 +1826,6 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <ul class="gs-list"></ul>
   <p class="gs-msg" role="status"></p>
 </div>
-<div class="sheet-bg" id="dob-bg" hidden></div>
-<div class="sheet" id="dob-sheet" role="dialog" aria-modal="true" aria-labelledby="dob-t" hidden>
-  <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="dob-t">Settings</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <form class="pf-form" id="pfForm" novalidate>
-    <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
-    <p class="st-note">Your age shows after Protocol.</p>
-    <p class="gs-msg" id="dobMsg" role="status"></p>
-    <div class="set-act"><span></span><button type="submit" id="dobSave" class="set-save">Save</button></div>
-  </form>
-  <div class="st-sec">
-    <p class="set-lab">Your data</p>
-    <p class="st-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
-    <div class="app-tools">
-      <button type="button" onclick="p53Backup()">Export backup</button>
-      <button type="button" onclick="p53Logout()">Log out</button>
-      <button type="button" id="resetData">Reset data</button>
-    </div>
-  </div>
-</div>
 <div class="sheet-bg top" id="set-bg" hidden></div>
 <div class="sheet top" id="set-sheet" role="dialog" aria-modal="true" aria-labelledby="set-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
@@ -1835,24 +1837,14 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <p class="set-prev" id="setPrev"></p>
   <div class="set-act"><button type="button" id="setReset" class="set-reset">Reset to default</button><button type="button" id="setSave" class="set-save">Save</button></div>
 </div>
-<div class="sheet-bg" id="more-bg" hidden></div>
-<div class="sheet more-sheet" id="more-sheet" role="dialog" aria-modal="true" aria-labelledby="more-t" hidden>
-  <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="more-t">More</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <ul class="more-list">
-    <li hidden><button type="button" data-view="cardio"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg></span><span class="mt"><b>Cardio</b><small>Zone 2, walking, VO2max</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-    <li><button type="button" data-view="voeding"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg></span><span class="mt"><b>Diet</b><small>Food list, protein, measuring</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-    <li><button type="button" data-view="kracht"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></span><span class="mt"><b>Info</b><small>Intensity, tempo, sleep</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-    <li><button type="button" id="moreProfile"><span class="mi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span><span class="mt"><b>Settings</b><small>Date of birth, backup, data</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></li>
-  </ul>
-</div>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg><span>Workout</span></button>
     <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M400-80v-280h-80v-240q0-33 23.5-56.5T400-680h160q33 0 56.5 23.5T640-600v240h-80v280H400Zm80-640q-33 0-56.5-23.5T400-800q0-33 23.5-56.5T480-880q33 0 56.5 23.5T560-800q0 33-23.5 56.5T480-720Z"/></svg><span>Statistics</span></button>
+    <button type="button" class="gnav-i" data-view="voeding" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M281.5-201.5Q200-283 200-400q0-100 61.5-176.5T420-674q-26-5-50-14.5T327-717q-28-29-37.5-67t-9.5-78v-18q86-2 148 56.5T489-680q14-43 39.5-80t57.5-69q9-9 21-9t21 9q9 9 9 21t-9 21q-25 25-45 54t-34 61q94 24 152.5 99.5T760-400q0 117-81.5 198.5T480-120q-117 0-198.5-81.5ZM636-244q64-64 64-156t-64-156q-64-64-156-64t-156 64q-64 64-64 156t64 156q64 64 156 64t156-64ZM480-400Z"/></svg><span>Diet</span></button>
+    <button type="button" class="gnav-i" data-view="kracht" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M560-574v-48q33-14 67.5-21t72.5-7q26 0 51 4t49 10v44q-24-9-48.5-13.5T700-610q-38 0-73 9.5T560-574Zm0 220v-49q33-13.5 67.5-20.25T700-430q26 0 51 4t49 10v44q-24-9-48.5-13.5T700-390q-38 0-73 9t-67 27Zm0-110v-48q33-14 67.5-21t72.5-7q26 0 51 4t49 10v44q-24-9-48.5-13.5T700-500q-38 0-73 9.5T560-464ZM248-300q53.57 0 104.28 12.5Q403-275 452-250v-427q-45-30-97.62-46.5Q301.76-740 248-740q-38 0-74.5 9.5T100-707v434q31-14 70.5-20.5T248-300Zm264 50q50-25 98-37.5T712-300q38 0 78.5 6t69.5 16v-429q-34-17-71.82-25-37.82-8-76.18-8-54 0-104.5 16.5T512-677v427Zm-30 90q-51-38-111-58.5T248-239q-36.54 0-71.77 9T106-208q-23.1 11-44.55-3Q40-225 40-251v-463q0-15 7-27.5T68-761q42-20 87.39-29.5 45.4-9.5 92.61-9.5 63 0 122.5 17T482-731q51-35 109.5-52T712-800q46.87 0 91.93 9.5Q849-781 891-761q14 7 21.5 19.5T920-714v463q0 27.89-22.5 42.45Q875-194 853-208q-34-14-69.23-22.5Q748.54-239 712-239q-63 0-121 21t-109 58ZM276-489Z"/></svg><span>Guide</span></button>
   </div>
-  <button type="button" class="gnav-more glass" id="gnavMore" aria-haspopup="dialog" aria-label="More pages"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5.5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="18.5" r="1.9"/></svg></button>
 </nav>
 
 
@@ -3625,9 +3617,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 /* ---- glazen navbar: Workout / Progress + meer-blad (Cardio, Diet, Info) ---- */
 (function(){
   var nav=document.querySelector('.gnav'); if(!nav) return;
-  var items=[].slice.call(nav.querySelectorAll('.gnav-i')), moreBtn=document.getElementById('gnavMore');
-  var bg=document.getElementById('more-bg'), sh=document.getElementById('more-sheet'), title=document.getElementById('pgTitle');
-  var NAMES={workout:'Workout',progress:'Statistics',cardio:'Cardio',voeding:'Diet',kracht:'Info'};
+  var items=[].slice.call(nav.querySelectorAll('.gnav-i')), title=document.getElementById('pgTitle');
+  var NAMES={workout:'Workout',progress:'Statistics',cardio:'Cardio',voeding:'Diet',kracht:'Guide'};
   var TAB={cardio:'t-cardio',voeding:'t-voeding',kracht:'t-kracht'};
   var view='workout';
   function current(){
@@ -3638,14 +3629,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function paint(v){
     view=v;
     items.forEach(function(b){ b.setAttribute('aria-selected',b.dataset.view===v?'true':'false'); });
-    moreBtn.classList.toggle('on',!!TAB[v]);
-    sh.querySelectorAll('[data-view]').forEach(function(b){ if(b.dataset.view===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
     if(title) title.textContent=NAMES[v]||'';
   }
   /* terug naar Workout = verder waar je was (scrollpositie onthouden); andere pagina's beginnen bovenaan */
   window.__woY=0;
   function go(v){
-    if(v===view){ window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(v===view){ window.scrollTo({top:typeof arguments[1]==='function'?arguments[1]():0,behavior:'smooth'}); return; }
     if(view==='workout') window.__woY=window.scrollY;
     var main=document.getElementById(TAB[v]||'t-schema');
     var mainActive=main.getAttribute('aria-selected')==='true';
@@ -3653,8 +3642,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     if(!TAB[v] && window.__ksub){ var want=v==='progress'?1:0; setTimeout(function(){ ksub(want); }, mainActive?0:150); }
     paint(v);
     /* altijd bovenaan beginnen, ook als het wisselen van tab zelf nog scrolt */
-    var y=v==='workout'?(window.__woY||0):0;
-    function place(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
+    var y=v==='workout'?(window.__woY||0):0, yf=typeof arguments[1]==='function'?arguments[1]:null;
+    function place(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,yf?yf():y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
     place(); setTimeout(place,200); setTimeout(place,450);
   }
   function toTop(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,0); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
@@ -3662,16 +3651,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   var ksub=window.__ksub||function(){};
   window.__ksub=function(i){ ksub(i); if(document.getElementById('t-schema').getAttribute('aria-selected')==='true') paint(i===1?'progress':'workout'); };
   items.forEach(function(b){ b.addEventListener('click',function(){ go(b.dataset.view); }); });
-  /* meer-blad */
-  var open=false, last=null;
-  function openMore(){ open=true; last=document.activeElement; bg.hidden=false; sh.hidden=false;
-    requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
-  function closeMore(){ if(!open) return; open=false; bg.classList.remove('on'); sh.classList.remove('on');
-    setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); if(last) last.focus({preventScroll:true}); }
-  moreBtn.addEventListener('click',openMore);
-  bg.addEventListener('click',closeMore); sh.querySelector('.sheet-x').addEventListener('click',closeMore);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeMore(); });
-  sh.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ closeMore(); var v=b.dataset.view; setTimeout(function(){ if(v===view) window.scrollTo({top:0}); else go(v); },180); }); });
+  window.__go=go;
   paint(current());
 })();
 </script>
@@ -3911,31 +3891,27 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function age(d){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); if(!m) return null;
     var now=new Date(), a=now.getFullYear()-(+m[1]); if(now.getMonth()+1<+m[2]||(now.getMonth()+1===+m[2]&&now.getDate()<+m[3])) a--;
     return a>=10&&a<=110?a:null; }
-  function paint(){ var a=age(dob), n=a==null?53:a; if(num) num.textContent=n; }
+  function paint(){ var a=age(dob), n=a==null?53:a; if(num) num.textContent=n; if(typeof fill==='function') fill(); }
   window.__p53profile=function(){ return {dob:dob,age:age(dob)}; };
   function doc(){ var d={}; if(dob) d.dob=dob; return d; }
   function store(save){ try{ if(dob) localStorage.setItem(KEY,dob); else localStorage.removeItem(KEY); localStorage.removeItem(PKEY); }catch(e){} paint();
     if(save && col) col.doc('profile').set(doc()).catch(function(){}); }
-  var btn=document.getElementById('ageBtn'), bg=document.getElementById('dob-bg'), sh=document.getElementById('dob-sheet'), msg=document.getElementById('dobMsg'), open=false;
+  var btn=document.getElementById('ageBtn'), msg=document.getElementById('dobMsg'), mt=null;
   function meta(){ var u=window.__p53user; return u&&u.user_metadata||{}; }
-  function openSheet(){ open=true; msg.textContent='';
-    inp.max=new Date().toISOString().slice(0,10);
-    inp.value=dob||meta().dob||((new Date().getFullYear()-53)+'-01-01');
-    bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); }
-  function closeSheet(){ if(!open) return; open=false; bg.classList.remove('on'); sh.classList.remove('on');
-    setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); }
+  /* instellingen staan onderaan Guide: invulveld vullen; tik op de leeftijd = naar Guide › Settings */
+  function fill(){ if(!inp||document.activeElement===inp) return; inp.max=new Date().toISOString().slice(0,10);
+    inp.value=dob||meta().dob||''; }
+  function openSheet(){ fill(); var el=document.getElementById('settings');
+    var y=function(){ return el?Math.max(0,el.getBoundingClientRect().top+window.scrollY-16):0; };
+    if(window.__go) window.__go('kracht',y); }
   window.__p53profileOpen=openSheet;
-  if(btn&&sh){
-    btn.addEventListener('click',openSheet);
-    bg.addEventListener('click',closeSheet); sh.querySelector('.sheet-x').addEventListener('click',closeSheet);
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) closeSheet(); });
-    document.getElementById('pfForm').addEventListener('submit',function(e){ e.preventDefault();
-      var v=inp.value;
+  if(btn) btn.addEventListener('click',openSheet);
+  var form=document.getElementById('pfForm');
+  if(form) form.addEventListener('submit',function(e){ e.preventDefault();
+      var v=inp.value; msg.classList.remove('ok');
       if(age(v)==null){ msg.textContent='Enter a valid date of birth.'; inp.focus(); return; }
-      dob=v; store(true); closeSheet(); });
-  }
-  var mp=document.getElementById('moreProfile');
-  if(mp) mp.addEventListener('click',function(){ var x=document.querySelector('#more-sheet .sheet-x'); if(x) x.click(); setTimeout(openSheet,250); });
+      dob=v; store(true); inp.blur(); msg.textContent='Saved.'; msg.classList.add('ok');
+      clearTimeout(mt); mt=setTimeout(function(){ msg.textContent=''; msg.classList.remove('ok'); },2500); });
   /* uit de aanmelding: wat nog ontbreekt aanvullen */
   function fromUser(u){ var m=u&&u.user_metadata; if(!m||!got) return; if(m.dob&&!dob){ dob=m.dob; store(true); } }
   paint();
