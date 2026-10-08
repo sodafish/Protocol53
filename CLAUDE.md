@@ -225,7 +225,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
-- Eigen menu (geen native `<select>`): `#splitPop` in de volgorde Full body, EGYM | Cardio | Upper body, Lower body (op vraag van Tom; `|` = scheidingslijn `hr.sm-sep`) (`menuitemradio`, vinkje in accentkleur).
+- Eigen menu (geen native `<select>`): `#splitPop` in de volgorde Open Gym (intern nog `full`, vroeger 'Full body'), EGYM | Cardio | Upper body, Lower body (op vraag van Tom; `|` = scheidingslijn `hr.sm-sep`) (`menuitemradio`, vinkje in accentkleur).
   Keuze in localStorage `fitlog-split` (onbekend = full).
 - `SPLIT`: full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. Warm-up (g0) zichtbaar behalve bij Cardio; g8 alleen bij
   Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.
@@ -249,7 +249,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Eigen EGYM-beelden van Tom (`EGI`, `img/egym/<naam>.jpg`, 640 px op wit, één beeld met bewegingspijl, bron 'Image: EGYM', klasse `.sheet-eg`)
   winnen van video/animatie/foto's; voor 14 toestellen (niet voor Butterfly, Butterfly Reverse, Biceps Curl, Squat: die houden de alias). Circuit-logica (`paintChecks`): niets doorstrepen, kop pas af als alle actieve oefeningen gedaan zijn.
   Mixen kan: EGYM afvinken, dan de dropdown op Full body zetten en losse oefeningen afvinken in dezelfde workout. Kalender (`prog()`): enkel g10 =
-  'EGYM', g10 + andere krachtgroepen = 'EGYM + Full body' (of Upper/Lower).
+  'EGYM', g10 + andere krachtgroepen = 'EGYM + Open Gym' (of Upper/Lower). De kalender noemt een gemengde krachtworkout 'Open Gym' (vroeger 'Full body').
 
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–7)
 - Structuur ligt vast: Warm-up + 7 groepen (6 à 7 oefeningen per sessie houdt de focus): 1 Quads (vroeger 'Front legs'), 2 Chest,
