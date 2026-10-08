@@ -1458,10 +1458,6 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
-      <section class="plist" id="plist" aria-label="Progress per exercise" hidden>
-        <h2 class="prog-t">Strength progress</h2>
-        <ol class="pl-list" id="plList"></ol>
-      </section>
       <section class="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">Calendar</h2>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -1469,6 +1465,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
           <button type="button" class="cal-nav" data-m="1" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-day" id="calDay" aria-live="polite"></div>
+      </section>
+      <section class="plist" id="plist" aria-label="Progress per exercise" hidden>
+        <h2 class="prog-t">Strength progress</h2>
+        <ol class="pl-list" id="plList"></ol>
       </section>
       <!-- Active exercises: verborgen, progressie staat nu onder de uitleg (i-knop). Code blijft (o.a. #pe-sheet). -->
       <div class="prog" id="prog" hidden>
@@ -3958,7 +3958,7 @@ window.__congrats=function(o){
       if(!li.classList.contains('exr')||li.dataset.grp==='g0'||li.dataset.grp==='g8') return; /* geen warm-up en cardio */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]'), rows='';
-      [].forEach.call(ins,function(inp){ var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
+      [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */ var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
         var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pts[0], d=last.v-first.v;
         var lab=ins.length>1?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'';
         rows+='<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+(lab?'<small>'+esc(lab)+'</small>':'')+'</span>'+

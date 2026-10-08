@@ -95,7 +95,7 @@ Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
-- Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, tussen de spierlijst en de kalender, eigen script vóór het kalenderscript; op vraag van Tom): elke
+- Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, onderaan na de kalender (op vraag van Tom), alleen velden in kg (geen reps/sec), eigen script vóór het kalenderscript; op vraag van Tom): elke
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
   rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en, vanaf twee metingen, het verschil eerste → laatste (`+5 kg`, accent bij
   stijging). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
