@@ -297,6 +297,10 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Omdat alles per oefeningsleutel wordt bewaard, blijft de geschiedenis van een uitgezette oefening
   bestaan: Active exercises toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
+- Op vraag van Tom (8 okt): spiergroepen (g1–g7) worden NIET meer doorgestreept na één oefening (geen `grp-done`/`grp-skip`), en er is geen automatisch
+  doorscrollen naar de volgende groep meer (`nextGroup` doet niets). Alleen de warm-up (g0) en EGYM (g10, als alles af is) krijgen nog `grp-done`;
+  enkel de warm-up streept de overige rijen door. Tik op een tab (Workout én Statistics) = wisselen + zacht naar boven (`window.__smoothTop`).
+  Wat hieronder over doorstrepen/doorscrollen staat, is de oude werking.
 - Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen. Eén oefening gedaan = groep af: kop doorgestreept en de andere
   oefeningen van die groep krijgen `grp-skip` (doorgestreept, 40%, blijven aanklikbaar). Opwarming (op vraag van Tom: cardio óf mobility):
   af zodra één oefening onder 'Cardio' gedaan is, of alle actieve oefeningen onder 'Mobility & activation' (`data-sub`); dan worden de
