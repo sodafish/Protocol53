@@ -225,7 +225,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
-- Eigen menu (geen native `<select>`): `#splitPop` met Full body / Upper body / Lower body / EGYM / Cardio (`menuitemradio`, vinkje in accentkleur).
+- Eigen menu (geen native `<select>`): `#splitPop` in de volgorde Full body, EGYM | Cardio | Upper body, Lower body (op vraag van Tom; `|` = scheidingslijn `hr.sm-sep`) (`menuitemradio`, vinkje in accentkleur).
   Keuze in localStorage `fitlog-split` (onbekend = full).
 - `SPLIT`: full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. Warm-up (g0) zichtbaar behalve bij Cardio; g8 alleen bij
   Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.

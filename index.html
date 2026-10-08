@@ -901,6 +901,7 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
   border:1px solid var(--line);box-shadow:0 14px 34px rgba(30,20,12,.16);display:flex;flex-direction:column;
   opacity:0;transform:translateY(-4px) scale(.98);transform-origin:top right;transition:opacity .16s ease,transform .16s ease;}
 .split-pop[hidden]{display:none;}
+.split-pop .sm-sep{border:0;border-top:1px solid var(--line);margin:.3rem .5rem;}
 .split-pop.on{opacity:1;transform:none;}
 .split-pop button{appearance:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:44px;padding:0 .8rem;
   border:0;border-radius:10px;background:transparent;color:var(--ink);font:500 14.5px 'Work Sans',system-ui,sans-serif;text-align:left;-webkit-tap-highlight-color:transparent;}
@@ -1199,10 +1200,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
         <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Full body</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="split-pop" id="splitPop" role="menu" hidden>
           <button type="button" role="menuitemradio" data-split="full"><span>Full body</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-split="egym"><span>EGYM</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <hr class="sm-sep" role="separator">
+          <button type="button" role="menuitemradio" data-split="cardio"><span>Cardio</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <hr class="sm-sep" role="separator">
           <button type="button" role="menuitemradio" data-split="upper"><span>Upper body</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <button type="button" role="menuitemradio" data-split="lower"><span>Lower body</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
-          <button type="button" role="menuitemradio" data-split="egym"><span>EGYM</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
-          <button type="button" role="menuitemradio" data-split="cardio"><span>Cardio</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
         </div>
       </div>
     </div>
