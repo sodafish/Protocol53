@@ -243,6 +243,13 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
+- Workout-blok (op vraag van Tom, 9 okt, naar een voorbeeld met een navbar + balk eronder): `#wtabs` (klasse `.wtabs wdock`) = de tabs (`.wd-tabs`,
+  role=tablist, eigen witte pil met afgeronde onderkant) + daaronder een balk `.wd-go` in één afgerond, plakkend blok. Vóór de start: balk in
+  accentkleur (verloop) met 'Start workout' (`.wd-btn.wo-btn`, zelfde handler als vroeger). Tijdens een workout: balk in `--ink` met
+  'Stop workout' + tijd (`#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
+  `#noteJump` staat rechts in de balk (`.wd-note`, 38 px). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
+  tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet nu ook 'Stop workout' (confirm 'Stop workout?')
+  en is verborgen op de Workout-pagina (`body[data-view=workout]`, gezet door de navbar-`paint`); op andere pagina's blijft ze.
 - Keuze via tabs (op vraag van Tom, vervangt de dropdown): `#wtabs` (pil met 4 knoppen `role=tab`, `data-split`): Warm-up · Open Gym · EGYM · Cardio,
   direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 8px`, zelfde 8 px als de `--paper`-ring rondom; op vraag van Tom terug van 20 px; z-index 45; ring in `--paper` + (alleen als `.stuck`) een vlak van
   20 px erboven zodat er niets door schemert — niet altijd, anders bedekt het de onderkant van 'Start workout'; klasse `.stuck` = schaduw). Actieve tab: zelfde pil als de actieve navbar-knop (`--ink` 9% + accentkleur, 600). Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open

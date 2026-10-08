@@ -1217,6 +1217,26 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .sheet-x:focus-visible,.prog-edit:focus-visible,.pe-del:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .nut{display:block;margin-top:.2rem;font-family:'Work Sans',system-ui,sans-serif;font-size:.78rem;font-weight:500;line-height:1.4;color:var(--muted);font-variant-numeric:tabular-nums;}
 .nut i{font-style:normal;opacity:.75;}
+
+/* ---- Workout: tabs + Start/Stop workout in één blok (op vraag van Tom) ---- */
+#s-d3 .tools-row[hidden]{display:none;}
+.wtabs.wdock{flex-direction:column;gap:0;padding:0;border:none;border-radius:26px;overflow:hidden;
+  background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));}
+.wtabs.wdock.on{background:var(--ink);}
+.wd-tabs{display:flex;gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
+.wd-go{display:flex;align-items:center;min-height:48px;padding:0 6px 0 4px;color:var(--paper);}
+.wtabs.wdock.on .wd-go{color:var(--paper);}
+.wtabs .wd-go button.wd-btn{flex:1;justify-content:flex-start;display:inline-flex;align-items:center;gap:.6rem;min-height:48px;padding:0 .9rem;border-radius:0;
+  background:transparent;color:inherit;font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;}
+.wtabs .wd-go button.wd-btn[hidden]{display:none;}
+.wtabs .wd-go button.wd-btn:active{transform:none;opacity:.75;}
+.wd-stop svg{color:var(--accent);}
+.wd-t{margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:500;opacity:.85;padding-right:.2rem;}
+.wd-t:empty{display:none;}
+.wtabs .wd-go button.wd-note{flex:none;width:38px;height:38px;min-height:0;padding:0;border:1.5px solid color-mix(in srgb,currentColor 45%,transparent);border-radius:50%;background:transparent;color:inherit;display:inline-flex;align-items:center;justify-content:center;}
+.wtabs .wd-go button.wd-note[hidden]{display:none;}
+.wtabs .wd-go button.wd-note svg{color:inherit;width:19px;height:19px;}
+body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workout al in het blok bovenaan */
 </style>
 
 <header class="top">
@@ -1251,9 +1271,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   </div>
 
   <div class="pane" id="s-d3">
-    <div class="tools-row">
-      <button type="button" class="reset reset-chk reset-top wo-btn" data-reset="s-d3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Start workout</span></button>
-      <button type="button" class="note-jump" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M180-180h400v-200h200v-400H180v600Zm0 60q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h600q24.75 0 42.38 17.62Q840-804.75 840-780v420L600-120H180Zm120-300v-60h170v60H300Zm0-160v-60h360v60H300ZM180-180v-600 600Z"/></svg></button>
+    <div class="tools-row" hidden>
       <div class="split-sel" hidden>
         <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Open Gym</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="split-pop" id="splitPop" role="menu" hidden>
@@ -1269,8 +1287,13 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
         </div>
       </div>
     </div>
-    <div class="wtabs" id="wtabs" role="tablist" aria-label="Workout type">
-      <button type="button" role="tab" data-split="warmup">Warm-up</button><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">EGYM</button><button type="button" role="tab" data-split="cardio">Cardio</button>
+    <div class="wtabs wdock" id="wtabs">
+      <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="warmup">Warm-up</button><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">EGYM</button><button type="button" role="tab" data-split="cardio">Cardio</button></div>
+      <div class="wd-go">
+        <button type="button" class="wd-btn wo-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Start workout</span></button>
+        <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>Stop workout</span><span class="wd-t" id="woStopT"></span></button>
+        <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M180-180h400v-200h200v-400H180v600Zm0 60q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h600q24.75 0 42.38 17.62Q840-804.75 840-780v420L600-120H180Zm120-300v-60h170v60H300Zm0-160v-60h360v60H300ZM180-180v-600 600Z"/></svg></button>
+      </div>
     </div>
     <ol class="exl">
       <li class="exgrp" data-grp="g0"><span class="grp-t">Warm-up</span><button type="button" class="grp-edit" data-grp="g0" aria-label="Choose exercises for Warm-up"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></li>
@@ -1837,7 +1860,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <p class="set-prev" id="setPrev"></p>
   <div class="set-act"><button type="button" id="setReset" class="set-reset">Reset to default</button><button type="button" id="setSave" class="set-save">Save</button></div>
 </div>
-<button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
+<button type="button" class="wo-end" id="woEnd" hidden aria-label="Stop workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">Stop workout</span><span class="wo-end-t" id="woEndT"></span></button>
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg><span>Workout</span></button>
@@ -2021,7 +2044,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function woFmt(ms){ var t=Math.max(0,Math.floor(ms/1000)), h=Math.floor(t/3600), m=Math.floor(t%3600/60), x=t%60;
     return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+x).slice(-2); }
   /* tijd staat in de zwevende End-knop rechtsonder (niet meer in de navbar) */
-  function woPaintTime(){ var t=document.getElementById('woEndT'); if(t) t.textContent=woStart?woFmt(Date.now()-woStart):''; }
+  function woPaintTime(){ var v=woStart?woFmt(Date.now()-woStart):''; ['woEndT','woStopT'].forEach(function(id){ var t=document.getElementById(id); if(t) t.textContent=v; }); }
   function woRun(on){
     if(on&&!woStart){ woStart=Date.now(); woSave(); }
     if(!on){ woStart=0; woSave(); }
@@ -2034,7 +2057,9 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   /* bovenaan altijd 'Start workout'; tijdens een workout uitgegrijsd. Rechtsonder dan een zwevende 'End'-knop met de tijd. */
   function paintWoBtns(){
     var on=woActive(), top=document.querySelector('#s-d3 .wo-btn'), fl=document.getElementById('woEnd');
-    if(top){ top.setAttribute('aria-disabled',on?'true':'false'); top.tabIndex=on?-1:0; }
+    if(top) top.hidden=on;
+    var stp=document.getElementById('woStop'); if(stp) stp.hidden=!on;
+    var dk=document.getElementById('wtabs'); if(dk) dk.classList.toggle('on',on);
     if(fl) fl.hidden=!on; document.body.classList.toggle('wo-on',on);
   }
   window.__paintWoBtns=paintWoBtns;
@@ -2049,13 +2074,14 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       var g=[].filter.call(woPane.querySelectorAll('.exgrp'),function(x){ return x.offsetParent!==null; })[0]; window.scrollTo({top:g?g.getBoundingClientRect().top+window.scrollY+2-(window.__wtabsH?window.__wtabsH():0):0,behavior:smooth});
     });
   });
-  var woEnd=document.getElementById('woEnd');
+  var woEnd=document.getElementById('woEnd'), woStop=document.getElementById('woStop');
+  if(woStop&&woEnd) woStop.addEventListener('click',function(){ woEnd.click(); });
   if(woEnd) woEnd.addEventListener('click',function(){
     var dur=woStart?Math.max(1,Math.round((Date.now()-woStart)/60000)):null;
     /* niets afgevinkt: gewoon stoppen, zonder vraag en zonder vuurwerk */
     var any=false; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) any=true; });
     if(!any){ woRun(false); paintWoBtns(); window.__woY=0; window.scrollTo({top:0,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); return; } /* en terug naar boven */
-    p53Confirm({title:'End workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'Your ticks are cleared; everything you ticked stays saved.',ok:'End workout'}).then(function(y){
+    p53Confirm({title:'Stop workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'Your ticks are cleared; everything you ticked stays saved.',ok:'Stop workout'}).then(function(y){
       if(!y) return;
       var _n=0, _str=0; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)){ _n++; if(!/^c-/.test(k)) _str++; } });
       if(woStart&&window.__sessAdd) window.__sessAdd(woStart,Date.now(),_n);
@@ -3630,6 +3656,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     view=v;
     items.forEach(function(b){ b.setAttribute('aria-selected',b.dataset.view===v?'true':'false'); });
     if(title) title.textContent=NAMES[v]||'';
+    document.body.dataset.view=v;
   }
   /* terug naar Workout = verder waar je was (scrollpositie onthouden); andere pagina's beginnen bovenaan */
   window.__woY=0;
