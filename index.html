@@ -944,7 +944,16 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .cal{margin:3rem 0 0;}
 .cal-day b{display:block;}
 .cal-day .cal-l{display:block;margin-top:.15rem;}
-.plist{margin:3rem 0 0;}
+.plist{margin:0;}
+.stabs{margin:0 0 1.2rem;}
+#s-stats .sv[hidden]{display:none!important;}
+#s-stats .cal{margin:0;}
+#s-stats .cal>.prog-t,#s-stats .plist>.prog-t{display:none;} /* de tab zegt het al */
+.pl-empty{margin:.4rem 0 0;font-size:14px;color:var(--muted);}
+/* periode (Last/Week/Month/All) als tekst-tabs met onderlijn, zodat ze niet lijken op de pil-tabs erboven */
+.stats>.sv>.stats-per{display:flex;gap:1.5rem;justify-content:flex-start;border-bottom:1px solid var(--line);}
+.stats>.sv>.stats-per button{flex:none;min-height:40px;padding:0 .1rem;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-weight:600;font-size:14px;}
+.stats>.sv>.stats-per button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--accent);}
 .pl-list{list-style:none;margin:0;padding:0;}
 .pl-list .pl-h{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:1.2rem 0 .4rem;border-bottom:1px solid var(--line);}
 .pl-list .pl-h:first-child{padding-top:.2rem;}
@@ -1467,14 +1476,19 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   </div>
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
+    <div class="wtabs stabs" id="stabs" role="tablist" aria-label="Statistics">
+      <button type="button" role="tab" data-sv="body" aria-selected="true">Muscles</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button><button type="button" role="tab" data-sv="prog" aria-selected="false">Progress</button>
+    </div>
     <section class="stats" aria-label="Progress">
+      <div class="sv" data-sv="body">
       <div class="stats-per" role="group" aria-label="Period">
         <button type="button" data-d="dag">Last</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="alles">All</button>
       </div>
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
-      <section class="cal" id="cal" aria-label="Workout calendar">
+      </div>
+      <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">Calendar</h2>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
           <div class="cal-title"><b id="calMonth"></b><span id="calSum"></span></div>
@@ -1482,10 +1496,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-day" id="calDay" aria-live="polite"></div>
       </section>
+      <div class="sv" data-sv="prog"><p class="pl-empty" id="plEmpty">No weights recorded yet. Tick off an exercise with a weight and it shows up here.</p>
       <section class="plist" id="plist" aria-label="Progress per exercise" hidden>
         <h2 class="prog-t">Strength progress</h2>
         <ol class="pl-list" id="plList"></ol>
       </section>
+      </div>
       <!-- Active exercises: verborgen, progressie staat nu onder de uitleg (i-knop). Code blijft (o.a. #pe-sheet). -->
       <div class="prog" id="prog" hidden>
         <h2 class="prog-t">Active exercises</h2>
@@ -2039,7 +2055,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       paintChecks(); saveChecksLocal();
       window.__woY=0; /* na End workout begint Workout weer bovenaan */
       /* altijd naar Statistics, bovenaan (op vraag van Tom) */
-      if(window.__statsPer) window.__statsPer('dag'); var cov=document.querySelector('.gnav-i[data-view="progress"]'); if(cov) cov.click();
+      if(window.__statsPer) window.__statsPer('dag'); if(window.__statsView) window.__statsView('body'); var cov=document.querySelector('.gnav-i[data-view="progress"]'); if(cov) cov.click();
       if(window.__congrats) setTimeout(function(){ window.__congrats({min:dur,n:_n}); },350);
     });
   });
@@ -3979,6 +3995,26 @@ window.__congrats=function(o){
   el.addEventListener('click',close); setTimeout(close,4500);
 };
 
+/* ---- tabs bovenaan Statistics: Muscles (lichaam + spierlijst) · Calendar · Progress (gewichten). Zelfde pil als op Workout. ---- */
+(function(){
+  var tabs=document.getElementById('stabs'); if(!tabs) return;
+  var KEY='fitlog-stats-view', cur='body'; try{ cur=localStorage.getItem(KEY)||'body'; }catch(e){} if(!/^(body|cal|prog)$/.test(cur)) cur='body';
+  function apply(){ tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.sv===cur?'true':'false'); });
+    document.querySelectorAll('#s-stats .sv').forEach(function(x){ x.hidden=x.dataset.sv!==cur; }); }
+  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} apply(); }
+  window.__statsView=function(v){ set(v); };
+  function keep(wasStuck){ var pane=tabs.parentElement, h=document.documentElement;
+    if(!wasStuck){ pane.style.minHeight=''; return; }
+    var st=parseFloat(getComputedStyle(tabs).top)||0; tabs.style.position='static'; var nat=tabs.getBoundingClientRect().top+window.scrollY; tabs.style.position='';
+    var y=Math.max(0,nat-st); pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY);
+    if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
+    h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
+  tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.sv===cur) return; var stuck=tabs.classList.contains('stuck'); set(b.dataset.sv); keep(stuck);
+    if(window.__renderCal&&cur==='cal') window.__renderCal(); }); });
+  window.addEventListener('scroll',function(){ if(!tabs.offsetParent) return; if(window.scrollY<2) tabs.parentElement.style.minHeight='';
+    var t=tabs.getBoundingClientRect().top, st=parseFloat(getComputedStyle(tabs).top)||0; tabs.classList.toggle('stuck',window.scrollY>0&&t<=st+.5); },{passive:true});
+  apply();
+})();
 /* ---- Progress (Statistics, tussen spieren en kalender): elke oefening met minstens één meting, per groep in workoutvolgorde,
    met de laatste waarde en het verschil eerste → laatste meting; tik = uitleg + grafiek (zoals de oog-knop) ---- */
 (function(){
@@ -4002,7 +4038,7 @@ window.__congrats=function(o){
       if(grp){ var t=grp.querySelector('.grp-t'); html+='<li class="pl-h" aria-hidden="true">'+esc(t?t.firstChild.textContent.trim():'')+'</li>'; grp=null; }
       html+=rows; n++;
     });
-    list.innerHTML=html; sec.hidden=!n;
+    list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
   }
   list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.open(b.dataset.n,b); });
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
