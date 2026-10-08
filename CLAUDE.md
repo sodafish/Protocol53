@@ -73,6 +73,10 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   Leeftijd herberekend bij laden en bij terugkeren naar de app.
 - Calorieën, geslacht, lengte en gewicht zijn op vraag van Tom weer weggehaald (niet opnieuw toevoegen zonder vraag).
 
+## Diet
+- Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ 100 g</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
+  ranges bij groepen zoals vette vis/noten; rauw/gekookt/droog/poeder tussen haakjes). Nieuwe voedingsrij: zo'n regel erbij.
+
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
   en **Statistics** (vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
