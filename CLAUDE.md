@@ -119,7 +119,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
   vandaag in accentkleur, bovenaan 'N workouts · N sets' (sets van die maand). Tik op een dag = eronder 'Dag datum · Programma · N sets' (som van de sets van elke oefening
-  die dag, één keer per oefening). Programma (`prog()` in het kalenderscript) wordt per workout afgeleid uit de groepen met een meting: enkel g8 = Cardio,
+  die dag, één keer per oefening). Programma (`prog()` in het kalenderscript) wordt per workout afgeleid uit de groepen met een meting: g10 = EGYM (+ rest), enkel g8 = Cardio,
   enkel g2/g4/g5/g7 = Upper body, enkel g1/g3/g6 = Lower body, anders Full body; meerdere workouts op één dag = 'Upper body + Cardio'. Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Geen duur, oefeningenlijst of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
 - Lichaamstekening zit in `drawBody()` (armen langs het lichaam, viewBox 28 0 144 ~400; het lichaam wordt verticaal
@@ -220,14 +220,14 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Omlaag vegen sluit een blad (onderaan `index.html`, bij de scroll-lock): vanaf grip/titel altijd, op de inhoud alleen als die
   bovenaan staat; blad + achtergrond volgen de vinger, los na > 30% hoogte (max 140 px) of snelle veeg = klik op `.sheet-x`, anders terugveren.
 
-## Full / Upper / Lower / Cardio (dropdown naast Start)
+## Full / Upper / Lower / EGYM / Cardio (dropdown naast Start)
 - Bovenaan Workout (`.tools-row`): links 'Start' (`.wo-btn`, play-icoon; label kort 'Start' zodat alles op één lijn past), meteen rechts
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
-- Eigen menu (geen native `<select>`): `#splitPop` met Full body / Upper body / Lower body / Cardio (`menuitemradio`, vinkje in accentkleur).
+- Eigen menu (geen native `<select>`): `#splitPop` met Full body / Upper body / Lower body / EGYM / Cardio (`menuitemradio`, vinkje in accentkleur).
   Keuze in localStorage `fitlog-split` (onbekend = full).
-- `SPLIT`: full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, cardio = g8. Warm-up (g0) zichtbaar behalve bij Cardio; g8 alleen bij
+- `SPLIT`: full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. Warm-up (g0) zichtbaar behalve bij Cardio; g8 alleen bij
   Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.
   'Start' scrolt naar de eerste zichtbare groepskop.
 - Groep 8 'Cardio' (onderaan in `#s-d3`, kop zonder nummer, met potlood/keuzeblad zoals de andere groepen, geen uitleg-regel):
@@ -240,6 +240,15 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Telt NIET in Coverage (spieren: `events()` slaat `w0-` en `c-` over); de kalender telt cardio als minuten i.p.v. sets: '17 sets + 20 min cardio' (plus als er
   kracht én cardio was; `amount()`), per dag en per maand. Een cardio-oefening streept de andere cardio-rijen niet door (je mag combineren). End workout met alleen cardio
   blijft op Workout (geen sprong naar Coverage), wel vuurwerk. De pagina Cardio onder More blijft als uitleg.
+- Groep 10 'EGYM' (Toms EGYM-circuit in de gym; tussen g7 en g8 in `#s-d3`, kop zonder nummer, potlood/keuzeblad, warm-up blijft zichtbaar):
+  alleen zichtbaar bij de keuze EGYM (`data-split="egym"`). Rijen `eg-…` met invulveld kg en schermnaam 'EGYM …' (zoals in de EGYM-app; uniek in NAMES).
+  Standaard aan (Toms circuit, volgorde in POP = volgorde van het circuit): Rotary Torso (2 × 6), Lat Pulldown, Leg Press (1 × 15), Abdominal Crunch,
+  Seated Row, Leg Extension, Triceps Press, Back Extension, Chest Press (2 × 15); uit: Leg Curl, Shoulder Press, Butterfly, Butterfly Reverse,
+  Biceps Curl, Hip Abduction, Hip Adduction, Glute, Squat. Elk met MUSCLES (telt dus in Coverage), eigen EX-uitleg (`eg…`, + 'Enter the weight the
+  EGYM screen shows.') en beelden van het vergelijkbare toestel via alias (VID/ANIM/IMG van bv. widepulldown, legpress, chestmachine; script bij `SSL`);
+  geen eigen EGYM-beelden. Circuit-logica (`paintChecks`): niets doorstrepen, kop pas af als alle actieve oefeningen gedaan zijn.
+  Mixen kan: EGYM afvinken, dan de dropdown op Full body zetten en losse oefeningen afvinken in dezelfde workout. Kalender (`prog()`): enkel g10 =
+  'EGYM', g10 + andere krachtgroepen = 'EGYM + Full body' (of Upper/Lower).
 
 ## Oefeningen per groep kiezen (Warm-up en groepen 1–7)
 - Structuur ligt vast: Warm-up + 7 groepen (6 à 7 oefeningen per sessie houdt de focus): 1 Quads (vroeger 'Front legs'), 2 Chest,
