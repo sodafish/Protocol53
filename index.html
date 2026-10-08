@@ -942,6 +942,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog{margin-top:3.4rem;}
 .prog[hidden]{display:none!important;}
 .cal{margin:3rem 0 0;}
+.cal-day b{display:block;}
+.cal-day .cal-l{display:block;margin-top:.15rem;}
 .plist{margin:3rem 0 0;}
 .pl-list{list-style:none;margin:0;padding:0;}
 .pl-list .pl-h{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:1.2rem 0 .4rem;border-bottom:1px solid var(--line);}
@@ -4037,7 +4039,9 @@ window.__congrats=function(o){
     var box=document.getElementById('calDay');
     if(!sel){ box.innerHTML=cnt?'':'Days you train get a dot.'; return; }
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
-    var pg=progs(o); box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b> · '+(pg?pg+' · '+amount(o.sets,o.min):'Cardio · '+Math.round(o.min)+' min'); /* alleen cardio: ‘Cardio · 40 min’ */
+    /* datum, dan per regel: kracht ('Open Gym + EGYM · 25 sets') en cardio ('Cardio · 40 min') */
+    var pg=progs(o), lines=[]; if(o.sets||pg) lines.push((pg||'Strength')+' · '+o.sets+(o.sets===1?' set':' sets')); if(o.min) lines.push('Cardio · '+Math.round(o.min)+' min');
+    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+lines.map(function(l){ return '<span class="cal-l">'+l+'</span>'; }).join('');
   }
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
