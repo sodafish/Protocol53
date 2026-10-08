@@ -76,7 +76,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
   en **Statistics** (vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
-  `#more-sheet` opent met Cardio, Diet, Info en als laatste Settings (`#moreProfile`, tandwiel). Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
+  `#more-sheet` opent met Diet, Info en als laatste Settings (Cardio verborgen op vraag van Tom: `<li hidden>`, de pagina zelf bestaat nog) (`#moreProfile`, tandwiel). Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
   begint bovenaan (meteen + na 200/450 ms, omdat het wisselen van tab zelf nog kan scrollen), behalve terug naar Workout: die
   komt terug op de onthouden scrollpositie (`window.__woY`, bewaard bij het verlaten van Workout, op 0 gezet na End workout).
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
