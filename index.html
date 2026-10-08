@@ -3976,11 +3976,11 @@ window.__congrats=function(o){
     for(var i=0;i<lead;i++) html+='<span class="cal-d out"></span>';
     for(var d=1;d<=n;d++){
       key=y+'-'+('0'+(m+1)).slice(-2)+'-'+('0'+d).slice(-2); var on=!!days[key], fut=key>today;
-      if(on){ cnt+=Object.keys(days[key].ws).length; msets+=days[key].sets; mmin+=days[key].min; lastOn=key; }
+      if(on){ cnt++; /* trainingsdagen, niet workouts (twee workouts op één dag = één dag) */ msets+=days[key].sets; mmin+=days[key].min; lastOn=key; }
       html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
     }
     grid.innerHTML=html;
-    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' workout':' workouts')+' · '+amount(msets,mmin):'No workouts';
+    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' training day':' training days')+' · '+amount(msets,mmin):'No workouts';
     var cur=new Date(); document.querySelector('.cal-nav[data-m="1"]').disabled=(y===cur.getFullYear()&&m===cur.getMonth());
     if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
     grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
