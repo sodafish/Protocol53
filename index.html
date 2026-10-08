@@ -621,7 +621,7 @@ td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
 
 /* afvinken */
 #s-d1 .exr,#s-d2 .exr,#s-d3 .exr{grid-template-columns:2.4rem 1fr 5.6rem;}
-#s-d3 .exr.has-info{cursor:pointer;-webkit-tap-highlight-color:transparent;grid-template-columns:2.4rem 1fr 36px 4.2rem;column-gap:.6rem;}
+#s-d3 .exr.has-info{-webkit-tap-highlight-color:transparent;grid-template-columns:2.4rem 1fr 36px 4.2rem;column-gap:.6rem;}
 #s-d3 .exr.has-info > .info-b{grid-column:3;grid-row:1;}
 #s-d3 .exr.has-info > .exr-in,#s-d3 .exr.has-info > .exr-in2{grid-column:4;grid-row:1;}
 #s-d3 .exr.has-info .exr-in{padding-left:.3rem;padding-right:.3rem;text-align:center;}
@@ -4168,7 +4168,7 @@ window.__congrats=function(o){
 
 /* ---- tik op een oefeningsrij (niet op het vinkje, het invulveld of een knop) = uitleg + grafiek openen, zoals de oog-knop ---- */
 (function(){
-  var pane=document.getElementById('s-d3'); if(!pane) return;
+  var pane=document.getElementById('s-d3'); if(!pane) return; return; /* uitgeschakeld op vraag van Tom: enkel de oog-knop opent de uitleg */
   pane.addEventListener('click',function(e){
     var li=e.target.closest('.exr'); if(!li||!pane.contains(li)) return;
     if(e.target.closest('input,textarea,button,a,label')) return;
