@@ -243,7 +243,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   tijdelijk `position:static`; bij een korte lijst krijgt `#s-d3` een `min-height` zodat er tot daar gescrold kan worden, weg zodra je bovenaan bent).
   `window.__wtabsH()` = hoogte van de plakkende tabs; Start, `nextGroup` en het doorschakelen na de warm-up trekken die af bij het scrollen.
   De oude dropdown (`.split-sel`, `#splitBtn`, `#splitPop`) staat nog in de DOM maar is verborgen (`hidden`).
-  De groepskoppen van Warm-up (g0), EGYM (g10) en Cardio (g8) tonen geen titel meer (de tab zegt het al; `.grp-t` verborgen), enkel het potlood rechts. Warm-up-kop zonder onderlijn (de tussenkop eronder heeft er al een). Die koppen hebben `padding-top:2.4rem` zoals groep 1, zodat het eerste potlood op elke tab op dezelfde hoogte staat (45 px onder de tabs).
+  De groepskoppen van Warm-up (g0), EGYM (g10) en Cardio (g8) tonen geen titel meer (de tab zegt het al; `.grp-t` verborgen), enkel het potlood rechts. Warm-up-kop heeft hoogte 0; het potlood staat absoluut rechts op de regel van de eerste tussenkop (Cardio, padding 47/18 px), zodat
+  potlood (45 px) en eerste lijn (90 px onder de tabs) op elke tab gelijk staan. Die koppen hebben `padding-top:2.4rem` zoals groep 1, zodat het eerste potlood op elke tab op dezelfde hoogte staat (45 px onder de tabs).
 - (oud) Eigen menu (geen native `<select>`): `#splitPop` in de volgorde Warm-up | Open Gym (intern nog `full`, vroeger 'Full body'), EGYM | Cardio | Upper body, Lower body (op vraag van Tom; `|` = scheidingslijn `hr.sm-sep`) (`menuitemradio`, vinkje in accentkleur).
   Keuze in localStorage `fitlog-split` (onbekend = full).
 - `SPLIT`: warmup = g0, full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. De warm-up is een eigen keuze (op vraag van Tom:

@@ -1084,8 +1084,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 #s-d3 .exr .chk::after{content:"";position:absolute;top:-14px;bottom:-14px;left:-16px;right:-22px;}
 /* Warm-up, EGYM en Cardio: de tab zegt het al, dus geen titel; enkel het potlood rechts (op vraag van Tom) */
 #s-d3 .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]) .grp-t{display:none;}
-#s-d3 .exl .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]){justify-content:flex-end;padding-top:2.4rem;padding-bottom:.4rem;} /* zelfde hoogte als Open Gym (groep 1), zodat het potlood op elke tab op dezelfde plaats staat */
-#s-d3 .exl .exgrp[data-grp="g0"]{border-bottom:0;} /* warm-up: de tussenkop Cardio heeft al een lijn */
+#s-d3 .exl .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]){justify-content:flex-end;padding-top:2.4rem;padding-bottom:.5rem;} /* zelfde hoogte als Open Gym (groep 1), zodat het potlood op elke tab op dezelfde plaats staat */
+/* warm-up: geen eigen kopregel; het potlood zweeft rechts op de regel van de eerste tussenkop (Cardio), zodat potlood én eerste lijn
+   op dezelfde plaats staan als op de andere tabs */
+#s-d3 .exl .exgrp[data-grp="g0"]{position:relative;height:0;padding:0!important;border-bottom:0;}
+#s-d3 .exl .exgrp[data-grp="g0"] .grp-edit{position:absolute;right:0;top:39px;}
+#s-d3 .exl .exgrp[data-grp="g0"] + .exsub{padding-top:47px;padding-bottom:18px;}
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
 .wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
