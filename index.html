@@ -1496,7 +1496,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
       <div class="stats-per" role="group" aria-label="Period">
-        <button type="button" data-d="dag">Last</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="alles">All</button>
+        <button type="button" data-d="dag">Last</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="jaar">Year</button><button type="button" data-d="alles">All</button>
       </div>
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
@@ -2409,7 +2409,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
     Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&ymdL(e.t)===d){ delete hist[id]; if(histCol) histCol.doc(id).delete().catch(function(){}); } });
     saveHistLocal(); renderStats(); };
-  var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','alles']; /* Last · Week · Month · All */
+  var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','jaar','alles']; /* Last · Week · Month · Year · All */
   var per='maand'; try{ per=localStorage.getItem(PERKEY)||'maand'; }catch(e){}
   if(PERS.indexOf(per)<0) per='maand';
   document.querySelectorAll('.stats-per button').forEach(function(b){
@@ -2437,6 +2437,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       if(per==='dag') return dayKey(e.t)===lastDay;
       if(per==='week') return now-e.t<=7*864e5;
       if(per==='maand') return now-e.t<=30*864e5;
+      if(per==='jaar') return now-e.t<=365*864e5;
       return true;
     }
     Object.keys(MLAB).forEach(function(m){ score[m]=0; });
@@ -2446,8 +2447,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in score) score[k]+=s*m[k]; });
     });
     /* Dag en Week: totaal aantal sets. Maand en Alles: gemiddeld per week. */
-    var perWeek=per==='maand'||per==='alles';
-    var weeks=perWeek?Math.max(1,Math.min(per==='maand'?30/7:1e9,(now-first)/(7*864e5))):1, max=0;
+    var perWeek=per==='maand'||per==='jaar'||per==='alles';
+    var weeks=perWeek?Math.max(1,Math.min(per==='maand'?30/7:per==='jaar'?365/7:1e9,(now-first)/(7*864e5))):1, max=0;
     Object.keys(score).forEach(function(k){ score[k]/=weeks; max=Math.max(max,score[k]); });
     fig.querySelectorAll('svg > g:not(.o) .m').forEach(function(p){
       var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
@@ -2457,6 +2458,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     if(per==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
     else if(per==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
     else if(per==='maand') head='Last 30 days, '+n+(n===1?' training day':' training days');
+    else if(per==='jaar') head='Last 12 months, '+n+(n===1?' training day':' training days');
     else { var f=new Date(first); head='Since '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' training day':' training days'); }
     sub.textContent=n ? head+'.'
       : 'No data in this period yet. Tick off exercises and the figure fills in.';
