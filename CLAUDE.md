@@ -345,6 +345,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   viewBox `0 -980 960 960` zodat het oog verticaal gecentreerd staat (vroeger een getekende Fraunces-'i');
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.
+- Vinkje (`.chk`, 34 px) heeft een groter onzichtbaar tikvlak (`#s-d3 .exr .chk::after`: 14 px boven/onder, 16 px links, 22 px rechts; op vraag van Tom).
 - Tik op een oefeningsrij opent NIETS meer (op vraag van Tom, 8 okt); enkel de oog-knop opent uitleg + grafiek. Het script onderaan `index.html` staat nog
   maar keert meteen terug; `cursor:pointer` op de rij is weg.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop

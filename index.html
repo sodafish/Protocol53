@@ -1077,6 +1077,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .note-jump[hidden]{display:none;}
 #s-d3 .tools-row .split-sel{margin-left:auto;}
 .split-sel[hidden]{display:none!important;}
+/* groter tikvlak voor het vinkje (op vraag van Tom): onzichtbare zone rond de cirkel, tot de rand van de rij en een stuk naar rechts */
+#s-d3 .exr .chk{position:relative;}
+#s-d3 .exr .chk::after{content:"";position:absolute;top:-14px;bottom:-14px;left:-16px;right:-22px;}
 /* Warm-up, EGYM en Cardio: de tab zegt het al, dus geen titel; enkel het potlood rechts (op vraag van Tom) */
 #s-d3 .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]) .grp-t{display:none;}
 #s-d3 .exl .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]){justify-content:flex-end;padding-top:.4rem;padding-bottom:.4rem;}
