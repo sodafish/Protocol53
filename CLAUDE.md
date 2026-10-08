@@ -233,7 +233,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
 - Keuze via tabs (op vraag van Tom, vervangt de dropdown): `#wtabs` (pil met 4 knoppen `role=tab`, `data-split`): Warm-up · Open Gym · EGYM · Cardio,
   direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 8px`, z-index 30, ring in `--paper` zodat
-  er niets door schemert; klasse `.stuck` = schaduw). Actieve tab: `--paper-soft` + inkt, 600. Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open
+  er niets door schemert; klasse `.stuck` = schaduw). Actieve tab: zelfde pil als de actieve navbar-knop (`--ink` 9% + accentkleur, 600). Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open
   Gym); de kalender kan ze nog wel tonen. Wisselen = als je al voorbij de tabs was, springt de lijst terug tot net onder de tabs (`toList`).
   `window.__wtabsH()` = hoogte van de plakkende tabs; Start, `nextGroup` en het doorschakelen na de warm-up trekken die af bij het scrollen.
   De oude dropdown (`.split-sel`, `#splitBtn`, `#splitPop`) staat nog in de DOM maar is verborgen (`hidden`).
