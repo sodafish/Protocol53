@@ -252,7 +252,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   'Start' scrolt naar de eerste zichtbare groepskop.
 - Groep 8 'Cardio' (onderaan in `#s-d3`, kop zonder nummer, met potlood/keuzeblad zoals de andere groepen, geen uitleg-regel):
   rijen met sleutels `c-…` en een invulveld in minuten (`placeholder="min"`, data-note = sleutel): standaard aan Walking (`c-walk`,
-  foto's walking = loopband), Walk-Jog Outdoors (`c-walkjog`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`),
+  foto's walking = loopband), Walk-Jog Outdoors (`c-walkjog`), Jogging (`c-jog`, 'Easy pace · 20–45 min · impact', foto's = die van walk-jog; op vraag van Tom; bestaande cardiokeuzes krijgen het erbij via `migrate()`, vlag `jg`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`),
   Cycling (`c-bike`), Padel (`c-padel`, 'Intervals · 60–90 min', geen foto's: het uitlegblad toont dan enkel tekst + tip);
   uit: Incline Walk (`c-incline`), Stairmaster (`c-stairs`), Recumbent Bike (`c-recumbent`). Labels '· impact' / '· outdoors' via `.exr-eqp`.
   Eigen namen (uniek t.o.v. de warm-up!) met EX-uitleg (zone 2) en foto's (`cwalk`… in NAMES/EX/IMG; nieuw: trail, jogtread, recumbent).
