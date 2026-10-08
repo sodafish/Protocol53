@@ -299,7 +299,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.
 - Op vraag van Tom (8 okt): spiergroepen (g1–g7) worden NIET meer doorgestreept na één oefening (geen `grp-done`/`grp-skip`), en er is geen automatisch
   doorscrollen naar de volgende groep meer (`nextGroup` doet niets). Alleen de warm-up (g0) en EGYM (g10, als alles af is) krijgen nog `grp-done`;
-  enkel de warm-up streept de overige rijen door. Tik op een tab (Workout én Statistics) = wisselen + zacht naar boven (`window.__smoothTop`).
+  enkel de warm-up streept de overige rijen door. Tik op een tab (Workout én Statistics) = wisselen + zacht scrollen tot de tabs op hun plakpositie staan, lijst er net onder
+  (`window.__smoothTop(tabs)`; nog niet geplakt = niets doen; korte lijst = tijdelijke `min-height`).
   Wat hieronder over doorstrepen/doorscrollen staat, is de oude werking.
 - Groep-af-logica (`paintChecks`) negeert `.ex-off`-rijen. Eén oefening gedaan = groep af: kop doorgestreept en de andere
   oefeningen van die groep krijgen `grp-skip` (doorgestreept, 40%, blijven aanklikbaar). Opwarming (op vraag van Tom: cardio óf mobility):

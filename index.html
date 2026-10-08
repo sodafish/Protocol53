@@ -3841,8 +3841,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   pop.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
     set(b.dataset.split); hide(); btn.focus({preventScroll:true}); }); });
   /* hoogte die de plakkende tabs bovenaan innemen (voor doorscrollen) */
-  window.__smoothTop=function(){ var p=document.getElementById('s-d3'), q=document.getElementById('s-stats'); if(p) p.style.minHeight=''; if(q) q.style.minHeight='';
-    window.scrollTo({top:0,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); };
+  /* tik op een tab: zacht scrollen tot de tabs op hun plakpositie staan en de lijst er net onder begint (niet helemaal naar boven) */
+  window.__smoothTop=function(bar){ if(!bar) return; var pane=bar.parentElement;
+    var st=parseFloat(getComputedStyle(bar).top)||0; bar.style.position='static'; var nat=bar.getBoundingClientRect().top+window.scrollY; bar.style.position='';
+    var y=Math.max(0,nat-st); if(window.scrollY<=y+1){ pane.style.minHeight=''; return; } /* tabs plakken nog niet: niets doen */
+    pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY); if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
+    window.scrollTo({top:y,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); };
   window.__wtabsH=function(){ return tabs&&tabs.offsetParent?tabs.offsetHeight+16:0; };
   function toList(wasStuck){ /* na wisselen: de tabs blijven op exact dezelfde plek (geplakt), de nieuwe lijst begint er net onder */
     if(!tabs) return; var pane=tabs.parentElement, h=document.documentElement;
@@ -3853,7 +3857,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY);
     if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
     h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
-  if(tabs){ tabs.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.split!==cur) set(b.dataset.split); window.__smoothTop(); }); /* tik = zacht naar boven (op vraag van Tom) */ });
+  if(tabs){ tabs.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.split!==cur) set(b.dataset.split); window.__smoothTop(tabs); }); /* tik = zacht naar boven (op vraag van Tom) */ });
     window.addEventListener('scroll',function(){ if(window.scrollY<2) tabs.parentElement.style.minHeight=''; var t=tabs.getBoundingClientRect().top, st=parseFloat(getComputedStyle(tabs).top)||0; tabs.classList.toggle('stuck',window.scrollY>0&&t<=st+.5); },{passive:true}); }
   window.__setSplit=function(v){ if(SPLIT[v]) set(v); };
   function set(v){ cur=v; try{ localStorage.setItem(KEY,cur); if(cur!=='warmup') localStorage.setItem(LKEY,cur); }catch(x){} apply(); }
@@ -4012,7 +4016,7 @@ window.__congrats=function(o){
     var y=Math.max(0,nat-st); pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY);
     if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
     h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
-  tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.sv!==cur) set(b.dataset.sv); window.__smoothTop();
+  tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.sv!==cur) set(b.dataset.sv); window.__smoothTop(tabs);
     if(window.__renderCal&&cur==='cal') window.__renderCal(); }); });
   window.addEventListener('scroll',function(){ if(!tabs.offsetParent) return; if(window.scrollY<2) tabs.parentElement.style.minHeight='';
     var t=tabs.getBoundingClientRect().top, st=parseFloat(getComputedStyle(tabs).top)||0; tabs.classList.toggle('stuck',window.scrollY>0&&t<=st+.5); },{passive:true});
