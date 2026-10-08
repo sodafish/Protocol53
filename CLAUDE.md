@@ -74,6 +74,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Calorieën, geslacht, lengte en gewicht zijn op vraag van Tom weer weggehaald (niet opnieuw toevoegen zonder vraag).
 
 ## Diet
+- Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom).
 - Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ 100 g</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
   ranges bij groepen zoals vette vis/noten; rauw/gekookt/droog/poeder tussen haakjes). Nieuwe voedingsrij: zo'n regel erbij.
 
