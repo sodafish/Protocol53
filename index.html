@@ -1077,6 +1077,17 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .note-jump[hidden]{display:none;}
 #s-d3 .tools-row .split-sel{margin-left:auto;}
 .split-sel[hidden]{display:none!important;}
+/* tabs zitten nu in een paneel dat aan de navbar vastzit en erboven zweeft (op vraag van Tom); de navbar ligt over de onderrand */
+.gsub{position:fixed;z-index:59;left:50%;transform:translateX(-50%);width:calc(100% - 32px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));max-width:404px;
+  bottom:calc(42px + env(safe-area-inset-bottom,0px));padding:6px 6px 38px;border-radius:26px;box-sizing:border-box;background:color-mix(in srgb,var(--paper-soft) 90%,transparent);} /* iets donkerder dan de navbar, zodat het een tweede laag is */
+.gsub[hidden]{display:none;}
+.gsub .wtabs{position:static;margin:0;padding:0;border:0;background:none;box-shadow:none!important;}
+.gsub .wtabs[hidden]{display:none;}
+.gsub .wtabs button{min-height:38px;font-size:13.5px;}
+.gsub .wtabs button[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 8%,var(--surface));color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+body.gsub-on{padding-bottom:calc(176px + env(safe-area-inset-bottom));}
+body.gsub-on.wo-on{padding-bottom:calc(236px + env(safe-area-inset-bottom));}
+body.gsub-on .wo-end{bottom:calc(136px + env(safe-area-inset-bottom,0px));}
 /* minder ruimte onder de paginatitel (Workout/Statistics) (op vraag van Tom) */
 #p-schema{padding-top:.6rem;}
 /* groter tikvlak voor het vinkje (op vraag van Tom): onzichtbare zone rond de cirkel, tot de rand van de rij en een stuk naar rechts */
@@ -1840,6 +1851,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   </ul>
 </div>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
+<div class="gsub glass" id="gsub" hidden></div>
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg><span>Workout</span></button>
@@ -3626,6 +3638,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     moreBtn.classList.toggle('on',!!TAB[v]);
     sh.querySelectorAll('[data-view]').forEach(function(b){ if(b.dataset.view===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
     if(title) title.textContent=NAMES[v]||'';
+    document.dispatchEvent(new CustomEvent('p53-view',{detail:v}));
   }
   /* terug naar Workout = verder waar je was (scrollpositie onthouden); andere pagina's beginnen bovenaan */
   window.__woY=0;
@@ -3853,13 +3866,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   pop.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
     set(b.dataset.split); hide(); btn.focus({preventScroll:true}); }); });
   /* hoogte die de plakkende tabs bovenaan innemen (voor doorscrollen) */
-  /* tik op een tab: zacht scrollen tot de tabs op hun plakpositie staan en de lijst er net onder begint (niet helemaal naar boven) */
-  window.__smoothTop=function(bar){ if(!bar) return; var pane=bar.parentElement;
-    var st=parseFloat(getComputedStyle(bar).top)||0; bar.style.position='static'; var nat=bar.getBoundingClientRect().top+window.scrollY; bar.style.position='';
-    var y=Math.max(0,nat-st); if(window.scrollY<=y+1){ pane.style.minHeight=''; return; } /* tabs plakken nog niet: niets doen */
-    pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY); if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
-    window.scrollTo({top:y,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); };
-  window.__wtabsH=function(){ return tabs&&tabs.offsetParent?tabs.offsetHeight+16:0; };
+  /* tik op een tab: zacht naar boven (de tabs zitten onderaan bij de navbar) */
+  window.__smoothTop=function(){ var p=document.getElementById('s-d3'), q=document.getElementById('s-stats'); if(p) p.style.minHeight=''; if(q) q.style.minHeight='';
+    window.scrollTo({top:0,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); };
+  window.__wtabsH=function(){ return 0; }; /* tabs plakken niet meer bovenaan */
   function toList(wasStuck){ /* na wisselen: de tabs blijven op exact dezelfde plek (geplakt), de nieuwe lijst begint er net onder */
     if(!tabs) return; var pane=tabs.parentElement, h=document.documentElement;
     if(!wasStuck){ pane.style.minHeight=''; return; }
@@ -4033,6 +4043,14 @@ window.__congrats=function(o){
   window.addEventListener('scroll',function(){ if(!tabs.offsetParent) return; if(window.scrollY<2) tabs.parentElement.style.minHeight='';
     var t=tabs.getBoundingClientRect().top, st=parseFloat(getComputedStyle(tabs).top)||0; tabs.classList.toggle('stuck',window.scrollY>0&&t<=st+.5); },{passive:true});
   apply();
+})();
+/* ---- tabs-paneel boven de navbar: Workout toont #wtabs, Statistics #stabs, andere pagina's niets ---- */
+(function(){
+  var box=document.getElementById('gsub'), w=document.getElementById('wtabs'), st=document.getElementById('stabs'); if(!box||!w||!st) return;
+  box.appendChild(w); box.appendChild(st);
+  function show(v){ var on=v==='workout'||v==='progress'; box.hidden=!on; w.hidden=v!=='workout'; st.hidden=v!=='progress'; document.body.classList.toggle('gsub-on',on); }
+  document.addEventListener('p53-view',function(e){ show(e.detail); });
+  var cur=document.querySelector('.gnav-i[aria-selected="true"]'); show(cur?cur.dataset.view:'workout');
 })();
 /* ---- Progress (Statistics, tussen spieren en kalender): elke oefening met minstens één meting, per groep in workoutvolgorde,
    met de laatste waarde en het verschil eerste → laatste meting; tik = uitleg + grafiek (zoals de oog-knop) ---- */
