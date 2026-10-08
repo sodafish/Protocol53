@@ -225,10 +225,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
-- Eigen menu (geen native `<select>`): `#splitPop` in de volgorde Open Gym (intern nog `full`, vroeger 'Full body'), EGYM | Cardio | Upper body, Lower body (op vraag van Tom; `|` = scheidingslijn `hr.sm-sep`) (`menuitemradio`, vinkje in accentkleur).
+- Eigen menu (geen native `<select>`): `#splitPop` in de volgorde Warm-up | Open Gym (intern nog `full`, vroeger 'Full body'), EGYM | Cardio | Upper body, Lower body (op vraag van Tom; `|` = scheidingslijn `hr.sm-sep`) (`menuitemradio`, vinkje in accentkleur).
   Keuze in localStorage `fitlog-split` (onbekend = full).
-- `SPLIT`: full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. Warm-up (g0) zichtbaar behalve bij Cardio en EGYM (op vraag van Tom); g8 alleen bij
-  Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.
+- `SPLIT`: warmup = g0, full = g1–g7, upper = g2, g4, g5, g7, lower = g1, g3, g6, egym = g10, cardio = g8. De warm-up is een eigen keuze (op vraag van Tom:
+  ze hoort bij elk programma) en staat in geen enkel ander programma. Laatst gekozen programma (niet warm-up) in localStorage `fitlog-split-last`.
+  Is de warm-up af door een vinkje (vinkje-handler stuurt event `p53-grpdone` met de groep zodra die groep `grp-done` wordt), dan schakelt de
+  dropdown na 700 ms vanzelf naar dat laatste programma (standaard Open Gym) en scrolt zacht naar de eerste groep. g8 alleen bij Cardio. Verbergt via klasse `split-off` op alle `#s-d3 .exl > li[data-grp]`; body krijgt `split-cardio` in cardiomodus.
   'Start' scrolt naar de eerste zichtbare groepskop.
 - Groep 8 'Cardio' (onderaan in `#s-d3`, kop zonder nummer, met potlood/keuzeblad zoals de andere groepen, geen uitleg-regel):
   rijen met sleutels `c-…` en een invulveld in minuten (`placeholder="min"`, data-note = sleutel): standaard aan Walking (`c-walk`,
@@ -240,7 +242,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Telt NIET in Coverage (spieren: `events()` slaat `w0-` en `c-` over); de kalender telt cardio als minuten i.p.v. sets: '17 sets + 20 min cardio' (plus als er
   kracht én cardio was; `amount()`), per dag en per maand. Een cardio-oefening streept de andere cardio-rijen niet door (je mag combineren). End workout met alleen cardio
   blijft op Workout (geen sprong naar Coverage), wel vuurwerk. De pagina Cardio onder More blijft als uitleg.
-- Groep 10 'EGYM' (Toms EGYM-circuit in de gym; tussen g7 en g8 in `#s-d3`, kop zonder nummer, potlood/keuzeblad, zonder warm-up):
+- Groep 10 'EGYM' (Toms EGYM-circuit in de gym; tussen g7 en g8 in `#s-d3`, kop zonder nummer, potlood/keuzeblad):
   alleen zichtbaar bij de keuze EGYM (`data-split="egym"`). Rijen `eg-…` met invulveld kg en schermnaam 'EGYM …' (zoals in de EGYM-app; uniek in NAMES).
   Standaard aan (Toms circuit, volgorde in POP = volgorde van het circuit): Rotary Torso (2 × 6), Lat Pulldown, Leg Press, Abdominal Crunch,
   Seated Row, Leg Extension, Triceps Press, Back Extension, Chest Press (2 × 15); uit: Leg Curl, Shoulder Press, Butterfly, Butterfly Reverse,

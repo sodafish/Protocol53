@@ -1203,6 +1203,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <div class="split-sel">
         <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Open Gym</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="split-pop" id="splitPop" role="menu" hidden>
+          <button type="button" role="menuitemradio" data-split="warmup"><span>Warm-up</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <hr class="sm-sep" role="separator">
           <button type="button" role="menuitemradio" data-split="full"><span>Open Gym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <button type="button" role="menuitemradio" data-split="egym"><span>EGYM</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <hr class="sm-sep" role="separator">
@@ -1939,6 +1941,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       if(on&&window.__woRun) window.__woRun(true);
       paintChecks(); saveChecksLocal();
       if(on) nextGroup(b.closest('.exr'));
+      if(on){ var gh=b.closest('.exr').previousElementSibling; while(gh&&!gh.classList.contains('exgrp')) gh=gh.previousElementSibling;
+        if(gh&&gh.classList.contains('grp-done')) document.dispatchEvent(new CustomEvent('p53-grpdone',{detail:gh.dataset.grp})); }
       if(chkCol){ (on?chkCol.doc(k).set({done:true,at:Date.now()}):chkCol.doc(k).delete()).catch(function(){}); }
       if(on && window.__progSnap && !b.closest('.exr-wu')) window.__progSnap(b.closest('.exr'),k);
       if(!on && window.__progDropToday) window.__progDropToday(b.closest('.exr'), window.__lastHistDay?window.__lastHistDay(k):null, k);
@@ -3761,14 +3765,14 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 /* ---- Full / Upper / Lower: verbergt groepen die je vandaag niet traint (Warm-up altijd). Keuze in localStorage fitlog-split ---- */
 (function(){
   /* Cardio = alleen groep 8 (geen warm-up); Full/Upper/Lower = nooit groep 8 */
-  var KEY='fitlog-split', SPLIT={full:['g1','g2','g3','g4','g5','g6','g7'],upper:['g2','g4','g5','g7'],lower:['g1','g3','g6'],egym:['g10'],cardio:['g8']};
+  var KEY='fitlog-split', LKEY='fitlog-split-last', SPLIT={warmup:['g0'],full:['g1','g2','g3','g4','g5','g6','g7'],upper:['g2','g4','g5','g7'],lower:['g1','g3','g6'],egym:['g10'],cardio:['g8']};
   var btn=document.getElementById('splitBtn'), pop=document.getElementById('splitPop'), lbl=document.getElementById('splitLbl'); if(!btn||!pop) return;
-  var NAME={full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'EGYM',cardio:'Cardio'};
+  var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'EGYM',cardio:'Cardio'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]) cur='full';
   function apply(){
     var keep=SPLIT[cur];
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
-      var g=li.dataset.grp; li.classList.toggle('split-off',g==='g0'?(cur==='cardio'||cur==='egym'):keep.indexOf(g)<0); }); /* warm-up niet bij Cardio en EGYM */
+      var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
     document.body.classList.toggle('split-cardio',cur==='cardio');
     window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
     lbl.textContent=NAME[cur];
@@ -3779,7 +3783,15 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function hide(){ if(!open) return; open=false; pop.classList.remove('on'); btn.setAttribute('aria-expanded','false'); setTimeout(function(){ if(!open) pop.hidden=true; },170); }
   btn.addEventListener('click',function(e){ e.stopPropagation(); open?hide():show(); });
   pop.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
-    cur=b.dataset.split; try{ localStorage.setItem(KEY,cur); }catch(x){} apply(); hide(); btn.focus({preventScroll:true}); }); });
+    set(b.dataset.split); hide(); btn.focus({preventScroll:true}); }); });
+  function set(v){ cur=v; try{ localStorage.setItem(KEY,cur); if(cur!=='warmup') localStorage.setItem(LKEY,cur); }catch(x){} apply(); }
+  /* warm-up af door een vinkje → door naar het programma van de vorige keer (standaard Open Gym), bovenaan de lijst */
+  document.addEventListener('p53-grpdone',function(e){ if(e.detail!=='g0'||cur!=='warmup') return;
+    var nx='full'; try{ nx=localStorage.getItem(LKEY)||'full'; }catch(x){} if(!SPLIT[nx]||nx==='warmup') nx='full';
+    setTimeout(function(){ set(nx);
+      var g=[].filter.call(document.querySelectorAll('#s-d3 .exgrp'),function(x){ return x.offsetParent!==null; })[0];
+      var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+      if(g) window.scrollTo({top:Math.max(0,g.getBoundingClientRect().top+window.scrollY-12),behavior:smooth}); },700); });
   document.addEventListener('click',function(e){ if(open && !pop.contains(e.target)) hide(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') hide(); });
   window.addEventListener('scroll',function(){ if(open) hide(); },{passive:true});
