@@ -114,7 +114,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   m:ss / u:mm:ss; body krijgt `wo-on` = extra ruimte onderaan), op elke pagina. Vóór de start is de pil verborgen
   (`.wo-end[hidden]{display:none}` nodig, want `display:inline-flex` overschreef anders het `hidden`-attribuut). De onderste End-knop is weg; de navbar toont altijd 'Workout'.
   Labels (op vraag van Tom): bovenaan 'Start workout' (zet ook de tab op Warm-up via `window.__setSplit('warmup')`), pil rechtsonder 'End workout' + tijd.
-  Tik op End zonder één vinkje → timer stopt, geen vraag, geen vuurwerk. Met minstens één vinkje (ook warm-up) → `p53Confirm` ('End workout?', met de tijd)
+  Tik op End zonder één vinkje → timer stopt, geen vraag, geen vuurwerk, Workout scrolt zacht naar boven. Met minstens één vinkje (ook warm-up) → `p53Confirm` ('End workout?', met de tijd)
   → sessie bewaren, alle vinkjes leeg, timer stop, periode Last workout (`__statsPer('dag')`), altijd naar Statistics (bovenaan; ook na enkel cardio), `__woY=0`, daarna vuurwerk. Alles wat afgevinkt was, is al bewaard (grafiek). Na End kun je niet
   meer uitvinken; corrigeren via het edit-blad van de grafiek. Vinkjes vervallen ook vanzelf de volgende dag.
   Timer: starttijd in localStorage `fitlog-wo-start` (overleeft herladen, vervalt na 12 u); het eerste vinkje start hem ook.
