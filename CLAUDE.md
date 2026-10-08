@@ -95,7 +95,7 @@ Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
-- Sectie **Progress** (`#plist`/`#plList`, tussen de spierlijst en de kalender, eigen script vóór het kalenderscript; op vraag van Tom): elke
+- Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, tussen de spierlijst en de kalender, eigen script vóór het kalenderscript; op vraag van Tom): elke
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
   rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en, vanaf twee metingen, het verschil eerste → laatste (`+5 kg`, accent bij
   stijging). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
@@ -120,7 +120,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Sessie in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`; cache `fitlog-sess`, ook in de back-up).
   Vuurwerk `window.__congrats({min,n})`: overlay `.cg` met canvas-vuurwerk (accent/goud/crème), 'Congratulations!' (Fraunces, één regel)
   + duur · oefeningen; tik of 4,5 s = weg. Geen geluid (op vraag van Tom weggehaald). Bij reduced motion zonder vuurwerk.
-- Kalender onderaan Coverage (`#cal`, kop 'Workouts', eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
+- Kalender onderaan Coverage (`#cal`, kop 'Calendar' (vroeger 'Workouts'), eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
   vandaag in accentkleur, bovenaan 'N training days · N sets' (sets van die maand; op vraag van Tom telt het dagen, twee workouts op één dag = één dag). Tik op een dag = eronder 'Dag datum · Programma · N sets' (som van de sets van elke oefening
