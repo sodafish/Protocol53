@@ -268,6 +268,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   bovenaan staan (sticky `.sheet-head`; bij scrollen klasse `.stuck` = dunne lijn eronder). Minstens
   één oefening blijft aan. Keuze in localStorage `fitlog-groups` en Supabase collectie `cfg`, doc `groups`
   (`{g1:[sleutels die aan staan]}`); zonder keuze gelden de rijen die in de HTML niet `ex-off` zijn.
+- Volgorde zelf kiezen (op vraag van Tom): in het keuzeblad staat links op elke rij een sleepgreep (`.gs-drag`, Material Symbols
+  'drag_indicator', geen ronde knop; pointer events, `touch-action:none`, rij krijgt `.dragging` met schaduw, buren schuiven met een korte FLIP-animatie,
+  blad scrolt mee aan de randen). Slepen kan alleen binnen dezelfde tussenkop (`data-sub`). Bij loslaten: `cfg.order[groep]` = alle sleutels in
+  de nieuwe volgorde (cfg/groups, dus ook op de server) → `sortRows(groep)` + `apply()`. `sortRows` gebruikt die volgorde i.p.v. laag + POP
+  (tussenkoppen blijven; nieuwe oefeningen zonder plaats achteraan op laag + POP) en wist eerst de oude `.exsub` van die groep, zodat opnieuw
+  sorteren kan (ook als de snapshot een andere `order` brengt). De veeg-om-te-sluiten negeert aanrakingen op de greep.
 - Omdat alles per oefeningsleutel wordt bewaard, blijft de geschiedenis van een uitgezette oefening
   bestaan: Active exercises toont alleen actieve oefeningen (`fillChips` filtert `.ex-off`,
   `window.__progChipsRefresh`), het lichaam/de spierlijst telt alles wat getraind is, ongeacht aan/uit.

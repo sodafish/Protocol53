@@ -1141,6 +1141,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gs-list .gs-t b{font:600 15.5px 'Work Sans',system-ui,sans-serif;color:var(--ink);}
 .gs-list .gs-t small{font-size:13px;color:var(--muted);}
 .gs-list li.off .gs-t b{color:var(--muted);}
+.gs-list .gs-drag{flex:none;display:flex;align-items:center;justify-content:center;width:28px;height:44px;margin:0 -.4rem 0 -.3rem;color:var(--muted-soft);cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.gs-list li[data-k]{position:relative;background:var(--surface);}
+.gs-list li.dragging{z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.14);border-radius:12px;cursor:grabbing;}
+.gs-list li.dragging .gs-drag{color:var(--accent);}
 .gs-list li.gs-sub-h{min-height:0;padding:1.3rem 0 .45rem;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);}
 .gs-list li.gs-sub-h:first-child{padding-top:.2rem;}
 .exgrp .grp-opt{font-style:italic;border:0;padding:0;margin:0 0 0 .15em;background:none;border-radius:0;font:inherit;font-style:italic;color:inherit;letter-spacing:inherit;}
@@ -3643,13 +3647,16 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('cfg');
     col.onSnapshot(function(snap){ var d=null, ss=null; snap.docs.forEach(function(x){ if(x.id==='groups') d=x.data(); if(x.id==='sets') ss=x.data(); });
       if(ss && !(snap.metadata&&snap.metadata.fromCache)){ sets=ss; try{ localStorage.setItem(SKEY,JSON.stringify(sets)); }catch(e){} applySets(); if(open) render(); }
-      if(d){ cfg=d; var mg=migrate(); try{ localStorage.setItem(KEY,JSON.stringify(cfg)); }catch(e){} if(mg&&col) col.doc('groups').set(cfg).catch(function(){}); apply(); if(open) render(); } },function(){}); });
+      if(d){ var oldOrd=JSON.stringify(cfg.order||null); cfg=d; if(JSON.stringify(cfg.order||null)!==oldOrd) Object.keys(POP).forEach(sortRows); var mg=migrate(); try{ localStorage.setItem(KEY,JSON.stringify(cfg)); }catch(e){} if(mg&&col) col.doc('groups').set(cfg).catch(function(){}); apply(); if(open) render(); } },function(){}); });
   /* populariteit in de fitnesswereld (meest gedaan eerst), voor de volgorde in het keuzeblad */
   var POP={g10:'eg-rotary-torso eg-lat-pulldown eg-leg-press eg-abdominal-crunch eg-seated-row eg-leg-extension eg-triceps-press eg-back-extension eg-chest-press eg-leg-curl eg-shoulder-press eg-butterfly eg-butterfly-reverse eg-biceps-curl eg-hip-abduction eg-hip-adduction eg-glute eg-squat'.split(' '),g8:'c-walk c-walkjog c-treadjog c-row c-elliptical c-bike c-padel c-incline c-stairs c-recumbent'.split(' '),g0:'w0-bike w0-rowing w0-incline-walk w0-cross-trainer w0-skierg w0-bodyweight-squats w0-arm-circles w0-glute-bridge w0-pull-aparts w0-torso-rotation w0-worlds-greatest w0-cat-cow w0-hip-circles w0-inchworm w0-jump-rope w0-stair-climber'.split(' '),g1:'x1-back-squat x1-leg-press d1-goblet-squat x1-leg-extension d3-bulgarian-split-squat x1-walking-lunge x1-hack-squat x1-smith-squat d2-dumbbell-reverse-lunges x1-front-squat x1-db-step-up x1-db-forward-lunge x1-bw-walking-lunge x1-split-squat x1-jump-squat x1-pistol-squat x1-sissy-squat'.split(' '),g2:'x2-bench-press x2-db-bench d3-push-ups x2-incline-bench d2-chest-press-machine x2-cable-crossover d3-chest-fly-machine d1-dumbbell-chest-press x2-smith-bench x2-db-fly x2-dips x2-incline-chest-machine x2-low-cable-fly x2-smith-incline x2-incline-pushup x2-decline-pushup x2-decline-db-press x2-db-floor-press x2-plyo-pushup'.split(' '),g3:'x3-deadlift x3-hip-thrust x3-barbell-rdl d1-dumbbell-romanian-deadlift x3-lying-leg-curl x3-seated-leg-curl x3-standing-calf x3-seated-calf-raise d3-hip-abduction x3-hip-adduction x3-legpress-calf x3-cable-kickback x3-kickback-machine x3-kb-swing x3-sumo-deadlift x3-db-calf-raise d3-single-leg-calf-raise x3-single-leg-rdl x3-sl-glute-bridge x3-pull-through x3-good-morning x3-nordic-curl x3-ball-leg-curl x3-donkey-kick x3-reverse-hyper x3-cable-adduction x3-band-adduction'.split(' '),g4:'x4-barbell-row d2-seated-cable-row d3-eenarmige-dumbbell-row x4-row-machine x4-tbar-row-standing d3-chest-supported-row x4-db-bent-row x4-tbar-row x4-inverted-row x4-one-arm-cable-row x4-high-row x4-ring-row d1-lat-pulldown x6-pull-ups x6-chin-ups d2-face-pull d3-assisted-pull-ups x6-wide-pulldown x6-close-grip-pulldown x6-straight-arm-pulldown x6-vbar-pulldown x6-barbell-shrug x6-underhand-pulldown x6-one-arm-pulldown x6-cable-rear-delt-fly d1-dead-hang x6-db-pullover x6-scap-pullup'.split(' '),g5:'d2-dumbbell-lateral-raise d1-seated-dumbbell-shoulder-press x5-overhead-press d3-shoulder-press-machine x5-arnold-press x5-reverse-fly-machine d3-cable-lateral-raise x5-front-raise x5-db-shrug x5-rear-delt-raise x5-cable-ext-rot x5-upright-row x5-db-upright-row x5-band-lateral x5-band-ext-rot x5-handstand-pushup'.split(' '),g6:'d1-plank x7-side-plank x7-plank-combo x7-crunches x7-hanging-leg-raise x7-cable-crunch x7-russian-twist x7-reverse-crunch x7-bicycle-crunch x7-mountain-climbers x7-sit-ups x7-ab-wheel x7-lying-leg-raise d3-crunch-machine x7-back-extension x7-dead-bug d3-bird-dog d1-farmers-carry x7-knee-raise x7-woodchop x7-side-bend x7-pallof-press x7-v-up x7-flutter-kicks x7-superman'.split(' '),g7:'d3-dumbbell-biceps-curl x8-barbell-curl x8-ez-curl x8-hammer-curl x8-preacher-curl x8-spider-curl x8-cable-curl x7-rope-hammer-curl x8-incline-curl x8-concentration-curl d3-curl-machine x8-reverse-curl x8-wrist-curl d2-triceps-rope-pushdown x8-bar-pushdown x8-skull-crusher d3-overhead-cable-triceps-extension x8-close-grip-bench x8-db-overhead-ext x8-kickback x8-bench-dips x8-diamond-pushup x8-dip-machine x8-triceps-machine d3-ss-rope x7-ss-bar d3-ss-overhead-curl x7-ss-reverse x7-ss-single'.split(' ')};
   /* de workout toont de oefeningen in dezelfde volgorde als het keuzeblad (laag, dan populariteit) */
   function tierOf(li){ return li.classList.contains('exr-danger')?2:li.querySelector('.exr-s .exr-warn')?1:0; }
   function sortRows(g){ var pop=POP[g]||[], rs=rows(g); if(!rs.length) return rs;
-    function rank(li){ var i=pop.indexOf(keyOf(li)); return i<0?999:i; }
+    document.querySelectorAll('#s-d3 .exsub[data-grp="'+g+'"]').forEach(function(h){ h.remove(); }); /* opnieuw sorteren: oude tussenkoppen weg */
+    var ord=cfg.order&&cfg.order[g]; /* eigen volgorde (slepen in het keuzeblad) */
+    function rank(li){ var i=pop.indexOf(keyOf(li)); i=i<0?999:i;
+      if(ord){ var j=ord.indexOf(keyOf(li)); return j<0?2000+tierOf(li)*1000+i:j; } return i; }
     var anchor=rs[0].previousElementSibling;
     /* binnen een groep: supersets achteraan, bij Biceps de onderarmen na de curls; daarbinnen laag + populariteit */
     function cat(li){ var og=li.dataset.og;
@@ -3659,7 +3666,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       if(li.querySelectorAll('.exr-in').length>1) return 3; /* Arms: supersets achteraan */
       if(og==='g9') return 2; /* triceps */
       return /wrist|reverse/i.test(li.querySelector('.exr-n').textContent)?1:0; } /* biceps, dan onderarmen */
-    rs.sort(function(a,b){ return cat(a)-cat(b) || tierOf(a)-tierOf(b) || rank(a)-rank(b); });
+    rs.sort(function(a,b){ return cat(a)-cat(b) || (ord?0:tierOf(a)-tierOf(b)) || rank(a)-rank(b); });
     /* tussenkoppen (Back: Rows / Vertical pull; Arms: Biceps / Forearms / Triceps / Supersets), ook in het keuzeblad (data-sub) */
     var lab=SUBS[g], last=null;
     rs.forEach(function(li){ var c=cat(li);
@@ -3680,7 +3687,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
       var rib=li.querySelector('.info-b'), nop=rib&&rib.classList.contains('nop')?' nop':'';
       var ib=(window.__p53info&&window.__p53info.has(n))?'<button type="button" class="info-b'+nop+'" data-n="'+n.replace(/"/g,'&quot;')+'" aria-label="How to '+n.replace(/"/g,'&quot;')+'">'+window.__p53infoIcon+'</button>':'';
-      return '<li'+(a?'':' class="off"')+'><span class="gs-t"><b>'+n+rk+'</b><small>'+st+(eqp?' <span class="exr-eqp">'+eqp.textContent+'</span>':'')+(function(){ var c=window.__exStat?window.__exStat(k):null; if(!c){ var ce=li.querySelector('.exr-cnt .cnt-n'); return ce?' <span class="exr-cnt">'+ce.textContent+'</span>':''; } return c.n?' <span class="exr-cnt">· '+c.n+'×</span>':''; })()+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span>'+ib+'<button type="button" class="gs-set'+(sets[k]?' custom':'')+'" data-k="'+k+'" aria-label="Sets and reps for '+n.replace(/"/g,'&quot;')+'"><svg width="24" height="24" viewBox="120 -840 720 720" fill="currentColor" aria-hidden="true"><path d="M220-360v-192h-60v-48h108v240h-48Zm132 0v-110q0-15 9.5-24.5T386-504h98v-48H352v-48h146q15 0 24.5 9.5T532-566v76q0 15-9.5 24.5T498-456h-98v48h132v48H352Zm248 0v-48h132v-48h-92v-48h92v-48H600v-48h146q15 0 24.5 9.5T780-566v172q0 15-9.5 24.5T746-360H600Z"/></svg></button><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; })(); }).join('');
+      return '<li'+(a?'':' class="off"')+' data-k="'+k+'" data-sub="'+(li.dataset.sub||'')+'">'+DRAG+'<span class="gs-t"><b>'+n+rk+'</b><small>'+st+(eqp?' <span class="exr-eqp">'+eqp.textContent+'</span>':'')+(function(){ var c=window.__exStat?window.__exStat(k):null; if(!c){ var ce=li.querySelector('.exr-cnt .cnt-n'); return ce?' <span class="exr-cnt">'+ce.textContent+'</span>':''; } return c.n?' <span class="exr-cnt">· '+c.n+'×</span>':''; })()+(wn?'<span class="exr-warn">'+wn.textContent+'</span>':'')+'</small></span>'+ib+'<button type="button" class="gs-set'+(sets[k]?' custom':'')+'" data-k="'+k+'" aria-label="Sets and reps for '+n.replace(/"/g,'&quot;')+'"><svg width="24" height="24" viewBox="120 -840 720 720" fill="currentColor" aria-hidden="true"><path d="M220-360v-192h-60v-48h108v240h-48Zm132 0v-110q0-15 9.5-24.5T386-504h98v-48H352v-48h146q15 0 24.5 9.5T532-566v76q0 15-9.5 24.5T498-456h-98v48h132v48H352Zm248 0v-48h132v-48h-92v-48h92v-48H600v-48h146q15 0 24.5 9.5T780-566v172q0 15-9.5 24.5T746-360H600Z"/></svg></button><input type="checkbox" class="sw" data-k="'+k+'"'+(a?' checked':'')+' aria-label="Show '+n.replace(/"/g,'&quot;')+'"></li>'; })(); }).join('');
     list.querySelectorAll('.info-b').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); window.__p53info.open(b.dataset.n,b); }); });
     list.querySelectorAll('.gs-set').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); openSet(b.dataset.k,b); }); });
     list.querySelectorAll('.sw').forEach(function(c){ c.addEventListener('change',function(){
@@ -3692,6 +3699,33 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       cfg[cur]=act; save(); apply(); c.closest('li').classList.toggle('off',!c.checked);
     }); });
   }
+  /* slepen om de volgorde te wijzigen (greep links), alleen binnen dezelfde tussenkop; bewaard in cfg.order[groep] */
+  var DRAG='<span class="gs-drag" aria-hidden="true"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor"><path d="M360-160q-33 0-56.5-23.5T280-240q0-33 23.5-56.5T360-320q33 0 56.5 23.5T440-240q0 33-23.5 56.5T360-160Zm240 0q-33 0-56.5-23.5T520-240q0-33 23.5-56.5T600-320q33 0 56.5 23.5T680-240q0 33-23.5 56.5T600-160ZM360-400q-33 0-56.5-23.5T280-480q0-33 23.5-56.5T360-560q33 0 56.5 23.5T440-480q0 33-23.5 56.5T360-400Zm240 0q-33 0-56.5-23.5T520-480q0-33 23.5-56.5T600-560q33 0 56.5 23.5T680-480q0 33-23.5 56.5T600-400ZM360-640q-33 0-56.5-23.5T280-720q0-33 23.5-56.5T360-800q33 0 56.5 23.5T440-720q0 33-23.5 56.5T360-640Zm240 0q-33 0-56.5-23.5T520-720q0-33 23.5-56.5T600-800q33 0 56.5 23.5T680-720q0 33-23.5 56.5T600-640Z"/></svg></span>';
+  (function(){
+    var it=null, y0=0, st0=0, raf=0, lastY=0, pid=null, moved=false;
+    function sib(el,dir){ var n=dir<0?el.previousElementSibling:el.nextElementSibling; return n&&n.dataset.k&&n.dataset.sub===el.dataset.sub?n:null; }
+    function flip(el,dy){ el.style.transition='none'; el.style.transform='translateY('+dy+'px)'; void el.offsetWidth; el.style.transition='transform .16s ease'; el.style.transform=''; }
+    function step(){ if(!it) return;
+      var r=sh.getBoundingClientRect(), edge=70, v=0;
+      if(lastY<r.top+edge) v=-Math.ceil((r.top+edge-lastY)/6); else if(lastY>r.bottom-edge) v=Math.ceil((lastY-(r.bottom-edge))/6);
+      if(v) sh.scrollTop+=v;
+      var dy=lastY-y0+(sh.scrollTop-st0), n;
+      while(dy>0 && (n=sib(it,1)) && dy>n.offsetHeight/2){ var h=n.offsetHeight; n.after(it); y0+=h; dy-=h; flip(n,h); moved=true; }
+      while(dy<0 && (n=sib(it,-1)) && -dy>n.offsetHeight/2){ var h2=n.offsetHeight; n.before(it); y0-=h2; dy+=h2; flip(n,-h2); moved=true; }
+      it.style.transform='translateY('+dy+'px)';
+      raf=requestAnimationFrame(step); }
+    list.addEventListener('pointerdown',function(e){ var g=e.target.closest('.gs-drag'); if(!g||it) return;
+      e.preventDefault(); it=g.closest('li'); pid=e.pointerId; y0=lastY=e.clientY; st0=sh.scrollTop; moved=false;
+      try{ g.setPointerCapture(pid); }catch(x){} it.classList.add('dragging'); raf=requestAnimationFrame(step); });
+    list.addEventListener('pointermove',function(e){ if(it&&e.pointerId===pid){ e.preventDefault(); lastY=e.clientY; } });
+    function drop(e){ if(!it||(e&&e.pointerId!==pid)) return; cancelAnimationFrame(raf);
+      var el=it; it=null; el.classList.remove('dragging'); el.style.transition='transform .16s ease'; el.style.transform='';
+      setTimeout(function(){ el.style.transition=''; },180);
+      if(!moved) return;
+      cfg.order=cfg.order||{}; cfg.order[cur]=[].map.call(list.querySelectorAll('li[data-k]'),function(x){ return x.dataset.k; });
+      save(); sortRows(cur); apply(); }
+    list.addEventListener('pointerup',drop); list.addEventListener('pointercancel',drop);
+  })();
   /* blad sets & reps */
   var sBg=document.getElementById('set-bg'), sSh=document.getElementById('set-sheet'), sN=document.getElementById('setN'), sR=document.getElementById('setR'), sPrev=document.getElementById('setPrev'), sK=null, sOpen=false, sLast=null, sCount=3;
   function parse(t){ var m=/^\s*(\d+)\s*×\s*(.*?)\s*$/.exec(t||''); return m?{s:+m[1],r:m[2]}:{s:0,r:(t||'').trim()}; }
@@ -3825,6 +3859,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     sh.addEventListener('touchstart',function(e){
       if(e.touches.length!==1 || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)){ armed=false; return; }
       var t=e.touches[0]; y0=t.clientY; x0=t.clientX; t0=Date.now(); dy=0; drag=false; armed=true; st0=sh.scrollTop;
+      if(e.target.closest('.gs-drag')){ armed=false; return; } /* sleepgreep in het keuzeblad */
       handle=!!e.target.closest('.sheet-grip,.sheet-head');
     },{passive:true});
     sh.addEventListener('touchmove',function(e){
