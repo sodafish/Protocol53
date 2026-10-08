@@ -96,7 +96,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
 - Sectie **Progress** (`#plist`/`#plList`, tussen de spierlijst en de kalender, eigen script vóór het kalenderscript; op vraag van Tom): elke
-  oefening met minstens één meting in `prog` (ook uitgezette, warm-up en cardio), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
+  krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
   rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en, vanaf twee metingen, het verschil eerste → laatste (`+5 kg`, accent bij
   stijging). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 

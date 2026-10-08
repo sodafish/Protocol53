@@ -3955,7 +3955,7 @@ window.__congrats=function(o){
     var F=window.__progFmt, html='', grp=null, n=0;
     document.querySelectorAll('#s-d3 .exl > li').forEach(function(li){
       if(li.classList.contains('exgrp')){ grp=li; return; }
-      if(!li.classList.contains('exr')) return;
+      if(!li.classList.contains('exr')||li.dataset.grp==='g0'||li.dataset.grp==='g8') return; /* geen warm-up en cardio */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]'), rows='';
       [].forEach.call(ins,function(inp){ var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
