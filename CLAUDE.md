@@ -237,7 +237,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   zit: de navbar ligt over de onderrand, de tabs zweven er net boven. Workout toont `#wtabs`, Statistics `#stabs`, andere pagina's geen paneel
   (event `p53-view` uit `paint()` van de navbar). Body krijgt `gsub-on` (meer ruimte onderaan; End workout-pil hoger, 136 px). Actieve tab =
   `--ink` 8% op `--surface` + accentkleur + lichte schaduw. Tik op een tab = wisselen + zacht naar boven (`__smoothTop`, naar 0). Sticky/`toList`/
-  `keep`/`__wtabsH` zijn niet meer van toepassing (`__wtabsH` geeft 0). Terugdraaien: git-tag `before-dock`. De beschrijving hieronder is de vorige stand.
+  `keep`/`__wtabsH` zijn niet meer van toepassing (`__wtabsH` geeft 0). Terugdraaien: commit `af04f0f` is de laatste stand vóór het paneel. De beschrijving hieronder is de vorige stand.
 - Bovenaan Workout (`.tools-row`): links 'Start' (`.wo-btn`, play-icoon; label kort 'Start' zodat alles op één lijn past), meteen rechts
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
