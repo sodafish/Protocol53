@@ -1069,9 +1069,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 #s-d3 .tools-row .split-sel{margin-left:auto;}
 .split-sel[hidden]{display:none!important;}
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
-.wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:30;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
-  background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;}
-.wtabs.stuck{box-shadow:0 0 0 8px var(--paper),0 10px 22px -10px rgba(0,0,0,.28);}
+.wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 20px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper),0 -20px 0 8px var(--paper);transition:box-shadow .2s ease;}
+.wtabs.stuck{box-shadow:0 0 0 8px var(--paper),0 -20px 0 8px var(--paper),0 10px 22px -10px rgba(0,0,0,.28);}
 .wtabs button{appearance:none;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;flex:1 1 0;min-width:0;min-height:44px;padding:0 .3rem;border:0;border-radius:999px;
   background:transparent;color:var(--muted);font:500 14.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .12s ease;}
 .wtabs button[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 9%,transparent);color:var(--accent);font-weight:600;} /* zelfde pil als de actieve navbar-knop */
@@ -3825,11 +3825,17 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     set(b.dataset.split); hide(); btn.focus({preventScroll:true}); }); });
   /* hoogte die de plakkende tabs bovenaan innemen (voor doorscrollen) */
   window.__wtabsH=function(){ return tabs&&tabs.offsetParent?tabs.offsetHeight+16:0; };
-  function toList(){ /* na wisselen: lijst begint net onder de tabs, als je al voorbij de tabs gescrold was */
-    if(!tabs) return; var h=document.documentElement, top=tabs.previousElementSibling.getBoundingClientRect().bottom+window.scrollY-8; /* natuurlijke plaats van de tabs (onder de tools-row) */
-    if(window.scrollY>top){ h.style.scrollBehavior='auto'; window.scrollTo(0,top); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); } }
-  if(tabs){ tabs.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.split===cur) return; set(b.dataset.split); toList(); }); });
-    window.addEventListener('scroll',function(){ var t=tabs.getBoundingClientRect().top, st=parseFloat(getComputedStyle(tabs).top)||0; tabs.classList.toggle('stuck',window.scrollY>0&&t<=st+.5); },{passive:true}); }
+  function toList(wasStuck){ /* na wisselen: de tabs blijven op exact dezelfde plek (geplakt), de nieuwe lijst begint er net onder */
+    if(!tabs) return; var pane=tabs.parentElement, h=document.documentElement;
+    if(!wasStuck){ pane.style.minHeight=''; return; }
+    var st=parseFloat(getComputedStyle(tabs).top)||0; tabs.style.position='static'; var nat=tabs.getBoundingClientRect().top+window.scrollY; tabs.style.position=''; /* natuurlijke plaats */
+    var y=Math.max(0,nat-st);
+    /* korte lijst (bv. Cardio): pagina hoog genoeg houden zodat er tot daar gescrold kan worden, anders zakken de tabs */
+    pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY);
+    if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
+    h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
+  if(tabs){ tabs.querySelectorAll('[data-split]').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.split===cur) return; var stuck=tabs.classList.contains('stuck'); set(b.dataset.split); toList(stuck); }); });
+    window.addEventListener('scroll',function(){ if(window.scrollY<2) tabs.parentElement.style.minHeight=''; var t=tabs.getBoundingClientRect().top, st=parseFloat(getComputedStyle(tabs).top)||0; tabs.classList.toggle('stuck',window.scrollY>0&&t<=st+.5); },{passive:true}); }
   window.__setSplit=function(v){ if(SPLIT[v]) set(v); };
   function set(v){ cur=v; try{ localStorage.setItem(KEY,cur); if(cur!=='warmup') localStorage.setItem(LKEY,cur); }catch(x){} apply(); }
   /* warm-up af door een vinkje → door naar het programma van de vorige keer (standaard Open Gym), bovenaan de lijst */
