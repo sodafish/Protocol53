@@ -942,6 +942,20 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .prog{margin-top:3.4rem;}
 .prog[hidden]{display:none!important;}
 .cal{margin:3rem 0 0;}
+.plist{margin:3rem 0 0;}
+.pl-list{list-style:none;margin:0;padding:0;}
+.pl-list .pl-h{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:1.2rem 0 .4rem;border-bottom:1px solid var(--line);}
+.pl-list .pl-h:first-child{padding-top:.2rem;}
+.pl-list button{appearance:none;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:.8rem;width:100%;min-height:52px;padding:.5rem 0;border:0;border-bottom:1px solid var(--line-soft);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;transition:background-color .15s ease;}
+.pl-list button:active{background:var(--paper-soft);}
+.pl-n{flex:1;min-width:0;font-size:15px;font-weight:500;color:var(--ink);line-height:1.25;}
+.pl-n small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:.1rem;}
+.pl-v{flex:none;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.pl-v b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;color:var(--ink);}
+.pl-v span{font-size:12.5px;color:var(--muted);margin-left:.15em;}
+.pl-v em{display:block;font-style:normal;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:.1rem;}
+.pl-v em.up{color:var(--accent);}
+.pl-chev{flex:none;color:var(--muted-soft);}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
 .cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
 .cal-title b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
@@ -1192,7 +1206,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 
   <div class="seg ksub" role="tablist" aria-label="Strength">
     <button type="button" class="seg-b" role="tab" id="k-train" aria-controls="s-d3" aria-selected="true">Training</button>
-    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Coverage</button>
+    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Statistics</button>
     <span class="seg-ind" aria-hidden="true"></span>
   </div>
 
@@ -1444,6 +1458,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <p class="stats-sub" id="statsSub"></p>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
+      <section class="plist" id="plist" aria-label="Progress per exercise" hidden>
+        <h2 class="prog-t">Progress</h2>
+        <ol class="pl-list" id="plList"></ol>
+      </section>
       <section class="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">Workouts</h2>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -1784,7 +1802,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg><span>Workout</span></button>
-    <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M400-80v-280h-80v-240q0-33 23.5-56.5T400-680h160q33 0 56.5 23.5T640-600v240h-80v280H400Zm80-640q-33 0-56.5-23.5T400-800q0-33 23.5-56.5T480-880q33 0 56.5 23.5T560-800q0 33-23.5 56.5T480-720Z"/></svg><span>Coverage</span></button>
+    <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M400-80v-280h-80v-240q0-33 23.5-56.5T400-680h160q33 0 56.5 23.5T640-600v240h-80v280H400Zm80-640q-33 0-56.5-23.5T400-800q0-33 23.5-56.5T480-880q33 0 56.5 23.5T560-800q0 33-23.5 56.5T480-720Z"/></svg><span>Statistics</span></button>
   </div>
   <button type="button" class="gnav-more glass" id="gnavMore" aria-haspopup="dialog" aria-label="More pages"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5.5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="18.5" r="1.9"/></svg></button>
 </nav>
@@ -3548,7 +3566,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   var nav=document.querySelector('.gnav'); if(!nav) return;
   var items=[].slice.call(nav.querySelectorAll('.gnav-i')), moreBtn=document.getElementById('gnavMore');
   var bg=document.getElementById('more-bg'), sh=document.getElementById('more-sheet'), title=document.getElementById('pgTitle');
-  var NAMES={workout:'Workout',progress:'Coverage',cardio:'Cardio',voeding:'Diet',kracht:'Info'};
+  var NAMES={workout:'Workout',progress:'Statistics',cardio:'Cardio',voeding:'Diet',kracht:'Info'};
   var TAB={cardio:'t-cardio',voeding:'t-voeding',kracht:'t-kracht'};
   var view='workout';
   function current(){
@@ -3926,6 +3944,36 @@ window.__congrats=function(o){
   el.addEventListener('click',close); setTimeout(close,4500);
 };
 
+/* ---- Progress (Statistics, tussen spieren en kalender): elke oefening met minstens één meting, per groep in workoutvolgorde,
+   met de laatste waarde en het verschil eerste → laatste meting; tik = uitleg + grafiek (zoals de oog-knop) ---- */
+(function(){
+  var list=document.getElementById('plList'), sec=document.getElementById('plist'); if(!list||!sec) return;
+  var CHEV='<svg class="pl-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function render(){
+    if(!window.__progPts||!window.__progFmt) return;
+    var F=window.__progFmt, html='', grp=null, n=0;
+    document.querySelectorAll('#s-d3 .exl > li').forEach(function(li){
+      if(li.classList.contains('exgrp')){ grp=li; return; }
+      if(!li.classList.contains('exr')) return;
+      var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
+      var ins=li.querySelectorAll('.exr-in[data-note]'), rows='';
+      [].forEach.call(ins,function(inp){ var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
+        var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pts[0], d=last.v-first.v;
+        var lab=ins.length>1?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'';
+        rows+='<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+(lab?'<small>'+esc(lab)+'</small>':'')+'</span>'+
+          '<span class="pl-v"><b>'+F.v(last.v)+'</b><span>'+esc(unit)+'</span>'+(pts.length>1?'<em class="'+(d>0?'up':'')+'">'+(d>0?'+':d<0?'−':'±')+F.v(Math.abs(d))+' '+esc(unit)+'</em>':'')+'</span>'+CHEV+'</button></li>'; });
+      if(!rows) return;
+      if(grp){ var t=grp.querySelector('.grp-t'); html+='<li class="pl-h" aria-hidden="true">'+esc(t?t.firstChild.textContent.trim():'')+'</li>'; grp=null; }
+      html+=rows; n++;
+    });
+    list.innerHTML=html; sec.hidden=!n;
+  }
+  list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.open(b.dataset.n,b); });
+  document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
+  document.addEventListener('p53-groups',function(){ setTimeout(render,0); });
+  setTimeout(render,0);
+})();
 /* ---- kalender (Coverage, onderaan): bolletje op elke trainingsdag; duur uit collectie 'sess' (End workout) ---- */
 (function(){
   var SKEY='fitlog-sess', sess={}, sCol=null;

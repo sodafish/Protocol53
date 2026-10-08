@@ -75,7 +75,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
-  en **Coverage** (vroeger Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
+  en **Statistics** (vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'man', staand figuurtje), plus een losse ronde knop met drie puntjes (`#gnavMore`) die een onderblad
   `#more-sheet` opent met Cardio, Diet, Info en als laatste Settings (`#moreProfile`, tandwiel). Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
   begint bovenaan (meteen + na 200/450 ms, omdat het wisselen van tab zelf nog kan scrollen), behalve terug naar Workout: die
   komt terug op de onthouden scrollpositie (`window.__woY`, bewaard bij het verlaten van Workout, op 0 gezet na End workout).
@@ -94,6 +94,11 @@ Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage
   Month (`maand`, laatste 30 dagen) en All (`alles`, sinds de eerste afvinking) → gemiddeld aantal sets per week.
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
+
+- Sectie **Progress** (`#plist`/`#plList`, tussen de spierlijst en de kalender, eigen script vóór het kalenderscript; op vraag van Tom): elke
+  oefening met minstens één meting in `prog` (ook uitgezette, warm-up en cardio), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
+  rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en, vanaf twee metingen, het verschil eerste → laatste (`+5 kg`, accent bij
+  stijging). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
