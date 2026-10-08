@@ -82,7 +82,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - De oude hoofdtabs bovenaan (`.tabbar`, knoppen `#t-schema`, `#t-cardio`, `#t-voeding`, `#t-kracht`) en
   de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
   `window.__ksub` is omwikkeld zodat sprongen (bv. End workout → Progress) de navbar bijwerken.
-- Onder de titel staat de huidige pagina (`#pgTitle`).
+- Onder de titel staat de huidige pagina (`#pgTitle`); ruimte eronder kleiner gemaakt (`#p-schema{padding-top:.6rem}`, ~23 px tot Start/tabs; op vraag van Tom).
 - De app opent altijd op Workout (geen vorige pagina terugzetten). Wel onthouden (localStorage): periode statistieken
   `fitlog-stats-per`, oefening en periode progressie `fitlog-prog-sel`/`fitlog-prog-per`, Full/Upper/Lower `fitlog-split`,
   oefeningen per groep `fitlog-groups` (+ cfg/groups), geboortedatum (+ cfg/profile).
