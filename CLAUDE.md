@@ -402,5 +402,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   close-grip bar, straight bar, straight or EZ bar, ankle strap); het keuzeblad toont het mee. Nieuwe kabeloefening: hulpstuk erbij.
 - Arms-kop: 'Arms' + `<em class="grp-opt">(Optional)</em>` (cursief, zelfde stijl als de kop): in een full-body training zijn armen
   een extraatje (ze werken al mee bij rows/presses). Warm-up heeft geen 'Optional' meer.
-- De rij-animatie (`cascade`) slaat `.ex-off`-rijen over en stopt de vertraging na 24 rijen.
+- De rij-animatie (`cascade`) en de paneel-animatie (`reveal`) zijn UITGESCHAKELD (op vraag van Tom: na wisselen van pagina leek het tot 2 s te
+  duren voor alles getekend was; de rijen kwamen gestaggerd tot ~1,9 s binnen). Beide functies keren meteen terug. Stats/kalender gebruiken
+  `window.__liByNote` (cache veld → rij) i.p.v. een querySelector per meting.
 

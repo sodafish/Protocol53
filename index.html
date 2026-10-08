@@ -1862,6 +1862,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var revealTimer;
   function reveal(panel){
+    return; /* uitgeschakeld: pagina's verschijnen meteen */
     if(reduce) return;
     clearTimeout(revealTimer);
     panel.classList.remove('revealing');
@@ -1937,6 +1938,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   var PANEKEY='fitlog-pane';
   var cascadeTimer;
   function cascade(p){
+    return; /* uitgeschakeld (op vraag van Tom): de rijen kwamen één voor één binnen en de pagina leek tot 2 s te laden */
     if(reduce||!p) return;
     var items=p.querySelectorAll('.pane-note, .exr:not(.ex-off), .wk li');
     items.forEach(function(el,i){ el.style.setProperty('--n',Math.min(i,24)); });
@@ -2362,10 +2364,14 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   /* alle gebeurtenissen, plus de tellingen van vóór deze functie (één keer vastgelegd in 'seed') */
   /* één bron: de grafiekdata (prog). Elke oefening met een meting op een dag = één training die dag (supersets: één keer),
      met de sets en spieren zoals de oefening nu staat. hist wordt nog geschreven maar telt niet meer mee. */
+  /* snelle opzoeking veld → oefeningsrij (de rijen veranderen niet, enkel van volgorde); vroeger een querySelector per meting = traag */
+  var NOTEMAP=null;
+  function liByNote(k){ if(!NOTEMAP){ NOTEMAP={}; document.querySelectorAll('#s-d3 [data-note]').forEach(function(x){ var li=x.closest('.exr'); if(li&&!NOTEMAP[x.dataset.note]) NOTEMAP[x.dataset.note]=li; }); } return NOTEMAP[k]||null; }
+  window.__liByNote=liByNote;
   function events(){
     var out=[], seen={}, P=window.__progAll?window.__progAll():{};
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number') return;
-      var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?chkKey(li):p.k;
+      var li=liByNote(p.k), k=li?chkKey(li):p.k;
       if(!k||/^(w0|c)-/.test(k)) return; /* warm-up en cardio tellen niet voor de spieren */
       var key=k+'|'+(p.d||new Date(p.t).toDateString())+'|'+(p.w||''); if(seen[key]) return; seen[key]=1; /* één training per oefening per workout */
       out.push({k:k,t:p.t,s:setsFor(k,li),m:musclesFor(k,li)});
@@ -4092,7 +4098,7 @@ window.__congrats=function(o){
   function data(){
     var days={}, P=window.__progAll?window.__progAll():{};
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number'||!p.d) return;
-      var inp=document.querySelector('#s-d3 [data-note="'+p.k+'"]'), li=inp&&inp.closest('.exr'), k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
+      var li=window.__liByNote?window.__liByNote(p.k):null, k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
       if(!k||/^w0-/.test(k)) return;
       var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w; if(o.ex[ek]) return; o.ex[ek]=1;
       if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
