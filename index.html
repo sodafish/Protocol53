@@ -3768,7 +3768,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function apply(){
     var keep=SPLIT[cur];
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
-      var g=li.dataset.grp; li.classList.toggle('split-off',g==='g0'?cur==='cardio':keep.indexOf(g)<0); });
+      var g=li.dataset.grp; li.classList.toggle('split-off',g==='g0'?(cur==='cardio'||cur==='egym'):keep.indexOf(g)<0); }); /* warm-up niet bij Cardio en EGYM */
     document.body.classList.toggle('split-cardio',cur==='cardio');
     window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
     lbl.textContent=NAME[cur];
