@@ -1077,6 +1077,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .note-jump[hidden]{display:none;}
 #s-d3 .tools-row .split-sel{margin-left:auto;}
 .split-sel[hidden]{display:none!important;}
+/* Warm-up, EGYM en Cardio: de tab zegt het al, dus geen titel; enkel het potlood rechts (op vraag van Tom) */
+#s-d3 .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]) .grp-t{display:none;}
+#s-d3 .exl .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]){justify-content:flex-end;padding-top:.4rem;padding-bottom:.4rem;}
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
 .wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 20px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
