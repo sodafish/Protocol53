@@ -99,7 +99,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`) · **Progress** (`#plist` + lege melding `#plEmpty`, `data-sv=prog`).
   Telkens één sectie zichtbaar (`.sv[hidden]`); keuze in localStorage `fitlog-stats-view`; `window.__statsView(v)`; End workout zet Muscles. De koppen
   'Calendar'/'Strength progress' zijn verborgen (de tab zegt het al). Wisselen houdt de geplakte tabs op dezelfde hoogte (`keep`, zoals `toList`).
-  Periode Last/Week/Month/All staat nu als tekst-tabs met accent-onderlijn (`.stats>.sv>.stats-per`), niet meer als pillen.
+  Ruimte onder `#stabs` = 1.6rem (op vraag van Tom). Periode Last/Week/Month/All staat nu als tekst-tabs met accent-onderlijn (`.stats>.sv>.stats-per`), niet meer als pillen.
 - Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, onderaan na de kalender (op vraag van Tom), alleen velden in kg (geen reps/sec), eigen script vóór het kalenderscript; op vraag van Tom): elke
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
   rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en, vanaf twee metingen, het verschil eerste → laatste (`+5 kg`, accent bij
