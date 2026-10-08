@@ -1086,7 +1086,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 #s-d3 .exr .chk{position:relative;}
 #s-d3 .exr .chk::after{content:"";position:absolute;top:-14px;bottom:-14px;left:-16px;right:-22px;}
 /* Warm-up, EGYM en Cardio: de tab zegt het al, dus geen titel; enkel het potlood rechts (op vraag van Tom) */
-#s-d3 .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]) .grp-t{display:none;}
+#s-d3 .exgrp:is([data-grp="g0"]) .grp-t{display:none;}
+/* EGYM en Cardio: titel als kleine tussenkop, zoals 'Cardio' onder Warm-up (op vraag van Tom) */
+#s-d3 .exl .exgrp:is([data-grp="g8"],[data-grp="g10"]){justify-content:space-between;align-items:center;}
+#s-d3 .exgrp:is([data-grp="g8"],[data-grp="g10"]) .grp-t{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transform:translateY(-2px);}
 #s-d3 .exl .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]){justify-content:flex-end;padding-top:2.4rem;padding-bottom:.5rem;} /* zelfde hoogte als Open Gym (groep 1), zodat het potlood op elke tab op dezelfde plaats staat */
 /* warm-up: geen eigen kopregel; het potlood zweeft rechts op de regel van de eerste tussenkop (Cardio), zodat potlood én eerste lijn
    op dezelfde plaats staan als op de andere tabs */
