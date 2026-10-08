@@ -246,7 +246,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Seated Row, Leg Extension, Triceps Press, Back Extension, Chest Press (2 × 15); uit: Leg Curl, Shoulder Press, Butterfly, Butterfly Reverse,
   Biceps Curl, Hip Abduction, Hip Adduction, Glute, Squat. Elk met MUSCLES (telt dus in Coverage), eigen EX-uitleg (`eg…`, + 'Enter the weight the
   EGYM screen shows.') en beelden van het vergelijkbare toestel via alias (VID/ANIM/IMG van bv. widepulldown, legpress, chestmachine; script bij `SSL`);
-  geen eigen EGYM-beelden. Circuit-logica (`paintChecks`): niets doorstrepen, kop pas af als alle actieve oefeningen gedaan zijn.
+  Eigen EGYM-beelden van Tom (`EGI`, `img/egym/<naam>.jpg`, 640 px op wit, één beeld met bewegingspijl, bron 'Image: EGYM', klasse `.sheet-eg`)
+  winnen van video/animatie/foto's; voor 14 toestellen (niet voor Butterfly, Butterfly Reverse, Biceps Curl, Squat: die houden de alias). Circuit-logica (`paintChecks`): niets doorstrepen, kop pas af als alle actieve oefeningen gedaan zijn.
   Mixen kan: EGYM afvinken, dan de dropdown op Full body zetten en losse oefeningen afvinken in dezelfde workout. Kalender (`prog()`): enkel g10 =
   'EGYM', g10 + andere krachtgroepen = 'EGYM + Full body' (of Upper/Lower).
 

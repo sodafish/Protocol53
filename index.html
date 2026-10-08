@@ -814,6 +814,8 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .sheet-fig.sheet-gif{background:#fff;padding:.4rem;display:flex;justify-content:center;}
 .sheet-gif img,.sheet-gif video{display:block;width:min(100%,280px);height:auto;aspect-ratio:1;}
 .sheet-fig.sheet-mov{padding:0;background:#fff;overflow:hidden;}
+.sheet-fig.sheet-eg{padding:0;background:#fff;overflow:hidden;display:flex;justify-content:center;}
+.sheet-eg img{display:block;width:min(100%,360px);height:auto;}
 .sheet-mov video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;}
 .ph-frame img{opacity:0;transition:opacity .45s ease;}
 .ph-frame img.on{opacity:1;}
@@ -3323,7 +3325,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   IMG.ss4=['img/revpushdown-0.jpg','img/revpushdown-1.jpg','img/revcablecurl-0.jpg','img/revcablecurl-1.jpg'];
   IMG.ss3=['img/barpushdown-0.jpg','img/barpushdown-1.jpg','img/cablecurl-0.jpg','img/cablecurl-1.jpg'];
   /* EGYM-circuit (g10): eigen uitleg, beelden van het vergelijkbare toestel (video/animatie/foto's) */
-  NAMES['EGYM Rotary Torso']='egtorso'; EX.egtorso={cap:'Hips locked in place, upper body turns against the resistance. Rotate in a smooth arc to one side, return under control, then the other side. Enter the weight the EGYM screen shows.'};
+  NAMES['EGYM Rotary Torso']='egtorso'; EX.egtorso={cap:'Chest against the pad, hands on the handles, knees on the platform. Turn your hips and legs to one side in a smooth arc, return under control, then the other side. Enter the weight the EGYM screen shows.'};
   NAMES['EGYM Lat Pulldown']='eglat'; EX.eglat={cap:'Thighs under the pads, wide grip. Pull the bar to your upper chest, elbows down and back, and let it rise slowly. Enter the weight the EGYM screen shows.'}; if(VID.widepulldown) VID.eglat=VID.widepulldown; if(ANIM.widepulldown) ANIM.eglat=ANIM.widepulldown; if(IMG.widepulldown) IMG.eglat=IMG.widepulldown;
   NAMES['EGYM Leg Press']='eglegpress'; EX.eglegpress={cap:'Feet hip-width on the plate, knees in line with your toes. Push away without locking your knees, bend back slowly. Enter the weight the EGYM screen shows.'}; if(VID.legpress) VID.eglegpress=VID.legpress; if(ANIM.legpress) ANIM.eglegpress=ANIM.legpress; if(IMG.legpress) IMG.eglegpress=IMG.legpress;
   NAMES['EGYM Abdominal Crunch']='egcrunch'; EX.egcrunch={cap:'Curl your chest towards your hips by rounding your upper back, not by pulling with your arms. Return slowly. Enter the weight the EGYM screen shows.'}; if(VID.crunch) VID.egcrunch=VID.crunch; if(ANIM.crunch) ANIM.egcrunch=ANIM.crunch; if(IMG.crunch) IMG.egcrunch=IMG.crunch;
@@ -3341,6 +3343,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   NAMES['EGYM Hip Adduction']='egadd'; EX.egadd={cap:'Pads on the inside of your knees. Squeeze your legs together, open slowly. Enter the weight the EGYM screen shows.'}; if(VID.adduction) VID.egadd=VID.adduction; if(ANIM.adduction) ANIM.egadd=ANIM.adduction; if(IMG.adduction) IMG.egadd=IMG.adduction;
   NAMES['EGYM Glute']='egglute'; EX.egglute={cap:'Push the pad back with one leg by extending your hip, without arching your lower back. Return slowly. Enter the weight the EGYM screen shows.'}; if(VID.kickbackmachine) VID.egglute=VID.kickbackmachine; if(ANIM.kickbackmachine) ANIM.egglute=ANIM.kickbackmachine; if(IMG.kickbackmachine) IMG.egglute=IMG.kickbackmachine;
   NAMES['EGYM Squat']='egsquat'; EX.egsquat={cap:'Feet hip-width, knees in line with your toes. Push up without locking your knees, lower slowly. Enter the weight the EGYM screen shows.'};
+  /* EGYM-beelden van Tom (toestel + bewegingspijl), wint van video/animatie/foto's: img/egym/<naam>.jpg */
+  var EGI={}; 'shoulder crunch legpress torso backext abd legcurl tri chest lat legext glute add row'.split(' ').forEach(function(n){ EGI['eg'+n]='img/egym/'+n+'.jpg'; });
   var SSL={ss1:['Overhead Extension','Biceps Curl'],ss2:['Rope Pushdown','Hammer Curl'],ss5:['Single-Arm Pushdown','Single-Arm Curl'],ss4:['Reverse-Grip Pushdown','Reverse Curl'],ss3:['Bar Pushdown','Bar Curl']};
 
   function photos(host,k){
@@ -3369,7 +3373,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
     bg.classList.toggle('over',!!over); sh.classList.toggle('over',!!over);
     tt.textContent=name;
-    bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+((IMG[k]||ANIM[k])?'<p class="ph-src">'+[IMG[k]?'Photos: Free Exercise DB':'',ANIM[k]?'Animation: © Gym visual':''].filter(Boolean).join(' · ')+'</p>':'');
+    bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+(EGI[k]?'<p class="ph-src">Image: EGYM</p>':(IMG[k]||ANIM[k])?'<p class="ph-src">'+[IMG[k]?'Photos: Free Exercise DB':'',ANIM[k]?'Animation: © Gym visual':''].filter(Boolean).join(' · ')+'</p>':'');
     bodyEl.querySelector('.sheet-cap').textContent=EX[k].cap;
     bodyEl.insertAdjacentHTML('beforeend','<div class="ip-wrap"></div>'); curName=name; progBlock(name);
     if(EX[k].risk){ var rk=document.createElement('p'); rk.className='sheet-tip sheet-risk'; rk.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5M12 17.2v.1"/></svg><span></span>'; rk.querySelector('span').textContent=EX[k].risk; bodyEl.appendChild(rk); }
@@ -3379,7 +3383,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); });
     var fig=bodyEl.querySelector('.sheet-fig');
     /* video (MuscleWiki) heeft voorrang; anders animatie (Gym visual) alleen; anders foto's (Free Exercise DB) */
-    if(VID[k]&&VSQ[k]){ fig.classList.add('sheet-gif'); fig.innerHTML='<video src="'+VID[k]+'?v='+VIDV+'" poster="'+VID[k].replace(/\.mp4$/,'.jpg')+'?v='+VIDV+'" autoplay muted loop playsinline preload="auto" aria-label="Animation"></video>'; cur=null; }
+    if(EGI[k]){ fig.classList.add('sheet-eg'); fig.innerHTML='<img alt="'+name.replace(/"/g,'&quot;')+'" src="'+EGI[k]+'">'; cur=null; }
+    else if(VID[k]&&VSQ[k]){ fig.classList.add('sheet-gif'); fig.innerHTML='<video src="'+VID[k]+'?v='+VIDV+'" poster="'+VID[k].replace(/\.mp4$/,'.jpg')+'?v='+VIDV+'" autoplay muted loop playsinline preload="auto" aria-label="Animation"></video>'; cur=null; }
     else if(VID[k]){ fig.classList.add('sheet-mov'); fig.innerHTML='<video src="'+VID[k]+'?v='+VIDV+'" poster="'+VID[k].replace(/\.mp4$/,'.jpg')+'?v='+VIDV+'" autoplay muted loop playsinline preload="auto" aria-label="Video"></video>'; cur=null; }
     else if(ANIM[k]){ fig.classList.add('sheet-gif'); fig.innerHTML='<img alt="Animation" src="'+ANIM[k]+'">'; cur=null; }
     else if(IMG[k]){ cur=photos(fig,k); }
