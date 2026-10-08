@@ -75,8 +75,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Diet
 - Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom).
-- Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ 100 g</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
-  ranges bij groepen zoals vette vis/noten; rauw/gekookt/droog/poeder tussen haakjes). Nieuwe voedingsrij: zo'n regel erbij.
+- Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ eenheid</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
+  ranges bij groepen zoals vette vis). Eenheid: per stuk waar dat logisch is (egg, avocado, piece fruit, slice, scoop, tin, tbsp,
+  handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij.
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
