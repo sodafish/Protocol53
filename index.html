@@ -4433,7 +4433,10 @@ window.__congrats=function(o){
         if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name});
         return '<li class="cx"><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button><div class="cx-row"><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em></div></li>'; }).join('');
-      html+='<li class="cx-h"><span>'+nm+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
+      var lab=nm; if(nm==='Open Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
+        var gs={}; arr.forEach(function(it){ var g=it.li.dataset.grp; if(g!=='g6') gs[g]=1; }); var gk=Object.keys(gs);
+        lab+=' · '+(!gk.length?'Core':gk.every(function(x){ return UP[x]; })?'Upper Body':gk.every(function(x){ return LO[x]; })?'Lower Body':'Full Body'); }
+      html+='<li class="cx-h"><span>'+lab+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
     return '<ul class="cal-ex">'+html+'</ul>'; }
   var calBox=document.getElementById('calDay');
   if(calBox&&window.p53Swipe) window.p53Swipe(calBox,function(b){ var it=EXI[+b.dataset.i]; if(it&&window.__progDelIds) window.__progDelIds(it.ids); }); /* geen extra bevestiging (op vraag van Tom) */
