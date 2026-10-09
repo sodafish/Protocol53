@@ -106,8 +106,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Vier knoppen links (op vraag van Tom, 9 okt): Last Workout (`dag`; de laatste trainingsdag → totaal aantal sets), 7d (`week` → totaal aantal sets),
-  30d (`maand`) en 90d (`kwart`, laatste 90 dagen) → gemiddeld per week; rechts in dezelfde rij een ronde knop `#balEdit` (icoon Material Symbols 'edit_calendar' als inline SVG 20 px, ook op `#prEdit`; op vraag van Tom, offline-veilig i.p.v. de webfont) (`.per-edit`, accent als actief) = eigen periode
+- Vier knoppen links (op vraag van Tom, 9 okt): Last Workout (`dag`; de laatste trainingsdag → totaal aantal sets), 7 Days (`week` → totaal aantal sets),
+  30 Days (`maand`) en 90 Days (`kwart`, laatste 90 dagen; 13.5 px, tussenruimte .7rem zodat alles op 375 px past; ≤ 360 px 12.5 px/.45rem) → gemiddeld per week; rechts in dezelfde rij een ronde knop `#balEdit` (icoon Material Symbols 'edit_calendar' als inline SVG 20 px, ook op `#prEdit`; op vraag van Tom, offline-veilig i.p.v. de webfont) (`.per-edit`, accent als actief) = eigen periode
   (`per='range'`, op vraag van Tom, 9 okt; Year/All zijn weg, bewaarde oude keuzes → 30d). Venster `p53EditRange` binnen de eerste/laatste training;
   bewaard in localStorage `fitlog-stats-range` `{f,t}` (leeg = volgt eerste/laatste); `balRange(evs)`. Langer dan 7 dagen = gemiddeld per week. Tekst eronder
   '27 Sep – 9 Oct 2026, 4 training days, sets per week.'. Selectors op de periodeknoppen gebruiken `.stats-per button[data-d]` (het potlood niet).
@@ -118,7 +118,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   met schakelaar Front/Back (`.bal-seg`, absoluut rechtsboven op de figuur zodat die hoger staat (op vraag van Tom); keuze in localStorage `fitlog-bal-side`); vanuit ELKE spier (alle 18 van `MLAB`, ook 0%) een lijntje (`.bal-ln`)
   naar links/rechts met groot % (`.bal-pct`, Fraunces 17, `zero` = muted, `top` = hoogste in accent) en de naam (`.bal-lab`, kapitalen 7). Ankers en
   labelhoogtes in `CO` (drawBody, 450-coördinaten; R-ankers al gespiegeld). Kleur van de spiervlakken = krachttoename (hoe donkerder, hoe meer).
-  Bovenaan Progress (op vraag van Tom, 9 okt) de periode `.pr-range` (40 px hoog, lijn en potlood op exact dezelfde hoogte als de periode-rij van Balance): tekst `#prRange` ('3 Oct – 9 Oct 2026 · all data') + potlood `#prEdit`
+  Bovenaan Progress (op vraag van Tom, 9 okt) de periode `.pr-range` (40 px hoog, lijn en potlood op exact dezelfde hoogte als de periode-rij van Balance): tekst `#prRange` ('3 Oct – 9 Oct 2026 · all data') + potlood `#prEdit` (accent (`on`) zodra er een eigen periode is, zoals op Balance)
   → `p53EditRange({title,msg,min,max,from,to})` (venster met twee datumvelden From/To, min/max = eerste/laatste kg-meting, buiten die grenzen wordt
   geklemd; 'Show all data' = terug naar alles). Bewaard in localStorage `fitlog-prog-range` `{f,t}`; leeg = volgt de eerste/laatste meting (ook nieuwe).
   `window.__progRange()` → `{from,to,f,t,b,all}`; figuur (`balPct(from,to)`) én de lijst `#plList` rekenen eerste → laatste meting BINNEN die periode

@@ -1041,7 +1041,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .stats>.sv>.stats-per{display:flex;gap:1.5rem;justify-content:flex-start;border-bottom:1px solid var(--line);}
 .stats>.sv>.stats-per button{flex:none;min-height:40px;padding:0 .1rem;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-weight:600;font-size:14px;}
 .stats>.sv>.stats-per button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--accent);}
-.stats>.sv>.stats-per{justify-content:flex-start;gap:1.5rem;align-items:center;}
+.stats>.sv>.stats-per{justify-content:flex-start;gap:.7rem;align-items:center;}
+.stats>.sv>.stats-per button[data-d]{font-size:13.5px;}
 /* potlood rechts in de periode-rij van Balance: eigen periode (op vraag van Tom, 9 okt) */
 .stats>.sv>.stats-per .per-edit{margin-left:auto;flex:none;width:36px;height:36px;min-height:0;padding:0;border:1.5px solid var(--line);border-radius:50%;margin-bottom:2px;
   display:flex;align-items:center;justify-content:center;background:transparent;color:var(--muted);}
@@ -1049,7 +1050,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .stats>.sv>.stats-per .per-edit,.pr-range .pr-edit{translate:0 -8.7px;}
 .stats>.sv>.stats-per .per-edit.on{border-color:var(--accent);color:var(--accent);}
 .stats>.sv>.stats-per .per-edit:disabled{opacity:.35;cursor:default;}
-@media (max-width:360px){.stats>.sv>.stats-per button{font-size:12.5px;}}
+@media (max-width:360px){.stats>.sv>.stats-per button[data-d]{font-size:12.5px;} .stats>.sv>.stats-per{gap:.45rem;}}
+@media (max-width:340px){.stats>.sv>.stats-per button[data-d]{font-size:11.5px;} .stats>.sv>.stats-per{gap:.3rem;}}
 .pl-list{list-style:none;margin:0;padding:0;}
 .pl-list .pl-h{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:1.2rem 0 .4rem;border-bottom:1px solid var(--line);}
 .pl-list .pl-h:first-child{padding-top:.2rem;}
@@ -1476,6 +1478,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .pr-range p{margin:0;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
 .pr-range p small{font-size:13px;font-weight:500;color:var(--muted-soft);}
 .pr-edit{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:2px;}
+.pr-edit.on{border-color:var(--accent);color:var(--accent);} /* eigen periode actief (ook op Progress) */
 .pr-edit:active{background:var(--paper-soft);transform:scale(.95);}
 .pr-edit[hidden]{display:none;}
 .cf-in i{font-style:normal;font-size:14px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;min-width:2.2em;}
@@ -1797,7 +1800,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
       <div class="stats-per" role="group" aria-label="Period">
-        <button type="button" data-d="dag">Last Workout</button><button type="button" data-d="week">7d</button><button type="button" data-d="maand">30d</button><button type="button" data-d="kwart">90d</button><button type="button" class="pr-edit per-edit" id="balEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button>
+        <button type="button" data-d="dag">Last Workout</button><button type="button" data-d="week">7 Days</button><button type="button" data-d="maand">30 Days</button><button type="button" data-d="kwart">90 Days</button><button type="button" class="pr-edit per-edit" id="balEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button>
       </div>
       <div class="stats-subrow"><p class="stats-sub" id="statsSub"></p><button type="button" class="sug-btn" id="sugBtn" aria-label="Suggestions" title="Suggestions"><svg width="18" height="18" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M423.5-103.5Q400-127 400-160h160q0 33-23.5 56.5T480-80q-33 0-56.5-23.5ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg></button></div>
       <div class="stats-fig" id="statsFig"></div>
@@ -2826,7 +2829,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var f=prR.f&&prR.f>b.min&&prR.f<=b.max?prR.f:b.min, t=prR.t&&prR.t<b.max&&prR.t>=f?prR.t:b.max;
     return {from:new Date(f+'T00:00:00').getTime(),to:new Date(t+'T23:59:59.999').getTime(),f:f,t:t,b:b,all:f===b.min&&t===b.max}; };
   function prLabel(){ var el=document.getElementById('prRange'), btn=document.getElementById('prEdit'); if(!el) return; var r=window.__progRange();
-    if(!r.b){ el.innerHTML='<small>No measurements yet</small>'; if(btn) btn.hidden=true; return; } if(btn) btn.hidden=false;
+    if(!r.b){ el.innerHTML='<small>No measurements yet</small>'; if(btn){ btn.hidden=true; btn.classList.remove('on'); } return; } if(btn){ btn.hidden=false; btn.classList.toggle('on',!r.all); }
     function lab(d,y){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+(y?' '+x.getFullYear():''); }
     var sameY=r.f.slice(0,4)===r.t.slice(0,4);
     el.innerHTML=(r.f===r.t?lab(r.t,true):lab(r.f,!sameY)+' – '+lab(r.t,true))+(r.all?' <small>· all data</small>':''); }
