@@ -103,7 +103,7 @@ Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
-- Tabs bovenaan Statistics/Results (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout), volgorde (9 okt) **Muscle Balance** (eerst, op vraag van Tom) · **Strength Progress** (`#plist` + lege melding `#plEmpty`, `data-sv=prog`) ·
+- Tabs bovenaan Statistics/Results (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout), volgorde (9 okt) **Balance** (eerst; schermnaam 'Balance', vroeger 'Muscle Balance') · **Progress** (vroeger 'Strength Progress') (`#plist` + lege melding `#plEmpty`, `data-sv=prog`) ·
   Muscle Balance (vroeger 'Balance'/'Muscles'; knoppen `#stabs>button` breedte volgens tekst, 13.5 px; periode + figuur + spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`). Stop workout (met vinkjes) → Balance, bovenaan.
 - Actieve tab in `#wtabs`/`#stabs`: zachte grijze pil (`--ink` 9%) met accenttekst (variant A; zwart/wit en volle terracotta (D) geprobeerd en teruggedraaid op vraag van Tom).
 - Schuivende pil (op vraag van Tom, 9 okt): in `#wtabs .wd-tabs`, `#stabs` en `.gnav-pill` tekent één `.pill-ind` de achtergrond van de actieve knop en schuift
