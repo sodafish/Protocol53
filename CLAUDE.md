@@ -82,7 +82,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij.
 
 ## Navigatie
-- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'exercise' (halter), als inline SVG; vroeger 'task_alt')
+- Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil (actieve knop: achtergrond `--ink`, tekst `--paper`, icoon accent, zoals de Stop workout-balk; op vraag van Tom) met **Workout** (icoon: Material Symbols 'exercise' (halter), als inline SVG; vroeger 'task_alt')
   en **Statistics** (vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'monitoring', vroeger 'man'), **Diet** (`data-view=voeding`, Material Symbols 'grocery') en **Guide** (`data-view=kracht`, vroeger 'Info', Material Symbols 'lightbulb_2';
   pil max 440 px). Het More-menu (`#gnavMore`, `#more-sheet`) is weg (op vraag van Tom, 9 okt); de pagina Cardio bestaat nog maar is niet bereikbaar. Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
   begint bovenaan (meteen + na 200/450 ms, omdat het wisselen van tab zelf nog kan scrollen), behalve terug naar Workout: die
@@ -111,7 +111,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, onderaan na de kalender (op vraag van Tom), alleen velden in kg (geen reps/sec), eigen script vóór het kalenderscript; op vraag van Tom): elke
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
   rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en groot de toename in procent eerste → laatste (`+25 %`, accent bij stijging), eronder klein 'laatste waarde · verschil'
-  (`20 kg · +4 kg`); één meting = `+0 %` en `+0 kg` (op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Rechts in de groepskop het gemiddelde percentage van die groep, enkel over oefeningen met minstens twee metingen (anders geen getal; op vraag van Tom). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
+  (`20 kg · +4 kg`); één meting = `+0 %` en `+0 kg` (op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Rechts in de groepskop het percentage van de groep = gemiddelde van de twee meest gemeten oefeningen (aantal metingen, minstens twee);
+  groepen met tussenkoppen (Back: Rows/Vertical pull; Arms: Biceps/Forearms/Triceps/Supersets) tonen per tussenkop (`.pl-sh`) dat percentage en
+  de groep = gemiddelde van de tussenkoppen; rijen gesorteerd per tussenkop. Geen getal als er geen oefening met twee metingen is (op vraag van Tom, 9 okt). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
