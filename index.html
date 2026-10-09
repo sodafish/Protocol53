@@ -1274,6 +1274,9 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .pl-v b{font-family:'Work Sans',system-ui,sans-serif!important;font-size:15px!important;font-weight:600!important;color:var(--muted)!important;}
 .pl-v b.up{color:var(--accent)!important;}
 .pl-v em{margin-top:.15rem;}
+
+#stabs>button{flex:1 1 auto;font-size:13.5px;padding:0 .55rem;} /* langere namen (Strength Progress, Muscle Balance): breedte volgens tekst */
+@media (max-width:360px){#stabs>button{font-size:12px;padding:0 .35rem;}}
 </style>
 
 <header class="top">
@@ -1556,7 +1559,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
     <div class="wtabs stabs" id="stabs" role="tablist" aria-label="Results">
-      <button type="button" role="tab" data-sv="prog" aria-selected="false">Progress</button><button type="button" role="tab" data-sv="body" aria-selected="true">Balance</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button>
+      <button type="button" role="tab" data-sv="prog" aria-selected="false">Strength Progress</button><button type="button" role="tab" data-sv="body" aria-selected="true">Muscle Balance</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button>
     </div>
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
