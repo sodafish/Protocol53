@@ -112,11 +112,11 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Ruimte onder `#stabs` = 1.6rem (op vraag van Tom). Ruimte boven de figuren (`.stats-fig` margin-top) = .8rem (was 1.6rem; op vraag van Tom). Periode Last/Week/Month/All staat nu als tekst-tabs met accent-onderlijn (`.stats>.sv>.stats-per`), niet meer als pillen.
 - Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, onderaan na de kalender (op vraag van Tom), alleen velden in kg (geen reps/sec), eigen script vóór het kalenderscript; op vraag van Tom): elke
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; geen supersets (op vraag van Tom, 9 okt; dus ook niet in het armgemiddelde). Rechts de laatste waarde + eenheid en groot de toename in procent eerste → laatste (`+25 %`, accent bij stijging), eronder klein 'laatste waarde · verschil'
-  (`20 kg · +4 kg`); één meting = `+0 %` en `+0 kg` (op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Rechts in de groepskop het percentage van de groep = gemiddelde van de twee meest gemeten oefeningen (aantal metingen; een oefening met één meting telt mee als 0%; één oefening = die; gelijk aantal = meest recent);
+  (`20 kg · +4 kg`); (op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Rechts in de groepskop het percentage van de groep = gemiddelde van de twee meest gemeten oefeningen (aantal metingen; één oefening = die; gelijk aantal = meest recent);
   groepen met tussenkoppen (Back: Rows/Vertical pull; Arms: Biceps/Forearms/Triceps/Supersets) tonen per tussenkop (`.pl-sh`) dat percentage en
-  de groep = gemiddelde van de tussenkoppen die bruikbare metingen hebben (een lege tussenkop, bv. Forearms, telt niet als 0% mee); rijen gesorteerd per tussenkop. Alle krachtgroepen (g1–g7 + eGym g10) en hun tussenkoppen (zonder Supersets) staan er altijd, ook zonder metingen; zonder
-  bruikbare metingen = `0%` (op vraag van Tom, 9 okt). Groepsnaam in de stijl van de oefeningnamen op Workout (Fraunces 600, 18 px), in accentkleur zoals het groeps-%. Tussenkopnaam (`.pl-sh`) als de tussenkoppen op Workout: 11.5 px, kapitalen, letterspatiëring, `--muted`. Groepskop: gewone lijn `--line`, 2.4rem ruimte erboven. Hiërarchie: groeps-% groot (26 px Fraunces), tussenkop-% 19 px, oefening-% gewone tekst 15 px, regel 'kg · verschil' in `--muted-soft`;
-  enkel het groeps-% krijgt de accentkleur, altijd (ook 0%) (tussenkop en oefening niet; op vraag van Tom). `#plEmpty` wordt niet meer getoond. Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
+  de groep = gemiddelde van de tussenkoppen die bruikbare metingen hebben (een lege tussenkop, bv. Forearms, telt niet als 0% mee); rijen gesorteerd per tussenkop. Enkel oefeningen met minstens twee metingen staan in de lijst (één meting = nog geen progressie); groepen (g1–g7 + eGym g10) en
+  tussenkoppen (zonder Supersets) verschijnen pas als er zo'n oefening onder staat; niets = melding `#plEmpty` (op vraag van Tom, 9 okt). Groepsnaam in de stijl van de oefeningnamen op Workout (Fraunces 600, 18 px), in accentkleur zoals het groeps-%. Tussenkopnaam (`.pl-sh`) als de tussenkoppen op Workout: 11.5 px, kapitalen, letterspatiëring, `--muted`. Groepskop: gewone lijn `--line`, 2.4rem ruimte erboven. Hiërarchie: groeps-% groot (26 px Fraunces), tussenkop-% 19 px, oefening-% gewone tekst 15 px, regel 'kg · verschil' in `--muted-soft`;
+  enkel het groeps-% krijgt de accentkleur, altijd (ook 0%) (tussenkop en oefening niet; op vraag van Tom).  Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
@@ -408,11 +408,11 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Back!-label alleen bij onondersteund voorover scharnieren met gewicht (deadlifts, RDL, good morning, swing, bent-over rows,
   barbell squats, staande overhead press) en belaste rug-flexie/rotatie in core. Niet bij goblet squat, farmer's carry,
   seated cable row, one-arm DB row (hand op de bank).
-- `sortRows` (`cat`): Back = eerst rows (`data-og` g4), dan verticaal/bovenrug (g6); Arms = curls, onderarmen (wrist/reverse),
-  triceps (g9), supersets (twee invulvelden); daarbinnen laag + `POP`. Calisthenics-filter is weer verwijderd (op vraag van Tom).
+- `sortRows` (`cat`): Back = eerst rows (`data-og` g4), dan verticaal/bovenrug (g6); Arms = curls, triceps (g9), supersets (twee invulvelden),
+  onderarmen (wrist/reverse) als laatste; daarbinnen laag + `POP`. Calisthenics-filter is weer verwijderd (op vraag van Tom).
 - Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Warm-up = Cardio (bike, rowing, incline walk, cross trainer,
   SkiErg (`w0-skierg`, standaard uit, uitleg + tip over de rug), jump rope, stair climber) / Mobility & activation (de rest); Back = Rows / Vertical pull & upper back; Arms = Biceps /
-  Forearms / Triceps / Supersets. Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
+  Triceps / Supersets / Forearms (onderarmen als laatste, op vraag van Tom, 9 okt; `cat` 0–3). Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
   koppen (`li.gs-sub-h`, uit `data-sub` op de rij).
 - Supersets (Arms, achteraan; volgorde in POP: rope only (ss2), bar only (ss3), mix rope + bar (ss1), reverse (ss4), single-arm (ss5);
   standaard aan: ss2, ss3, ss1; elke superset gebruikt altijd dezelfde hulpstukken zodat de gewichten vergelijkbaar blijven): ss1 Overhead Extension + Biceps Curl, ss2 Rope Pushdown +
