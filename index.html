@@ -1330,6 +1330,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));}
 .wtabs.wdock.on{background:var(--ink);}
 .wd-tabs{display:flex;gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
+.wd-go[hidden]{display:none;} /* geen startknop meer: de balk verschijnt pas bij het eerste vinkje (op vraag van Tom) */
 .wd-go{display:flex;align-items:center;min-height:48px;padding:0 6px 0 4px;color:var(--paper);}
 .wtabs.wdock.on .wd-go{color:var(--paper);}
 .wtabs .wd-go button.wd-btn{flex:1;justify-content:flex-start;display:inline-flex;align-items:center;gap:.6rem;min-height:48px;padding:0 .9rem;border-radius:0;
@@ -1565,8 +1566,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     </div>
     <div class="wtabs wdock" id="wtabs">
       <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="warmup">Warm-up</button><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="cardio">Cardio</button></div>
-      <div class="wd-go">
-        <button type="button" class="wd-btn wo-btn"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Start new workout</span></button>
+      <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
       </div>
@@ -2376,6 +2376,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(top) top.hidden=on;
     var stp=document.getElementById('woStop'); if(stp) stp.hidden=!on;
     var dk=document.getElementById('wtabs'); if(dk) dk.classList.toggle('on',on);
+    var wg=document.getElementById('wdGo'); if(wg) wg.hidden=!on;
     if(fl) fl.hidden=!on; document.body.classList.toggle('wo-on',on);
   }
   window.__paintWoBtns=paintWoBtns;
@@ -3054,7 +3055,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(anim){ var p=document.getElementById(tabs[i].getAttribute('aria-controls')); if(i===0&&window.__cascadeSchema) window.__cascadeSchema(); else if(typeof reveal==='function') reveal(p); }
     }
     window.__ksub=function(i){ show(i,true); };
-    /* de app opent altijd op Workout */
+    /* start op Workout; het navbar-script zet daarna de laatst bekeken pagina terug (fitlog-where) */
     show(0,false);
     requestAnimationFrame(function(){ bar.classList.add('ready'); });
     tabs.forEach(function(t,n){ t.addEventListener('click',function(){ show(n,true); }); });
@@ -4162,6 +4163,17 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   items.forEach(function(b){ b.addEventListener('click',function(){ go(b.dataset.view); }); });
   window.__go=go;
   paint(current());
+  /* de app opent waar ze gesloten werd (op vraag van Tom, 9 okt): pagina + scrollpositie in localStorage 'fitlog-where' {v,y} */
+  var WKEY='fitlog-where';
+  function saveWhere(){ try{ localStorage.setItem(WKEY,JSON.stringify({v:view,y:Math.round(window.scrollY)})); }catch(e){} }
+  document.addEventListener('visibilitychange',function(){ if(document.hidden) saveWhere(); });
+  window.addEventListener('pagehide',saveWhere);
+  (function(){ var w=null; try{ w=JSON.parse(localStorage.getItem(WKEY)||'null'); }catch(e){} if(!w||!NAMES[w.v]||w.v==='cardio') return;
+    var y=w.y||0;
+    if(w.v==='workout'){ window.__woY=y; var h=document.documentElement;
+      function place(){ h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); }
+      place(); setTimeout(place,200); setTimeout(place,450); setTimeout(place,900); }
+    else { go(w.v,function(){ return y; }); setTimeout(function(){ var h=document.documentElement; h.style.scrollBehavior='auto'; window.scrollTo(0,y); requestAnimationFrame(function(){ h.style.scrollBehavior=''; }); },900); } })();
 })();
 </script>
 <script>

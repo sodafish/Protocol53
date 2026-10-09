@@ -99,7 +99,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   de subtabs (`.ksub`, `#k-train`/`#k-stats`) bestaan nog maar zijn verborgen; de navbar klikt ze aan.
   `window.__ksub` is omwikkeld zodat sprongen (bv. End workout → Progress) de navbar bijwerken.
 - Onder de titel staat de huidige pagina (`#pgTitle`); ruimte eronder kleiner gemaakt (`#p-schema{padding-top:.6rem}`, ~23 px tot Start/tabs; op vraag van Tom).
-- De app opent altijd op Workout (geen vorige pagina terugzetten). Wel onthouden (localStorage): periode statistieken
+- De app opent waar ze gesloten werd (op vraag van Tom, 9 okt; vroeger altijd Workout): pagina + scrollpositie in localStorage `fitlog-where` `{v,y}`
+  (bewaard bij `visibilitychange` hidden en `pagehide`; teruggezet onderaan het navbar-script, scroll op 0/200/450/900 ms omdat de data later laadt). Ook onthouden (localStorage): periode statistieken
   `fitlog-stats-per`, oefening en periode progressie `fitlog-prog-sel`/`fitlog-prog-per`, Full/Upper/Lower `fitlog-split`,
   oefeningen per groep `fitlog-groups` (+ cfg/groups), geboortedatum (+ cfg/profile).
 - Geen zwevende pijl naar boven meer (tik op het actieve navbar-item). Body heeft extra ruimte onderaan.
@@ -297,7 +298,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
 - Workout-blok (op vraag van Tom, 9 okt, naar een voorbeeld met een navbar + balk eronder): `#wtabs` (klasse `.wtabs wdock`) = de tabs (`.wd-tabs`,
   role=tablist, eigen witte pil met afgeronde onderkant) + daaronder een balk `.wd-go` in één afgerond, plakkend blok. Vóór de start: balk in
-  accentkleur (verloop) met 'Start workout' (`.wd-btn.wo-btn`, zelfde handler als vroeger). Tijdens een workout: balk in `--ink` met
+  accentkleur (verloop) met 'Start workout' — WEG (op vraag van Tom, 9 okt): geen startknop meer, de timer start bij het eerste vinkje en de balk `#wdGo` is `hidden` tot er een workout loopt (`paintWoBtns`); de notitieknop zit dus ook enkel tijdens een workout in beeld. `startTab()` bestaat nog maar wordt niet meer aangeroepen. Tijdens een workout: balk in `--ink` met
   'End workout' + tijd (vroeger 'Stop workout', op vraag van Tom terug naar End; startknop heet 'Start new workout' met play-icoon 21 px, op vraag van Tom; stop 19 px, op vraag van Tom groter; `#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px, icoon Material Symbols 'sticky_note_2' (vroeger sd_card_alert) outlined FILL 0 · wght 400 · GRAD 0 · opsz 24 (SVG van fonts.gstatic.com), 24 px, op vraag van Tom). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet ook 'End workout' (confirm 'End workout?')
