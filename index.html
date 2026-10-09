@@ -1328,6 +1328,18 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cal-ex .cx-row em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
 .cal-ex .cx-del{position:absolute;right:0;top:0;bottom:0;width:88px;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
 .cal-ex .cx-row em i{font-style:normal;font-weight:500;color:var(--muted-soft);} /* reps rechts naast de kg (op vraag van Tom) */
+
+/* lege groep: 'Add exercises' (nieuwe gebruiker; op vraag van Tom) */
+.gx-empty{list-style:none;padding:.4rem 0 .2rem;}
+.gx-empty button{appearance:none;-webkit-tap-highlight-color:transparent;width:100%;display:flex;align-items:center;gap:.85rem;padding:.85rem 1rem;border:1.5px dashed var(--line);border-radius:16px;background:transparent;color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:background-color .15s ease,transform .12s ease;}
+.gx-empty button:active{background:var(--paper-soft);transform:scale(.99);}
+.gx-plus{flex:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);}
+.gx-t{display:flex;flex-direction:column;gap:.1rem;}
+.gx-t b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:16px;}
+.gx-t small{font-size:12.5px;color:var(--muted);}
+.exgrp.split-off + .gx-empty{display:none;}
+#s-d3 .exl .exgrp.g-empty .grp-edit{visibility:hidden;}
+#s-d3 .exl .exgrp[data-grp="g0"].g-empty{height:auto;padding:1.6rem 0 .3rem!important;}
 </style>
 
 <header class="top">
@@ -3808,6 +3820,15 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   function on(g){ return cfg[g]||DEF[g]||[]; }
   function apply(){
     Object.keys(DEF).forEach(function(g){ var act=on(g); rows(g).forEach(function(li){ li.classList.toggle('ex-off',act.indexOf(keyOf(li))<0); }); });
+    /* lege groep: subtiele knop 'Add exercises' onder de kop, opent het keuzeblad (nieuwe gebruiker start leeg; op vraag van Tom) */
+    Object.keys(DEF).forEach(function(g){ var h=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+g+'"]'); if(!h) return;
+      var empty=!on(g).length, ph=h.nextElementSibling&&h.nextElementSibling.classList.contains('gx-empty')?h.nextElementSibling:null;
+      h.classList.toggle('g-empty',empty);
+      if(empty&&!ph){ ph=document.createElement('li'); ph.className='gx-empty'; ph.dataset.g=g;
+        ph.innerHTML='<button type="button"><span class="gx-plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="gx-t"><b>Add exercises</b><small>Tap to choose from the list</small></span></button>';
+        ph.querySelector('button').addEventListener('click',function(){ var e=h.querySelector('.grp-edit'); if(e) e.click(); });
+        h.after(ph); }
+      else if(!empty&&ph) ph.remove(); });
     /* tussenkop (bv. Supersets) verbergen als er geen zichtbare oefening onder staat */
     document.querySelectorAll('#s-d3 .exsub').forEach(function(h){ var n=h.nextElementSibling, vis=false;
       while(n && n.classList.contains('exr')){ if(!n.classList.contains('ex-off')) vis=true; n=n.nextElementSibling; } h.hidden=!vis; });
@@ -3837,6 +3858,12 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     if(!cfg.jg){ if(Array.isArray(cfg.g8) && cfg.g8.indexOf('c-jog')<0) cfg.g8.push('c-jog'); cfg.jg=1; ch=true; }
     return ch; }
   function save(){ try{ localStorage.setItem(KEY,JSON.stringify(cfg)); }catch(e){} if(col) col.doc('groups').set(cfg).catch(function(){}); }
+  /* nieuw account (aangemaakt na deze versie, nog geen keuze op de server): alle groepen leeg, de gebruiker kiest zelf (op vraag van Tom).
+     Bestaande accounts zonder groups-doc houden de standaardkeuze. */
+  var FRESH_FROM=Date.parse('2026-10-09T07:30:00Z');
+  function fresh(){ var u=window.__p53user, t=u&&Date.parse(u.created_at||''); if(!t||t<FRESH_FROM||cfg.fresh) return false;
+    var n={v7:1,sp:1,tr:1,lc:1,jg:1,fresh:1}; Object.keys(DEF).forEach(function(g){ n[g]=[]; }); cfg=n; save(); apply(); if(open) render(); return true; }
+  window.__p53freshTest=function(){ var n={v7:1,sp:1,tr:1,lc:1,jg:1,fresh:1}; Object.keys(DEF).forEach(function(g){ n[g]=[]; }); cfg=n; apply(); };
   /* eigen sets & reps per oefening: localStorage fitlog-sets + cfg/doc sets ({sleutel:{s:3,r:'8–12'}}); past de tekst onder de oefening aan
      (de statistieken lezen het aantal sets uit die tekst) */
   var SKEY='fitlog-sets', sets={}; try{ sets=JSON.parse(localStorage.getItem(SKEY)||'{}')||{}; }catch(e){}
@@ -3852,6 +3879,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('cfg');
     col.onSnapshot(function(snap){ var d=null, ss=null; snap.docs.forEach(function(x){ if(x.id==='groups') d=x.data(); if(x.id==='sets') ss=x.data(); });
       if(ss && !(snap.metadata&&snap.metadata.fromCache)){ sets=ss; try{ localStorage.setItem(SKEY,JSON.stringify(sets)); }catch(e){} applySets(); if(open) render(); }
+      if(!d && !(snap.metadata&&snap.metadata.fromCache) && fresh()) return;
       if(d){ var oldOrd=JSON.stringify(cfg.order||null); cfg=d; if(JSON.stringify(cfg.order||null)!==oldOrd) Object.keys(POP).forEach(sortRows); var mg=migrate(); try{ localStorage.setItem(KEY,JSON.stringify(cfg)); }catch(e){} if(mg&&col) col.doc('groups').set(cfg).catch(function(){}); apply(); if(open) render(); } },function(){}); });
   /* populariteit in de fitnesswereld (meest gedaan eerst), voor de volgorde in het keuzeblad */
   var POP={g10:'eg-rotary-torso eg-lat-pulldown eg-leg-press eg-abdominal-crunch eg-seated-row eg-leg-extension eg-triceps-press eg-back-extension eg-chest-press eg-leg-curl eg-shoulder-press eg-butterfly eg-butterfly-reverse eg-biceps-curl eg-hip-abduction eg-hip-adduction eg-glute eg-squat'.split(' '),g8:'c-walk c-walkjog c-jog c-treadjog c-row c-elliptical c-bike c-padel c-incline c-stairs c-recumbent'.split(' '),g0:'w0-bike w0-rowing w0-incline-walk w0-cross-trainer w0-skierg w0-bodyweight-squats w0-arm-circles w0-glute-bridge w0-pull-aparts w0-torso-rotation w0-worlds-greatest w0-cat-cow w0-hip-circles w0-inchworm w0-jump-rope w0-stair-climber'.split(' '),g1:'x1-back-squat x1-leg-press d1-goblet-squat x1-leg-extension d3-bulgarian-split-squat x1-walking-lunge x1-hack-squat x1-smith-squat d2-dumbbell-reverse-lunges x1-front-squat x1-db-step-up x1-db-forward-lunge x1-bw-walking-lunge x1-split-squat x1-jump-squat x1-pistol-squat x1-sissy-squat'.split(' '),g2:'x2-bench-press x2-db-bench d3-push-ups x2-incline-bench d2-chest-press-machine x2-cable-crossover d3-chest-fly-machine d1-dumbbell-chest-press x2-smith-bench x2-db-fly x2-dips x2-incline-chest-machine x2-low-cable-fly x2-smith-incline x2-incline-pushup x2-decline-pushup x2-decline-db-press x2-db-floor-press x2-plyo-pushup'.split(' '),g3:'x3-deadlift x3-hip-thrust x3-barbell-rdl d1-dumbbell-romanian-deadlift x3-lying-leg-curl x3-seated-leg-curl x3-standing-calf x3-seated-calf-raise d3-hip-abduction x3-hip-adduction x3-legpress-calf x3-cable-kickback x3-kickback-machine x3-kb-swing x3-sumo-deadlift x3-db-calf-raise d3-single-leg-calf-raise x3-single-leg-rdl x3-sl-glute-bridge x3-pull-through x3-good-morning x3-nordic-curl x3-ball-leg-curl x3-donkey-kick x3-reverse-hyper x3-cable-adduction x3-band-adduction'.split(' '),g4:'x4-barbell-row d2-seated-cable-row d3-eenarmige-dumbbell-row x4-row-machine x4-tbar-row-standing d3-chest-supported-row x4-db-bent-row x4-tbar-row x4-inverted-row x4-one-arm-cable-row x4-high-row x4-ring-row d1-lat-pulldown x6-pull-ups x6-chin-ups d2-face-pull d3-assisted-pull-ups x6-wide-pulldown x6-close-grip-pulldown x6-straight-arm-pulldown x6-vbar-pulldown x6-barbell-shrug x6-underhand-pulldown x6-one-arm-pulldown x6-cable-rear-delt-fly d1-dead-hang x6-db-pullover x6-scap-pullup'.split(' '),g5:'d2-dumbbell-lateral-raise d1-seated-dumbbell-shoulder-press x5-overhead-press d3-shoulder-press-machine x5-arnold-press x5-reverse-fly-machine d3-cable-lateral-raise x5-front-raise x5-db-shrug x5-rear-delt-raise x5-cable-ext-rot x5-upright-row x5-db-upright-row x5-band-lateral x5-band-ext-rot x5-handstand-pushup'.split(' '),g6:'d1-plank x7-side-plank x7-plank-combo x7-crunches x7-hanging-leg-raise x7-cable-crunch x7-russian-twist x7-reverse-crunch x7-bicycle-crunch x7-mountain-climbers x7-sit-ups x7-ab-wheel x7-lying-leg-raise d3-crunch-machine x7-back-extension x7-dead-bug d3-bird-dog d1-farmers-carry x7-knee-raise x7-woodchop x7-side-bend x7-pallof-press x7-v-up x7-flutter-kicks x7-superman'.split(' '),g7:'d3-dumbbell-biceps-curl x8-barbell-curl x8-ez-curl x8-hammer-curl x8-preacher-curl x8-spider-curl x8-cable-curl x7-rope-hammer-curl x8-incline-curl x8-concentration-curl d3-curl-machine x8-reverse-curl x8-wrist-curl d2-triceps-rope-pushdown x8-bar-pushdown x8-skull-crusher d3-overhead-cable-triceps-extension x8-close-grip-bench x8-db-overhead-ext x8-kickback x8-bench-dips x8-diamond-pushup x8-dip-machine x8-triceps-machine d3-ss-rope x7-ss-bar d3-ss-overhead-curl x7-ss-reverse x7-ss-single'.split(' ')};
@@ -3899,7 +3927,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     list.querySelectorAll('.sw').forEach(function(c){ c.addEventListener('change',function(){
       var act=on(cur).slice(), k=c.dataset.k, i=act.indexOf(k);
       if(c.checked){ if(i<0) act.push(k); }
-      else{ if(act.length<=1){ c.checked=true; msg.textContent='Keep at least one exercise in this group.'; return; } if(i>=0) act.splice(i,1); }
+      else{ if(i>=0) act.splice(i,1); } /* een groep mag leeg zijn (nieuwe gebruiker kiest zelf; op vraag van Tom) */
       msg.textContent='';
       var order=rows(cur).map(keyOf); act.sort(function(a,b){ return order.indexOf(a)-order.indexOf(b); });
       cfg[cur]=act; save(); apply(); c.closest('li').classList.toggle('off',!c.checked);

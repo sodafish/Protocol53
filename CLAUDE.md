@@ -310,7 +310,12 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Machine · 4: Seated Cable Row, Seated Row Machine, Cable Face Pull, Wide-Grip Lat Pulldown, V-Bar Pulldown, Dead Hang · 5: DB Lateral Raise,
   Seated DB Shoulder Press, Shoulder Press Machine, Reverse Fly Machine · 6: Plank, Side Plank, Weighted Back Extension, Dead Bug, Bird Dog ·
   7: Cable Biceps Curl, Curl Machine, Triceps Rope Pushdown, Triceps Bar Pushdown, Overhead Cable Triceps Extension (geen supersets).
-  Cardio (g8) ongewijzigd. Toms eigen keuze staat in cfg/groups en verandert hier niet door. Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
+  Cardio (g8) ongewijzigd. Toms eigen keuze staat in cfg/groups en verandert hier niet door.
+  NIEUW ACCOUNT (op vraag van Tom, 9 okt): account aangemaakt na `FRESH_FROM` (2026-10-09 07:30 UTC, `__p53user.created_at`) zonder groups-doc op de
+  server (snapshot niet uit cache) → `fresh()` zet alle groepen op `[]` (+ migratievlaggen, `fresh:1`) en bewaart; bestaande accounts houden de
+  standaard. Een groep mag leeg zijn (de regel 'minstens één oefening' is weg). Lege groep: kop krijgt `.g-empty` (potlood onzichtbaar) en eronder
+  `li.gx-empty` met gestippelde knop '+ Add exercises · Tap to choose from the list' die het keuzeblad van die groep opent (`apply()` zet/verwijdert hem).
+  Testen: `window.__p53freshTest()` (alleen lokaal, bewaart niets). Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
 - Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Titel + kruisje blijven
   bovenaan staan (sticky `.sheet-head`; bij scrollen klasse `.stuck` = dunne lijn eronder). Minstens
