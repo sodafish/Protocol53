@@ -993,6 +993,7 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 .bal-pct{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;fill:var(--ink);font-variant-numeric:tabular-nums;}
 .bal-pct.zero{fill:var(--muted-soft);}
 .bal-pct.has{fill:var(--accent);}
+.bal-hint{margin:.4rem 0 0;text-align:center;font-size:13.5px;color:var(--muted);}
 .bal-lab{font-family:'Work Sans',system-ui,sans-serif;font-weight:600;font-size:7px;letter-spacing:.12em;text-transform:uppercase;fill:var(--muted);}
 .stats-fig.bal .draw .bal-ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:balLn .7s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:var(--d);}
 .stats-fig.bal .draw .bal-dot{transform-box:fill-box;transform-origin:center;animation:balPop .35s ease backwards;animation-delay:var(--d);}
@@ -2895,7 +2896,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       p.style.fill=v>0&&bmax?'color-mix(in srgb,var(--accent) '+Math.round(18+82*v/bmax)+'%,var(--surface))':'';
     });
     if(pf) pf.querySelectorAll('.bal-pct').forEach(function(t){ var v=Math.round(bp[t.getAttribute('data-m')]||0);
-      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; var m=t.getAttribute('data-m'); t.setAttribute('class','bal-pct'+((m in bp)?' has':' zero')); }); /* oranje = minstens twee metingen in de periode (op vraag van Tom) */
+      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; var m=t.getAttribute('data-m'); t.setAttribute('class','bal-pct has');
+      /* enkel spieren met data tonen een lijntje + % (op vraag van Tom, 9 okt): zonder data verdwijnt de callout, vaste plek voor de rest */
+      var co=t.parentNode&&t.parentNode.parentNode; if(co) co.style.display=(m in bp)?'':'none'; });
+    var ph=document.getElementById('progHint'); if(ph) ph.hidden=Object.keys(bp).length>0;
     var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
     if(eff==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
     else if(eff==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
@@ -3041,7 +3045,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     fig.innerHTML='<div class="bal-seg" role="group" aria-label="Side"><button type="button" data-s="front">Front</button><button type="button" data-s="back">Back</button></div><div class="bal-figs">'+
       [['front','Front'],['back','Back']].map(function(v){
       return '<figure data-side="'+v[0]+'"><svg viewBox="-58 0 316 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+', strength progress per muscle">'+bodySvg(v[0])+callouts(v[0])+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
-    }).join('')+'</div>';
+    }).join('')+'</div><p class="bal-hint" id="progHint" hidden>Log an exercise three times to see your progress here.</p>';
     function show(s,anim){ cur=s; try{ localStorage.setItem(SKEY,s); }catch(e){}
       fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.s===s?'true':'false'); });
       fig.querySelectorAll('figure[data-side]').forEach(function(f){ f.classList.toggle('on',f.dataset.side===s);
