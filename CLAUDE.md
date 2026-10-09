@@ -157,7 +157,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   enkel g2/g4/g5/g7 = Upper body, enkel g1/g3/g6 = Lower body, anders Full body; meerdere workouts op één dag = 'Open Gym + EGYM'; 'Cardio' staat niet als programma (de minuten staan al in '+ 40 min cardio'), een dag met enkel cardio = 'Cardio · 40 min'. Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Onder de datum staat de lijst van gedane oefeningen (`.cal-ex`), gegroepeerd per programma met tussenkop + totaal (Open Gym krijgt altijd ' · Upper Body / Lower Body / Full Body' erachter, uit de groepen
   van die dag: g2/g4/g5/g7 = upper, g1/g3 = lower, core g6 telt neutraal, enkel core = 'Core'; op vraag van Tom) (`.cx-h`, 2rem ruimte erboven, eerste 1.2rem: Open Gym · N sets,
   eGym · N sets, Cardio · N min; vervangt de vroegere regels 'Programma · N sets'), in workoutvolgorde, per rij links de naam, rechts sets/reps (eerste tekst van `.exr-s`,
-  niet bij cardio, lichter) · gemeten waarde (supersets 'a / b'). Rechts naast de datum staat subtiel 'Swipe left to delete' (`.cx-hint`). Veeg naar links op een rij (`.cx-row`, pointer events, rij schuift 100 px, knop 88 px breed = 12 px ruimte) = rode Delete-knop (tekst wit in licht, `--paper` = donker in dark mode); naam mag afbreken (`min-width:0`) zodat de rechtse tekst nooit over de rand/onder Delete loopt
+  niet bij cardio, lichter) · gemeten waarde (supersets 'a / b'). Rechts naast de datum staat subtiel 'Swipe left to delete' (`.cx-hint`). Veeg naar links op een rij (`.cx-row`, pointer events; de knop `.cx-del` (88 px) zit ín de rij, 10 px rechts ernaast (`right:-98px`), en schuift mee in; open = rij −98 px) = rode Delete-knop (tekst wit in licht, `--paper` = donker in dark mode); naam mag afbreken (`min-width:0`) zodat de rechtse tekst nooit over de rand/onder Delete loopt
   (`.cx-del`) → tik = meteen wissen (geen extra bevestiging, op vraag van Tom) → `window.__progDelIds(ids)` wist de metingen in `prog` (de hoofdbron; zelfde regels als het vuilbakje, ook het vinkje
   van de lopende workout) (op vraag van Tom, 9 okt). Geen duur of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.
@@ -251,7 +251,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   onderblad (`#pe-sheet`, zelfde stijl als de oefeninguitleg; sluiten met kruisje, naast tikken of Esc):
   bovenaan datum + waarde + Toevoegen (zelfde datum = overschrijven; tijdstip = 12u die dag), daaronder
   alle metingen (nieuwste eerst); verwijderen = veeg naar links + tik op de rode Delete (zoals in de kalender, geen bevestiging; op vraag van Tom, 9 okt;
-  gedeelde helper `window.p53Swipe(box,onDel)` vóór de navbar, rijen `li.cx` > `.cx-del` + `.cx-row`; het oude vuilbakje is weg). Lange lijsten scrollen in het blad.
+  gedeelde helper `window.p53Swipe(box,onDel)` vóór de navbar, rijen `li.cx` > `.cx-row` > (inhoud + `.cx-del`); het oude vuilbakje is weg). Lange lijsten scrollen in het blad.
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 - Alle onderbladen: `overscroll-behavior:contain`; zolang een `.sheet` zichtbaar is én klasse `on` heeft, staat de

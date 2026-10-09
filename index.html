@@ -1326,7 +1326,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cal-ex .cx-n{display:flex;flex-direction:column;font-size:14.5px;color:var(--ink);}
 .cal-ex .cx-n small{font-size:12.5px;color:var(--muted);margin-top:.1rem;}
 .cal-ex .cx-row em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
-.cx-del{position:absolute;right:0;top:0;bottom:0;width:88px;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
+.cx-del{position:absolute;right:-98px;top:0;bottom:0;width:88px;z-index:2;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
 .cal-ex .cx-row em i{font-style:normal;font-weight:500;color:var(--muted-soft);} /* reps rechts naast de kg (op vraag van Tom) */
 
 /* lege groep: 'Add exercises' (nieuwe gebruiker; op vraag van Tom) */
@@ -2020,10 +2020,10 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
 <script>
 /* ---- veeg naar links om te verwijderen (kalender + edit-blad van de grafiek): rij .cx-row schuift, rode .cx-del eronder; tik = wissen ---- */
-window.p53Swipe=function(box,onDel){ var W=100, st=null, openRow=null; /* rij schuift 100 px, knop is 88 px: 12 px ruimte tussen label en Delete (op vraag van Tom) */
+window.p53Swipe=function(box,onDel){ var W=98, st=null, openRow=null; /* de knop hangt 10 px rechts naast de rij en schuift mee in (op vraag van Tom) */
   function setX(row,x,anim){ row.style.transition=anim?'transform .22s ease':'none'; row.style.transform=x?'translateX('+x+'px)':''; }
   function closeOpen(){ if(openRow){ setX(openRow,0,true); openRow=null; } }
-  box.addEventListener('pointerdown',function(e){ var row=e.target.closest('.cx-row'); if(!row||!box.contains(row)){ if(!e.target.closest('.cx-del')) closeOpen(); return; }
+  box.addEventListener('pointerdown',function(e){ if(e.target.closest('.cx-del')) return; var row=e.target.closest('.cx-row'); if(!row||!box.contains(row)){ if(!e.target.closest('.cx-del')) closeOpen(); return; }
     if(openRow&&openRow!==row) closeOpen();
     st={row:row,x:e.clientX,y:e.clientY,base:row===openRow?-W:0,dir:null,id:e.pointerId}; });
   box.addEventListener('pointermove',function(e){ if(!st||e.pointerId!==st.id) return; var dx=e.clientX-st.x, dy=e.clientY-st.y;
@@ -2934,8 +2934,8 @@ window.p53Swipe=function(box,onDel){ var W=100, st=null, openRow=null; /* rij sc
       var dt=new Date(e.t);
       var tm=(D.perDay[e.d]>1&&typeof e.w==='number')?' · '+dt.getHours()+':'+('0'+dt.getMinutes()).slice(-2):''; /* twee workouts die dag: uur erbij */
       /* veeg naar links om te verwijderen, zoals in de kalender (op vraag van Tom) */
-      return '<li class="cx'+(e.gap?' pe-gap" data-d="'+e.d:'')+'"><button type="button" class="cx-del" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'">Delete</button><div class="cx-row"><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+'</span>'+
-        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+'</div></li>';
+      return '<li class="cx'+(e.gap?' pe-gap" data-d="'+e.d:'')+'"><div class="cx-row"><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+'</span>'+
+        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+'<button type="button" class="cx-del" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'">Delete</button></div></li>';
     }).join('');
     var nm=D.all.length-D.gaps;
     body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Swipe left to delete.':'No measurements yet. Add one.')+'</p>'+
@@ -4436,7 +4436,7 @@ window.__congrats=function(o){
         var sx=it.li.querySelector('.exr-s'), reps=nm==='Cardio'?'':(sx&&sx.firstChild&&sx.firstChild.nodeType===3?sx.firstChild.textContent.replace(/[·\s]+$/,'').trim():'');
         if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name});
-        return '<li class="cx"><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button><div class="cx-row"><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em></div></li>'; }).join('');
+        return '<li class="cx"><div class="cx-row"><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button></div></li>'; }).join('');
       var lab=nm; if(nm==='Open Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
         var gs={}; arr.forEach(function(it){ var g=it.li.dataset.grp; if(g!=='g6') gs[g]=1; }); var gk=Object.keys(gs);
         lab+=' · '+(!gk.length?'Core':gk.every(function(x){ return UP[x]; })?'Upper Body':gk.every(function(x){ return LO[x]; })?'Lower Body':'Full Body'); }
