@@ -1872,7 +1872,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg><span>Workout</span></button>
-    <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M400-80v-280h-80v-240q0-33 23.5-56.5T400-680h160q33 0 56.5 23.5T640-600v240h-80v280H400Zm80-640q-33 0-56.5-23.5T400-800q0-33 23.5-56.5T480-880q33 0 56.5 23.5T560-800q0 33-23.5 56.5T480-720Z"/></svg><span>Statistics</span></button>
+    <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="m296-334 122-122 80 80 152-151v77h60v-180H530v60h77L498-461l-80-80-164 165 42 42ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"/></svg><span>Statistics</span></button>
     <button type="button" class="gnav-i" data-view="voeding" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M80-200v-60h800v60H80Zm30-120v-17q0-155 88.5-250T420-710v-30q0-26 17-43t43-17q26 0 43 17t17 43v30q133 28 221.5 123T850-337v17H110Zm63-60h614q-14-128-102.5-200.5T479-653q-117 0-204.5 72.5T173-380Zm307 0Z"/></svg><span>Diet</span></button>
     <button type="button" class="gnav-i" data-view="kracht" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M385-240q-24.75 0-42.37-17.63Q325-275.25 325-300v-67q-59.37-40.02-92.19-102.61Q200-532.2 200-603q0-115.75 82-196.37Q364-880 480.5-880t198 81.5Q760-717 760-600q0 71-33 132.5T635-367v67q0 24.75-17.62 42.37Q599.75-240 575-240H385Zm5-60h180v-94l36-25q44.81-30.95 69.41-79.03Q700-546.11 700-600.26 700-692 636-756q-64-64-156-64t-156 64.61q-64 64.61-64 156.27 0 54.12 24.59 101.78Q309.19-449.68 354-419l36 24.62V-300Zm7 220q-12.75 0-21.37-8.63Q367-97.25 367-110v-30h227v30.18q0 12.82-8.62 21.32Q576.75-80 564-80H397Zm83-520Z"/></svg><span>Guide</span></button>
   </div>
@@ -4068,21 +4068,26 @@ window.__congrats=function(o){
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
   function render(){
     if(!window.__progPts||!window.__progFmt) return;
-    var F=window.__progFmt, html='', grp=null, n=0;
+    var F=window.__progFmt, html='', grp=null, n=0, groups=[], cur=null;
     document.querySelectorAll('#s-d3 .exl > li').forEach(function(li){
       if(li.classList.contains('exgrp')){ grp=li; return; }
       if(!li.classList.contains('exr')||li.dataset.grp==='g0'||li.dataset.grp==='g8') return; /* geen warm-up en cardio */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
-      var ins=li.querySelectorAll('.exr-in[data-note]'), rows='';
+      var ins=li.querySelectorAll('.exr-in[data-note]'), rows=[];
       [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */ var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
         var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pts[0], d=last.v-first.v;
+        var pct=first.v>0?d/first.v*100:0, pr=Math.round(pct);
         var lab=ins.length>1?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'';
-        rows+='<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+(lab?'<small>'+esc(lab)+'</small>':'')+'</span>'+
-          '<span class="pl-v"><b>'+F.v(last.v)+'</b><span>'+esc(unit)+'</span>'+(pts.length>1?'<em class="'+(d>0?'up':'')+'">'+(d>0?'+':d<0?'−':'±')+F.v(Math.abs(d))+' '+esc(unit)+'</em>':'')+'</span>'+CHEV+'</button></li>'; });
-      if(!rows) return;
-      if(grp){ var t=grp.querySelector('.grp-t'); html+='<li class="pl-h" aria-hidden="true">'+esc(t?t.firstChild.textContent.trim():'')+'</li>'; grp=null; }
-      html+=rows; n++;
+        /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
+        rows.push({p:pct,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+(lab?'<small>'+esc(lab)+'</small>':'')+'</span>'+
+          '<span class="pl-v"><b>'+F.v(last.v)+'</b><span>'+esc(unit)+'</span><em class="'+(d>0?'up':'')+'">'+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+' · '+(pr<0?'−':pr>0?'+':'')+Math.abs(pr)+'%</em></span>'+CHEV+'</button></li>'}); });
+      if(!rows.length) return;
+      if(grp){ cur={t:(function(t){ return t?t.firstChild.textContent.trim():''; })(grp.querySelector('.grp-t')),r:[]}; groups.push(cur); grp=null; }
+      if(cur) cur.r=cur.r.concat(rows); n++;
     });
+    /* per groep gesorteerd op toename in procent (grootste eerst) */
+    groups.forEach(function(g){ g.r.sort(function(a,b){ return b.p-a.p; });
+      html+='<li class="pl-h" aria-hidden="true">'+esc(g.t)+'</li>'+g.r.map(function(x){ return x.h; }).join(''); });
     list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
   }
   list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.open(b.dataset.n,b); });
