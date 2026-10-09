@@ -2683,6 +2683,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     for(var i=0;i<GROUPDEF.length;i++) if(GROUPDEF[i][0].test(gt)) return GROUPDEF[i][1];
     return {};
   }
+  window.__musclesFor=function(k,li){ return musclesFor(k,li); };
   function setsFor(k,li){
     li=li||liFor(k); var t=li&&li.querySelector('.exr-s'); t=t?t.textContent:'';
     var m=t.match(/(\d+)\s*(?:×|x|rondes|rounds?|sets)/i); return m?Math.min(6,parseInt(m[1],10)):3;
@@ -4586,6 +4587,9 @@ window.__congrats=function(o){
   function render(){
     if(!window.__progPts||!window.__progFmt) return;
     var F=window.__progFmt, html='', n=0, groups=[], byG={};
+    /* hoofdspier van een eGym-toestel → groep (+ tussenkop) van Open Gym */
+    var EGMAP={quad:['g1'],borst:['g2'],ham:['g3'],bil:['g3'],kuit:['g3'],add:['g3'],lats:['g4','Vertical pull & upper back'],trap:['g4','Vertical pull & upper back'],
+      midrug:['g4','Rows'],sz:['g5'],sv:['g5'],sa:['g5'],buik:['g6'],schuin:['g6'],onderrug:['g6'],bi:['g7','Biceps'],tri:['g7','Triceps'],oa:['g7','Forearms']};
     var R=window.__progRange?window.__progRange():{from:-Infinity,to:Infinity}; /* gekozen periode (bovenaan Progress) */
     /* alle krachtgroepen (1–7 en eGym) en hun tussenkoppen staan er altijd, ook zonder metingen (op vraag van Tom) */
     document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var g=h.dataset.grp; if(!/^g([1-7]|10)$/.test(g)) return;
@@ -4593,12 +4597,15 @@ window.__congrats=function(o){
       document.querySelectorAll('#s-d3 .exr[data-grp="'+g+'"]').forEach(function(li){ var k=li.dataset.sub||''; if(k&&k!=='Supersets'&&subs.indexOf(k)<0) subs.push(k); });
       var o={t:t?t.firstChild.textContent.trim():'',subs:subs,r:[],notes:[],sn:{}}; groups.push(o); byG[g]=o; });
     document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
-      var G=byG[li.dataset.grp]; if(!G) return; /* geen warm-up en cardio */
+      /* eGym-oefeningen staan onder hun spiergroep (hoofdspier), niet als eigen groep (op vraag van Tom, 9 okt) */
+      var gk=li.dataset.grp, sub=li.dataset.sub||'';
+      if(gk==='g10'){ var mm=window.__musclesFor?window.__musclesFor(li.dataset.key,li)||{}:{}, pm=Object.keys(mm).filter(function(m){ return mm[m]===1; })[0], to=EGMAP[pm]; if(!to) return; gk=to[0]; sub=to[1]||''; }
+      var G=byG[gk]; if(!G) return; /* geen warm-up en cardio */
       if(li.dataset.sub==='Supersets'||li.querySelectorAll('.exr-in[data-note]').length>1) return; /* geen supersets (op vraag van Tom) */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]');
       [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
-        G.notes.push(inp.dataset.note); var sk=li.dataset.sub||''; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
+        G.notes.push(inp.dataset.note); var sk=sub; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
         if(pts.length<2) return; /* één meting = nog geen progressie: niet tonen (op vraag van Tom) */
         /* de allereerste meting van een oefening telt niet mee in het % (leereffect; op vraag van Tom) — de grafiek toont ze wel.
            Basis = eerste meting in de periode die niet de allereerste is; zo'n meting nog niet = 0%. */
@@ -4606,7 +4613,7 @@ window.__congrats=function(o){
         var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pb.length?pb[0]:last, d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
-        G.r.push({p:pct,n:pts.length,t:last.t||0,sub:li.dataset.sub||'',h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+'</span>'+
+        G.r.push({p:pct,n:pts.length,t:last.t||0,sub:sub,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+'</span>'+
           '<span class="pl-v">'+pc(pct)+'<em>'+F.v(last.v)+' '+esc(unit)+' · '+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+'</em></span>'+CHEV+'</button></li>'}); n++; });
     });
     /* progressie van een (sub)groep = gemiddelde % van de twee meest gemeten oefeningen (enkel oefeningen met minstens twee metingen; één oefening = die);
