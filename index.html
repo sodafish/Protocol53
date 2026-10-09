@@ -1414,6 +1414,26 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cf-in i{font-style:normal;font-size:14px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;min-width:2.2em;}
 .pl-chart{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);}
 .pl-list button:active .pl-chart{background:var(--paper-soft);transform:scale(.95);}
+
+/* ================= TABLET / BREED SCHERM (≥ 1000 px), mobiel blijft ongewijzigd (op vraag van Tom) ================= */
+@media (min-width:1000px){
+  /* Statistics = één dashboard: Balance · Progress · Calendar naast elkaar, geen tabs */
+  body[data-view="progress"] .wrap,body[data-view="progress"] main.wrap{max-width:84rem;}
+  #s-stats #stabs{display:none;}
+  #s-stats section.stats{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr);gap:0 3rem;align-items:start;}
+  #s-stats section.stats>.sv,#s-stats section.stats>.sv[hidden]{display:block!important;min-width:0;}
+  #s-stats section.stats>.sv[data-sv="body"]{order:1;} #s-stats section.stats>.sv[data-sv="prog"]{order:2;} #s-stats section.stats>.sv[data-sv="cal"]{order:3;}
+  #s-stats section.stats>.sv::before{display:block;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line);font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;color:var(--ink);}
+  #s-stats section.stats>.sv[data-sv="body"]::before{content:'Balance';}
+  #s-stats section.stats>.sv[data-sv="prog"]::before{content:'Progress';}
+  #s-stats section.stats>.sv[data-sv="cal"]::before{content:'Calendar';}
+  #s-stats .cal{margin-top:0;}
+  #s-stats .pl-empty{padding-top:1rem;}
+  /* Workout: breder, oefeningen in twee kolommen; groepskoppen en tussenkoppen over de volle breedte */
+  body[data-view="workout"] .wrap,body[data-view="workout"] main.wrap{max-width:72rem;}
+  #s-d3 .exl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:3rem;}
+  #s-d3 .exl>li.exgrp,#s-d3 .exl>li.exsub,#s-d3 .exl>li.gx-empty,#s-d3 .exl>li:not(.exr){grid-column:1/-1;}
+}
 </style>
 
 <header class="top">

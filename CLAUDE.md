@@ -81,6 +81,13 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   ranges bij groepen zoals vette vis). Eenheid: per stuk waar dat logisch is (egg, avocado, piece fruit, slice, scoop, tin, tbsp,
   handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij. Getoond als zachte pil (`#p-voeding .nut`, 6% inkt). Eiwit enkel waar relevant: niet bij groenten, fruit, olie, avocado, olijven, cacao, chocolade, hummus, stevia, water (daar enkel kcal). De pil '★ Top protein' is weg (op vraag van Tom).
 
+## Tablet / breed scherm (≥ 1000 px; op vraag van Tom, 9 okt)
+- Eén `@media (min-width:1000px)`-blok onderaan de CSS; daaronder (gsm, tablet portrait) verandert niets (pixelvergelijking 375/390 px voor/na = gelijk).
+- Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met drie kolommen Balance · Progress · Calendar (alle `.sv` tegelijk zichtbaar,
+  `[hidden]` overschreven; titels via `::before`), pagina tot 84rem breed (`body[data-view=progress]`).
+- Workout: tot 72rem breed, oefeningen in twee kolommen (`#s-d3 .exl` grid; groepskoppen, tussenkoppen, 'Add exercises' over de volle breedte).
+- Diet en Guide blijven zoals op gsm (52rem).
+
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil (actieve knop: zelfde terracotta-verloop als de Start workout-balk, tekst en icoon `--paper`; op vraag van Tom) met **Workout** (icoon: Material Symbols 'exercise' (halter), als inline SVG; vroeger 'task_alt')
   en **Statistics** (op vraag van Tom, 9 okt even 'Results', daarna terug naar Statistics; vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'monitoring', vroeger 'man'), **Diet** (`data-view=voeding`, Material Symbols 'grocery') en **Guide** (`data-view=kracht`, vroeger 'Info', Material Symbols 'explore' (kompas);
