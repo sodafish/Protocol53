@@ -4351,8 +4351,7 @@ window.__congrats=function(o){
       if(m<-W/2){ setX(s0.row,-W,true); openRow=s0.row; } else { setX(s0.row,0,true); if(openRow===s0.row) openRow=null; } }
     box.addEventListener('pointerup',end); box.addEventListener('pointercancel',end);
     box.addEventListener('click',function(e){ var b=e.target.closest('.cx-del'); if(!b) return; var it=EXI[+b.dataset.i]; if(!it) return;
-      p53Confirm({title:'Delete exercise?',msg:'Remove '+it.name+' from '+(box.dataset.dl||'this day')+'? This also removes the measurement from its chart.',ok:'Delete',danger:true}).then(function(y){
-        if(!y){ closeOpen(); return; } openRow=null; if(window.__progDelIds) window.__progDelIds(it.ids); }); });
+      openRow=null; if(window.__progDelIds) window.__progDelIds(it.ids); }); /* geen extra bevestiging: de tik op Delete is de bevestiging (op vraag van Tom) */
   })();
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
