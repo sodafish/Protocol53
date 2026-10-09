@@ -1435,8 +1435,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 /* Muscle Balance: knop Suggestions + blad (op vraag van Tom) */
 .stats-subrow{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:.7rem;}
 .stats-subrow .stats-sub{margin:0;}
-.sug-btn{flex:none;display:inline-flex;align-items:center;gap:.35rem;min-height:34px;padding:0 .8rem 0 .65rem;border-radius:999px;border:1.5px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--accent);font:600 12.5px 'Work Sans',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.sug-btn:active{transform:scale(.97);}
+.sug-btn{flex:none;display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;} /* enkel icoon, zoals de andere ronde knoppen (op vraag van Tom) */
+.sug-btn:active{background:var(--paper-soft);transform:scale(.95);}
 .sug-intro{margin:0 0 .4rem;font-size:14px;color:var(--muted);}
 .sug-h{margin:1.4rem 0 .5rem;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
 .sug-list,.sug-bal{list-style:none;margin:0;padding:0;}
@@ -1795,9 +1795,9 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
       <div class="stats-per" role="group" aria-label="Period">
-        <button type="button" data-d="dag">Last workout</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" class="pr-edit per-edit" id="balEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button>
+        <button type="button" data-d="dag">Last Workout</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" class="pr-edit per-edit" id="balEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button>
       </div>
-      <div class="stats-subrow"><p class="stats-sub" id="statsSub"></p><button type="button" class="sug-btn" id="sugBtn"><svg width="16" height="16" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M423.5-103.5Q400-127 400-160h160q0 33-23.5 56.5T480-80q-33 0-56.5-23.5ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg>Suggestions</button></div>
+      <div class="stats-subrow"><p class="stats-sub" id="statsSub"></p><button type="button" class="sug-btn" id="sugBtn" aria-label="Suggestions" title="Suggestions"><svg width="18" height="18" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M423.5-103.5Q400-127 400-160h160q0 33-23.5 56.5T480-80q-33 0-56.5-23.5ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg></button></div>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
       </div>

@@ -106,7 +106,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Drie knoppen links: Last workout (`dag`; de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
+- Drie knoppen links: Last Workout (`dag`, schermnaam met hoofdletter W; de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
   Month (`maand`, laatste 30 dagen → gemiddeld per week); rechts in dezelfde rij een rond potlood `#balEdit` (`.per-edit`, accent als actief) = eigen periode
   (`per='range'`, op vraag van Tom, 9 okt; 3 months/Year/All zijn weg, bewaarde oude keuzes → Month). Venster `p53EditRange` binnen de eerste/laatste training;
   bewaard in localStorage `fitlog-stats-range` `{f,t}` (leeg = volgt eerste/laatste); `balRange(evs)`. Langer dan 7 dagen = gemiddeld per week. Tekst eronder
@@ -146,7 +146,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   tussenkoppen (zonder Supersets) verschijnen pas als er zo'n oefening onder staat; niets = lege staat `#plEmpty` (gecentreerd: kaartje met mini-grafiek 1st → 2nd + 'Your progress starts here' + uitleg 'at least twice') (op vraag van Tom, 9 okt). Groepsnaam in de stijl van de oefeningnamen op Workout (Fraunces 600, 18 px), in accentkleur zoals het groeps-%. Tussenkopnaam (`.pl-sh`) als de tussenkoppen op Workout: 11.5 px, kapitalen, letterspatiëring, `--muted`. Groepskop: gewone lijn `--line`, 2.4rem ruimte erboven. Hiërarchie: groeps-% groot (26 px Fraunces), tussenkop-% 19 px, oefening-% gewone tekst 15 px, regel 'kg · verschil' in `--muted-soft`;
   enkel het groeps-% krijgt de accentkleur, altijd (ook 0%) (tussenkop en oefening niet; op vraag van Tom).  Rechts op elke rij een rond icoon (`.pl-chart`, Material Symbols 'timeline', 36 px cirkel zoals de andere icoonknoppen; vroeger een pijltje). Tik (rij of icoon) = uitlegblad met enkel de grafiek ('Your progress', geen beeld/uitleg; `window.__p53info.chart`, op vraag van Tom). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
-- **Suggestions** (op vraag van Tom, 9 okt): knop `#sugBtn` (lampje, accent-omlijnd) rechts op de regel van `#statsSub` (`.stats-subrow`) opent blad `#sug-sheet`.
+- **Suggestions** (op vraag van Tom, 9 okt): knop `#sugBtn` (enkel lampje-icoon in een ronde 36 px-knop zoals overal, geen accent; op vraag van Tom, 9 okt) rechts op de regel van `#statsSub` (`.stats-subrow`) opent blad `#sug-sheet`.
   Rekent over de laatste 4 weken (los van de gekozen periode; via `events()`, dus de metingen): sets per week per spier, gewogen (MUSCLES).
   'Give more attention' = spieren onder het minimum `SUG_MIN` (grote spieren 8, zijkant/achterkant schouder, armen, buik, onderrug, kuiten 3–5;
   NIET onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee, op vraag van Tom), max. 5, laagste % eerst,
