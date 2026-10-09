@@ -76,7 +76,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Diet
 - Diet en Guide: de eerste kaders beginnen op dezelfde hoogte als de tabs op Workout/Statistics (115 px op 375 px; `#p-voeding,#p-kracht{padding-top:.6rem}`, eerste marges 0; op vraag van Tom).
-- Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom).
+- Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom). Alle frequentie-pillen zijn gevuld (groen/goud/rood met tekst in `--paper`, dus ook leesbaar in donker; op vraag van Tom).
 - Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ eenheid</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
   ranges bij groepen zoals vette vis). Eenheid: per stuk waar dat logisch is (egg, avocado, piece fruit, slice, scoop, tin, tbsp,
   handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij.
