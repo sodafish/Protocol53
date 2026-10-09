@@ -951,6 +951,30 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 .stats-fig .o path,.stats-fig .o ellipse{fill:var(--line)!important;stroke:var(--line);stroke-width:5;stroke-linejoin:round;}
 .stats-fig .n,.stats-fig .m{fill:var(--paper-soft);stroke:var(--line);stroke-width:1.6;stroke-linejoin:round;}
 .stats-fig .m{transition:fill .5s ease;}
+/* Balance-infographic (variant C, op vraag van Tom, 9 okt): één figuur + Front/Back-schakelaar; op tablet beide naast elkaar */
+.stats-fig.bal{display:block;max-width:24rem;margin:.9rem auto 0;}
+.bal-seg{display:flex;width:max-content;margin:0 auto .5rem;background:var(--paper-soft);border-radius:999px;padding:3px;}
+.bal-seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 13.5px 'Work Sans',system-ui,sans-serif;padding:.4rem 1.1rem;border-radius:999px;cursor:pointer;}
+.bal-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;}
+.bal-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+.stats-fig.bal figure{display:none;}
+.stats-fig.bal figure.on{display:block;}
+.stats-fig.bal figcaption{display:none;}
+.stats-fig.bal svg{overflow:visible;}
+.bal-ln{fill:none!important;stroke:var(--ink);stroke-opacity:.45;stroke-width:.8;stroke-linecap:round;stroke-linejoin:round;}
+.bal-dot{fill:var(--ink);stroke:var(--paper);stroke-width:1.4;}
+.bal-pct{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;fill:var(--ink);font-variant-numeric:tabular-nums;}
+.bal-pct.zero{fill:var(--muted-soft);}
+.bal-pct.top{fill:var(--accent);}
+.bal-lab{font-family:'Work Sans',system-ui,sans-serif;font-weight:600;font-size:7px;letter-spacing:.12em;text-transform:uppercase;fill:var(--muted);}
+.stats-fig.bal .draw .bal-ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:balLn .7s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:var(--d);}
+.stats-fig.bal .draw .bal-dot{transform-box:fill-box;transform-origin:center;animation:balPop .35s ease backwards;animation-delay:var(--d);}
+.stats-fig.bal .draw .bal-tx{animation:balFd .45s ease backwards;animation-delay:calc(var(--d) + .4s);}
+@keyframes balLn{to{stroke-dashoffset:0;}}
+@keyframes balPop{from{transform:scale(0);}}
+@keyframes balFd{from{opacity:0;}}
+@media (prefers-reduced-motion:reduce){.stats-fig.bal .draw .bal-ln,.stats-fig.bal .draw .bal-dot,.stats-fig.bal .draw .bal-tx{animation:none;stroke-dashoffset:0;}}
+.stats>.sv>.stats-per button[aria-disabled="true"]{opacity:.35;cursor:default;}
 .stats-list{list-style:none;margin:2.6rem 0 0;padding:0;}
 .stats-list li{display:grid;grid-template-columns:10.6rem 1fr 2.4rem;align-items:center;gap:.7rem;padding:.42rem 0;border-bottom:1px solid var(--line-soft);font-size:14px;}
 .stats-list .sl-n{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -1420,7 +1444,16 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   /* Statistics = één dashboard: Balance · Progress · Calendar naast elkaar, geen tabs */
   body[data-view="progress"] .wrap,body[data-view="progress"] main.wrap{max-width:84rem;}
   #s-stats #stabs{display:none;}
-  #s-stats section.stats{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr);gap:0 3rem;align-items:start;}
+  /* twee kolommen (op vraag van Tom, 9 okt): links Balance (voor en achter naast elkaar), rechts Progress met Calendar eronder */
+  #s-stats section.stats{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0 3.5rem;align-items:start;}
+  #s-stats section.stats>.sv[data-sv="body"]{grid-column:1;grid-row:1/span 2;}
+  #s-stats section.stats>.sv[data-sv="prog"]{grid-column:2;grid-row:1;}
+  #s-stats section.stats>.sv[data-sv="cal"]{grid-column:2;grid-row:2;margin-top:3rem;}
+  .stats-fig.bal{max-width:none;}
+  .stats-fig.bal .bal-seg{display:none;}
+  .stats-fig.bal .bal-figs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.4rem;}
+  .stats-fig.bal figure,.stats-fig.bal figure.on{display:block;}
+  .stats-fig.bal figcaption{display:block;}
   #s-stats section.stats>.sv,#s-stats section.stats>.sv[hidden]{display:block!important;min-width:0;}
   #s-stats section.stats>.sv[data-sv="body"]{order:1;} #s-stats section.stats>.sv[data-sv="prog"]{order:2;} #s-stats section.stats>.sv[data-sv="cal"]{order:3;}
   #s-stats section.stats>.sv::before{display:block;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line);font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;color:var(--ink);}
@@ -2693,6 +2726,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   document.querySelectorAll('.stats-per button').forEach(function(b){
     b.setAttribute('aria-pressed',b.dataset.d===per?'true':'false');
     b.addEventListener('click',function(){
+      if(b.getAttribute('aria-disabled')==='true') return; /* geen data zo ver terug: uitgegrijsd (op vraag van Tom) */
       per=b.dataset.d; try{ localStorage.setItem(PERKEY,per); }catch(e){}
       document.querySelectorAll('.stats-per button').forEach(function(x){ x.setAttribute('aria-pressed',x===b?'true':'false'); });
       renderStats();
@@ -2706,16 +2740,43 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var DAGEN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
       MAANDEN=['January','February','March','April','May','June','July','August','September','October','November','December'];
   function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
+  /* krachttoename per spier sinds 'start': per krachtoefening (één kg-veld, geen supersets/warm-up/cardio, zoals Progress)
+     laatste meting (in de periode) t.o.v. de laatste meting vóór de periode, of anders de eerste in de periode. Een spier telt
+     de oefeningen waar ze hoofdspier is (1); waarde = gemiddelde van de twee meest gemeten (zoals de groepen onder Progress). */
+  function balPct(start){
+    var by={}, out={}; if(!window.__progPts) return out;
+    document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
+      if(!/^g([1-7]|10)$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return;
+      var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return;
+      var pts=window.__progPts(ins[0].dataset.note); if(pts.length<2) return;
+      var L=pts[pts.length-1]; if(L.t<start) return;
+      var base=null; pts.forEach(function(x){ if(x.t<start) base=x; }); if(!base) base=pts.filter(function(x){ return x.t>=start; })[0];
+      if(!base||base===L) return;
+      var pct=base.v>0?(L.v-base.v)/base.v*100:0, mm=musclesFor(chkKey(li),li)||{};
+      Object.keys(mm).forEach(function(m){ if(mm[m]===1) (by[m]=by[m]||[]).push({p:pct,n:pts.length,t:L.t}); });
+    });
+    Object.keys(by).forEach(function(m){ var v=by[m].sort(function(a,b){ return b.n-a.n||b.t-a.t; }).slice(0,2);
+      out[m]=v.reduce(function(a,x){ return a+x.p; },0)/v.length; });
+    return out;
+  }
   function renderStats(){ setTimeout(paintCounts,0); if(window.__renderCal) setTimeout(window.__renderCal,0);
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var now=Date.now(), score={}, first=now, days={}, evs=events().filter(function(e){ return e.t; }), last=0;
     evs.forEach(function(e){ if(e.t>last) last=e.t; });
     var lastDay=last?dayKey(last):null;
+    /* periodes zonder data uitgrijzen (op vraag van Tom): Week vanaf de eerste meting, Month pas als de data verder teruggaat
+       dan 7 dagen, Year verder dan 30 dagen, All verder dan 365 dagen. Staat de gekozen periode uit, dan tonen we de langste
+       die wel kan (zonder die keuze te bewaren: zodra de data er is, komt de eigen keuze terug). */
+    var oldest=now; evs.forEach(function(e){ if(e.t<oldest) oldest=e.t; });
+    var span=evs.length?now-oldest:-1, OK={dag:true,week:span>=0,maand:span>7*864e5,jaar:span>30*864e5,alles:span>365*864e5};
+    var eff=per; if(!OK[eff]){ eff='dag'; PERS.forEach(function(p){ if(OK[p]) eff=p; }); }
+    document.querySelectorAll('.stats>.sv[data-sv="body"] .stats-per button').forEach(function(b){
+      b.setAttribute('aria-disabled',OK[b.dataset.d]?'false':'true'); b.setAttribute('aria-pressed',b.dataset.d===eff?'true':'false'); });
     function inPer(e){
-      if(per==='dag') return dayKey(e.t)===lastDay;
-      if(per==='week') return now-e.t<=7*864e5;
-      if(per==='maand') return now-e.t<=30*864e5;
-      if(per==='jaar') return now-e.t<=365*864e5;
+      if(eff==='dag') return dayKey(e.t)===lastDay;
+      if(eff==='week') return now-e.t<=7*864e5;
+      if(eff==='maand') return now-e.t<=30*864e5;
+      if(eff==='jaar') return now-e.t<=365*864e5;
       return true;
     }
     Object.keys(MLAB).forEach(function(m){ score[m]=0; });
@@ -2725,18 +2786,23 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in score) score[k]+=s*m[k]; });
     });
     /* Dag en Week: totaal aantal sets. Maand en Alles: gemiddeld per week. */
-    var perWeek=per==='maand'||per==='jaar'||per==='alles';
-    var weeks=perWeek?Math.max(1,Math.min(per==='maand'?30/7:per==='jaar'?365/7:1e9,(now-first)/(7*864e5))):1, max=0;
+    var perWeek=eff==='maand'||eff==='jaar'||eff==='alles';
+    var weeks=perWeek?Math.max(1,Math.min(eff==='maand'?30/7:eff==='jaar'?365/7:1e9,(now-first)/(7*864e5))):1, max=0;
     Object.keys(score).forEach(function(k){ score[k]/=weeks; max=Math.max(max,score[k]); });
-    fig.querySelectorAll('svg > g:not(.o) .m').forEach(function(p){
-      var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
-      p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
+    /* figuur = krachttoename per spier in de gekozen periode (op vraag van Tom, variant C); de lijst eronder blijft de sets */
+    var start=eff==='dag'?(last?new Date(new Date(last).setHours(0,0,0,0)).getTime():now):eff==='week'?now-7*864e5:eff==='maand'?now-30*864e5:eff==='jaar'?now-365*864e5:0;
+    var bp=balPct(start), bmax=0; Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
+    fig.querySelectorAll('.m').forEach(function(p){ if(p.closest('.o')) return;
+      var v=bp[p.getAttribute('data-m')]||0;
+      p.style.fill=v>0&&bmax?'color-mix(in srgb,var(--accent) '+Math.round(18+82*v/bmax)+'%,var(--surface))':'';
     });
+    fig.querySelectorAll('.bal-pct').forEach(function(t){ var v=Math.round(bp[t.getAttribute('data-m')]||0);
+      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; t.setAttribute('class','bal-pct'+(v===0?' zero':v>0&&v===Math.round(bmax)?' top':'')); });
     var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
-    if(per==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
-    else if(per==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
-    else if(per==='maand') head='Last 30 days, '+n+(n===1?' training day':' training days');
-    else if(per==='jaar') head='Last 12 months, '+n+(n===1?' training day':' training days');
+    if(eff==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
+    else if(eff==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
+    else if(eff==='maand') head='Last 30 days, '+n+(n===1?' training day':' training days');
+    else if(eff==='jaar') head='Last 12 months, '+n+(n===1?' training day':' training days');
     else { var f=new Date(first); head='Since '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' training day':' training days'); }
     sub.textContent=n ? head+'.'
       : 'No data in this period yet. Tick off exercises and the figure fills in.';
@@ -2845,16 +2911,42 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   }
 };
     var MIR=' transform="matrix(-1 0 0 1 200 0)"';
-    fig.innerHTML=[['front','Front'],['back','Back']].map(function(v){
+    /* lichaam iets minder hoog (factor SY rond de kin), hoofd en oor ongewijzigd */
+    var SY=.86, CY=55, VH=Math.ceil(CY+(450-CY)*SY)+4, ys=function(y){ return +(CY+(y-CY)*SY).toFixed(1); };
+    /* infographic (op vraag van Tom, 9 okt): vanuit elke spier een lijntje naar buiten met de krachttoename.
+       [spier, anker x, anker y, hoogte label] in 450-coördinaten; L = labels links, R = rechts (ankers al gespiegeld, x > 100) */
+    var CO={
+      front:{L:[['trap',82,74,52],['sz',45,116,104],['bi',52,158,156],['oa',44,215,214],['quad',72,262,270],['kuit',73,370,372]],
+             R:[['borst',116,106,70],['sv',139,110,124],['buik',104,150,172],['schuin',124,165,226],['add',105,245,276]]},
+      back:{L:[['trap',90,90,52],['sa',48,112,104],['tri',50,155,156],['oa',44,215,214],['ham',82,290,290],['kuit',76,355,362]],
+            R:[['midrug',125,112,76],['lats',122,160,140],['onderrug',104,190,196],['schuin',123,203,236],['bil',115,245,280]]}};
+    function callouts(side){ var h='', i=0;
+      ['L','R'].forEach(function(s){ CO[side][s].forEach(function(c){
+        var ax=c[1], ay=ys(c[2]), ky=ys(c[3]), kx=s==='L'?16:184, tx=s==='L'?-56:256, an=s==='L'?'start':'end';
+        var len=(Math.hypot(kx-ax,ky-ay)+Math.abs(tx-kx)).toFixed(1);
+        h+='<g style="--d:'+(i++*.06).toFixed(2)+'s"><path class="bal-ln" style="--len:'+len+'" d="M'+ax+','+ay+' L'+kx+','+ky+' L'+tx+','+ky+'"/>'+
+          '<circle class="bal-dot" cx="'+ax+'" cy="'+ay+'" r="2.6"/><g class="bal-tx"><text class="bal-pct" data-m="'+c[0]+'" x="'+tx+'" y="'+(ky-3.5)+'" text-anchor="'+an+'">0%</text>'+
+          '<text class="bal-lab" x="'+tx+'" y="'+(ky+10)+'" text-anchor="'+an+'">'+MLAB[c[0]]+'</text></g></g>'; }); });
+      return '<g class="bal-co">'+h+'</g>'; }
+    var SKEY='fitlog-bal-side', cur='front'; try{ cur=localStorage.getItem(SKEY)==='back'?'back':'front'; }catch(e){}
+    fig.classList.add('bal');
+    fig.innerHTML='<div class="bal-seg" role="group" aria-label="Side"><button type="button" data-s="front">Front</button><button type="button" data-s="back">Back</button></div><div class="bal-figs">'+
+      [['front','Front'],['back','Back']].map(function(v){
       var d=B[v[0]], half='', ear='';
-      /* lichaam iets minder hoog (factor SY rond de kin), hoofd en oor ongewijzigd */
-      var SY=.86, CY=55, SC=' transform="translate(0 '+CY+') scale(1 '+SY+') translate(0 '+(-CY)+')"';
+      var SC=' transform="translate(0 '+CY+') scale(1 '+SY+') translate(0 '+(-CY)+')"';
       d.parts.forEach(function(x,i){ var p='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; if(i===0) ear+=p; else half+=p; });
       var side='<g'+SC+'>'+half+'</g>'+ear;
       var all='<g>'+side+'</g><g'+MIR+'>'+side+'</g>'+d.head;
-      var VH=Math.ceil(CY+(450-CY)*SY)+4;
-      return '<figure><svg viewBox="28 0 144 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+'"><g class="o" aria-hidden="true">'+all+'</g>'+all+'</svg></figure>';
-    }).join('');
+      return '<figure data-side="'+v[0]+'"><svg viewBox="-58 0 316 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+', strength progress per muscle"><g class="o" aria-hidden="true">'+all+'</g>'+all+callouts(v[0])+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
+    }).join('')+'</div>';
+    function show(s,anim){ cur=s; try{ localStorage.setItem(SKEY,s); }catch(e){}
+      fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.s===s?'true':'false'); });
+      fig.querySelectorAll('figure[data-side]').forEach(function(f){ f.classList.toggle('on',f.dataset.side===s);
+        if(anim&&f.dataset.side===s){ f.classList.remove('draw'); void f.offsetWidth; f.classList.add('draw'); clearTimeout(f._t); f._t=setTimeout(function(){ f.classList.remove('draw'); },2000); } }); }
+    fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.s!==cur) show(b.dataset.s,true); }); });
+    show(cur,false);
+    /* lijntjes tekenen zich in bij het openen van Balance */
+    window.__balDraw=function(){ fig.querySelectorAll('figure[data-side]').forEach(function(f){ if(!f.offsetParent) return; f.classList.remove('draw'); void f.offsetWidth; f.classList.add('draw'); clearTimeout(f._t); f._t=setTimeout(function(){ f.classList.remove('draw'); },2000); }); };
   })();
   renderStats();
   /* ---- Kracht: subtabs Training / Statistieken ---- */
@@ -3953,6 +4045,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     view=v;
     items.forEach(function(b){ b.setAttribute('aria-selected',b.dataset.view===v?'true':'false'); });
     if(title) title.textContent=NAMES[v]||'';
+    if(v==='progress'&&document.body.dataset.view!=='progress'&&window.__balDraw) setTimeout(window.__balDraw,60); /* lijntjes intekenen bij openen */
     document.body.dataset.view=v;
   }
   /* terug naar Workout = verder waar je was (scrollpositie onthouden); andere pagina's beginnen bovenaan */
@@ -4354,7 +4447,7 @@ window.__congrats=function(o){
   var KEY='fitlog-stats-view', cur='body'; try{ cur=localStorage.getItem(KEY)||'body'; }catch(e){} if(!/^(body|cal|prog)$/.test(cur)) cur='body';
   function apply(){ tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.sv===cur?'true':'false'); });
     document.querySelectorAll('#s-stats .sv').forEach(function(x){ x.hidden=x.dataset.sv!==cur; }); }
-  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} apply(); }
+  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} apply(); if(v==='body'&&window.__balDraw) setTimeout(window.__balDraw,30); }
   window.__statsView=function(v){ set(v); };
   function keep(wasStuck){ var pane=tabs.parentElement, h=document.documentElement;
     if(!wasStuck){ pane.style.minHeight=''; return; }
