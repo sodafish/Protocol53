@@ -2706,7 +2706,7 @@ window.p53Swipe=function(box,onDel){ var W=88, st=null, openRow=null;
         (ex.list.length?'<small>'+(ex.add?'Add to your list: ':'Try: ')+ex.list.map(esc).join(', ')+'</small>':'')+'</li>'; }).join('')+'</ul>'; }
     if(bal.length) h+='<p class="sug-h">Balance</p><ul class="sug-bal">'+bal.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ul>';
     if(!low.length&&!bal.length) h+='<p class="sug-ok">Nicely balanced — every muscle gets enough work. Keep it up.</p>';
-    return h+'<p class="sug-note">Sets per week, weighted by how much each exercise works the muscle. Weight and effort aren’t counted. A guide, not a rule.</p>'; }
+    return h+'<p class="sug-note">A guide, not a rule.</p>'; }
   (function(){ var btn=document.getElementById('sugBtn'), bg=document.getElementById('sug-bg'), sh=document.getElementById('sug-sheet'); if(!btn||!sh) return; var open=false;
     function show(){ open=true; sh.querySelector('.sug-body').innerHTML=sugHTML(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
     function hide(){ if(!open) return; open=false; bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); btn.focus({preventScroll:true}); }

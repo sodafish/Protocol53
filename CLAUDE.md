@@ -125,7 +125,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   NIET onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee, op vraag van Tom), max. 5, laagste % eerst,
   met staafje en 'Try: …' (actieve oefeningen met die spier als hoofdspier, meest gedaan eerst) of 'Add to your list: …' (uitgezette). 'Balance' =
   paren `SUG_PAIRS` (Chest/Back, Quads/Hamstrings, Biceps/Triceps, Front/Rear delts, Abs/Lower back) bij verhouding ≥ 1,8 en ≥ 3 sets. < 2 trainingsdagen =
-  uitleg. Onderaan: telt sets, geen gewicht/inzet; 'A guide, not a rule'.
+  uitleg. Onderaan enkel 'A guide, not a rule.' (op vraag van Tom).
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
