@@ -106,14 +106,16 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Vijf knoppen: Last workout (`dag`, label 'Last workout' op vraag van Tom; de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
-  Month (`maand`, laatste 30 dagen), 3 months (`kwart`, laatste 91 dagen) en Year (`jaar`, laatste 365 dagen) → gemiddeld aantal sets per week.
-  All (`alles`) is weg (9 okt, op vraag van Tom: langer dan een jaar heeft geen zin); een bewaarde 'alles' wordt 'jaar'.
+- Drie knoppen links: Last workout (`dag`; de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
+  Month (`maand`, laatste 30 dagen → gemiddeld per week); rechts in dezelfde rij een rond potlood `#balEdit` (`.per-edit`, accent als actief) = eigen periode
+  (`per='range'`, op vraag van Tom, 9 okt; 3 months/Year/All zijn weg, bewaarde oude keuzes → Month). Venster `p53EditRange` binnen de eerste/laatste training;
+  bewaard in localStorage `fitlog-stats-range` `{f,t}` (leeg = volgt eerste/laatste); `balRange(evs)`. Langer dan 7 dagen = gemiddeld per week. Tekst eronder
+  '27 Sep – 9 Oct 2026, 4 training days, sets per week.'. Selectors op de periodeknoppen gebruiken `.stats-per button[data-d]` (het potlood niet).
 De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijst relatief t.o.v. de best getrainde spier.
 - Balance-figuur (`#statsFig`) = de gewone twee figuren voor/achter, kleur = sets (zoals altijd).
 - Progress-figuur = infographic (variant C, op vraag van Tom, 9 okt; preview gekozen uit A/B/C; eerst onder Balance, op vraag van Tom verhuisd naar
   bovenaan Progress, want kracht en sets zijn twee verschillende zaken): één grote figuur (`#progFig.stats-fig.bal`, viewBox -58 0 316 VH)
-  met schakelaar Front/Back (`.bal-seg`, keuze in localStorage `fitlog-bal-side`); vanuit ELKE spier (alle 18 van `MLAB`, ook 0%) een lijntje (`.bal-ln`)
+  met schakelaar Front/Back (`.bal-seg`, absoluut rechtsboven op de figuur zodat die hoger staat (op vraag van Tom); keuze in localStorage `fitlog-bal-side`); vanuit ELKE spier (alle 18 van `MLAB`, ook 0%) een lijntje (`.bal-ln`)
   naar links/rechts met groot % (`.bal-pct`, Fraunces 17, `zero` = muted, `top` = hoogste in accent) en de naam (`.bal-lab`, kapitalen 7). Ankers en
   labelhoogtes in `CO` (drawBody, 450-coördinaten; R-ankers al gespiegeld). Kleur van de spiervlakken = krachttoename (hoe donkerder, hoe meer).
   Bovenaan Progress (op vraag van Tom, 9 okt) de periode `.pr-range`: tekst `#prRange` ('3 Oct – 9 Oct 2026 · all data') + potlood `#prEdit`
@@ -124,7 +126,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   % per spier = `balPct(from,to)`: per krachtoefening (één kg-veld, g1–g7/g10, geen supersets; `progRows`) eerste → laatste meting in de periode; spier = oefeningen waar ze hoofdspier (1) is, gemiddelde van de twee meest gemeten.
   Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Progress en bij wisselen van kant.
 - Periodes zonder data uitgegrijsd (op vraag van Tom, 9 okt; `aria-disabled`, 35%, klik doet niets): Last workout altijd, Week vanaf de eerste meting,
-  Month als de oudste meting > 7 dagen terug ligt, 3 months > 30 dagen, Year > 90 dagen. Staat de bewaarde keuze uit, dan toont `renderStats` de langste
+  Month als de oudste meting > 7 dagen terug ligt; potlood uit zolang er geen data is. Staat de bewaarde keuze uit, dan toont `renderStats` de langste
   beschikbare (`eff`) zonder de keuze te overschrijven.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
