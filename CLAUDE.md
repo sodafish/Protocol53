@@ -146,7 +146,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   die dag, één keer per oefening). Programma (`prog()` in het kalenderscript) wordt per workout afgeleid uit de groepen met een meting: g10 = EGYM (+ rest), enkel g8 = Cardio,
   enkel g2/g4/g5/g7 = Upper body, enkel g1/g3/g6 = Lower body, anders Full body; meerdere workouts op één dag = 'Open Gym + EGYM'; 'Cardio' staat niet als programma (de minuten staan al in '+ 40 min cardio'), een dag met enkel cardio = 'Cardio · 40 min'. Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Onder de datum staat de lijst van gedane oefeningen (`.cal-ex`), gegroepeerd per programma met tussenkop + totaal (`.cx-h`: Open Gym · N sets,
   eGym · N sets, Cardio · N min; vervangt de vroegere regels 'Programma · N sets'), in workoutvolgorde, per rij links de naam, rechts sets/reps (eerste tekst van `.exr-s`,
-  niet bij cardio, lichter) · gemeten waarde (supersets 'a / b'). Veeg naar links op een rij (`.cx-row`, pointer events, 88 px) = rode Delete-knop
+  niet bij cardio, lichter) · gemeten waarde (supersets 'a / b'). Rechts naast de datum staat subtiel 'Swipe left to delete' (`.cx-hint`). Veeg naar links op een rij (`.cx-row`, pointer events, 88 px) = rode Delete-knop
   (`.cx-del`) → `p53Confirm` → `window.__progDelIds(ids)` wist de metingen in `prog` (de hoofdbron; zelfde regels als het vuilbakje, ook het vinkje
   van de lopende workout) (op vraag van Tom, 9 okt). Geen duur of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
   Subtabs (`#k-train` → pane `#s-d3`, `#k-stats` → pane `#s-stats`); bij opstarten altijd Workout.

@@ -1340,6 +1340,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .exgrp.split-off + .gx-empty{display:none;}
 #s-d3 .exl .exgrp.g-empty .grp-edit{visibility:hidden;}
 #s-d3 .exl .exgrp[data-grp="g0"].g-empty{height:auto;padding:1.6rem 0 .3rem!important;}
+.cx-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
+.cx-hint{font-size:12px;color:var(--muted-soft);} /* subtiele hint (op vraag van Tom) */
 </style>
 
 <header class="top">
@@ -4308,7 +4310,7 @@ window.__congrats=function(o){
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
     /* datum, dan per regel: kracht ('Open Gym + eGym · 25 sets') en cardio ('Cardio · 40 min') */
     var pg=progs(o), lines=[]; if(o.sets||pg) lines.push((pg||'Strength')+' · '+o.sets+(o.sets===1?' set':' sets')); if(o.min) lines.push('Cardio · '+Math.round(o.min)+' min');
-    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]; box.innerHTML='<b>'+dl+'</b>'+exList(o); box.dataset.dl=dl;
+    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()], exl=exList(o); box.innerHTML='<div class="cx-top"><b>'+dl+'</b>'+(exl?'<span class="cx-hint">Swipe left to delete</span>':'')+'</div>'+exl; box.dataset.dl=dl;
   }
   /* oefeningen van die dag, gegroepeerd per programma (Open Gym, eGym, Cardio) in workoutvolgorde, met gemeten waarde + sets/reps;
      veeg naar links = verwijderen (met bevestiging), wist de meting(en) in de grafiekdata (op vraag van Tom) */
