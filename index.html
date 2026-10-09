@@ -1373,6 +1373,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cal-ex li.cx,.pe-list li.cx{display:block;padding:0;} /* rij vult de breedte, Delete blijft eronder verborgen */
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cx-del{color:var(--paper);}}
 :root[data-theme="dark"] .cx-del{color:var(--paper);} /* Delete-tekst donker in dark mode (op vraag van Tom) */
+.cx-row>*:first-child{flex:1 1 auto;min-width:0;} /* lange naam mag afbreken: de rechtse tekst loopt nooit over de rand (of onder Delete) */
+.cx-row>em,.cx-row>.pe-v{flex:none;white-space:nowrap;text-align:right;}
 </style>
 
 <header class="top">
