@@ -1350,6 +1350,26 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .pe-list .cx-row{background:var(--surface);min-height:48px;padding:0;justify-content:flex-start;gap:.8rem;}
 .pe-list .cx-row .pe-d{flex:1;}
 
+
+/* Muscle Balance: knop Suggestions + blad (op vraag van Tom) */
+.stats-subrow{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:.7rem;}
+.stats-subrow .stats-sub{margin:0;}
+.sug-btn{flex:none;display:inline-flex;align-items:center;gap:.35rem;min-height:34px;padding:0 .8rem 0 .65rem;border-radius:999px;border:1.5px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--accent);font:600 12.5px 'Work Sans',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.sug-btn:active{transform:scale(.97);}
+.sug-intro{margin:0 0 .4rem;font-size:14px;color:var(--muted);}
+.sug-h{margin:1.4rem 0 .5rem;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.sug-list,.sug-bal{list-style:none;margin:0;padding:0;}
+.sug-list li{padding:.75rem 0;border-bottom:1px solid var(--line-soft);}
+.sug-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
+.sug-row b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;}
+.sug-row span{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;}
+.sug-row i{font-style:normal;font-weight:500;color:var(--muted);}
+.sug-bar{display:block;height:5px;margin:.45rem 0 .1rem;border-radius:3px;background:var(--line-soft);overflow:hidden;}
+.sug-bar i{display:block;height:100%;background:var(--accent);border-radius:3px;}
+.sug-list small{display:block;margin-top:.35rem;font-size:13px;color:var(--muted);}
+.sug-bal li{padding:.6rem 0;border-bottom:1px solid var(--line-soft);font-size:14.5px;line-height:1.45;}
+.sug-ok{margin:1rem 0 0;font-size:15px;}
+.sug-note{margin:1.2rem 0 .4rem;font-size:12.5px;line-height:1.45;color:var(--muted-soft);}
 </style>
 
 <header class="top">
@@ -1639,7 +1659,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
       <div class="stats-per" role="group" aria-label="Period">
         <button type="button" data-d="dag">Last workout</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="jaar">Year</button><button type="button" data-d="alles">All</button>
       </div>
-      <p class="stats-sub" id="statsSub"></p>
+      <div class="stats-subrow"><p class="stats-sub" id="statsSub"></p><button type="button" class="sug-btn" id="sugBtn"><svg width="16" height="16" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M423.5-103.5Q400-127 400-160h160q0 33-23.5 56.5T480-80q-33 0-56.5-23.5ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg>Suggestions</button></div>
       <div class="stats-fig" id="statsFig"></div>
       <ol class="stats-list" id="statsList"></ol>
       </div>
@@ -1985,6 +2005,12 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   <label class="set-lab set-reps">Reps or time<input type="text" id="setR" autocomplete="off" placeholder="8–12"></label>
   <p class="set-prev" id="setPrev"></p>
   <div class="set-act"><button type="button" id="setReset" class="set-reset">Reset to default</button><button type="button" id="setSave" class="set-save">Save</button></div>
+</div>
+<div class="sheet-bg" id="sug-bg" hidden></div>
+<div class="sheet" id="sug-sheet" role="dialog" aria-modal="true" aria-labelledby="sug-t" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head"><h3 id="sug-t">Suggestions</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sug-body"></div>
 </div>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
 <script>
@@ -2654,6 +2680,38 @@ window.p53Swipe=function(box,onDel){ var W=88, st=null, openRow=null;
       var v=score[k]; return '<li'+(v?'':' class="zero"')+'><span class="sl-n">'+MLAB[k]+'</span><span class="sl-b"><i style="width:'+(max?Math.round(100*v/max):0)+'%"></i></span><span class="sl-v">'+(v?fmt(v):'–')+'</span></li>';
     }).join('');
   }
+  /* ---- Suggestions: welke spieren verdienen de komende trainingen meer aandacht (laatste 4 weken, sets per week, gewogen) ---- */
+  var SUG_MIN={borst:8,lats:8,midrug:8,quad:8,ham:8,bil:8,sz:5,sa:4,trap:3,onderrug:3,bi:4,tri:4,oa:2,buik:4,schuin:3,kuit:4,add:3,sv:3};
+  var SUG_PAIRS=[['borst',['lats','midrug'],'Chest','Back'],['quad',['ham'],'Quads','Hamstrings'],['bi',['tri'],'Biceps','Triceps'],['sv',['sa'],'Front delts','Rear delts'],['buik',['onderrug'],'Abs','Lower back']];
+  function sugData(){ var now=Date.now(), W=28*864e5, sc={}, first=now, days={};
+    Object.keys(MLAB).forEach(function(m){ sc[m]=0; });
+    events().forEach(function(e){ if(!e.t||now-e.t>W) return; first=Math.min(first,e.t); days[dayKey(e.t)]=1;
+      var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in sc) sc[k]+=s*m[k]; }); });
+    var weeks=Math.max(1,Math.min(4,(now-first)/(7*864e5))); Object.keys(sc).forEach(function(k){ sc[k]/=weeks; });
+    return {sc:sc,days:Object.keys(days).length}; }
+  function exFor(m){ var act=[], off=[];
+    document.querySelectorAll('#s-d3 .exr[data-grp]').forEach(function(li){ var g=li.dataset.grp; if(!/^g([1-7]|10)$/.test(g)) return;
+      var k=chkKey(li), mm=musclesFor(k,li)||{}; if(mm[m]!==1) return; var n=li.querySelector('.exr-n'); n=n?n.firstChild.textContent.trim():''; if(!n) return;
+      (li.classList.contains('ex-off')?off:act).push({n:n,c:window.__exStat?window.__exStat(k).n:0}); });
+    act.sort(function(a,b){ return b.c-a.c; });
+    return act.length?{list:act.slice(0,2).map(function(x){ return x.n; }),add:false}:{list:off.slice(0,2).map(function(x){ return x.n; }),add:true}; }
+  function sugHTML(){ var D=sugData(), sc=D.sc, f=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+''); }, esc=function(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
+    if(D.days<2) return '<p class="sug-intro">Train for a week or two and this fills in. Suggestions look at your last 4 weeks.</p>';
+    var low=Object.keys(SUG_MIN).filter(function(m){ return sc[m]<SUG_MIN[m]; }).sort(function(a,b){ return sc[a]/SUG_MIN[a]-sc[b]/SUG_MIN[b]; }).slice(0,5);
+    var bal=[]; SUG_PAIRS.forEach(function(p){ var a=sc[p[0]], b=p[1].reduce(function(x,k){ return x+sc[k]; },0)/p[1].length, hi=Math.max(a,b), lo=Math.min(a,b);
+      if(hi>=3&&hi>=1.8*Math.max(lo,.5)){ var big=a>b?p[2]:p[3], small=a>b?p[3]:p[2], r=lo>0?hi/lo:null; bal.push(esc(big)+(/s$/.test(big)?' get ':' gets ')+(r&&r<10?(Math.round(r*10)/10)+'×':'far')+' more work than '+esc(small)+'. Give '+esc(small)+' a bit more attention.'); } });
+    var h='<p class="sug-intro">Based on your last 4 weeks · '+D.days+' training days.</p>';
+    if(low.length){ h+='<p class="sug-h">Give more attention</p><ul class="sug-list">'+low.map(function(m){ var ex=exFor(m);
+      return '<li><div class="sug-row"><b>'+MLAB[m]+'</b><span>'+f(sc[m])+' <i>/ '+SUG_MIN[m]+' sets a week</i></span></div><span class="sug-bar"><i style="width:'+Math.min(100,Math.round(100*sc[m]/SUG_MIN[m]))+'%"></i></span>'+
+        (ex.list.length?'<small>'+(ex.add?'Add to your list: ':'Try: ')+ex.list.map(esc).join(', ')+'</small>':'')+'</li>'; }).join('')+'</ul>'; }
+    if(bal.length) h+='<p class="sug-h">Balance</p><ul class="sug-bal">'+bal.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ul>';
+    if(!low.length&&!bal.length) h+='<p class="sug-ok">Nicely balanced — every muscle gets enough work. Keep it up.</p>';
+    return h+'<p class="sug-note">Sets per week, weighted by how much each exercise works the muscle. Weight and effort aren’t counted. A guide, not a rule.</p>'; }
+  (function(){ var btn=document.getElementById('sugBtn'), bg=document.getElementById('sug-bg'), sh=document.getElementById('sug-sheet'); if(!btn||!sh) return; var open=false;
+    function show(){ open=true; sh.querySelector('.sug-body').innerHTML=sugHTML(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
+    function hide(){ if(!open) return; open=false; bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); btn.focus({preventScroll:true}); }
+    btn.addEventListener('click',show); bg.addEventListener('click',hide); sh.querySelector('.sheet-x').addEventListener('click',hide);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) hide(); }); })();
   (function drawBody(){
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var B={

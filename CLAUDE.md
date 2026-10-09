@@ -119,6 +119,13 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   tussenkoppen (zonder Supersets) verschijnen pas als er zo'n oefening onder staat; niets = lege staat `#plEmpty` (gecentreerd: kaartje met mini-grafiek 1st → 2nd + 'Your progress starts here' + uitleg 'at least twice') (op vraag van Tom, 9 okt). Groepsnaam in de stijl van de oefeningnamen op Workout (Fraunces 600, 18 px), in accentkleur zoals het groeps-%. Tussenkopnaam (`.pl-sh`) als de tussenkoppen op Workout: 11.5 px, kapitalen, letterspatiëring, `--muted`. Groepskop: gewone lijn `--line`, 2.4rem ruimte erboven. Hiërarchie: groeps-% groot (26 px Fraunces), tussenkop-% 19 px, oefening-% gewone tekst 15 px, regel 'kg · verschil' in `--muted-soft`;
   enkel het groeps-% krijgt de accentkleur, altijd (ook 0%) (tussenkop en oefening niet; op vraag van Tom).  Tik = uitlegblad met enkel de grafiek ('Your progress', geen beeld/uitleg; `window.__p53info.chart`, op vraag van Tom). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
+- **Suggestions** (op vraag van Tom, 9 okt): knop `#sugBtn` (lampje, accent-omlijnd) rechts op de regel van `#statsSub` (`.stats-subrow`) opent blad `#sug-sheet`.
+  Rekent over de laatste 4 weken (los van de gekozen periode; via `events()`, dus de metingen): sets per week per spier, gewogen (MUSCLES).
+  'Give more attention' = spieren onder het minimum `SUG_MIN` (grote spieren 8, schouders/armen/core 3–5, onderarmen 2), max. 5, laagste % eerst,
+  met staafje en 'Try: …' (actieve oefeningen met die spier als hoofdspier, meest gedaan eerst) of 'Add to your list: …' (uitgezette). 'Balance' =
+  paren `SUG_PAIRS` (Chest/Back, Quads/Hamstrings, Biceps/Triceps, Front/Rear delts, Abs/Lower back) bij verhouding ≥ 1,8 en ≥ 3 sets. < 2 trainingsdagen =
+  uitleg. Onderaan: telt sets, geen gewicht/inzet; 'A guide, not a rule'.
+
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
   hoofdspier van de adductie-oefeningen in groep 3 en hulpspier bij squats/sumo deadlift).
