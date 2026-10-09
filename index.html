@@ -1371,6 +1371,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .sug-ok{margin:1rem 0 0;font-size:15px;}
 .sug-note{margin:1.2rem 0 .4rem;font-size:12.5px;line-height:1.45;color:var(--muted-soft);}
 .cal-ex li.cx,.pe-list li.cx{display:block;padding:0;} /* rij vult de breedte, Delete blijft eronder verborgen */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cx-del{color:var(--paper);}}
+:root[data-theme="dark"] .cx-del{color:var(--paper);} /* Delete-tekst donker in dark mode (op vraag van Tom) */
 </style>
 
 <header class="top">
