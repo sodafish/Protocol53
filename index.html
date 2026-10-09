@@ -1343,7 +1343,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wtabs .wd-go button.wd-note{flex:none;width:38px;height:38px;min-height:0;padding:0;border:1.5px solid color-mix(in srgb,currentColor 45%,transparent);border-radius:50%;background:transparent;color:inherit;display:inline-flex;align-items:center;justify-content:center;}
 .wtabs .wd-go button.wd-note[hidden]{display:none;}
 .wtabs .wd-go button.wd-note svg{color:inherit;width:24px;height:24px;} /* opsz 24, FILL 0, wght 400 (op vraag van Tom) */
-body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workout al in het blok bovenaan */
+/* End workout staat altijd rechtsonder (ook op Workout; op vraag van Tom, 9 okt): de balk onder de tabs blijft weg */
 
 /* Diet en Guide: eerste kaders beginnen op dezelfde hoogte als de tabs op Workout (op vraag van Tom) */
 #p-voeding,#p-kracht{padding-top:.6rem!important;}
@@ -2375,8 +2375,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var on=woActive(), top=document.querySelector('#s-d3 .wo-btn'), fl=document.getElementById('woEnd');
     if(top) top.hidden=on;
     var stp=document.getElementById('woStop'); if(stp) stp.hidden=!on;
-    var dk=document.getElementById('wtabs'); if(dk) dk.classList.toggle('on',on);
-    var wg=document.getElementById('wdGo'); if(wg) wg.hidden=!on;
+    var dk=document.getElementById('wtabs'); if(dk) dk.classList.remove('on');
+    var wg=document.getElementById('wdGo'); if(wg) wg.hidden=true; /* End workout enkel rechtsonder (op vraag van Tom) */
     if(fl) fl.hidden=!on; document.body.classList.toggle('wo-on',on);
   }
   window.__paintWoBtns=paintWoBtns;
