@@ -3561,10 +3561,14 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   /* ---------- venster ---------- */
   var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
   var cur=null, lastFocus=null;
-  function open(name,btn,over){
+  function open(name,btn,over,chartOnly){
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
     bg.classList.toggle('over',!!over); sh.classList.toggle('over',!!over);
     tt.textContent=name;
+    if(chartOnly){ /* vanuit Strength Progress: enkel de grafiek, geen beeld of uitleg (op vraag van Tom) */
+      cur=null; bodyEl.innerHTML='<div class="ip-wrap"></div>'; curName=name; progBlock(name);
+      bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); });
+      sh.querySelector('.sheet-x').focus({preventScroll:true}); return; }
     bodyEl.innerHTML='<div class="sheet-fig"></div><p class="sheet-cap"></p>'+(EGI[k]?'<p class="ph-src">Image: eGym</p>':(IMG[k]||ANIM[k])?'<p class="ph-src">'+[IMG[k]?'Photos: Free Exercise DB':'',ANIM[k]?'Animation: © Gym visual':''].filter(Boolean).join(' · ')+'</p>':'');
     bodyEl.querySelector('.sheet-cap').textContent=EX[k].cap;
     bodyEl.insertAdjacentHTML('beforeend','<div class="ip-wrap"></div>'); curName=name; progBlock(name);
@@ -3687,7 +3691,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   markProg(); document.addEventListener('p53-prog',markProg);
   bg.addEventListener('click',close); sh.querySelector('.sheet-x').addEventListener('click',close);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !sh.hidden) close(); });
-  window.__p53info={has:function(name){ return !!NAMES[name]; },open:function(name,btn){ open(name,btn,true); }};
+  window.__p53info={has:function(name){ return !!NAMES[name]; },open:function(name,btn){ open(name,btn,true); },chart:function(name,btn){ open(name,btn,true,true); }};
   window.__p53anim={EX:EX,NAMES:NAMES,player:player,staticPose:function(host,k,ph){ var ex=EX[k], view=ex.view||'side'; var svg=el('svg',{viewBox:'0 0 300 230',width:205},host); svg.innerHTML='<line x1="20" y1="'+GY+'" x2="280" y2="'+GY+'" stroke="var(--line)" stroke-width="2"/>'+fixv(ex.props); var gb=el('g',{},svg); var g=build(gb,view); draw(g,view,ex.poses[ph],ex); }};
 })();
 </script>
@@ -4179,7 +4183,7 @@ window.__congrats=function(o){
       html+='<li class="pl-h" aria-hidden="true"><span>'+esc(g.t)+'</span>'+pc(avg)+'</li>'+body; });
     list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
   }
-  list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.open(b.dataset.n,b); });
+  list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.chart(b.dataset.n,b); });
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.addEventListener('p53-groups',function(){ setTimeout(render,0); });
   setTimeout(render,0);
