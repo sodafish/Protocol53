@@ -83,8 +83,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Tablet / breed scherm (≥ 1000 px; op vraag van Tom, 9 okt)
 - Eén `@media (min-width:1000px)`-blok onderaan de CSS; daaronder (gsm, tablet portrait) verandert niets (pixelvergelijking 375/390 px voor/na = gelijk).
-- Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met TWEE kolommen (9 okt; vroeger drie): links Balance (over twee rijen, figuren
-  voor en achter naast elkaar, schakelaar `.bal-seg` verborgen, captions zichtbaar), rechts Progress met Calendar eronder (alle `.sv` tegelijk zichtbaar,
+- Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met TWEE kolommen (9 okt; vroeger drie): links Progress (over twee rijen, infographic
+  voor en achter naast elkaar, schakelaar `.bal-seg` verborgen, captions zichtbaar), rechts Balance met Calendar eronder (alle `.sv` tegelijk zichtbaar,
   `[hidden]` overschreven; titels via `::before`), pagina tot 84rem breed (`body[data-view=progress]`). Diet/Guide in twee kolommen: nog niet, enkel geopperd.
 - Workout: tot 72rem breed, oefeningen in twee kolommen (`#s-d3 .exl` grid; groepskoppen, tussenkoppen, 'Add exercises' over de volle breedte).
 - Diet en Guide blijven zoals op gsm (52rem).
@@ -107,17 +107,21 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
 - Vijf knoppen: Last workout (`dag`, label 'Last workout' op vraag van Tom; de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
-  Month (`maand`, laatste 30 dagen), Year (`jaar`, laatste 365 dagen, op vraag van Tom) en All (`alles`, sinds de eerste afvinking) → gemiddeld aantal sets per week.
+  Month (`maand`, laatste 30 dagen), 3 months (`kwart`, laatste 91 dagen) en Year (`jaar`, laatste 365 dagen) → gemiddeld aantal sets per week.
+  All (`alles`) is weg (9 okt, op vraag van Tom: langer dan een jaar heeft geen zin); een bewaarde 'alles' wordt 'jaar'.
 De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijst relatief t.o.v. de best getrainde spier.
-- Balance-figuur = infographic (variant C, op vraag van Tom, 9 okt; preview gekozen uit A/B/C): één grote figuur (`#statsFig.bal`, viewBox -58 0 316 VH)
+- Balance-figuur (`#statsFig`) = de gewone twee figuren voor/achter, kleur = sets (zoals altijd).
+- Progress-figuur = infographic (variant C, op vraag van Tom, 9 okt; preview gekozen uit A/B/C; eerst onder Balance, op vraag van Tom verhuisd naar
+  bovenaan Progress, want kracht en sets zijn twee verschillende zaken): één grote figuur (`#progFig.stats-fig.bal`, viewBox -58 0 316 VH)
   met schakelaar Front/Back (`.bal-seg`, keuze in localStorage `fitlog-bal-side`); vanuit ELKE spier (alle 18 van `MLAB`, ook 0%) een lijntje (`.bal-ln`)
   naar links/rechts met groot % (`.bal-pct`, Fraunces 17, `zero` = muted, `top` = hoogste in accent) en de naam (`.bal-lab`, kapitalen 7). Ankers en
-  labelhoogtes in `CO` (drawBody, 450-coördinaten; R-ankers al gespiegeld). Kleur van de spiervlakken = krachttoename (hoe donkerder, hoe meer), niet meer de sets.
+  labelhoogtes in `CO` (drawBody, 450-coördinaten; R-ankers al gespiegeld). Kleur van de spiervlakken = krachttoename (hoe donkerder, hoe meer).
+  Altijd eerste → laatste meting (`balPct(0)`, geen periode, zoals de lijst eronder). Getekend in `drawBody` (`bodySvg`), gevuld in `renderStats`.
   % per spier = `balPct(start)`: per krachtoefening (één kg-veld, g1–g7/g10, geen supersets; zoals Progress) laatste meting (moet in de periode vallen)
   t.o.v. de laatste meting vóór de periode (of de eerste in de periode); spier = oefeningen waar ze hoofdspier (1) is, gemiddelde van de twee meest gemeten.
-  Last workout = vanaf middernacht van de laatste trainingsdag. Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Balance en bij wisselen van kant.
+  Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Progress en bij wisselen van kant.
 - Periodes zonder data uitgegrijsd (op vraag van Tom, 9 okt; `aria-disabled`, 35%, klik doet niets): Last workout altijd, Week vanaf de eerste meting,
-  Month als de oudste meting > 7 dagen terug ligt, Year > 30 dagen, All > 365 dagen. Staat de bewaarde keuze uit, dan toont `renderStats` de langste
+  Month als de oudste meting > 7 dagen terug ligt, 3 months > 30 dagen, Year > 90 dagen. Staat de bewaarde keuze uit, dan toont `renderStats` de langste
   beschikbare (`eff`) zonder de keuze te overschrijven.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 

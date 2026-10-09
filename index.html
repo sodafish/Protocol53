@@ -953,6 +953,7 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 .stats-fig .m{transition:fill .5s ease;}
 /* Balance-infographic (variant C, op vraag van Tom, 9 okt): één figuur + Front/Back-schakelaar; op tablet beide naast elkaar */
 .stats-fig.bal{display:block;max-width:24rem;margin:.9rem auto 0;}
+#progFig{margin:0 auto 1.4rem;}
 .bal-seg{display:flex;width:max-content;margin:0 auto .5rem;background:var(--paper-soft);border-radius:999px;padding:3px;}
 .bal-seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 13.5px 'Work Sans',system-ui,sans-serif;padding:.4rem 1.1rem;border-radius:999px;cursor:pointer;}
 .bal-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;}
@@ -1444,10 +1445,10 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   /* Statistics = één dashboard: Balance · Progress · Calendar naast elkaar, geen tabs */
   body[data-view="progress"] .wrap,body[data-view="progress"] main.wrap{max-width:84rem;}
   #s-stats #stabs{display:none;}
-  /* twee kolommen (op vraag van Tom, 9 okt): links Balance (voor en achter naast elkaar), rechts Progress met Calendar eronder */
+  /* twee kolommen (op vraag van Tom, 9 okt): links Progress (infographic voor en achter naast elkaar + lijst), rechts Balance met Calendar eronder */
   #s-stats section.stats{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0 3.5rem;align-items:start;}
-  #s-stats section.stats>.sv[data-sv="body"]{grid-column:1;grid-row:1/span 2;}
-  #s-stats section.stats>.sv[data-sv="prog"]{grid-column:2;grid-row:1;}
+  #s-stats section.stats>.sv[data-sv="prog"]{grid-column:1;grid-row:1/span 2;}
+  #s-stats section.stats>.sv[data-sv="body"]{grid-column:2;grid-row:1;}
   #s-stats section.stats>.sv[data-sv="cal"]{grid-column:2;grid-row:2;margin-top:3rem;}
   .stats-fig.bal{max-width:none;}
   .stats-fig.bal .bal-seg{display:none;}
@@ -1754,7 +1755,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
       <div class="stats-per" role="group" aria-label="Period">
-        <button type="button" data-d="dag">Last workout</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="jaar">Year</button><button type="button" data-d="alles">All</button>
+        <button type="button" data-d="dag">Last workout</button><button type="button" data-d="week">Week</button><button type="button" data-d="maand">Month</button><button type="button" data-d="kwart">3 months</button><button type="button" data-d="jaar">Year</button>
       </div>
       <div class="stats-subrow"><p class="stats-sub" id="statsSub"></p><button type="button" class="sug-btn" id="sugBtn"><svg width="16" height="16" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M423.5-103.5Q400-127 400-160h160q0 33-23.5 56.5T480-80q-33 0-56.5-23.5ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg>Suggestions</button></div>
       <div class="stats-fig" id="statsFig"></div>
@@ -1768,7 +1769,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-day" id="calDay" aria-live="polite"></div>
       </section>
-      <div class="sv" data-sv="prog"><div class="pl-empty" id="plEmpty">
+      <div class="sv" data-sv="prog"><div class="stats-fig bal" id="progFig"></div><div class="pl-empty" id="plEmpty">
         <svg class="pe-art" width="148" height="104" viewBox="0 0 148 104" fill="none" aria-hidden="true">
           <rect x="1" y="1" width="146" height="102" rx="20" class="pe-card"/>
           <path d="M22 78H126" class="pe-axis"/>
@@ -2720,9 +2721,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
     Object.keys(hist).forEach(function(id){ var e=hist[id]; if(id!=='seed'&&e&&e.k===k&&ymdL(e.t)===d){ delete hist[id]; if(histCol) histCol.doc(id).delete().catch(function(){}); } });
     saveHistLocal(); renderStats(); };
-  var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','jaar','alles']; /* Last · Week · Month · Year · All */
+  var PERKEY='fitlog-stats-per', PERS=['dag','week','maand','kwart','jaar']; /* Last workout · Week · Month · 3 months · Year (All weg: langer dan een jaar heeft geen zin, op vraag van Tom) */
   var per='maand'; try{ per=localStorage.getItem(PERKEY)||'maand'; }catch(e){}
-  if(PERS.indexOf(per)<0) per='maand';
+  if(per==='alles') per='jaar'; if(PERS.indexOf(per)<0) per='maand';
   document.querySelectorAll('.stats-per button').forEach(function(b){
     b.setAttribute('aria-pressed',b.dataset.d===per?'true':'false');
     b.addEventListener('click',function(){
@@ -2768,7 +2769,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
        dan 7 dagen, Year verder dan 30 dagen, All verder dan 365 dagen. Staat de gekozen periode uit, dan tonen we de langste
        die wel kan (zonder die keuze te bewaren: zodra de data er is, komt de eigen keuze terug). */
     var oldest=now; evs.forEach(function(e){ if(e.t<oldest) oldest=e.t; });
-    var span=evs.length?now-oldest:-1, OK={dag:true,week:span>=0,maand:span>7*864e5,jaar:span>30*864e5,alles:span>365*864e5};
+    var span=evs.length?now-oldest:-1, OK={dag:true,week:span>=0,maand:span>7*864e5,kwart:span>30*864e5,jaar:span>90*864e5};
     var eff=per; if(!OK[eff]){ eff='dag'; PERS.forEach(function(p){ if(OK[p]) eff=p; }); }
     document.querySelectorAll('.stats>.sv[data-sv="body"] .stats-per button').forEach(function(b){
       b.setAttribute('aria-disabled',OK[b.dataset.d]?'false':'true'); b.setAttribute('aria-pressed',b.dataset.d===eff?'true':'false'); });
@@ -2776,6 +2777,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(eff==='dag') return dayKey(e.t)===lastDay;
       if(eff==='week') return now-e.t<=7*864e5;
       if(eff==='maand') return now-e.t<=30*864e5;
+      if(eff==='kwart') return now-e.t<=91*864e5;
       if(eff==='jaar') return now-e.t<=365*864e5;
       return true;
     }
@@ -2785,18 +2787,21 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       first=Math.min(first,e.t); days[dayKey(e.t)]=1;
       var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in score) score[k]+=s*m[k]; });
     });
-    /* Dag en Week: totaal aantal sets. Maand en Alles: gemiddeld per week. */
-    var perWeek=eff==='maand'||eff==='jaar'||eff==='alles';
-    var weeks=perWeek?Math.max(1,Math.min(eff==='maand'?30/7:eff==='jaar'?365/7:1e9,(now-first)/(7*864e5))):1, max=0;
+    /* Dag en Week: totaal aantal sets. Maand, 3 maanden en Jaar: gemiddeld per week. */
+    var perWeek=eff==='maand'||eff==='kwart'||eff==='jaar';
+    var weeks=perWeek?Math.max(1,Math.min(eff==='maand'?30/7:eff==='kwart'?13:365/7,(now-first)/(7*864e5))):1, max=0;
     Object.keys(score).forEach(function(k){ score[k]/=weeks; max=Math.max(max,score[k]); });
-    /* figuur = krachttoename per spier in de gekozen periode (op vraag van Tom, variant C); de lijst eronder blijft de sets */
-    var start=eff==='dag'?(last?new Date(new Date(last).setHours(0,0,0,0)).getTime():now):eff==='week'?now-7*864e5:eff==='maand'?now-30*864e5:eff==='jaar'?now-365*864e5:0;
-    var bp=balPct(start), bmax=0; Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
-    fig.querySelectorAll('.m').forEach(function(p){ if(p.closest('.o')) return;
+    fig.querySelectorAll('svg > g:not(.o) .m').forEach(function(p){
+      var v=score[p.getAttribute('data-m')]||0, i=max?v/max:0;
+      p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
+    });
+    /* Progress-figuur (variant C): krachttoename per spier, eerste → laatste meting, zoals de lijst eronder (op vraag van Tom, 9 okt) */
+    var pf=document.getElementById('progFig'), bp=balPct(0), bmax=0; Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
+    if(pf) pf.querySelectorAll('.m').forEach(function(p){ if(p.closest('.o')) return;
       var v=bp[p.getAttribute('data-m')]||0;
       p.style.fill=v>0&&bmax?'color-mix(in srgb,var(--accent) '+Math.round(18+82*v/bmax)+'%,var(--surface))':'';
     });
-    fig.querySelectorAll('.bal-pct').forEach(function(t){ var v=Math.round(bp[t.getAttribute('data-m')]||0);
+    if(pf) pf.querySelectorAll('.bal-pct').forEach(function(t){ var v=Math.round(bp[t.getAttribute('data-m')]||0);
       t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; t.setAttribute('class','bal-pct'+(v===0?' zero':v>0&&v===Math.round(bmax)?' top':'')); });
     var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
     if(eff==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
@@ -2928,16 +2933,19 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
           '<circle class="bal-dot" cx="'+ax+'" cy="'+ay+'" r="2.6"/><g class="bal-tx"><text class="bal-pct" data-m="'+c[0]+'" x="'+tx+'" y="'+(ky-3.5)+'" text-anchor="'+an+'">0%</text>'+
           '<text class="bal-lab" x="'+tx+'" y="'+(ky+10)+'" text-anchor="'+an+'">'+MLAB[c[0]]+'</text></g></g>'; }); });
       return '<g class="bal-co">'+h+'</g>'; }
+    function bodySvg(side){ var d=B[side], half='', ear='', SC=' transform="translate(0 '+CY+') scale(1 '+SY+') translate(0 '+(-CY)+')"';
+      d.parts.forEach(function(x,i){ var p='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; if(i===0) ear+=p; else half+=p; });
+      var sd='<g'+SC+'>'+half+'</g>'+ear, all='<g>'+sd+'</g><g'+MIR+'>'+sd+'</g>'+d.head;
+      return '<g class="o" aria-hidden="true">'+all+'</g>'+all; }
+    /* Balance: de gewone figuren voor/achter (sets) */
+    fig.innerHTML=[['front','Front'],['back','Back']].map(function(v){
+      return '<figure><svg viewBox="28 0 144 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+'">'+bodySvg(v[0])+'</svg></figure>'; }).join('');
+    /* Progress: infographic met lijntjes */
+    fig=document.getElementById('progFig'); if(!fig) return;
     var SKEY='fitlog-bal-side', cur='front'; try{ cur=localStorage.getItem(SKEY)==='back'?'back':'front'; }catch(e){}
-    fig.classList.add('bal');
     fig.innerHTML='<div class="bal-seg" role="group" aria-label="Side"><button type="button" data-s="front">Front</button><button type="button" data-s="back">Back</button></div><div class="bal-figs">'+
       [['front','Front'],['back','Back']].map(function(v){
-      var d=B[v[0]], half='', ear='';
-      var SC=' transform="translate(0 '+CY+') scale(1 '+SY+') translate(0 '+(-CY)+')"';
-      d.parts.forEach(function(x,i){ var p='<path d="'+x[1]+'" class="'+(x[0]?'m" data-m="'+x[0]:'n')+'"/>'; if(i===0) ear+=p; else half+=p; });
-      var side='<g'+SC+'>'+half+'</g>'+ear;
-      var all='<g>'+side+'</g><g'+MIR+'>'+side+'</g>'+d.head;
-      return '<figure data-side="'+v[0]+'"><svg viewBox="-58 0 316 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+', strength progress per muscle"><g class="o" aria-hidden="true">'+all+'</g>'+all+callouts(v[0])+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
+      return '<figure data-side="'+v[0]+'"><svg viewBox="-58 0 316 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+', strength progress per muscle">'+bodySvg(v[0])+callouts(v[0])+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
     }).join('')+'</div>';
     function show(s,anim){ cur=s; try{ localStorage.setItem(SKEY,s); }catch(e){}
       fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.s===s?'true':'false'); });
@@ -4447,7 +4455,7 @@ window.__congrats=function(o){
   var KEY='fitlog-stats-view', cur='body'; try{ cur=localStorage.getItem(KEY)||'body'; }catch(e){} if(!/^(body|cal|prog)$/.test(cur)) cur='body';
   function apply(){ tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.sv===cur?'true':'false'); });
     document.querySelectorAll('#s-stats .sv').forEach(function(x){ x.hidden=x.dataset.sv!==cur; }); }
-  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} apply(); if(v==='body'&&window.__balDraw) setTimeout(window.__balDraw,30); }
+  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} apply(); if(v==='prog'&&window.__balDraw) setTimeout(window.__balDraw,30); }
   window.__statsView=function(v){ set(v); };
   function keep(wasStuck){ var pane=tabs.parentElement, h=document.documentElement;
     if(!wasStuck){ pane.style.minHeight=''; return; }
