@@ -121,7 +121,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 
 - **Suggestions** (op vraag van Tom, 9 okt): knop `#sugBtn` (lampje, accent-omlijnd) rechts op de regel van `#statsSub` (`.stats-subrow`) opent blad `#sug-sheet`.
   Rekent over de laatste 4 weken (los van de gekozen periode; via `events()`, dus de metingen): sets per week per spier, gewogen (MUSCLES).
-  'Give more attention' = spieren onder het minimum `SUG_MIN` (grote spieren 8, schouders/armen/core 3–5, onderarmen 2), max. 5, laagste % eerst,
+  'Give more attention' = spieren onder het minimum `SUG_MIN` (grote spieren 8, zijkant/achterkant schouder, armen, buik, onderrug, kuiten 3–5;
+  NIET onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee, op vraag van Tom), max. 5, laagste % eerst,
   met staafje en 'Try: …' (actieve oefeningen met die spier als hoofdspier, meest gedaan eerst) of 'Add to your list: …' (uitgezette). 'Balance' =
   paren `SUG_PAIRS` (Chest/Back, Quads/Hamstrings, Biceps/Triceps, Front/Rear delts, Abs/Lower back) bij verhouding ≥ 1,8 en ≥ 3 sets. < 2 trainingsdagen =
   uitleg. Onderaan: telt sets, geen gewicht/inzet; 'A guide, not a rule'.

@@ -2681,7 +2681,7 @@ window.p53Swipe=function(box,onDel){ var W=88, st=null, openRow=null;
     }).join('');
   }
   /* ---- Suggestions: welke spieren verdienen de komende trainingen meer aandacht (laatste 4 weken, sets per week, gewogen) ---- */
-  var SUG_MIN={borst:8,lats:8,midrug:8,quad:8,ham:8,bil:8,sz:5,sa:4,trap:3,onderrug:3,bi:4,tri:4,oa:2,buik:4,schuin:3,kuit:4,add:3,sv:3};
+  var SUG_MIN={borst:8,lats:8,midrug:8,quad:8,ham:8,bil:8,sz:5,sa:4,onderrug:3,bi:4,tri:4,buik:4,kuit:4}; /* geen onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee via andere oefeningen (op vraag van Tom) */
   var SUG_PAIRS=[['borst',['lats','midrug'],'Chest','Back'],['quad',['ham'],'Quads','Hamstrings'],['bi',['tri'],'Biceps','Triceps'],['sv',['sa'],'Front delts','Rear delts'],['buik',['onderrug'],'Abs','Lower back']];
   function sugData(){ var now=Date.now(), W=28*864e5, sc={}, first=now, days={};
     Object.keys(MLAB).forEach(function(m){ sc[m]=0; });
