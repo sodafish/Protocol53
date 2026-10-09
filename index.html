@@ -2018,7 +2018,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
 <script>
 /* ---- veeg naar links om te verwijderen (kalender + edit-blad van de grafiek): rij .cx-row schuift, rode .cx-del eronder; tik = wissen ---- */
-window.p53Swipe=function(box,onDel){ var W=88, st=null, openRow=null;
+window.p53Swipe=function(box,onDel){ var W=100, st=null, openRow=null; /* rij schuift 100 px, knop is 88 px: 12 px ruimte tussen label en Delete (op vraag van Tom) */
   function setX(row,x,anim){ row.style.transition=anim?'transform .22s ease':'none'; row.style.transform=x?'translateX('+x+'px)':''; }
   function closeOpen(){ if(openRow){ setX(openRow,0,true); openRow=null; } }
   box.addEventListener('pointerdown',function(e){ var row=e.target.closest('.cx-row'); if(!row||!box.contains(row)){ if(!e.target.closest('.cx-del')) closeOpen(); return; }
