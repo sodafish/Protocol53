@@ -1113,7 +1113,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
    op dezelfde plaats staan als op de andere tabs */
 #s-d3 .exl .exgrp[data-grp="g0"]{position:relative;height:0;padding:0!important;border-bottom:0;}
 #s-d3 .exl .exgrp[data-grp="g0"] .grp-edit{position:absolute;right:0;top:39px;}
-#s-d3 .exl .exgrp[data-grp="g0"] + .exsub{padding-top:47px;padding-bottom:18px;}
+#s-d3 .exl .exsub.first-sub{padding-top:47px;padding-bottom:18px;} /* eerste ZICHTBARE tussenkop van de warm-up (ook als Cardio leeg is) */
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
 .wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
@@ -3835,6 +3835,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     /* tussenkop (bv. Supersets) verbergen als er geen zichtbare oefening onder staat */
     document.querySelectorAll('#s-d3 .exsub').forEach(function(h){ var n=h.nextElementSibling, vis=false;
       while(n && n.classList.contains('exr')){ if(!n.classList.contains('ex-off')) vis=true; n=n.nextElementSibling; } h.hidden=!vis; });
+    /* warm-up: het potlood staat op de regel van de eerste zichtbare tussenkop */
+    var fs=null; document.querySelectorAll('#s-d3 .exsub[data-grp="g0"]').forEach(function(h){ h.classList.remove('first-sub'); if(!fs&&!h.hidden) fs=h; }); if(fs) fs.classList.add('first-sub');
     if(window.__progChipsRefresh) window.__progChipsRefresh();
     document.dispatchEvent(new Event('p53-groups'));
   }
