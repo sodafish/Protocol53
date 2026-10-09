@@ -123,7 +123,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   → `p53EditRange({title,msg,min,max,from,to})` (venster met twee datumvelden From/To, min/max = eerste/laatste kg-meting, buiten die grenzen wordt
   geklemd; 'Show all data' = terug naar alles). Bewaard in localStorage `fitlog-prog-range` `{f,t}`; leeg = volgt de eerste/laatste meting (ook nieuwe).
   `window.__progRange()` → `{from,to,f,t,b,all}`; figuur (`balPct(from,to)`) én de lijst `#plList` rekenen eerste → laatste meting BINNEN die periode
-  (minstens twee metingen); lijst ververst bij event `p53-prange`. Getekend in `drawBody` (`bodySvg`), gevuld in `renderStats`.
+  (minstens twee metingen); lijst ververst bij event `p53-prange`. Getekend in `drawBody` (`bodySvg`), gevuld in `renderStats`. Onder de figuur 2.6rem ruimte (`#progFig`, op vraag van Tom).
   % per spier = `balPct(from,to)`: per krachtoefening (één kg-veld, g1–g7/g10, geen supersets; `progRows`) eerste → laatste meting in de periode; spier = oefeningen waar ze hoofdspier (1) is, gemiddelde van de twee meest gemeten.
   Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Progress en bij wisselen van kant.
 - Periodes zonder data uitgegrijsd (op vraag van Tom, 9 okt; `aria-disabled`, 35%, klik doet niets): Last workout altijd, Week vanaf de eerste meting,
@@ -180,7 +180,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Kalender onderaan Coverage (`#cal`, kop 'Calendar' (vroeger 'Workouts'), eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
-  vandaag in accentkleur, bovenaan 'N training days · N sets' (sets van die maand; op vraag van Tom telt het dagen, twee workouts op één dag = één dag). Tik op een dag = eronder de datum en daaronder per regel 'Programma · N sets' en 'Cardio · N min' (op vraag van Tom) (som van de sets van elke oefening
+  vandaag in accentkleur, bovenaan 'N training days · N sets' (sets van die maand; op vraag van Tom telt het dagen, twee workouts op één dag = één dag). Tik op een dag = eronder (1.8rem ruimte + lijn, op vraag van Tom) de datum en daaronder per regel 'Programma · N sets' en 'Cardio · N min' (op vraag van Tom) (som van de sets van elke oefening
   die dag, één keer per oefening). Programma (`prog()` in het kalenderscript) wordt per workout afgeleid uit de groepen met een meting: g10 = EGYM (+ rest), enkel g8 = Cardio,
   enkel g2/g4/g5/g7 = Upper body, enkel g1/g3/g6 = Lower body, anders Full body; meerdere workouts op één dag = 'Open Gym + EGYM'; 'Cardio' staat niet als programma (de minuten staan al in '+ 40 min cardio'), een dag met enkel cardio = 'Cardio · 40 min'. Bron = alleen de grafiekdata (`prog`, zoals 'N×'; sets via `window.__setsFor`), ververst bij `p53-prog`. Onder de datum staat de lijst van gedane oefeningen (`.cal-ex`), gegroepeerd per programma met tussenkop + totaal (Open Gym krijgt altijd ' · Upper Body / Lower Body / Full Body' erachter, uit de groepen
   van die dag: g2/g4/g5/g7 = upper, g1/g3 = lower, core g6 telt neutraal, enkel core = 'Core'; op vraag van Tom) (`.cx-h`, 2rem ruimte erboven, eerste 1.2rem: Open Gym · N sets,
