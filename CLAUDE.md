@@ -83,7 +83,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil (actieve knop: zelfde terracotta-verloop als de Start workout-balk, tekst en icoon `--paper`; op vraag van Tom) met **Workout** (icoon: Material Symbols 'exercise' (halter), als inline SVG; vroeger 'task_alt')
-  en **Results** (op vraag van Tom, 9 okt; vroeger Statistics, Coverage, Progress/Balance; in deze notities heet de pagina nog 'Statistics'; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'monitoring', vroeger 'man'), **Diet** (`data-view=voeding`, Material Symbols 'grocery') en **Guide** (`data-view=kracht`, vroeger 'Info', Material Symbols 'lightbulb_2';
+  en **Results** (op vraag van Tom, 9 okt; vroeger Statistics, Coverage, Progress/Balance; in deze notities heet de pagina nog 'Statistics'; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'monitoring', vroeger 'man'), **Diet** (`data-view=voeding`, Material Symbols 'grocery') en **Guide** (`data-view=kracht`, vroeger 'Info', Material Symbols 'explore' (kompas);
   pil max 440 px). Het More-menu (`#gnavMore`, `#more-sheet`) is weg (op vraag van Tom, 9 okt); de pagina Cardio bestaat nog maar is niet bereikbaar. Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
   begint bovenaan (meteen + na 200/450 ms, omdat het wisselen van tab zelf nog kan scrollen), behalve terug naar Workout: die
   komt terug op de onthouden scrollpositie (`window.__woY`, bewaard bij het verlaten van Workout, op 0 gezet na End workout).
@@ -98,7 +98,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
-- Vijf knoppen: Last (`dag`, de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
+- Vijf knoppen: Last workout (`dag`, label 'Last workout' op vraag van Tom; de laatste trainingsdag → totaal aantal sets), Week (`week`, laatste 7 dagen → totaal aantal sets),
   Month (`maand`, laatste 30 dagen), Year (`jaar`, laatste 365 dagen, op vraag van Tom) en All (`alles`, sinds de eerste afvinking) → gemiddeld aantal sets per week.
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
