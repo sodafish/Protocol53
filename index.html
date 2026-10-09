@@ -1327,6 +1327,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cal-ex .cx-n small{font-size:12.5px;color:var(--muted);margin-top:.1rem;}
 .cal-ex .cx-row em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
 .cal-ex .cx-del{position:absolute;right:0;top:0;bottom:0;width:88px;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
+.cal-ex .cx-row em i{font-style:normal;font-weight:500;color:var(--muted-soft);} /* reps rechts naast de kg (op vraag van Tom) */
 </style>
 
 <header class="top">
@@ -4298,7 +4299,7 @@ window.__congrats=function(o){
         var sx=it.li.querySelector('.exr-s'), reps=nm==='Cardio'?'':(sx&&sx.firstChild&&sx.firstChild.nodeType===3?sx.firstChild.textContent.replace(/[·\s]+$/,'').trim():'');
         if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name});
-        return '<li class="cx"><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button><div class="cx-row"><span class="cx-n">'+esc(name)+(reps?'<small>'+esc(reps)+'</small>':'')+'</span><em>'+esc(val)+'</em></div></li>'; }).join('');
+        return '<li class="cx"><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button><div class="cx-row"><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em></div></li>'; }).join('');
       html+='<li class="cx-h"><span>'+nm+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
     return '<ul class="cal-ex">'+html+'</ul>'; }
   /* veeg naar links op een rij: rode Delete-knop verschijnt; tik = bevestigen en wissen */
