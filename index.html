@@ -4597,7 +4597,10 @@ window.__congrats=function(o){
       [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
         G.notes.push(inp.dataset.note); var sk=li.dataset.sub||''; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
         if(pts.length<2) return; /* één meting = nog geen progressie: niet tonen (op vraag van Tom) */
-        var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pts[0], d=last.v-first.v;
+        /* de allereerste meting van een oefening telt niet mee in het % (leereffect; op vraag van Tom) — de grafiek toont ze wel.
+           Basis = eerste meting in de periode die niet de allereerste is; zo'n meting nog niet = 0%. */
+        var all0=window.__progPts(inp.dataset.note)[0], pb=pts.filter(function(x){ return x!==all0&&!(x.t===all0.t&&x.v===all0.v); });
+        var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pb.length?pb[0]:last, d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
         G.r.push({p:pct,n:pts.length,t:last.t||0,sub:li.dataset.sub||'',h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+'</span>'+
