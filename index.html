@@ -1250,6 +1250,16 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 #p-voeding,#p-kracht{padding-top:.6rem!important;}
 #p-voeding>.section:first-child{margin-top:0!important;}
 #p-voeding>.section:first-child>.rules,#p-kracht>.cards:first-child{margin-top:0!important;}
+
+/* ---- schuivende pil: tabs (Workout, Results) en navbar; de achtergrond van de actieve knop is één element dat zacht verschuift (op vraag van Tom) ---- */
+.wd-tabs,.gnav-pill{position:relative;}
+.pill-ind{position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:999px;background:color-mix(in srgb,var(--ink) 9%,transparent);
+  transition:transform .34s cubic-bezier(.3,.7,.2,1),width .34s cubic-bezier(.3,.7,.2,1),height .34s cubic-bezier(.3,.7,.2,1);}
+.pill-ind.no-anim{transition:none;}
+.gnav-pill>.pill-ind{border-radius:27px;background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));}
+.has-ind>button{position:relative;z-index:1;}
+.has-ind>button[aria-selected="true"]{background:transparent!important;}
+@media (prefers-reduced-motion:reduce){.pill-ind{transition:none;}}
 </style>
 
 <header class="top">
@@ -1464,7 +1474,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
       <li class="exr ex-off" data-grp="g6" data-og="g7"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Side Bend</div><div class="exr-s">2 × 12–15 per side<span class="exr-warn">· Back!</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-side-bend" placeholder="kg" aria-label="Dumbbell Side Bend — kg"></li>
       <li class="exr ex-off" data-grp="g6" data-og="g7" data-key="x7-sit-ups"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Sit-Ups</div><div class="exr-s">2 × 15–20<span class="exr-warn">· Back!</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-sit-ups" placeholder="reps" aria-label="Sit-Ups — reps"></li>
       <li class="exr ex-off" data-grp="g6" data-og="g7" data-key="x7-v-up"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">V-Up</div><div class="exr-s">2 × 8–12<span class="exr-warn">· Back!</span></div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-v-up" placeholder="reps" aria-label="V-Up — reps"></li>
-      <li class="exgrp" data-grp="g7"><span class="grp-n">7</span><span class="grp-t">Arms <em class="grp-opt">(Optional)</em></span><button type="button" class="grp-edit" data-grp="g7" aria-label="Choose exercises for Arms"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></li>
+      <li class="exgrp" data-grp="g7"><span class="grp-n">7</span><span class="grp-t">Arms</span><button type="button" class="grp-edit" data-grp="g7" aria-label="Choose exercises for Arms"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></li>
       <li class="exr" data-grp="g7" data-og="g8"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Curl Machine</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-curl-machine" placeholder="kg" aria-label="Curl Machine — kg"></li>
       <li data-eq="d" class="exr ex-off" data-grp="g7" data-og="g8"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Biceps Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-dumbbell-biceps-curl" placeholder="kg" aria-label="Dumbbell Biceps Curl — kg"></li>
       <li data-eq="d" class="exr ex-off" data-grp="g7" data-og="g8"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Dumbbell Hammer Curl</div><div class="exr-s">2 × 10–15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="x8-hammer-curl" placeholder="kg" aria-label="Dumbbell Hammer Curl — kg"></li>
@@ -1532,7 +1542,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
     <div class="wtabs stabs" id="stabs" role="tablist" aria-label="Results">
-      <button type="button" role="tab" data-sv="body" aria-selected="true">Muscles</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button><button type="button" role="tab" data-sv="prog" aria-selected="false">Progress</button>
+      <button type="button" role="tab" data-sv="prog" aria-selected="false">Progress</button><button type="button" role="tab" data-sv="body" aria-selected="true">Balance</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button>
     </div>
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
@@ -4229,6 +4239,23 @@ window.__congrats=function(o){
     if(e.target.closest('input,textarea,button,a,label')) return;
     var b=li.querySelector('.info-b'); if(b) b.click();
   });
+})();
+</script>
+<script>
+/* ---- schuivende pil onder de actieve knop (tabs Workout/Results + navbar) ---- */
+(function(){
+  function setup(box){ if(!box) return; box.classList.add('has-ind');
+    var ind=document.createElement('span'); ind.className='pill-ind no-anim'; ind.setAttribute('aria-hidden','true'); box.insertBefore(ind,box.firstChild);
+    var first=true;
+    function place(anim){ var b=box.querySelector(':scope>button[aria-selected="true"]');
+      if(!b||!box.offsetWidth){ ind.style.opacity='0'; return; } ind.style.opacity='';
+      if(!anim) ind.classList.add('no-anim');
+      ind.style.width=b.offsetWidth+'px'; ind.style.height=b.offsetHeight+'px'; ind.style.transform='translate('+b.offsetLeft+'px,'+b.offsetTop+'px)';
+      if(!anim){ void ind.offsetWidth; requestAnimationFrame(function(){ ind.classList.remove('no-anim'); }); } }
+    new MutationObserver(function(){ place(!first); }).observe(box,{subtree:true,attributes:true,attributeFilter:['aria-selected']});
+    if(window.ResizeObserver) new ResizeObserver(function(){ place(false); }).observe(box);
+    place(false); setTimeout(function(){ first=false; place(false); },0); }
+  setup(document.querySelector('#wtabs .wd-tabs')); setup(document.getElementById('stabs')); setup(document.querySelector('.gnav-pill'));
 })();
 </script>
 </body>

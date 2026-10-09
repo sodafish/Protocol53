@@ -103,8 +103,10 @@ Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage
 Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de balans ziet.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
-- Tabs bovenaan Statistics (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout) met **Muscles** (periode + figuur +
-  spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`) · **Progress** (`#plist` + lege melding `#plEmpty`, `data-sv=prog`).
+- Tabs bovenaan Statistics/Results (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout), volgorde (9 okt) **Progress** (`#plist` + lege melding `#plEmpty`, `data-sv=prog`) ·
+  **Balance** (vroeger 'Muscles'; periode + figuur + spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`). Stop workout (met vinkjes) → Balance, bovenaan.
+- Schuivende pil (op vraag van Tom, 9 okt): in `#wtabs .wd-tabs`, `#stabs` en `.gnav-pill` tekent één `.pill-ind` de achtergrond van de actieve knop en schuift
+  zacht (.34 s) naar de nieuwe knop (script onderaan `index.html`; MutationObserver op `aria-selected`, ResizeObserver; actieve knop zelf `background:transparent`).
   Telkens één sectie zichtbaar (`.sv[hidden]`); keuze in localStorage `fitlog-stats-view`; `window.__statsView(v)`; End workout zet Muscles. De koppen
   'Calendar'/'Strength progress' zijn verborgen (de tab zegt het al). Wisselen houdt de geplakte tabs op dezelfde hoogte (`keep`, zoals `toList`).
   Ruimte onder `#stabs` = 1.6rem (op vraag van Tom). Ruimte boven de figuren (`.stats-fig` margin-top) = .8rem (was 1.6rem; op vraag van Tom). Periode Last/Week/Month/All staat nu als tekst-tabs met accent-onderlijn (`.stats>.sv>.stats-per`), niet meer als pillen.
@@ -417,8 +419,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   NAMES → `ssN`, `EX.ssN`, `IMG.ssN` (4 foto's: begin/eind van beide), `SSL.ssN` (namen voor de foto-labels en progressieblokken), POP.
 - Kabeloefeningen tonen het hulpstuk achter de sets: `<span class="exr-eqp">· rope</span>` (ook V-handle, D-handle(s), wide bar,
   close-grip bar, straight bar, straight or EZ bar, ankle strap); het keuzeblad toont het mee. Nieuwe kabeloefening: hulpstuk erbij.
-- Arms-kop: 'Arms' + `<em class="grp-opt">(Optional)</em>` (cursief, zelfde stijl als de kop): in een full-body training zijn armen
-  een extraatje (ze werken al mee bij rows/presses). Warm-up heeft geen 'Optional' meer.
+- Arms-kop: gewoon 'Arms' ('(Optional)' weggehaald op vraag van Tom, 9 okt).
 - De rij-animatie (`cascade`) en de paneel-animatie (`reveal`) zijn UITGESCHAKELD (op vraag van Tom: na wisselen van pagina leek het tot 2 s te
   duren voor alles getekend was; de rijen kwamen gestaggerd tot ~1,9 s binnen). Beide functies keren meteen terug. Stats/kalender gebruiken
   `window.__liByNote` (cache veld → rij) i.p.v. een querySelector per meting.
