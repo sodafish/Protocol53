@@ -79,7 +79,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom). Alle frequentie-pillen zijn gevuld (groen/goud/rood met tekst in `--paper`, dus ook leesbaar in donker; op vraag van Tom).
 - Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ eenheid</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
   ranges bij groepen zoals vette vis). Eenheid: per stuk waar dat logisch is (egg, avocado, piece fruit, slice, scoop, tin, tbsp,
-  handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij.
+  handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij. Getoond als zachte pil (`#p-voeding .nut`, 6% inkt). Eiwit enkel waar relevant: niet bij groenten, fruit, olie, avocado, olijven, cacao, chocolade, hummus, stevia, water (daar enkel kcal). De pil '★ Top protein' is weg (op vraag van Tom).
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil (actieve knop: zelfde terracotta-verloop als de Start workout-balk, tekst en icoon `--paper`; op vraag van Tom) met **Workout** (icoon: Material Symbols 'exercise' (halter), als inline SVG; vroeger 'task_alt')
@@ -252,7 +252,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Workout-blok (op vraag van Tom, 9 okt, naar een voorbeeld met een navbar + balk eronder): `#wtabs` (klasse `.wtabs wdock`) = de tabs (`.wd-tabs`,
   role=tablist, eigen witte pil met afgeronde onderkant) + daaronder een balk `.wd-go` in één afgerond, plakkend blok. Vóór de start: balk in
   accentkleur (verloop) met 'Start workout' (`.wd-btn.wo-btn`, zelfde handler als vroeger). Tijdens een workout: balk in `--ink` met
-  'Stop workout' + tijd (startknop heet 'Start new workout' met plus-icoon 20 px, op vraag van Tom; stop 19 px, op vraag van Tom groter; `#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
+  'Stop workout' + tijd (startknop heet 'Start new workout' met play-icoon 21 px, op vraag van Tom; stop 19 px, op vraag van Tom groter; `#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet nu ook 'Stop workout' (confirm 'Stop workout?')
   en is verborgen op de Workout-pagina (`body[data-view=workout]`, gezet door de navbar-`paint`); op andere pagina's blijft ze.

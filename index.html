@@ -1313,6 +1313,10 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cal-ex{list-style:none;margin:.9rem 0 0;padding:0;border-top:1px solid var(--line-soft);}
 .cal-ex li{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line-soft);font-size:14.5px;color:var(--ink);}
 .cal-ex li em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
+
+/* Diet: kcal/eiwit als zachte pil (op vraag van Tom) */
+#p-voeding .nut{display:block;width:fit-content;margin-top:.35rem;padding:.18rem .6rem;border-radius:999px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--muted);font-size:12px;font-weight:500;line-height:1.35;}
+#p-voeding .nut i{opacity:.7;}
 </style>
 
 <header class="top">
@@ -1366,7 +1370,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="wtabs wdock" id="wtabs">
       <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="warmup">Warm-up</button><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="cardio">Cardio</button></div>
       <div class="wd-go">
-        <button type="button" class="wd-btn wo-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Start new workout</span></button>
+        <button type="button" class="wd-btn wo-btn"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Start new workout</span></button>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>Stop workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M180-180h400v-200h200v-400H180v600Zm0 60q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h600q24.75 0 42.38 17.62Q840-804.75 840-780v420L600-120H180Zm120-300v-60h170v60H300Zm0-160v-60h360v60H300ZM180-180v-600 600Z"/></svg></button>
       </div>
@@ -1686,7 +1690,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>All vegetables<span class="nut">15–40 kcal · 1–3 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">Unlimited</td><td>As varied as possible. Exception: starchy vegetables such as potatoes and corn.</td></tr>
+        <tr class="row-groen"><td>All vegetables<span class="nut">15–40 kcal <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">Unlimited</td><td>As varied as possible. Exception: starchy vegetables such as potatoes and corn.</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -1696,7 +1700,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Low-fat quark, skyr <span class="badge b-super">★ Top protein</span><span class="nut">55–65 kcal · 10–12 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">150–200 g</td><td><strong>The strongest protein source in this plan.</strong> Almost fat- and sugar-free, packed with protein, low in calories and filling for a long time — exactly what you want in a deficit. Plain, with berries mixed in.</td></tr>
+        <tr class="row-groen"><td>Low-fat quark, skyr<span class="nut">55–65 kcal · 10–12 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">150–200 g</td><td><strong>The strongest protein source in this plan.</strong> Almost fat- and sugar-free, packed with protein, low in calories and filling for a long time — exactly what you want in a deficit. Plain, with berries mixed in.</td></tr>
         <tr class="row-groen"><td>Eggs<span class="nut">70–80 kcal · 6–7 g protein <i>/ egg</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">2–3 per day</td><td>Protein and healthy fats in one. Boiled, poached or scrambled in olive oil.</td></tr>
         <tr class="row-groen"><td>Protein shake<span class="nut">110–120 kcal · 22–25 g protein <i>/ scoop (±30 g)</i></span></td><td data-label="Frequency"><span class="badge b-groen">1–2× per day</span></td><td data-label="Portion">1 sachet or scoop (±25 g protein)</td><td><strong>Handy for reaching your daily total of 150 g.</strong> Timing hardly matters — your total protein per day counts most. Regular food first, because it fills you up better; the shake fills the gap that's left. Choose whey isolate without added sugars.</td></tr>
         <tr class="row-groen"><td>Chicken, turkey<span class="nut">105–120 kcal · 22–24 g protein <i>/ 100 g raw</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">120–150 g</td><td>Skinless. Lean and protein-rich.</td></tr>
@@ -1713,8 +1717,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Olive oil<span class="nut">120 kcal · 0 g protein <i>/ tbsp</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">1–2 tbsp per day</td><td>Extra virgin. One tablespoon is already over 120 kcal — over three meals you unknowingly add half a day's portion. Use cooking spray if you fry often.</td></tr>
-        <tr class="row-groen"><td>Avocado<span class="nut">±225 kcal · 3 g protein <i>/ avocado</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">½ per day</td><td>Very filling. Half is enough — a whole one is fine, but not every day.</td></tr>
+        <tr class="row-groen"><td>Olive oil<span class="nut">120 kcal <i>/ tbsp</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">1–2 tbsp per day</td><td>Extra virgin. One tablespoon is already over 120 kcal — over three meals you unknowingly add half a day's portion. Use cooking spray if you fry often.</td></tr>
+        <tr class="row-groen"><td>Avocado<span class="nut">±225 kcal <i>/ avocado</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">½ per day</td><td>Very filling. Half is enough — a whole one is fine, but not every day.</td></tr>
         <tr class="row-amber"><td>Nuts and seeds<span class="nut">125–165 kcal · 4–6 g protein <i>/ handful (±25 g)</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">A handful</td><td>Unsalted. A handful is fine, half a bag is not. Flaxseed and chia seed provide omega-3; flaxseed ground, otherwise it isn't digested.</td></tr>
       </tbody>
     </table></div>
@@ -1725,8 +1729,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-amber"><td>Berries<span class="nut">30–60 kcal · 1 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">100–150 g</td><td>Strawberries, raspberries, blueberries, blackberries. The least sugar of all fruit. Frozen is as good as fresh.</td></tr>
-        <tr class="row-amber"><td>Apple, pear, citrus, kiwi<span class="nut">45–100 kcal · 0.5–1 g protein <i>/ piece</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1 to 2 pieces per day</td><td>Whole fruit, not as juice.</td></tr>
+        <tr class="row-amber"><td>Berries<span class="nut">30–60 kcal <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">100–150 g</td><td>Strawberries, raspberries, blueberries, blackberries. The least sugar of all fruit. Frozen is as good as fresh.</td></tr>
+        <tr class="row-amber"><td>Apple, pear, citrus, kiwi<span class="nut">45–100 kcal <i>/ piece</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1 to 2 pieces per day</td><td>Whole fruit, not as juice.</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -1749,11 +1753,11 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-amber"><td>Pure cocoa powder<span class="nut">±20 kcal · 1 g protein <i>/ tbsp</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1–2 tbsp</td><td>One ingredient, no sugar, lots of fibre and antioxidants. Stirred into your skyr, in coffee or in a shake. Choose a brand that tests for cadmium — cocoa absorbs it from the soil.</td></tr>
-        <tr class="row-amber"><td>Stevia<span class="nut">0 kcal · 0 g protein</span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">To taste</td><td>Pure steviol glycosides give no calories or blood sugar response. Check the label: a lot of stevia is cut with erythritol or maltodextrin. It does keep your sweet tooth alive.</td></tr>
-        <tr class="row-amber"><td>Olives<span class="nut">115–145 kcal · 1 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">Handful</td><td>Healthy fats and almost no carbohydrates. Salty though, so not the whole jar.</td></tr>
-        <tr class="row-amber"><td>Dark chocolate 85%+<span class="nut">±115 kcal · 2.5 g protein <i>/ 2 squares (20 g)</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2 squares, ±20 g</td><td>Four ingredients, little sugar, and it satisfies you faster than milk chocolate. The best snack within this plan.</td></tr>
-        <tr class="row-amber"><td>Veggie sticks with hummus<span class="nut">Hummus: 25–50 kcal · 1 g protein <i>/ tbsp</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2 tbsp hummus</td><td>Satisfies cravings without a blood sugar spike. Check the label on ready-made hummus.</td></tr>
+        <tr class="row-amber"><td>Pure cocoa powder<span class="nut">±20 kcal <i>/ tbsp</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1–2 tbsp</td><td>One ingredient, no sugar, lots of fibre and antioxidants. Stirred into your skyr, in coffee or in a shake. Choose a brand that tests for cadmium — cocoa absorbs it from the soil.</td></tr>
+        <tr class="row-amber"><td>Stevia<span class="nut">0 kcal</span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">To taste</td><td>Pure steviol glycosides give no calories or blood sugar response. Check the label: a lot of stevia is cut with erythritol or maltodextrin. It does keep your sweet tooth alive.</td></tr>
+        <tr class="row-amber"><td>Olives<span class="nut">115–145 kcal <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">Handful</td><td>Healthy fats and almost no carbohydrates. Salty though, so not the whole jar.</td></tr>
+        <tr class="row-amber"><td>Dark chocolate 85%+<span class="nut">±115 kcal <i>/ 2 squares (20 g)</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2 squares, ±20 g</td><td>Four ingredients, little sugar, and it satisfies you faster than milk chocolate. The best snack within this plan.</td></tr>
+        <tr class="row-amber"><td>Veggie sticks with hummus<span class="nut">Hummus: 25–50 kcal <i>/ tbsp</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">2 tbsp hummus</td><td>Satisfies cravings without a blood sugar spike. Check the label on ready-made hummus.</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -1763,7 +1767,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-groen"><td>Water, coffee, tea<span class="nut">0 kcal · 0 g protein</span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">Unlimited</td><td>Without sugar. Drinking before a meal curbs hunger.</td></tr>
+        <tr class="row-groen"><td>Water, coffee, tea<span class="nut">0 kcal</span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">Unlimited</td><td>Without sugar. Drinking before a meal curbs hunger.</td></tr>
       </tbody>
     </table></div>
   </div>
