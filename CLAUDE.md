@@ -116,9 +116,12 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   met schakelaar Front/Back (`.bal-seg`, keuze in localStorage `fitlog-bal-side`); vanuit ELKE spier (alle 18 van `MLAB`, ook 0%) een lijntje (`.bal-ln`)
   naar links/rechts met groot % (`.bal-pct`, Fraunces 17, `zero` = muted, `top` = hoogste in accent) en de naam (`.bal-lab`, kapitalen 7). Ankers en
   labelhoogtes in `CO` (drawBody, 450-coördinaten; R-ankers al gespiegeld). Kleur van de spiervlakken = krachttoename (hoe donkerder, hoe meer).
-  Altijd eerste → laatste meting (`balPct(0)`, geen periode, zoals de lijst eronder). Getekend in `drawBody` (`bodySvg`), gevuld in `renderStats`.
-  % per spier = `balPct(start)`: per krachtoefening (één kg-veld, g1–g7/g10, geen supersets; zoals Progress) laatste meting (moet in de periode vallen)
-  t.o.v. de laatste meting vóór de periode (of de eerste in de periode); spier = oefeningen waar ze hoofdspier (1) is, gemiddelde van de twee meest gemeten.
+  Bovenaan Progress (op vraag van Tom, 9 okt) de periode `.pr-range`: tekst `#prRange` ('3 Oct – 9 Oct 2026 · all data') + potlood `#prEdit`
+  → `p53EditRange({title,msg,min,max,from,to})` (venster met twee datumvelden From/To, min/max = eerste/laatste kg-meting, buiten die grenzen wordt
+  geklemd; 'Show all data' = terug naar alles). Bewaard in localStorage `fitlog-prog-range` `{f,t}`; leeg = volgt de eerste/laatste meting (ook nieuwe).
+  `window.__progRange()` → `{from,to,f,t,b,all}`; figuur (`balPct(from,to)`) én de lijst `#plList` rekenen eerste → laatste meting BINNEN die periode
+  (minstens twee metingen); lijst ververst bij event `p53-prange`. Getekend in `drawBody` (`bodySvg`), gevuld in `renderStats`.
+  % per spier = `balPct(from,to)`: per krachtoefening (één kg-veld, g1–g7/g10, geen supersets; `progRows`) eerste → laatste meting in de periode; spier = oefeningen waar ze hoofdspier (1) is, gemiddelde van de twee meest gemeten.
   Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Progress en bij wisselen van kant.
 - Periodes zonder data uitgegrijsd (op vraag van Tom, 9 okt; `aria-disabled`, 35%, klik doet niets): Last workout altijd, Week vanaf de eerste meting,
   Month als de oudste meting > 7 dagen terug ligt, 3 months > 30 dagen, Year > 90 dagen. Staat de bewaarde keuze uit, dan toont `renderStats` de langste

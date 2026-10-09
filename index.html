@@ -34,6 +34,32 @@ window.p53Confirm=function(o){
     bg.addEventListener('click',function(e){ if(e.target===bg) done(false); });
   });
 };
+/* periode kiezen in een klein venster: p53EditRange({title,msg,min,max,from,to}) (datums 'jjjj-mm-dd') → Promise<{from,to}|'all'|null> */
+window.p53EditRange=function(o){
+  return new Promise(function(res){
+    var last=document.activeElement, bg=document.createElement('div');
+    bg.className='cf-bg'; bg.setAttribute('role','dialog'); bg.setAttribute('aria-modal','true');
+    bg.innerHTML='<form class="cf-card cf-edit cf-range" novalidate><h4></h4><p class="cf-msg"></p><div class="cf-fields">'+
+      '<label class="cf-f"><span>From</span><span class="cf-in"><input type="date" id="rgFrom"></span></label>'+
+      '<label class="cf-f"><span>To</span><span class="cf-in"><input type="date" id="rgTo"></span></label></div>'+
+      '<button type="button" class="cf-all">Show all data</button>'+
+      '<div class="cf-btns"><button type="button" class="cf-no">Cancel</button><button type="submit" class="cf-yes">Save</button></div></form>';
+    bg.querySelector('h4').textContent=o.title||'Period';
+    var pm=bg.querySelector('.cf-msg'); if(o.msg) pm.textContent=o.msg; else pm.remove();
+    var f=bg.querySelector('#rgFrom'), t=bg.querySelector('#rgTo');
+    [f,t].forEach(function(i){ i.min=o.min; i.max=o.max; }); f.value=o.from; t.value=o.to;
+    document.body.appendChild(bg); requestAnimationFrame(function(){ bg.classList.add('on'); });
+    function done(v){ document.removeEventListener('keydown',key,true); bg.classList.remove('on'); setTimeout(function(){ bg.remove(); },200); if(last&&last.focus) last.focus({preventScroll:true}); res(v); }
+    function key(e){ if(e.key==='Escape'){ e.stopPropagation(); done(null); } }
+    document.addEventListener('keydown',key,true);
+    function clamp(v){ return !v?'':v<o.min?o.min:v>o.max?o.max:v; }
+    bg.querySelector('form').addEventListener('submit',function(e){ e.preventDefault();
+      var a=clamp(f.value)||o.min, b=clamp(t.value)||o.max; if(a>b){ var x=a; a=b; b=x; } done({from:a,to:b}); });
+    bg.querySelector('.cf-all').addEventListener('click',function(){ done('all'); });
+    bg.querySelector('.cf-no').addEventListener('click',function(){ done(null); });
+    bg.addEventListener('click',function(e){ if(e.target===bg) done(null); });
+  });
+};
 /* waarde(n) aanpassen in een klein venster in de app-stijl: p53EditVals({title,msg,fields:[{label,value,unit}]}) → Promise<[getallen]|null> */
 window.p53EditVals=function(o){
   return new Promise(function(res){
@@ -1436,6 +1462,15 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cf-in input{flex:1;min-width:0;font:600 20px 'Work Sans',system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.6rem .8rem;text-align:right;}
 .cf-in input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
 .cf-in input.need{border-color:var(--accent);}
+.cf-range .cf-in input{text-align:left;font-size:17px;min-height:48px;-webkit-appearance:none;appearance:none;}
+.cf-all{appearance:none;border:0;background:none;color:var(--accent);font:600 13.5px 'Work Sans',system-ui,sans-serif;padding:.5rem 0 .9rem;cursor:pointer;}
+/* periode bovenaan Progress (op vraag van Tom, 9 okt): datum van – tot + potlood */
+.pr-range{display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:44px;border-bottom:1px solid var(--line);margin:0 0 1rem;}
+.pr-range p{margin:0;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.pr-range p small{font-size:13px;font-weight:500;color:var(--muted-soft);}
+.pr-edit{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:4px;}
+.pr-edit:active{background:var(--paper-soft);transform:scale(.95);}
+.pr-edit[hidden]{display:none;}
 .cf-in i{font-style:normal;font-size:14px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;min-width:2.2em;}
 .pl-chart{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);}
 .pl-list button:active .pl-chart{background:var(--paper-soft);transform:scale(.95);}
@@ -1769,7 +1804,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-day" id="calDay" aria-live="polite"></div>
       </section>
-      <div class="sv" data-sv="prog"><div class="stats-fig bal" id="progFig"></div><div class="pl-empty" id="plEmpty">
+      <div class="sv" data-sv="prog"><div class="pr-range"><p id="prRange"></p><button type="button" class="pr-edit" id="prEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div><div class="stats-fig bal" id="progFig"></div><div class="pl-empty" id="plEmpty">
         <svg class="pe-art" width="148" height="104" viewBox="0 0 148 104" fill="none" aria-hidden="true">
           <rect x="1" y="1" width="146" height="102" rx="20" class="pe-card"/>
           <path d="M22 78H126" class="pe-axis"/>
@@ -2741,25 +2776,45 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var DAGEN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
       MAANDEN=['January','February','March','April','May','June','July','August','September','October','November','December'];
   function dayKey(t){ var d=new Date(t); return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate(); }
-  /* krachttoename per spier sinds 'start': per krachtoefening (één kg-veld, geen supersets/warm-up/cardio, zoals Progress)
-     laatste meting (in de periode) t.o.v. de laatste meting vóór de periode, of anders de eerste in de periode. Een spier telt
-     de oefeningen waar ze hoofdspier is (1); waarde = gemiddelde van de twee meest gemeten (zoals de groepen onder Progress). */
-  function balPct(start){
-    var by={}, out={}; if(!window.__progPts) return out;
-    document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
+  /* krachttoename per spier binnen [van, tot]: per krachtoefening (één kg-veld, g1–g7/g10, geen supersets; zoals Progress)
+     eerste → laatste meting binnen het bereik (minstens twee). Een spier telt de oefeningen waar ze hoofdspier is (1);
+     waarde = gemiddelde van de twee meest gemeten (zoals de groepen onder Progress). */
+  function progRows(fn){ document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
       if(!/^g([1-7]|10)$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return;
-      var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return;
-      var pts=window.__progPts(ins[0].dataset.note); if(pts.length<2) return;
-      var L=pts[pts.length-1]; if(L.t<start) return;
-      var base=null; pts.forEach(function(x){ if(x.t<start) base=x; }); if(!base) base=pts.filter(function(x){ return x.t>=start; })[0];
-      if(!base||base===L) return;
-      var pct=base.v>0?(L.v-base.v)/base.v*100:0, mm=musclesFor(chkKey(li),li)||{};
+      var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return; fn(li,ins[0].dataset.note); }); }
+  function balPct(from,to){
+    var by={}, out={}; if(!window.__progPts) return out;
+    progRows(function(li,note){
+      var pts=window.__progPts(note).filter(function(x){ return x.t>=from&&x.t<=to; }); if(pts.length<2) return;
+      var base=pts[0], L=pts[pts.length-1], pct=base.v>0?(L.v-base.v)/base.v*100:0, mm=musclesFor(chkKey(li),li)||{};
       Object.keys(mm).forEach(function(m){ if(mm[m]===1) (by[m]=by[m]||[]).push({p:pct,n:pts.length,t:L.t}); });
     });
     Object.keys(by).forEach(function(m){ var v=by[m].sort(function(a,b){ return b.n-a.n||b.t-a.t; }).slice(0,2);
       out[m]=v.reduce(function(a,x){ return a+x.p; },0)/v.length; });
     return out;
   }
+  /* periode van Progress (op vraag van Tom, 9 okt): standaard alle data; zelf te kiezen binnen de eerste en laatste meting.
+     Bewaard in localStorage 'fitlog-prog-range' als {f,t}; f/t leeg = volgt de eerste/laatste meting (ook als er nieuwe bijkomen). */
+  var PRKEY='fitlog-prog-range', prR={}; try{ prR=JSON.parse(localStorage.getItem(PRKEY)||'{}')||{}; }catch(e){}
+  function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+  function prBounds(){ var lo=Infinity, hi=-Infinity; if(!window.__progPts) return null;
+    progRows(function(li,note){ window.__progPts(note).forEach(function(x){ if(x.t<lo) lo=x.t; if(x.t>hi) hi=x.t; }); });
+    return lo<=hi?{min:ymdL(lo),max:ymdL(hi)}:null; }
+  window.__progRange=function(){ var b=prBounds(); if(!b) return {from:-Infinity,to:Infinity,f:null,t:null,b:null};
+    var f=prR.f&&prR.f>b.min&&prR.f<=b.max?prR.f:b.min, t=prR.t&&prR.t<b.max&&prR.t>=f?prR.t:b.max;
+    return {from:new Date(f+'T00:00:00').getTime(),to:new Date(t+'T23:59:59.999').getTime(),f:f,t:t,b:b,all:f===b.min&&t===b.max}; };
+  function prLabel(){ var el=document.getElementById('prRange'), btn=document.getElementById('prEdit'); if(!el) return; var r=window.__progRange();
+    if(!r.b){ el.innerHTML='<small>No measurements yet</small>'; if(btn) btn.hidden=true; return; } if(btn) btn.hidden=false;
+    function lab(d,y){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+(y?' '+x.getFullYear():''); }
+    var sameY=r.f.slice(0,4)===r.t.slice(0,4);
+    el.innerHTML=(r.f===r.t?lab(r.t,true):lab(r.f,!sameY)+' – '+lab(r.t,true))+(r.all?' <small>· all data</small>':''); }
+  function dLabel(d){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+' '+x.getFullYear(); }
+  (function(){ var btn=document.getElementById('prEdit'); if(!btn) return;
+    btn.addEventListener('click',function(){ var r=window.__progRange(); if(!r.b) return;
+      p53EditRange({title:'Progress period',msg:'You have measurements from '+dLabel(r.b.min)+' to '+dLabel(r.b.max)+'.',min:r.b.min,max:r.b.max,from:r.f,to:r.t}).then(function(v){ if(!v) return;
+        prR=v==='all'?{}:{f:v.from===r.b.min?null:v.from,t:v.to===r.b.max?null:v.to};
+        try{ localStorage.setItem(PRKEY,JSON.stringify(prR)); }catch(e){}
+        renderStats(); try{ document.dispatchEvent(new Event('p53-prange')); }catch(e){} if(window.__balDraw) window.__balDraw(); }); }); })();
   function renderStats(){ setTimeout(paintCounts,0); if(window.__renderCal) setTimeout(window.__renderCal,0);
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var now=Date.now(), score={}, first=now, days={}, evs=events().filter(function(e){ return e.t; }), last=0;
@@ -2796,7 +2851,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
     /* Progress-figuur (variant C): krachttoename per spier, eerste → laatste meting, zoals de lijst eronder (op vraag van Tom, 9 okt) */
-    var pf=document.getElementById('progFig'), bp=balPct(0), bmax=0; Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
+    var pf=document.getElementById('progFig'), PR=window.__progRange(), bp=balPct(PR.from,PR.to), bmax=0; prLabel(); Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
     if(pf) pf.querySelectorAll('.m').forEach(function(p){ if(p.closest('.o')) return;
       var v=bp[p.getAttribute('data-m')]||0;
       p.style.fill=v>0&&bmax?'color-mix(in srgb,var(--accent) '+Math.round(18+82*v/bmax)+'%,var(--surface))':'';
@@ -4478,6 +4533,7 @@ window.__congrats=function(o){
   function render(){
     if(!window.__progPts||!window.__progFmt) return;
     var F=window.__progFmt, html='', n=0, groups=[], byG={};
+    var R=window.__progRange?window.__progRange():{from:-Infinity,to:Infinity}; /* gekozen periode (bovenaan Progress) */
     /* alle krachtgroepen (1–7 en eGym) en hun tussenkoppen staan er altijd, ook zonder metingen (op vraag van Tom) */
     document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var g=h.dataset.grp; if(!/^g([1-7]|10)$/.test(g)) return;
       var t=h.querySelector('.grp-t'), subs=[];
@@ -4488,7 +4544,7 @@ window.__congrats=function(o){
       if(li.dataset.sub==='Supersets'||li.querySelectorAll('.exr-in[data-note]').length>1) return; /* geen supersets (op vraag van Tom) */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]');
-      [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */ var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
+      [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
         if(pts.length<2) return; /* één meting = nog geen progressie: niet tonen (op vraag van Tom) */
         var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pts[0], d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
@@ -4514,6 +4570,7 @@ window.__congrats=function(o){
   list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.chart(b.dataset.n,b); });
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.addEventListener('p53-groups',function(){ setTimeout(render,0); });
+  document.addEventListener('p53-prange',function(){ setTimeout(render,0); });
   setTimeout(render,0);
 })();
 /* ---- kalender (Coverage, onderaan): bolletje op elke trainingsdag; duur uit collectie 'sess' (End workout) ---- */
