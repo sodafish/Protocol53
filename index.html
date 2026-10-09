@@ -1443,7 +1443,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 
   <div class="seg ksub" role="tablist" aria-label="Strength">
     <button type="button" class="seg-b" role="tab" id="k-train" aria-controls="s-d3" aria-selected="true">Training</button>
-    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Results</button>
+    <button type="button" class="seg-b" role="tab" id="k-stats" aria-controls="s-stats" aria-selected="false">Statistics</button>
     <span class="seg-ind" aria-hidden="true"></span>
   </div>
 
@@ -1695,7 +1695,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   </div>
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
-    <div class="wtabs stabs" id="stabs" role="tablist" aria-label="Results">
+    <div class="wtabs stabs" id="stabs" role="tablist" aria-label="Statistics">
       <button type="button" role="tab" data-sv="body" aria-selected="true">Balance</button><button type="button" role="tab" data-sv="prog" aria-selected="false">Progress</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button>
     </div>
     <section class="stats" aria-label="Progress">
@@ -2081,7 +2081,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="m826-585-42-42 45-45-157-157-45 45-43-43 30-31q23-23 57-22.5t57 23.5l129 129q23 23 23 56.5T857-615l-31 30ZM346-104q-23 23-56.5 23T233-104L90-247q-17-17.38-17-42.69T90-332l44-44 43 42-45 45 157 157 45-45 42 43-30 30Zm397-308 85-85-331-331-85 85 331 331ZM463-132l86-86-331-331-86 86 331 331Zm9-248 109-109-92-92-109 109 92 92Zm33 290q-16.93 17-41.97 17Q438-73 421-90L90-421q-17-16.93-17-41.97Q73-488 90-505l85-86q17.38-17 42.69-17T260-591l77 77 110-110-77-77q-17-16.93-17-41.97Q353-768 370-785l85-86q17.38-17 42.69-17T540-871l331 331q17 17.38 17 42.69T871-455l-86 85q-16.93 17-41.97 17Q718-353 701-370l-77-77-110 110 77 77q17 17.38 17 42.69T591-175l-86 85Z"/></svg><span>Workout</span></button>
-    <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M120-120v-76l60-60v136h-60Zm165 0v-236l60-60v296h-60Zm165 0v-296l60 61v235h-60Zm165 0v-235l60-60v295h-60Zm165 0v-396l60-60v456h-60ZM120-356v-85l280-278 160 160 280-281v85L560-474 400-634 120-356Z"/></svg><span>Results</span></button>
+    <button type="button" class="gnav-i" data-view="progress" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M120-120v-76l60-60v136h-60Zm165 0v-236l60-60v296h-60Zm165 0v-296l60 61v235h-60Zm165 0v-235l60-60v295h-60Zm165 0v-396l60-60v456h-60ZM120-356v-85l280-278 160 160 280-281v85L560-474 400-634 120-356Z"/></svg><span>Statistics</span></button>
     <button type="button" class="gnav-i" data-view="voeding" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M292-505ZM646-80q-100 0-167-67t-67-167q0-100 67-167t167-67q100 0 167 67t67 167q0 100-67 167T646-80Zm.16-60Q718-140 769-191.16t51-123Q820-386 768.84-437t-123-51Q574-488 523-436.84t-51 123Q472-242 523.16-191t123 51ZM140-160q-24 0-42-18t-18-42v-330q0-13 1.5-21t6.5-19l92-200h-22q-15 0-24.5-9.5T124-824v-22q0-15 9.5-24.5T158-880h261q15 0 24.5 9.5T453-846v22q0 15-9.5 24.5T419-790h-22l96 222q-12 6-25 15t-24 18L329-790h-82L140-559v339h224q3 15 10 31t15 29H140Zm506-438q-36 0-60-24t-24-60q0-36 24-60t60-24v168q0-36 24-60t60-24q36 0 60 24t24 60H646Zm0 284Z"/></svg><span>Diet</span></button>
     <button type="button" class="gnav-i" data-view="kracht" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="m303-303 270-83 83-270-270 83-83 270Zm176.76-137q-16.76 0-28.26-11.74-11.5-11.73-11.5-28.5 0-16.76 11.74-28.26 11.73-11.5 28.5-11.5 16.76 0 28.26 11.74 11.5 11.73 11.5 28.5 0 16.76-11.74 28.26-11.73 11.5-28.5 11.5Zm.51 360q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.22-60Q622-140 721-239.49q99-99.48 99-241Q820-622 721-721t-240.51-99q-141.52 0-241 99Q140-622 140-480.49q0 141.52 99.49 241 99.48 99.49 241 99.49ZM480-480Z"/></svg><span>Guide</span></button>
   </div>
@@ -3921,7 +3921,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
 (function(){
   var nav=document.querySelector('.gnav'); if(!nav) return;
   var items=[].slice.call(nav.querySelectorAll('.gnav-i')), title=document.getElementById('pgTitle');
-  var NAMES={workout:'Workout',progress:'Results',cardio:'Cardio',voeding:'Diet',kracht:'Guide'};
+  var NAMES={workout:'Workout',progress:'Statistics',cardio:'Cardio',voeding:'Diet',kracht:'Guide'};
   var TAB={cardio:'t-cardio',voeding:'t-voeding',kracht:'t-kracht'};
   var view='workout';
   function current(){
