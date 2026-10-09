@@ -965,7 +965,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pl-v b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;color:var(--ink);}
 .pl-v span{font-size:12.5px;color:var(--muted);margin-left:.15em;}
 .pl-v em{display:block;font-style:normal;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:.1rem;}
-.pl-v em.up{color:var(--accent);}
+.pl-v.up b,.pl-v.up>span{color:var(--accent);} /* groot getal = toename in % (op vraag van Tom) */
 .pl-chev{flex:none;color:var(--muted-soft);}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
 .cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
@@ -4080,7 +4080,7 @@ window.__congrats=function(o){
         var lab=ins.length>1?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'';
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
         rows.push({p:pct,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+(lab?'<small>'+esc(lab)+'</small>':'')+'</span>'+
-          '<span class="pl-v"><b>'+F.v(last.v)+'</b><span>'+esc(unit)+'</span><em class="'+(d>0?'up':'')+'">'+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+' · '+(pr<0?'−':pr>0?'+':'')+Math.abs(pr)+'%</em></span>'+CHEV+'</button></li>'}); });
+          '<span class="pl-v'+(d>0?' up':'')+'"><b>'+(pr<0?'−':'+')+Math.abs(pr)+'</b><span>%</span><em>'+F.v(last.v)+' '+esc(unit)+' · '+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+'</em></span>'+CHEV+'</button></li>'}); });
       if(!rows.length) return;
       if(grp){ cur={t:(function(t){ return t?t.firstChild.textContent.trim():''; })(grp.querySelector('.grp-t')),r:[]}; groups.push(cur); grp=null; }
       if(cur) cur.r=cur.r.concat(rows); n++;

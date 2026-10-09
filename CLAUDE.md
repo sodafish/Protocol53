@@ -110,8 +110,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   Ruimte onder `#stabs` = 1.6rem (op vraag van Tom). Ruimte boven de figuren (`.stats-fig` margin-top) = .8rem (was 1.6rem; op vraag van Tom). Periode Last/Week/Month/All staat nu als tekst-tabs met accent-onderlijn (`.stats>.sv>.stats-per`), niet meer als pillen.
 - Sectie **Strength progress** (`#plist`, vroeger 'Progress'/`#plList`, onderaan na de kalender (op vraag van Tom), alleen velden in kg (geen reps/sec), eigen script vóór het kalenderscript; op vraag van Tom): elke
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; supersets = één
-  rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en het verschil eerste → laatste in kg én procent (`+5 kg · +25%`, accent bij
-  stijging; één meting = `+0 kg · 0%`; op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
+  rij per veld met het veldlabel eronder. Rechts de laatste waarde + eenheid en groot de toename in procent eerste → laatste (`+25 %`, accent bij stijging), eronder klein 'laatste waarde · verschil'
+  (`20 kg · +4 kg`); één meting = `+0 %` en `+0 kg` (op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
