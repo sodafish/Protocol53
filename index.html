@@ -1295,6 +1295,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .pl-list .pl-h b{color:var(--accent)!important;} /* groepspercentage altijd in accentkleur, ook 0% (op vraag van Tom) */
 
 .pl-list .pl-h span{color:var(--accent);} /* groepsnaam in dezelfde kleur als het percentage (op vraag van Tom) */
+
+.pl-v em{color:var(--muted-soft)!important;font-weight:500;} /* '20 kg · +0 kg' iets meer uitgegrijsd (op vraag van Tom) */
 </style>
 
 <header class="top">
@@ -4136,9 +4138,9 @@ window.__congrats=function(o){
         G.r.push({p:pct,n:pts.length,t:last.t||0,sub:li.dataset.sub||'',h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+'</span>'+
           '<span class="pl-v">'+pc(pct)+'<em>'+F.v(last.v)+' '+esc(unit)+' · '+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+'</em></span>'+CHEV+'</button></li>'}); n++; });
     });
-    /* progressie van een (sub)groep = gemiddelde % van de twee meest gemeten oefeningen (minstens twee metingen);
+    /* progressie van een (sub)groep = gemiddelde % van de twee meest gemeten oefeningen (ook met één meting = 0%; één oefening = die);
        groep met tussenkoppen (Back, Arms) = gemiddelde van die tussenkoppen; niets gemeten = 0% (op vraag van Tom) */
-    function top2(r){ var v=r.filter(function(x){ return x.n>1; }).sort(function(a,b){ return b.n-a.n||b.t-a.t; }).slice(0,2); /* gelijk aantal: meest recent gedaan */
+    function top2(r){ var v=r.slice().sort(function(a,b){ return b.n-a.n||b.t-a.t; }).slice(0,2); /* gelijk aantal: meest recent gedaan */
       return v.length?v.reduce(function(a,x){ return a+x.p; },0)/v.length:null; }
     function pc(v){ v=Math.round(v||0); return '<b class="'+(v>0?'up':'')+'">'+(v<0?'−':v>0?'+':'')+Math.abs(v)+'%</b>'; }
     function rws(r){ return r.slice().sort(function(a,b){ return b.p-a.p; }).map(function(x){ return x.h; }).join(''); }
