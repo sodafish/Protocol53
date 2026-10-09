@@ -250,7 +250,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Workout-blok (op vraag van Tom, 9 okt, naar een voorbeeld met een navbar + balk eronder): `#wtabs` (klasse `.wtabs wdock`) = de tabs (`.wd-tabs`,
   role=tablist, eigen witte pil met afgeronde onderkant) + daaronder een balk `.wd-go` in één afgerond, plakkend blok. Vóór de start: balk in
   accentkleur (verloop) met 'Start workout' (`.wd-btn.wo-btn`, zelfde handler als vroeger). Tijdens een workout: balk in `--ink` met
-  'Stop workout' + tijd (`#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
+  'Stop workout' + tijd (iconen play 21 px / stop 19 px, op vraag van Tom groter; `#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet nu ook 'Stop workout' (confirm 'Stop workout?')
   en is verborgen op de Workout-pagina (`body[data-view=workout]`, gezet door de navbar-`paint`); op andere pagina's blijft ze.
