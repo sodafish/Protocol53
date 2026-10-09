@@ -1308,6 +1308,11 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .pl-list .pl-h span{color:var(--accent);} /* groepsnaam in dezelfde kleur als het percentage (op vraag van Tom) */
 
 .pl-v em{color:var(--muted-soft)!important;font-weight:500;} /* '20 kg · +0 kg' iets meer uitgegrijsd (op vraag van Tom) */
+
+/* kalender: oefeningen van de gekozen dag (op vraag van Tom) */
+.cal-ex{list-style:none;margin:.9rem 0 0;padding:0;border-top:1px solid var(--line-soft);}
+.cal-ex li{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line-soft);font-size:14.5px;color:var(--ink);}
+.cal-ex li em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
 </style>
 
 <header class="top">
@@ -4211,7 +4216,9 @@ window.__congrats=function(o){
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number'||!p.d) return;
       var li=window.__liByNote?window.__liByNote(p.k):null, k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
       if(!k||/^w0-/.test(k)) return;
-      var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w; if(o.ex[ek]) return; o.ex[ek]=1;
+      var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0,items:{}}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w;
+      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||''}; } /* oefeningenlijst onder de dag */
+      if(o.ex[ek]) return; o.ex[ek]=1;
       if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
       else o.sets+=window.__setsFor?(+window.__setsFor(k,li)||0):3; });
     return days;
@@ -4253,8 +4260,18 @@ window.__congrats=function(o){
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
     /* datum, dan per regel: kracht ('Open Gym + eGym · 25 sets') en cardio ('Cardio · 40 min') */
     var pg=progs(o), lines=[]; if(o.sets||pg) lines.push((pg||'Strength')+' · '+o.sets+(o.sets===1?' set':' sets')); if(o.min) lines.push('Cardio · '+Math.round(o.min)+' min');
-    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+lines.map(function(l){ return '<span class="cal-l">'+l+'</span>'; }).join('');
+    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+lines.map(function(l){ return '<span class="cal-l">'+l+'</span>'; }).join('')+exList(o);
   }
+  /* oefeningen van die dag, in workoutvolgorde, met de gemeten waarde (op vraag van Tom) */
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function exList(o){ var its=Object.keys(o.items||{}).map(function(e){ return o.items[e]; });
+    if(!its.length) return '';
+    its.sort(function(a,b){ return a.li===b.li?0:(a.li.compareDocumentPosition(b.li)&4?-1:1); });
+    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; };
+    return '<ul class="cal-ex">'+its.map(function(it){ var n=it.li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'';
+      var ks=[].map.call(it.li.querySelectorAll('.exr-in[data-note]'),function(x){ return x.dataset.note; }).filter(function(k){ return it.f[k]; });
+      var u=ks.length?it.f[ks[0]].u:'', val=ks.map(function(k){ return fv(it.f[k].v); }).join(' / ')+(u?' '+u:'');
+      return '<li><span>'+esc(name)+'</span><em>'+esc(val)+'</em></li>'; }).join('')+'</ul>'; }
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
