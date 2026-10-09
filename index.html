@@ -949,7 +949,18 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 #s-stats .sv[hidden]{display:none!important;}
 #s-stats .cal{margin:0;}
 #s-stats .cal>.prog-t,#s-stats .plist>.prog-t{display:none;} /* de tab zegt het al */
-.pl-empty{margin:.4rem 0 0;font-size:14px;color:var(--muted);}
+.pl-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2.2rem 1.2rem 1rem;margin:0;}
+.pl-empty[hidden]{display:none;}
+.pl-empty h3{margin:1.4rem 0 .5rem;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:22px;line-height:1.2;color:var(--ink);}
+.pl-empty p{margin:0;max-width:19rem;font-size:14.5px;line-height:1.5;color:var(--muted);}
+.pe-card{fill:var(--surface);stroke:var(--line);stroke-width:1.5;}
+.pe-axis{stroke:var(--line);stroke-width:1.5;stroke-linecap:round;}
+.pe-ghost{stroke:var(--muted-soft);stroke-width:2;stroke-dasharray:3 6;stroke-linecap:round;opacity:.6;}
+.pe-line{stroke:var(--accent);stroke-width:3;stroke-linecap:round;}
+.pe-dot1{fill:var(--surface);stroke:var(--accent);stroke-width:3;}
+.pe-dot2{fill:var(--accent);}
+.pe-dot3{fill:none;stroke:var(--muted-soft);stroke-width:2;stroke-dasharray:3 3;opacity:.7;}
+.pe-lab{font:600 10px 'Work Sans',system-ui,sans-serif;letter-spacing:.06em;fill:var(--muted);text-anchor:middle;}
 /* periode (Last/Week/Month/All) als tekst-tabs met onderlijn, zodat ze niet lijken op de pil-tabs erboven */
 .stats>.sv>.stats-per{display:flex;gap:1.5rem;justify-content:flex-start;border-bottom:1px solid var(--line);}
 .stats>.sv>.stats-per button{flex:none;min-height:40px;padding:0 .1rem;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-weight:600;font-size:14px;}
@@ -1598,7 +1609,20 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-day" id="calDay" aria-live="polite"></div>
       </section>
-      <div class="sv" data-sv="prog"><p class="pl-empty" id="plEmpty">No progress yet. An exercise shows up here once you’ve recorded its weight at least twice.</p>
+      <div class="sv" data-sv="prog"><div class="pl-empty" id="plEmpty">
+        <svg class="pe-art" width="148" height="104" viewBox="0 0 148 104" fill="none" aria-hidden="true">
+          <rect x="1" y="1" width="146" height="102" rx="20" class="pe-card"/>
+          <path d="M22 78H126" class="pe-axis"/>
+          <path d="M34 66C52 64 60 54 74 50S100 34 114 28" class="pe-ghost"/>
+          <path d="M34 66L74 50" class="pe-line"/>
+          <circle cx="34" cy="66" r="7" class="pe-dot1"/>
+          <circle cx="74" cy="50" r="7" class="pe-dot2"/>
+          <circle cx="114" cy="28" r="6" class="pe-dot3"/>
+          <text x="34" y="94" class="pe-lab">1st</text><text x="74" y="94" class="pe-lab">2nd</text>
+        </svg>
+        <h3>Your progress starts here</h3>
+        <p>An exercise shows up here once you’ve logged its weight at least twice. Your first session sets the starting point, the next one shows how far you’ve come.</p>
+      </div>
       <section class="plist" id="plist" aria-label="Progress per exercise" hidden>
         <h2 class="prog-t">Strength progress</h2>
         <ol class="pl-list" id="plList"></ol>
