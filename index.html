@@ -2808,15 +2808,24 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function progRows(fn){ document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
       if(!/^g([1-7]|10)$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return;
       var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return; fn(li,ins[0].dataset.note); }); }
+  /* KETTINGINDEX (op vraag van Tom, 9 okt): elke oefening wordt enkel met zichzelf vergeleken (meting → volgende meting),
+     de eerste twee metingen van een oefening (ooit) tellen niet (leereffect). Per week (ma–zo): per oefening de som van haar
+     stapjes (log), daarna het gemiddelde over de oefeningen die die week gedaan zijn; de weken worden vermenigvuldigd.
+     Zo blijft het getal kloppen als je van oefening wisselt. notes = invulvelden (data-note). → {p: %, n: aantal stapjes} of null. */
+  function weekKey(t){ var d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d.getTime(); }
+  function chainPct(notes,from,to){ if(!window.__progPts) return null; var W={}, n=0;
+    notes.forEach(function(note){ var pts=window.__progPts(note).slice(2).filter(function(x){ return x.t>=from&&x.t<=to; });
+      for(var i=1;i<pts.length;i++){ var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue;
+        var wk=weekKey(pts[i].t); W[wk]=W[wk]||{}; W[wk][note]=(W[wk][note]||0)+Math.log(b/a); n++; } });
+    if(!n) return null; var sum=0;
+    Object.keys(W).forEach(function(wk){ var o=W[wk], ks=Object.keys(o); sum+=ks.reduce(function(a,k){ return a+o[k]; },0)/ks.length; });
+    return {p:(Math.exp(sum)-1)*100,n:n}; }
+  window.__chainPct=chainPct;
   function balPct(from,to){
-    var by={}, out={}; if(!window.__progPts) return out;
-    progRows(function(li,note){
-      var pts=window.__progPts(note).filter(function(x){ return x.t>=from&&x.t<=to; }); if(pts.length<2) return;
-      var base=pts[0], L=pts[pts.length-1], pct=base.v>0?(L.v-base.v)/base.v*100:0, mm=musclesFor(chkKey(li),li)||{};
-      Object.keys(mm).forEach(function(m){ if(mm[m]===1) (by[m]=by[m]||[]).push({p:pct,n:pts.length,t:L.t}); });
-    });
-    Object.keys(by).forEach(function(m){ var v=by[m].sort(function(a,b){ return b.n-a.n||b.t-a.t; }).slice(0,2);
-      out[m]=v.reduce(function(a,x){ return a+x.p; },0)/v.length; });
+    var by={}, out={};
+    progRows(function(li,note){ var mm=musclesFor(chkKey(li),li)||{};
+      Object.keys(mm).forEach(function(m){ if(mm[m]===1) (by[m]=by[m]||[]).push(note); }); });
+    Object.keys(by).forEach(function(m){ var c=chainPct(by[m],from,to); if(c) out[m]=c.p; });
     return out;
   }
   /* periode van Progress (op vraag van Tom, 9 okt): standaard alle data; zelf te kiezen binnen de eerste en laatste meting.
@@ -4579,13 +4588,14 @@ window.__congrats=function(o){
     document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var g=h.dataset.grp; if(!/^g([1-7]|10)$/.test(g)) return;
       var t=h.querySelector('.grp-t'), subs=[];
       document.querySelectorAll('#s-d3 .exr[data-grp="'+g+'"]').forEach(function(li){ var k=li.dataset.sub||''; if(k&&k!=='Supersets'&&subs.indexOf(k)<0) subs.push(k); });
-      var o={t:t?t.firstChild.textContent.trim():'',subs:subs,r:[]}; groups.push(o); byG[g]=o; });
+      var o={t:t?t.firstChild.textContent.trim():'',subs:subs,r:[],notes:[],sn:{}}; groups.push(o); byG[g]=o; });
     document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
       var G=byG[li.dataset.grp]; if(!G) return; /* geen warm-up en cardio */
       if(li.dataset.sub==='Supersets'||li.querySelectorAll('.exr-in[data-note]').length>1) return; /* geen supersets (op vraag van Tom) */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]');
-      [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
+      [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
+        G.notes.push(inp.dataset.note); var sk=li.dataset.sub||''; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
         if(pts.length<2) return; /* één meting = nog geen progressie: niet tonen (op vraag van Tom) */
         var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pts[0], d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
@@ -4599,12 +4609,14 @@ window.__congrats=function(o){
       return v.length?v.reduce(function(a,x){ return a+x.p; },0)/v.length:null; }
     function pc(v){ v=Math.round(v||0); return '<b class="'+(v>0?'up':'')+'">'+(v<0?'−':v>0?'+':'')+Math.abs(v)+'%</b>'; }
     function rws(r){ return r.slice().sort(function(a,b){ return b.p-a.p; }).map(function(x){ return x.h; }).join(''); }
+    /* groep en tussenkop = kettingindex over al hun oefeningen (wisselen van oefening breekt het getal niet; eerste 2 metingen per oefening tellen niet) */
+    function ch(notes){ var c=window.__chainPct?window.__chainPct(notes||[],R.from,R.to):null; return c?c.p:0; }
     groups.forEach(function(g){ var body='', avg; if(!g.r.length) return; /* groep pas tonen als er iets onder staat */
-      if(g.subs.length){ var vals=[];
-        g.subs.forEach(function(k){ var r=g.r.filter(function(x){ return x.sub===k; }), v=top2(r); if(v==null) return; vals.push(v); /* tussenkop pas tonen als er iets onder staat */
-          body+='<li class="pl-sh" aria-hidden="true"><span>'+esc(k)+'</span>'+pc(v)+'</li>'+rws(r); });
-        avg=vals.length?vals.reduce(function(a,x){ return a+x; },0)/vals.length:0; }
-      else { avg=top2(g.r); body=rws(g.r); }
+      if(g.subs.length){
+        g.subs.forEach(function(k){ var r=g.r.filter(function(x){ return x.sub===k; }); if(!r.length) return; /* tussenkop pas tonen als er iets onder staat */
+          body+='<li class="pl-sh" aria-hidden="true"><span>'+esc(k)+'</span>'+pc(ch(g.sn[k]))+'</li>'+rws(r); });
+        avg=ch(g.notes); }
+      else { avg=ch(g.notes); body=rws(g.r); }
       html+='<li class="pl-h" aria-hidden="true"><span>'+esc(g.t)+'</span>'+pc(avg)+'</li>'+body; });
     list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
   }
