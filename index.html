@@ -980,7 +980,7 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 /* Balance-infographic (variant C, op vraag van Tom, 9 okt): één figuur + Front/Back-schakelaar; op tablet beide naast elkaar */
 .stats-fig.bal{display:block;max-width:24rem;margin:.9rem auto 0;position:relative;}
 #progFig{margin:0 auto 1.4rem;}
-.bal-seg{display:flex;width:max-content;position:absolute;top:2px;right:0;z-index:2;margin:0;background:var(--paper-soft);border-radius:999px;padding:3px;}
+.bal-seg{display:flex;width:max-content;position:absolute;top:0;right:0;z-index:2;margin:0;background:var(--paper-soft);border-radius:999px;padding:3px;}
 .bal-seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 13.5px 'Work Sans',system-ui,sans-serif;padding:.4rem 1.1rem;border-radius:999px;cursor:pointer;}
 .bal-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;}
 .bal-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
@@ -1045,6 +1045,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* potlood rechts in de periode-rij van Balance: eigen periode (op vraag van Tom, 9 okt) */
 .stats>.sv>.stats-per .per-edit{margin-left:auto;flex:none;width:36px;height:36px;min-height:0;padding:0;border:1.5px solid var(--line);border-radius:50%;margin-bottom:2px;
   display:flex;align-items:center;justify-content:center;background:transparent;color:var(--muted);}
+/* potlood hoger: even ver boven de lijn als het lampje/Front-Back eronder (11 px, op vraag van Tom); 'translate' laat de druk-schaal (transform) vrij */
+.stats>.sv>.stats-per .per-edit,.pr-range .pr-edit{translate:0 -8.7px;}
 .stats>.sv>.stats-per .per-edit.on{border-color:var(--accent);color:var(--accent);}
 .stats>.sv>.stats-per .per-edit:disabled{opacity:.35;cursor:default;}
 @media (max-width:360px){.stats>.sv>.stats-per button{font-size:12.5px;}}
