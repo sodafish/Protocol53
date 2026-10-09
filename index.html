@@ -996,10 +996,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pl-list .pl-h{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:1.2rem 0 .4rem;border-bottom:1px solid var(--line);}
 .pl-list .pl-h:first-child{padding-top:.2rem;}
 .pl-list .pl-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;}
-.pl-list .pl-h b{font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:600;letter-spacing:0;color:var(--muted);padding-right:calc(16px + .8rem);font-variant-numeric:tabular-nums;}
+.pl-list .pl-h b{font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:600;letter-spacing:0;color:var(--muted);padding-right:calc(36px + .8rem);font-variant-numeric:tabular-nums;}
 .pl-list .pl-h b.up,.pl-list .pl-sh b.up{color:var(--accent);}
 .pl-list .pl-sh{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;padding:.9rem 0 .3rem;font-size:13px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--line-soft);}
-.pl-list .pl-sh b{font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:600;color:var(--muted);padding-right:calc(16px + .8rem);font-variant-numeric:tabular-nums;}
+.pl-list .pl-sh b{font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:600;color:var(--muted);padding-right:calc(36px + .8rem);font-variant-numeric:tabular-nums;}
 .pl-list button{appearance:none;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:.8rem;width:100%;min-height:52px;padding:.5rem 0;border:0;border-bottom:1px solid var(--line-soft);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;transition:background-color .15s ease;}
 .pl-list button:active{background:var(--paper-soft);}
 .pl-n{flex:1;min-width:0;font-size:15px;font-weight:500;color:var(--ink);line-height:1.25;}
@@ -1412,6 +1412,8 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cf-in input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
 .cf-in input.need{border-color:var(--accent);}
 .cf-in i{font-style:normal;font-size:14px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;min-width:2.2em;}
+.pl-chart{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.pl-list button:active .pl-chart{background:var(--paper-soft);transform:scale(.95);}
 </style>
 
 <header class="top">
@@ -4350,7 +4352,7 @@ window.__congrats=function(o){
    met de laatste waarde en het verschil eerste → laatste meting; tik = uitleg + grafiek (zoals de oog-knop) ---- */
 (function(){
   var list=document.getElementById('plList'), sec=document.getElementById('plist'); if(!list||!sec) return;
-  var CHEV='<svg class="pl-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  var CHEV='<span class="pl-chart" aria-hidden="true"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor"><path d="M120-240q-33 0-56.5-23.5T40-320q0-33 23.5-56.5T120-400h10.5q4.5 0 9.5 2l182-182q-2-5-2-9.5V-600q0-33 23.5-56.5T400-680q33 0 56.5 23.5T480-600q0 2-2 20l102 102q5-2 9.5-2h21q4.5 0 9.5 2l142-142q-2-5-2-9.5V-640q0-33 23.5-56.5T840-720q33 0 56.5 23.5T920-640q0 33-23.5 56.5T840-560h-10.5q-4.5 0-9.5-2L678-420q2 5 2 9.5v10.5q0 33-23.5 56.5T600-320q-33 0-56.5-23.5T520-400v-10.5q0-4.5 2-9.5L420-522q-5 2-9.5 2H400q-2 0-20-2L198-340q2 5 2 9.5v10.5q0 33-23.5 56.5T120-240Z"/></svg></span>'; /* rond icoon 'timeline' = grafiek openen (op vraag van Tom) */
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
   function render(){
     if(!window.__progPts||!window.__progFmt) return;
