@@ -2188,12 +2188,26 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   window.__paintWoBtns=paintWoBtns;
   setTimeout(function(){ woRun(!!woStart); paintWoBtns(); },0);
   var woPane=document.getElementById('s-d3');
+  /* Start new workout: met welke tab begin je meestal? Kijk naar de eerste afgevinkte oefening van je laatste 3 workouts
+     (warm-up → Warm-up, groep 1–7 → Open Gym, eGym → eGym, cardio → Cardio); meest voorkomend wint, bij gelijkstand de meest recente.
+     Nog geen geschiedenis = Warm-up. */
+  function startTab(){ var P=window.__progAll?window.__progAll():{}, W={};
+    Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number'||!p.t||p.w==='m') return; /* handmatige metingen tellen niet */
+      var key=p.w||p.d, li=window.__liByNote?window.__liByNote(p.k):null; if(!li) return;
+      var o=W[key]=W[key]||{first:Infinity,last:0,g:null}; if(p.t<o.first){ o.first=p.t; o.g=li.dataset.grp; } if(p.t>o.last) o.last=p.t; });
+    var ws=Object.keys(W).map(function(k){ return W[k]; }).sort(function(a,b){ return b.last-a.last; }).slice(0,3);
+    if(!ws.length) return 'warmup';
+    function tab(g){ return g==='g0'?'warmup':g==='g10'?'egym':g==='g8'?'cardio':'full'; }
+    var cnt={}, best=null; ws.forEach(function(w){ var t=tab(w.g); cnt[t]=(cnt[t]||0)+1; });
+    ws.forEach(function(w){ var t=tab(w.g); if(!best||cnt[t]>cnt[best]) best=t; }); /* volgorde = recent eerst, dus gelijkstand → meest recente */
+    return best; }
+  window.__startTab=startTab;
   document.querySelectorAll('.wo-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
       if(woActive()) return;
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
       woRun(true); paintWoBtns();
-      if(window.__setSplit) window.__setSplit('warmup'); /* Start workout = warm-up-tab */
+      if(window.__setSplit) window.__setSplit(startTab()); /* slim: de tab waarmee je meestal begint (op vraag van Tom) */
       var g=[].filter.call(woPane.querySelectorAll('.exgrp'),function(x){ return x.offsetParent!==null; })[0]; window.scrollTo({top:g?g.getBoundingClientRect().top+window.scrollY+2-(window.__wtabsH?window.__wtabsH():0):0,behavior:smooth});
     });
   });
