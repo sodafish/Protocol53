@@ -241,7 +241,8 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Potloodknop (`#progEdit`, alleen icoon) rechts op de lijn van het huidige gewicht opent een
   onderblad (`#pe-sheet`, zelfde stijl als de oefeninguitleg; sluiten met kruisje, naast tikken of Esc):
   bovenaan datum + waarde + Toevoegen (zelfde datum = overschrijven; tijdstip = 12u die dag), daaronder
-  alle metingen (nieuwste eerst) met een vuilbakje (verwijdert meteen, zonder bevestiging). Lange lijsten scrollen in het blad.
+  alle metingen (nieuwste eerst); verwijderen = veeg naar links + tik op de rode Delete (zoals in de kalender, geen bevestiging; op vraag van Tom, 9 okt;
+  gedeelde helper `window.p53Swipe(box,onDel)` vóór de navbar, rijen `li.cx` > `.cx-del` + `.cx-row`; het oude vuilbakje is weg). Lange lijsten scrollen in het blad.
   Let op: `#pe-sheet` deelt de klassen `.sheet`/`.sheet-bg` met het uitlegvenster; die code selecteert
   daarom `.sheet:not(#pe-sheet)`. Nieuwe vensters altijd met een eigen id aanspreken.
 - Alle onderbladen: `overscroll-behavior:contain`; zolang een `.sheet` zichtbaar is én klasse `on` heeft, staat de

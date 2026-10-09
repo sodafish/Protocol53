@@ -1321,12 +1321,12 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 /* kalender: oefeningen per programma met veeg-om-te-verwijderen (op vraag van Tom) */
 .cal-ex{border-top:0;margin-top:.4rem;}
 .cal-ex .cx-h{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0 .45rem;border-bottom:1px solid var(--line);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-.cal-ex .cx{position:relative;display:block;padding:0;overflow:hidden;border-bottom:1px solid var(--line-soft);}
-.cal-ex .cx-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;background:var(--paper);touch-action:pan-y;user-select:none;-webkit-user-select:none;}
+.cx{position:relative;display:block;padding:0;overflow:hidden;border-bottom:1px solid var(--line-soft);}
+.cx-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;background:var(--paper);touch-action:pan-y;user-select:none;-webkit-user-select:none;}
 .cal-ex .cx-n{display:flex;flex-direction:column;font-size:14.5px;color:var(--ink);}
 .cal-ex .cx-n small{font-size:12.5px;color:var(--muted);margin-top:.1rem;}
 .cal-ex .cx-row em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
-.cal-ex .cx-del{position:absolute;right:0;top:0;bottom:0;width:88px;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
+.cx-del{position:absolute;right:0;top:0;bottom:0;width:88px;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
 .cal-ex .cx-row em i{font-style:normal;font-weight:500;color:var(--muted-soft);} /* reps rechts naast de kg (op vraag van Tom) */
 
 /* lege groep: 'Add exercises' (nieuwe gebruiker; op vraag van Tom) */
@@ -1343,6 +1343,12 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 .cx-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
 .cx-hint{font-size:12px;color:var(--muted-soft);} /* subtiele hint (op vraag van Tom) */
 .cal-ex .cx-h{padding-top:2rem;} .cal-ex .cx-h:first-child{padding-top:1.2rem;} /* meer ruimte tussen de groepen (op vraag van Tom) */
+
+
+/* edit-blad grafiek: veeg om te verwijderen (op vraag van Tom) */
+.pe-list li.cx{display:block;min-height:0;padding:0;gap:0;}
+.pe-list .cx-row{background:var(--surface);min-height:48px;padding:0;justify-content:flex-start;gap:.8rem;}
+.pe-list .cx-row .pe-d{flex:1;}
 
 </style>
 
@@ -1981,6 +1987,25 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   <div class="set-act"><button type="button" id="setReset" class="set-reset">Reset to default</button><button type="button" id="setSave" class="set-save">Save</button></div>
 </div>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
+<script>
+/* ---- veeg naar links om te verwijderen (kalender + edit-blad van de grafiek): rij .cx-row schuift, rode .cx-del eronder; tik = wissen ---- */
+window.p53Swipe=function(box,onDel){ var W=88, st=null, openRow=null;
+  function setX(row,x,anim){ row.style.transition=anim?'transform .22s ease':'none'; row.style.transform=x?'translateX('+x+'px)':''; }
+  function closeOpen(){ if(openRow){ setX(openRow,0,true); openRow=null; } }
+  box.addEventListener('pointerdown',function(e){ var row=e.target.closest('.cx-row'); if(!row||!box.contains(row)){ if(!e.target.closest('.cx-del')) closeOpen(); return; }
+    if(openRow&&openRow!==row) closeOpen();
+    st={row:row,x:e.clientX,y:e.clientY,base:row===openRow?-W:0,dir:null,id:e.pointerId}; });
+  box.addEventListener('pointermove',function(e){ if(!st||e.pointerId!==st.id) return; var dx=e.clientX-st.x, dy=e.clientY-st.y;
+    if(!st.dir){ if(Math.abs(dx)<6&&Math.abs(dy)<6) return; st.dir=Math.abs(dx)>Math.abs(dy)?'h':'v'; if(st.dir==='h') try{ st.row.setPointerCapture(e.pointerId); }catch(_){} }
+    if(st.dir!=='h') return; e.preventDefault(); e.stopPropagation(); setX(st.row,Math.max(-W-24,Math.min(0,st.base+dx)),false); });
+  function end(e){ if(!st||e.pointerId!==st.id) return; var s0=st; st=null;
+    if(s0.dir!=='h'){ if(!s0.dir&&s0.row===openRow) closeOpen(); return; }
+    var m=new DOMMatrixReadOnly(getComputedStyle(s0.row).transform).m41;
+    if(m<-W/2){ setX(s0.row,-W,true); openRow=s0.row; } else { setX(s0.row,0,true); if(openRow===s0.row) openRow=null; } }
+  box.addEventListener('pointerup',end); box.addEventListener('pointercancel',end);
+  box.addEventListener('click',function(e){ var b=e.target.closest('.cx-del'); if(!b||!box.contains(b)) return; e.stopPropagation(); openRow=null; onDel(b); });
+};
+</script>
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="m826-585-42-42 45-45-157-157-45 45-43-43 30-31q23-23 57-22.5t57 23.5l129 129q23 23 23 56.5T857-615l-31 30ZM346-104q-23 23-56.5 23T233-104L90-247q-17-17.38-17-42.69T90-332l44-44 43 42-45 45 157 157 45-45 42 43-30 30Zm397-308 85-85-331-331-85 85 331 331ZM463-132l86-86-331-331-86 86 331 331Zm9-248 109-109-92-92-109 109 92 92Zm33 290q-16.93 17-41.97 17Q438-73 421-90L90-421q-17-16.93-17-41.97Q73-488 90-505l85-86q17.38-17 42.69-17T260-591l77 77 110-110-77-77q-17-16.93-17-41.97Q353-768 370-785l85-86q17.38-17 42.69-17T540-871l331 331q17 17.38 17 42.69T871-455l-86 85q-16.93 17-41.97 17Q718-353 701-370l-77-77-110 110 77 77q17 17.38 17 42.69T591-175l-86 85Z"/></svg><span>Workout</span></button>
@@ -2845,19 +2870,20 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     var rows=D.all.map(function(e){
       var dt=new Date(e.t);
       var tm=(D.perDay[e.d]>1&&typeof e.w==='number')?' · '+dt.getHours()+':'+('0'+dt.getMinutes()).slice(-2):''; /* twee workouts die dag: uur erbij */
-      return '<li'+(e.gap?' class="pe-gap" data-d="'+e.d+'"':'')+'><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+'</span>'+
-        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+
-        '<button type="button" class="pe-del" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></li>';
+      /* veeg naar links om te verwijderen, zoals in de kalender (op vraag van Tom) */
+      return '<li class="cx'+(e.gap?' pe-gap" data-d="'+e.d:'')+'"><button type="button" class="cx-del" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'">Delete</button><div class="cx-row"><span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+'</span>'+
+        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+'</div></li>';
     }).join('');
     var nm=D.all.length-D.gaps;
-    body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Add or delete.':'No measurements yet. Add one.')+'</p>'+
+    body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Swipe left to delete.':'No measurements yet. Add one.')+'</p>'+
       '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
     body.querySelectorAll('.pe-fill').forEach(function(b){ b.addEventListener('click',function(){
       var f=body.querySelector('.pe-add'); f.d.value=b.dataset.d;
       var cur=document.querySelector('#s-d3 .exr-in[data-note="'+D.k+'"]'); if(cur&&!f.v.value&&numOf(cur.value)!=null) f.v.value=cur.value; /* waarde uit het veld als voorstel */
       f.v.focus(); }); });
-    body.querySelectorAll('.pe-del').forEach(function(b){ b.addEventListener('click',function(){
+    if(!body.__sw&&window.p53Swipe){ body.__sw=1; window.p53Swipe(body,function(b){ peDelBtn(b); }); }
+    function peDelBtn(b){ (function(){
       if(b.dataset.gap){ var dd=b.dataset.id.split('@').pop(); if(window.__histDropDayAll) window.__histDropDayAll(b.dataset.gap,dd); renderProg(); renderSheet(true); try{ document.dispatchEvent(new Event('p53-prog')); }catch(_e){} return; }
       var e=prog[b.dataset.id]; if(!e) return;
       /* meteen verwijderen, zonder bevestiging */
@@ -2866,8 +2892,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
         /* meting van de lopende workout weg terwijl de oefening afgevinkt staat: vinkje ook weg */
         if(_li&&e.w&&e.w===curW()&&_li.classList.contains('done')){ var _c=_li.querySelector('.chk'); if(_c) _c.click(); }
         renderProg(); renderSheet(true);
-      
-    }); });
+    }).call(null); }
     var f=body.querySelector('.pe-add');
     f.addEventListener('submit',function(ev){ ev.preventDefault();
       var d=f.d.value, v=numOf(f.v.value);
@@ -4351,24 +4376,8 @@ window.__congrats=function(o){
         return '<li class="cx"><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button><div class="cx-row"><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em></div></li>'; }).join('');
       html+='<li class="cx-h"><span>'+nm+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
     return '<ul class="cal-ex">'+html+'</ul>'; }
-  /* veeg naar links op een rij: rode Delete-knop verschijnt; tik = bevestigen en wissen */
-  (function(){ var box=document.getElementById('calDay'); if(!box) return; var W=88, st=null, openRow=null;
-    function setX(row,x,anim){ row.style.transition=anim?'transform .22s ease':'none'; row.style.transform=x?'translateX('+x+'px)':''; }
-    function closeOpen(){ if(openRow){ setX(openRow,0,true); openRow=null; } }
-    box.addEventListener('pointerdown',function(e){ var row=e.target.closest('.cx-row'); if(!row){ if(!e.target.closest('.cx-del')) closeOpen(); return; }
-      if(openRow&&openRow!==row) closeOpen();
-      st={row:row,x:e.clientX,y:e.clientY,base:row===openRow?-W:0,dir:null,id:e.pointerId}; });
-    box.addEventListener('pointermove',function(e){ if(!st||e.pointerId!==st.id) return; var dx=e.clientX-st.x, dy=e.clientY-st.y;
-      if(!st.dir){ if(Math.abs(dx)<6&&Math.abs(dy)<6) return; st.dir=Math.abs(dx)>Math.abs(dy)?'h':'v'; if(st.dir==='h') try{ st.row.setPointerCapture(e.pointerId); }catch(_){} }
-      if(st.dir!=='h') return; e.preventDefault(); setX(st.row,Math.max(-W-24,Math.min(0,st.base+dx)),false); });
-    function end(e){ if(!st||e.pointerId!==st.id) return; var s0=st; st=null;
-      if(s0.dir!=='h'){ if(!s0.dir&&s0.row===openRow) closeOpen(); return; }
-      var m=new DOMMatrixReadOnly(getComputedStyle(s0.row).transform).m41;
-      if(m<-W/2){ setX(s0.row,-W,true); openRow=s0.row; } else { setX(s0.row,0,true); if(openRow===s0.row) openRow=null; } }
-    box.addEventListener('pointerup',end); box.addEventListener('pointercancel',end);
-    box.addEventListener('click',function(e){ var b=e.target.closest('.cx-del'); if(!b) return; var it=EXI[+b.dataset.i]; if(!it) return;
-      openRow=null; if(window.__progDelIds) window.__progDelIds(it.ids); }); /* geen extra bevestiging: de tik op Delete is de bevestiging (op vraag van Tom) */
-  })();
+  var calBox=document.getElementById('calDay');
+  if(calBox&&window.p53Swipe) window.p53Swipe(calBox,function(b){ var it=EXI[+b.dataset.i]; if(it&&window.__progDelIds) window.__progDelIds(it.ids); }); /* geen extra bevestiging (op vraag van Tom) */
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
