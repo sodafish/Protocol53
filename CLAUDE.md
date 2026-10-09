@@ -105,7 +105,7 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 
 - Tabs bovenaan Statistics/Results (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout), volgorde (9 okt) **Muscle Balance** (eerst, op vraag van Tom) · **Strength Progress** (`#plist` + lege melding `#plEmpty`, `data-sv=prog`) ·
   Muscle Balance (vroeger 'Balance'/'Muscles'; knoppen `#stabs>button` breedte volgens tekst, 13.5 px; periode + figuur + spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`). Stop workout (met vinkjes) → Balance, bovenaan.
-- Actieve tab in `#wtabs`/`#stabs`: volle terracotta pil (`--accent`) met tekst `--paper` (variant D uit 6 voorbeelden; zwart/wit was te hard; op vraag van Tom).
+- Actieve tab in `#wtabs`/`#stabs`: zachte grijze pil (`--ink` 9%) met accenttekst (variant A; zwart/wit en volle terracotta (D) geprobeerd en teruggedraaid op vraag van Tom).
 - Schuivende pil (op vraag van Tom, 9 okt): in `#wtabs .wd-tabs`, `#stabs` en `.gnav-pill` tekent één `.pill-ind` de achtergrond van de actieve knop en schuift
   zacht (.34 s) naar de nieuwe knop (script onderaan `index.html`; MutationObserver op `aria-selected`, ResizeObserver; actieve knop zelf `background:transparent`).
   Telkens één sectie zichtbaar (`.sv[hidden]`); keuze in localStorage `fitlog-stats-view`; `window.__statsView(v)`; End workout zet Muscles. De koppen
