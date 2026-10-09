@@ -1827,7 +1827,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
           <text x="34" y="94" class="pe-lab">1st</text><text x="74" y="94" class="pe-lab">2nd</text>
         </svg>
         <h3>Your progress starts here</h3>
-        <p>An exercise shows up here once you’ve logged its weight at least twice. Your first session sets the starting point, the next one shows how far you’ve come.</p>
+        <p>An exercise shows up here once you’ve logged its weight three times. Your first session is a warm-up for the movement, the second sets the starting point, the third shows how far you’ve come.</p>
       </div>
       <section class="plist" id="plist" aria-label="Progress per exercise" hidden>
         <h2 class="prog-t">Strength progress</h2>
@@ -2817,8 +2817,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      Zo blijft het getal kloppen als je van oefening wisselt. notes = invulvelden (data-note). → {p: %, n: aantal stapjes} of null. */
   function weekKey(t){ var d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d.getTime(); }
   function chainPct(notes,from,to){ if(!window.__progPts) return null; var W={}, n=0;
-    notes.forEach(function(note){ var pts=window.__progPts(note).slice(1).filter(function(x){ return x.t>=from&&x.t<=to; });
-      for(var i=1;i<pts.length;i++){ var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue;
+    notes.forEach(function(note){ var pts=window.__progPts(note).slice(1); /* eerste meting telt niet */
+      for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen: vooruitgang sinds de laatste meting vóór de periode) */
+        var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue;
         var wk=weekKey(pts[i].t); W[wk]=W[wk]||{}; W[wk][note]=(W[wk][note]||0)+Math.log(b/a); n++; } });
     if(!n) return null; var sum=0;
     Object.keys(W).forEach(function(wk){ var o=W[wk], ks=Object.keys(o); sum+=ks.reduce(function(a,k){ return a+o[k]; },0)/ks.length; });
@@ -3083,7 +3084,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      Bewaard bij afvinken en bij elke wijziging van het invulveld (zelfde dag = overschrijven). */
   var PROGKEY='fitlog-prog', progCol=null, progReady=false;
   var prog={}; try{ prog=JSON.parse(localStorage.getItem(PROGKEY)||'{}'); }catch(e){}
-  function saveProgLocal(){ try{ localStorage.setItem(PROGKEY,JSON.stringify(prog)); }catch(e){} try{ document.dispatchEvent(new Event('p53-prog')); }catch(e){} }
+  function saveProgLocal(){ PIDX=null; try{ localStorage.setItem(PROGKEY,JSON.stringify(prog)); }catch(e){} try{ document.dispatchEvent(new Event('p53-prog')); }catch(e){} }
   function ymd(t){ var d=new Date(t); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function numOf(txt){ var m=String(txt||'').replace(',','.').match(/\d+(?:\.\d+)?/); return m?parseFloat(m[0]):null; }
   /* één meting per veld per WORKOUT (niet per dag): id <veld>@<dag>@<start van de workout>, met w = start.
@@ -3157,7 +3158,12 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function dLabYr(t){ return new Date(t).getFullYear()===new Date().getFullYear()?dLab(t):dLabY(t); } /* jaar erbij als het niet dit jaar is */
   function fmtV(v){ return (Math.round(v*10)/10+''); }
   /* progressie opvragen vanuit het uitlegvenster (test) */
-  window.__progPts=function(k){ return Object.keys(prog).map(function(id){ return prog[id]; }).filter(function(e){ return e&&e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return a.t-b.t; }); };
+  /* index veld → gesorteerde metingen, één keer opgebouwd en gewist bij elke wijziging (anders werd elke statistiek-render traag bij veel data) */
+  var PIDX=null;
+  function pidx(){ if(PIDX) return PIDX; var o={}; Object.keys(prog).forEach(function(id){ var e=prog[id]; if(e&&typeof e.v==='number') (o[e.k]=o[e.k]||[]).push(e); });
+    Object.keys(o).forEach(function(k){ o[k].sort(function(a,b){ return a.t-b.t; }); }); return PIDX=o; }
+  window.addEventListener('p53-prog',function(){ PIDX=null; },true);
+  window.__progPts=function(k){ return (pidx()[k]||[]).slice(); };
   window.__progFmt={d:dLabY,v:fmtV};
   function niceTicks(lo,hi){
     var span=hi-lo||1, step=Math.pow(10,Math.floor(Math.log10(span/3))), err=span/3/step;
@@ -4612,12 +4618,12 @@ window.__congrats=function(o){
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]');
       [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
-        G.notes.push(inp.dataset.note); var sk=sub; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */ var pts=window.__progPts(inp.dataset.note).filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); /* gekozen periode */ if(!pts.length) return;
-        if(pts.length<2) return; /* één meting = nog geen progressie: niet tonen (op vraag van Tom) */
-        /* de allereerste meting van een oefening telt niet mee in het % (leereffect; op vraag van Tom) — de grafiek toont ze wel.
-           Basis = eerste meting in de periode die niet de allereerste is; zo'n meting nog niet = 0%. */
-        var all0=window.__progPts(inp.dataset.note)[0], pb=pts.filter(function(x){ return x!==all0&&!(x.t===all0.t&&x.v===all0.v); });
-        var unit=inp.placeholder||'kg', last=pts[pts.length-1], first=pb.length?pb[0]:last, d=last.v-first.v;
+        G.notes.push(inp.dataset.note); var sk=sub; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */
+        /* zelfde regels als de kettingindex: de allereerste meting telt nooit (leereffect); basis = laatste meting vóór de periode, anders de eerste erin;
+           enkel tonen als er een echte stap is (dus vanaf de derde meting) */
+        var allx=window.__progPts(inp.dataset.note).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
+        var before=allx.filter(function(x){ return x.t<R.from; }).pop(), first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
+        var unit=inp.placeholder||'kg', d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
         G.r.push({p:pct,n:pts.length,t:last.t||0,sub:sub,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+'</span>'+
