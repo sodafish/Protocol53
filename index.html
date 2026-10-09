@@ -1317,6 +1317,16 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
 /* Diet: kcal/eiwit als zachte pil (op vraag van Tom) */
 #p-voeding .nut{display:block;width:fit-content;margin-top:.35rem;padding:.18rem .6rem;border-radius:999px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--muted);font-size:12px;font-weight:500;line-height:1.35;}
 #p-voeding .nut i{opacity:.7;}
+
+/* kalender: oefeningen per programma met veeg-om-te-verwijderen (op vraag van Tom) */
+.cal-ex{border-top:0;margin-top:.4rem;}
+.cal-ex .cx-h{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0 .45rem;border-bottom:1px solid var(--line);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.cal-ex .cx{position:relative;display:block;padding:0;overflow:hidden;border-bottom:1px solid var(--line-soft);}
+.cal-ex .cx-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;background:var(--paper);touch-action:pan-y;user-select:none;-webkit-user-select:none;}
+.cal-ex .cx-n{display:flex;flex-direction:column;font-size:14.5px;color:var(--ink);}
+.cal-ex .cx-n small{font-size:12.5px;color:var(--muted);margin-top:.1rem;}
+.cal-ex .cx-row em{flex:none;font-style:normal;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;}
+.cal-ex .cx-del{position:absolute;right:0;top:0;bottom:0;width:88px;border:0;background:var(--rood);color:#fff;font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
 </style>
 
 <header class="top">
@@ -2779,6 +2789,11 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
+  /* metingen wissen van buitenaf (kalender: veeg om te verwijderen); zelfde regels als het vuilbakje in het edit-blad */
+  window.__progDelIds=function(ids){ ids.forEach(function(id){ var e=prog[id]; if(!e) return; progDel(id);
+      var _i=document.querySelector('#s-d3 .exr-in[data-note="'+e.k+'"]'), _li=_i&&_i.closest('.exr');
+      if(_li&&e.w&&e.w===curW()&&_li.classList.contains('done')){ var _c=_li.querySelector('.chk'); if(_c) _c.click(); } });
+    renderProg(); };
   function peData(){
     var k=peKey||progSel.value, inp=document.querySelector('.exr-in[data-note="'+k+'"]'), unit=(inp&&inp.placeholder)||'kg';
     var all=Object.keys(prog).filter(function(id){ var e=prog[id]; return e&&e.k===k&&typeof e.v==='number'; }).map(function(id){ return Object.assign({id:id},prog[id]); }).sort(function(a,b){ return b.t-a.t; });
@@ -4221,7 +4236,7 @@ window.__congrats=function(o){
       var li=window.__liByNote?window.__liByNote(p.k):null, k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
       if(!k||/^w0-/.test(k)) return;
       var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0,items:{}}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w;
-      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||''}; } /* oefeningenlijst onder de dag */
+      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||''}; (it.ids=it.ids||[]).push(id); } /* oefeningenlijst onder de dag */
       if(o.ex[ek]) return; o.ex[ek]=1;
       if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
       else o.sets+=window.__setsFor?(+window.__setsFor(k,li)||0):3; });
@@ -4264,18 +4279,47 @@ window.__congrats=function(o){
     var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
     /* datum, dan per regel: kracht ('Open Gym + eGym · 25 sets') en cardio ('Cardio · 40 min') */
     var pg=progs(o), lines=[]; if(o.sets||pg) lines.push((pg||'Strength')+' · '+o.sets+(o.sets===1?' set':' sets')); if(o.min) lines.push('Cardio · '+Math.round(o.min)+' min');
-    box.innerHTML='<b>'+WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]+'</b>'+lines.map(function(l){ return '<span class="cal-l">'+l+'</span>'; }).join('')+exList(o);
+    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()]; box.innerHTML='<b>'+dl+'</b>'+exList(o); box.dataset.dl=dl;
   }
-  /* oefeningen van die dag, in workoutvolgorde, met de gemeten waarde (op vraag van Tom) */
-  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  /* oefeningen van die dag, gegroepeerd per programma (Open Gym, eGym, Cardio) in workoutvolgorde, met gemeten waarde + sets/reps;
+     veeg naar links = verwijderen (met bevestiging), wist de meting(en) in de grafiekdata (op vraag van Tom) */
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  var EXI=[];
   function exList(o){ var its=Object.keys(o.items||{}).map(function(e){ return o.items[e]; });
-    if(!its.length) return '';
+    EXI=[]; if(!its.length) return '';
     its.sort(function(a,b){ return a.li===b.li?0:(a.li.compareDocumentPosition(b.li)&4?-1:1); });
-    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; };
-    return '<ul class="cal-ex">'+its.map(function(it){ var n=it.li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'';
-      var ks=[].map.call(it.li.querySelectorAll('.exr-in[data-note]'),function(x){ return x.dataset.note; }).filter(function(k){ return it.f[k]; });
-      var u=ks.length?it.f[ks[0]].u:'', val=ks.map(function(k){ return fv(it.f[k].v); }).join(' / ')+(u?' '+u:'');
-      return '<li><span>'+esc(name)+'</span><em>'+esc(val)+'</em></li>'; }).join('')+'</ul>'; }
+    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; }, G={}, ORDER=['Open Gym','eGym','Cardio'];
+    its.forEach(function(it){ var g=it.li.dataset.grp, nm=g==='g10'?'eGym':g==='g8'?'Cardio':'Open Gym'; (G[nm]=G[nm]||[]).push(it); });
+    var html='';
+    ORDER.forEach(function(nm){ var arr=G[nm]; if(!arr) return; var tot=0;
+      var rows=arr.map(function(it){ var n=it.li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'', k=it.li.dataset.key||'';
+        var ks=[].map.call(it.li.querySelectorAll('.exr-in[data-note]'),function(x){ return x.dataset.note; }).filter(function(q){ return it.f[q]; });
+        var u=ks.length?it.f[ks[0]].u:'', val=ks.map(function(q){ return fv(it.f[q].v); }).join(' / ')+(u?' '+u:'');
+        var sx=it.li.querySelector('.exr-s'), reps=nm==='Cardio'?'':(sx&&sx.firstChild&&sx.firstChild.nodeType===3?sx.firstChild.textContent.replace(/[·\s]+$/,'').trim():'');
+        if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
+        EXI.push({ids:it.ids||[],name:name});
+        return '<li class="cx"><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button><div class="cx-row"><span class="cx-n">'+esc(name)+(reps?'<small>'+esc(reps)+'</small>':'')+'</span><em>'+esc(val)+'</em></div></li>'; }).join('');
+      html+='<li class="cx-h"><span>'+nm+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
+    return '<ul class="cal-ex">'+html+'</ul>'; }
+  /* veeg naar links op een rij: rode Delete-knop verschijnt; tik = bevestigen en wissen */
+  (function(){ var box=document.getElementById('calDay'); if(!box) return; var W=88, st=null, openRow=null;
+    function setX(row,x,anim){ row.style.transition=anim?'transform .22s ease':'none'; row.style.transform=x?'translateX('+x+'px)':''; }
+    function closeOpen(){ if(openRow){ setX(openRow,0,true); openRow=null; } }
+    box.addEventListener('pointerdown',function(e){ var row=e.target.closest('.cx-row'); if(!row){ if(!e.target.closest('.cx-del')) closeOpen(); return; }
+      if(openRow&&openRow!==row) closeOpen();
+      st={row:row,x:e.clientX,y:e.clientY,base:row===openRow?-W:0,dir:null,id:e.pointerId}; });
+    box.addEventListener('pointermove',function(e){ if(!st||e.pointerId!==st.id) return; var dx=e.clientX-st.x, dy=e.clientY-st.y;
+      if(!st.dir){ if(Math.abs(dx)<6&&Math.abs(dy)<6) return; st.dir=Math.abs(dx)>Math.abs(dy)?'h':'v'; if(st.dir==='h') try{ st.row.setPointerCapture(e.pointerId); }catch(_){} }
+      if(st.dir!=='h') return; e.preventDefault(); setX(st.row,Math.max(-W-24,Math.min(0,st.base+dx)),false); });
+    function end(e){ if(!st||e.pointerId!==st.id) return; var s0=st; st=null;
+      if(s0.dir!=='h'){ if(!s0.dir&&s0.row===openRow) closeOpen(); return; }
+      var m=new DOMMatrixReadOnly(getComputedStyle(s0.row).transform).m41;
+      if(m<-W/2){ setX(s0.row,-W,true); openRow=s0.row; } else { setX(s0.row,0,true); if(openRow===s0.row) openRow=null; } }
+    box.addEventListener('pointerup',end); box.addEventListener('pointercancel',end);
+    box.addEventListener('click',function(e){ var b=e.target.closest('.cx-del'); if(!b) return; var it=EXI[+b.dataset.i]; if(!it) return;
+      p53Confirm({title:'Delete exercise?',msg:'Remove '+it.name+' from '+(box.dataset.dl||'this day')+'? This also removes the measurement from its chart.',ok:'Delete',danger:true}).then(function(y){
+        if(!y){ closeOpen(); return; } openRow=null; if(window.__progDelIds) window.__progDelIds(it.ids); }); });
+  })();
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
