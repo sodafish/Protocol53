@@ -114,7 +114,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
   krachtoefening met minstens één meting in `prog` (ook uitgezette; geen warm-up g0 en cardio g8, op vraag van Tom), per groep (kop `.pl-h` = groepsnaam) in workoutvolgorde; geen supersets (op vraag van Tom, 9 okt; dus ook niet in het armgemiddelde). Rechts de laatste waarde + eenheid en groot de toename in procent eerste → laatste (`+25 %`, accent bij stijging), eronder klein 'laatste waarde · verschil'
   (`20 kg · +4 kg`); één meting = `+0 %` en `+0 kg` (op vraag van Tom, 9 okt). Binnen elke groep gesorteerd op procentuele toename (grootste eerst). Rechts in de groepskop het percentage van de groep = gemiddelde van de twee meest gemeten oefeningen (aantal metingen, minstens twee);
   groepen met tussenkoppen (Back: Rows/Vertical pull; Arms: Biceps/Forearms/Triceps/Supersets) tonen per tussenkop (`.pl-sh`) dat percentage en
-  de groep = gemiddelde van de tussenkoppen; rijen gesorteerd per tussenkop. Geen getal als er geen oefening met twee metingen is (op vraag van Tom, 9 okt). Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
+  de groep = gemiddelde van de tussenkoppen die bruikbare metingen hebben (een lege tussenkop, bv. Forearms, telt niet als 0% mee); rijen gesorteerd per tussenkop. Alle krachtgroepen (g1–g7 + eGym g10) en hun tussenkoppen (zonder Supersets) staan er altijd, ook zonder metingen; zonder
+  bruikbare metingen = `0%` (op vraag van Tom, 9 okt). Hiërarchie: groeps-% groot (26 px Fraunces), tussenkop-% 19 px, oefening-% gewone tekst 15 px;
+  accent bij stijging. `#plEmpty` wordt niet meer getoond. Tik = uitlegblad met grafiek (`window.__p53info.open`). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
 **Waar staat wat** (allemaal in `index.html`, zoek op `statistieken`):
 - `MLAB` — de spiergroepen en hun (Engelse) schermnaam (18 stuks; `add` = Adductors, vlak binnenkant dij vooraan,
