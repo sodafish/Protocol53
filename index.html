@@ -1130,8 +1130,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gnav-pill{display:flex;flex:1;max-width:440px;height:64px;padding:5px;border-radius:32px;gap:4px;}
 .gnav-i{flex:1;appearance:none;border:none;cursor:pointer;border-radius:27px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font:600 11px 'Work Sans',system-ui,sans-serif;letter-spacing:.02em;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,color .25s ease,transform .12s ease;}
-.gnav-i[aria-selected="true"]{background:var(--ink);color:var(--paper);} /* zelfde tinten als de Stop workout-balk (op vraag van Tom) */
-.gnav-i[aria-selected="true"] svg{color:var(--accent);}
+.gnav-i[aria-selected="true"]{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));color:var(--paper);} /* zelfde stijl als de Start workout-balk (op vraag van Tom) */
 .gnav-i:active{transform:scale(.96);}
 .gnav-more{flex:none;width:64px;height:64px;border-radius:50%;appearance:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,color .2s ease;}
 .gnav-more.on{color:var(--accent);}
