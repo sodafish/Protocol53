@@ -83,7 +83,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Navigatie
 - Onderaan een zwevende glazen navbar (`.gnav`, klasse `.glass`: zelfde kleur als de invulvelden: `--surface` op 90% in licht (anders lijkt ze op de paginakleur), 62% in donker, blur 26px, saturate 140%, witte lichtrand (vroeger warm glas op 26%)): pil met **Workout** (icoon: Material Symbols 'task_alt', rond vinkje, als inline SVG; vroeger 'target_check')
-  en **Statistics** (vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'chart_data', vroeger 'man'), **Diet** (`data-view=voeding`, Material Symbols 'room_service') en **Guide** (`data-view=kracht`, vroeger 'Info', Material Symbols 'lightbulb_2';
+  en **Statistics** (vroeger Coverage, Progress/Balance; intern blijft het `progress`, `#k-stats`; icoon: Material Symbols 'monitoring', vroeger 'man'), **Diet** (`data-view=voeding`, Material Symbols 'grocery') en **Guide** (`data-view=kracht`, vroeger 'Info', Material Symbols 'lightbulb_2';
   pil max 440 px). Het More-menu (`#gnavMore`, `#more-sheet`) is weg (op vraag van Tom, 9 okt); de pagina Cardio bestaat nog maar is niet bereikbaar. Tik op het actieve item = zacht naar boven scrollen; wisselen van pagina
   begint bovenaan (meteen + na 200/450 ms, omdat het wisselen van tab zelf nog kan scrollen), behalve terug naar Workout: die
   komt terug op de onthouden scrollpositie (`window.__woY`, bewaard bij het verlaten van Workout, op 0 gezet na End workout).
