@@ -2890,15 +2890,17 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
     /* Progress-figuur (variant C): krachttoename per spier, eerste → laatste meting, zoals de lijst eronder (op vraag van Tom, 9 okt) */
+    var PRIM={}; progRows(function(li){ var mm=musclesFor(chkKey(li),li)||{}; Object.keys(mm).forEach(function(m){ if(mm[m]===1) PRIM[m]=1; }); });
     var pf=document.getElementById('progFig'), PR=window.__progRange(), bp=balPct(PR.from,PR.to), bmax=0; prLabel(); Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
     if(pf) pf.querySelectorAll('.m').forEach(function(p){ if(p.closest('.o')) return;
       var v=bp[p.getAttribute('data-m')]||0;
       p.style.fill=v>0&&bmax?'color-mix(in srgb,var(--accent) '+Math.round(18+82*v/bmax)+'%,var(--surface))':'';
     });
     if(pf) pf.querySelectorAll('.bal-pct').forEach(function(t){ var v=Math.round(bp[t.getAttribute('data-m')]||0);
-      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; var m=t.getAttribute('data-m'); t.setAttribute('class','bal-pct has');
-      /* enkel spieren met data tonen een lijntje + % (op vraag van Tom, 9 okt): zonder data verdwijnt de callout, vaste plek voor de rest */
-      var co=t.parentNode&&t.parentNode.parentNode; if(co) co.style.display=(m in bp)?'':'none'; });
+      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; var m=t.getAttribute('data-m'); t.setAttribute('class','bal-pct'+((m in bp)?' has':' zero'));
+      /* lijntje + % voor elke spier die een kg-oefening als hoofdspier heeft (ook zonder data: grijze 0%); spieren die nooit hoofdspier zijn
+         (trapezius, forearms, calves) krijgen geen callout (op vraag van Tom, 9 okt) */
+      var co=t.parentNode&&t.parentNode.parentNode; if(co) co.style.display=(m in bp||PRIM[m])?'':'none'; });
     var ph=document.getElementById('progHint'); if(ph) ph.hidden=Object.keys(bp).length>0;
     var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
     if(eff==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
