@@ -2809,12 +2809,12 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(!/^g([1-7]|10)$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return;
       var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return; fn(li,ins[0].dataset.note); }); }
   /* KETTINGINDEX (op vraag van Tom, 9 okt): elke oefening wordt enkel met zichzelf vergeleken (meting → volgende meting),
-     de eerste twee metingen van een oefening (ooit) tellen niet (leereffect). Per week (ma–zo): per oefening de som van haar
+     de eerste meting van een oefening (ooit) telt niet (leereffect; op vraag van Tom enkel de eerste). Per week (ma–zo): per oefening de som van haar
      stapjes (log), daarna het gemiddelde over de oefeningen die die week gedaan zijn; de weken worden vermenigvuldigd.
      Zo blijft het getal kloppen als je van oefening wisselt. notes = invulvelden (data-note). → {p: %, n: aantal stapjes} of null. */
   function weekKey(t){ var d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d.getTime(); }
   function chainPct(notes,from,to){ if(!window.__progPts) return null; var W={}, n=0;
-    notes.forEach(function(note){ var pts=window.__progPts(note).slice(2).filter(function(x){ return x.t>=from&&x.t<=to; });
+    notes.forEach(function(note){ var pts=window.__progPts(note).slice(1).filter(function(x){ return x.t>=from&&x.t<=to; });
       for(var i=1;i<pts.length;i++){ var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue;
         var wk=weekKey(pts[i].t); W[wk]=W[wk]||{}; W[wk][note]=(W[wk][note]||0)+Math.log(b/a); n++; } });
     if(!n) return null; var sum=0;
@@ -4609,7 +4609,7 @@ window.__congrats=function(o){
       return v.length?v.reduce(function(a,x){ return a+x.p; },0)/v.length:null; }
     function pc(v){ v=Math.round(v||0); return '<b class="'+(v>0?'up':'')+'">'+(v<0?'−':v>0?'+':'')+Math.abs(v)+'%</b>'; }
     function rws(r){ return r.slice().sort(function(a,b){ return b.p-a.p; }).map(function(x){ return x.h; }).join(''); }
-    /* groep en tussenkop = kettingindex over al hun oefeningen (wisselen van oefening breekt het getal niet; eerste 2 metingen per oefening tellen niet) */
+    /* groep en tussenkop = kettingindex over al hun oefeningen (wisselen van oefening breekt het getal niet; eerste meting per oefening telt niet) */
     function ch(notes){ var c=window.__chainPct?window.__chainPct(notes||[],R.from,R.to):null; return c?c.p:0; }
     groups.forEach(function(g){ var body='', avg; if(!g.r.length) return; /* groep pas tonen als er iets onder staat */
       if(g.subs.length){

@@ -125,9 +125,9 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   `window.__progRange()` → `{from,to,f,t,b,all}`; figuur (`balPct(from,to)`) én de lijst `#plList` rekenen eerste → laatste meting BINNEN die periode
   (minstens twee metingen); lijst ververst bij event `p53-prange`. Getekend in `drawBody` (`bodySvg`), gevuld in `renderStats`. Onder de figuur 2.6rem ruimte (`#progFig`, op vraag van Tom).
   % per spier = `balPct(from,to)` = KETTINGINDEX (op vraag van Tom, 9 okt; `chainPct(notes,from,to)`, ook `window.__chainPct`) over de oefeningen waar die spier
-  hoofdspier (1) is (één kg-veld, g1–g7/g10, geen supersets; `progRows`): elke oefening enkel t.o.v. zichzelf (meting → volgende meting), de EERSTE TWEE metingen
-  van een oefening (ooit) tellen niet (leereffect), stapjes binnen de periode; per week (ma–zo, `weekKey`) per oefening de som van haar log-stapjes, dan het
-  gemiddelde over de oefeningen van die week; weken vermenigvuldigd. Wisselen van oefening breekt het getal dus niet. Een oefening telt pas mee vanaf 4 metingen.
+  hoofdspier (1) is (één kg-veld, g1–g7/g10, geen supersets; `progRows`): elke oefening enkel t.o.v. zichzelf (meting → volgende meting), de EERSTE meting
+  van een oefening (ooit) telt niet (leereffect; eerst twee, op vraag van Tom één), stapjes binnen de periode; per week (ma–zo, `weekKey`) per oefening de som van haar log-stapjes, dan het
+  gemiddelde over de oefeningen van die week; weken vermenigvuldigd. Wisselen van oefening breekt het getal dus niet. Een oefening telt pas mee vanaf 3 metingen. Achteruitgang (lager gewicht) telt negatief mee.
   Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Progress en bij wisselen van kant.
 - Periodes zonder data uitgegrijsd (op vraag van Tom, 9 okt; `aria-disabled`, 35%, klik doet niets): Last workout altijd, Week vanaf de eerste meting,
   30d als de oudste meting > 7 dagen terug ligt, 90d > 30 dagen; potlood uit zolang er geen data is. Staat de bewaarde keuze uit, dan toont `renderStats` de langste
