@@ -1381,7 +1381,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
       <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="warmup">Warm-up</button><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="cardio">Cardio</button></div>
       <div class="wd-go">
         <button type="button" class="wd-btn wo-btn"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Start new workout</span></button>
-        <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>Stop workout</span><span class="wd-t" id="woStopT"></span></button>
+        <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M180-180h400v-200h200v-400H180v600Zm0 60q-24.75 0-42.37-17.63Q120-155.25 120-180v-600q0-24.75 17.63-42.38Q155.25-840 180-840h600q24.75 0 42.38 17.62Q840-804.75 840-780v420L600-120H180Zm120-300v-60h170v60H300Zm0-160v-60h360v60H300ZM180-180v-600 600Z"/></svg></button>
       </div>
     </div>
@@ -1963,7 +1963,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
   <p class="set-prev" id="setPrev"></p>
   <div class="set-act"><button type="button" id="setReset" class="set-reset">Reset to default</button><button type="button" id="setSave" class="set-save">Save</button></div>
 </div>
-<button type="button" class="wo-end" id="woEnd" hidden aria-label="Stop workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">Stop workout</span><span class="wo-end-t" id="woEndT"></span></button>
+<button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
 <nav class="gnav" aria-label="Main">
   <div class="gnav-pill glass" role="tablist">
     <button type="button" class="gnav-i" data-view="workout" role="tab"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="m826-585-42-42 45-45-157-157-45 45-43-43 30-31q23-23 57-22.5t57 23.5l129 129q23 23 23 56.5T857-615l-31 30ZM346-104q-23 23-56.5 23T233-104L90-247q-17-17.38-17-42.69T90-332l44-44 43 42-45 45 157 157 45-45 42 43-30 30Zm397-308 85-85-331-331-85 85 331 331ZM463-132l86-86-331-331-86 86 331 331Zm9-248 109-109-92-92-109 109 92 92Zm33 290q-16.93 17-41.97 17Q438-73 421-90L90-421q-17-16.93-17-41.97Q73-488 90-505l85-86q17.38-17 42.69-17T260-591l77 77 110-110-77-77q-17-16.93-17-41.97Q353-768 370-785l85-86q17.38-17 42.69-17T540-871l331 331q17 17.38 17 42.69T871-455l-86 85q-16.93 17-41.97 17Q718-353 701-370l-77-77-110 110 77 77q17 17.38 17 42.69T591-175l-86 85Z"/></svg><span>Workout</span></button>
@@ -2184,7 +2184,7 @@ body[data-view="workout"] .wo-end{display:none;} /* op Workout staat Stop workou
     /* niets afgevinkt: gewoon stoppen, zonder vraag en zonder vuurwerk */
     var any=false; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) any=true; });
     if(!any){ woRun(false); paintWoBtns(); window.__woY=0; window.scrollTo({top:0,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); return; } /* en terug naar boven */
-    p53Confirm({title:'Stop workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'Your ticks are cleared; everything you ticked stays saved.',ok:'Stop workout'}).then(function(y){
+    p53Confirm({title:'End workout?',msg:(dur!=null?'Time: '+(dur<60?dur+' min':Math.floor(dur/60)+' h '+('0'+dur%60).slice(-2)+' min')+'. ':'')+'Your ticks are cleared; everything you ticked stays saved.',ok:'End workout'}).then(function(y){
       if(!y) return;
       var _n=0, _str=0; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]&&!/^w0-/.test(k)){ _n++; if(!/^c-/.test(k)) _str++; } });
       if(woStart&&window.__sessAdd) window.__sessAdd(woStart,Date.now(),_n);

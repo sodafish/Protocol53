@@ -256,9 +256,9 @@ Kleur is relatief t.o.v. de best getrainde spier in die periode, zodat je de bal
 - Workout-blok (op vraag van Tom, 9 okt, naar een voorbeeld met een navbar + balk eronder): `#wtabs` (klasse `.wtabs wdock`) = de tabs (`.wd-tabs`,
   role=tablist, eigen witte pil met afgeronde onderkant) + daaronder een balk `.wd-go` in één afgerond, plakkend blok. Vóór de start: balk in
   accentkleur (verloop) met 'Start workout' (`.wd-btn.wo-btn`, zelfde handler als vroeger). Tijdens een workout: balk in `--ink` met
-  'Stop workout' + tijd (startknop heet 'Start new workout' met play-icoon 21 px, op vraag van Tom; stop 19 px, op vraag van Tom groter; `#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
+  'End workout' + tijd (vroeger 'Stop workout', op vraag van Tom terug naar End; startknop heet 'Start new workout' met play-icoon 21 px, op vraag van Tom; stop 19 px, op vraag van Tom groter; `#woStop`, `#woStopT`; klikt `#woEnd` aan, dus zelfde logica) en het blok krijgt klasse `on`. De notitieknop
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
-  tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet nu ook 'Stop workout' (confirm 'Stop workout?')
+  tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet ook 'End workout' (confirm 'End workout?')
   en is verborgen op de Workout-pagina (`body[data-view=workout]`, gezet door de navbar-`paint`); op andere pagina's blijft ze.
 - Keuze via tabs (op vraag van Tom, vervangt de dropdown): `#wtabs` (pil met 4 knoppen `role=tab`, `data-split`): Warm-up · Open Gym · EGYM · Cardio,
   direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 8px`, zelfde 8 px als de `--paper`-ring rondom; op vraag van Tom terug van 20 px; z-index 45; ring in `--paper` + (alleen als `.stuck`) een vlak van
