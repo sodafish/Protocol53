@@ -69,17 +69,24 @@ window.p53EditVals=function(o){
     bg.querySelector('h4').textContent=o.title||'Edit';
     var pm=bg.querySelector('.cf-msg'); if(o.msg) pm.textContent=o.msg; else pm.remove();
     var box=bg.querySelector('.cf-fields');
+    /* optioneel datumveld bovenaan (o.date = 'jjjj-mm-dd'); resultaat krijgt dan .date (op vraag van Tom, 10 okt) */
+    var din=null; if(o.date){ var dl=document.createElement('label'); dl.className='cf-f cf-date';
+      dl.innerHTML='<span>Date</span><span class="cf-in"><input type="date" autocomplete="off"></span>'; din=dl.querySelector('input');
+      var td=new Date(), mx=td.getFullYear()+'-'+('0'+(td.getMonth()+1)).slice(-2)+'-'+('0'+td.getDate()).slice(-2);
+      din.value=o.date; din.max=mx>o.date?mx:o.date; box.appendChild(dl); }
     (o.fields||[]).forEach(function(f){ var l=document.createElement('label'); l.className='cf-f';
+      if(din&&!f.label) f=Object.assign({},f,{label:f.unit==='kg'?'Weight':'Value'});
       l.innerHTML='<span></span><span class="cf-in"><input type="text" inputmode="decimal" autocomplete="off"><i></i></span>';
       l.querySelector('span').textContent=f.label||''; if(!f.label) l.querySelector('span').remove();
       var inp=l.querySelector('input'); inp.value=String(f.value==null?'':f.value).replace('.',','); l.querySelector('i').textContent=f.unit||''; box.appendChild(l); });
     document.body.appendChild(bg); requestAnimationFrame(function(){ bg.classList.add('on'); });
-    var first=bg.querySelector('input'); if(first){ first.focus({preventScroll:true}); first.select(); }
+    var first=bg.querySelector('input:not([type=date])'); if(first){ first.focus({preventScroll:true}); first.select(); }
     function done(v){ document.removeEventListener('keydown',key,true); bg.classList.remove('on'); setTimeout(function(){ bg.remove(); },200); if(last&&last.focus) last.focus({preventScroll:true}); res(v); }
     function key(e){ if(e.key==='Escape'){ e.stopPropagation(); done(null); } }
     document.addEventListener('keydown',key,true);
     bg.querySelector('form').addEventListener('submit',function(e){ e.preventDefault(); var out=[], bad=null;
-      bg.querySelectorAll('input').forEach(function(i){ var m=String(i.value).replace(',','.').match(/\d+(?:\.\d+)?/); if(!m&&!bad) bad=i; out.push(m?parseFloat(m[0]):null); });
+      bg.querySelectorAll('input:not([type=date])').forEach(function(i){ var m=String(i.value).replace(',','.').match(/\d+(?:\.\d+)?/); if(!m&&!bad) bad=i; out.push(m?parseFloat(m[0]):null); });
+      if(din){ if(!/^\d{4}-\d{2}-\d{2}$/.test(din.value)||din.value>din.max){ if(!bad) bad=din; } else out.date=din.value; }
       if(bad){ bad.focus(); bad.classList.add('need'); return; } done(out); });
     bg.querySelector('.cf-no').addEventListener('click',function(){ done(null); });
     bg.addEventListener('click',function(e){ if(e.target===bg) done(null); });
@@ -1473,7 +1480,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .cf-in input{flex:1;min-width:0;font:600 20px 'Work Sans',system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.6rem .8rem;text-align:right;}
 .cf-in input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
 .cf-in input.need{border-color:var(--accent);}
-.cf-range .cf-in input{text-align:left;font-size:17px;min-height:48px;-webkit-appearance:none;appearance:none;}
+.cf-range .cf-in input,.cf-date .cf-in input{text-align:left;font-size:17px;min-height:48px;-webkit-appearance:none;appearance:none;}
 .cf-all{appearance:none;border:0;background:none;color:var(--accent);font:600 13.5px 'Work Sans',system-ui,sans-serif;padding:.5rem 0 .9rem;cursor:pointer;}
 /* periode bovenaan Progress (op vraag van Tom, 9 okt): datum van – tot + potlood */
 .pr-range{display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:40px;border-bottom:1px solid var(--line);margin:0 0 .7rem;} /* zelfde afstand als de regel eronder op Balance: Front/Back staat even hoog als het lampje */
@@ -3179,8 +3186,13 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   }
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
   /* waarde van een bestaande meting aanpassen (veeg naar rechts → Edit, kalender en edit-blad) */
-  window.__progSetVals=function(ids,vals){ ids.forEach(function(id,i){ var e=prog[id], v=vals[i]; if(!e||typeof v!=='number'||isNaN(v)) return; e.v=v; prog[id]=e; if(progCol) progCol.doc(id).set(e).catch(function(){}); });
-    saveProgLocal(); renderProg(); if(window.__syncFromChart) try{ window.__syncFromChart(); }catch(_){} };
+  /* met d ('jjjj-mm-dd', andere dag): meting verhuist naar die dag (nieuw id met de nieuwe datum, zelfde uur en workout; oud id weg) */
+  window.__progSetVals=function(ids,vals,d){ var moved={}; ids.forEach(function(id,i){ var e=prog[id], v=vals[i]; if(!e||typeof v!=='number'||isNaN(v)) return; e.v=v;
+      if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&d!==e.d){ var p=d.split('-'), o=new Date(e.t), nt=new Date(+p[0],+p[1]-1,+p[2],o.getHours(),o.getMinutes(),o.getSeconds()).getTime();
+        var nid=e.w==='m'?e.k+'@'+d+'@m':sessId(e.k,d,e.w); if(prog[nid]) nid+='~'+Date.now().toString(36); /* bestaat er al een meting met dat id: niet overschrijven */
+        e=Object.assign({},e,{d:d,t:nt}); delete prog[id]; if(progCol) progCol.doc(id).delete().catch(function(){}); id=nid; }
+      moved[ids[i]]=id; prog[id]=e; if(progCol) progCol.doc(id).set(e).catch(function(){}); });
+    saveProgLocal(); renderProg(); if(window.__syncFromChart) try{ window.__syncFromChart(); }catch(_){} return moved; };
   /* metingen wissen van buitenaf (kalender: veeg om te verwijderen); zelfde regels als het vuilbakje in het edit-blad */
   window.__progDelIds=function(ids){ ids.forEach(function(id){ var e=prog[id]; if(!e) return; progDel(id);
       var _i=document.querySelector('#s-d3 .exr-in[data-note="'+e.k+'"]'), _li=_i&&_i.closest('.exr');
@@ -3218,7 +3230,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var cur=document.querySelector('#s-d3 .exr-in[data-note="'+D.k+'"]'); if(cur&&!f.v.value&&numOf(cur.value)!=null) f.v.value=cur.value; /* waarde uit het veld als voorstel */
       f.v.focus(); }); });
     if(!body.__sw&&window.p53Swipe){ body.__sw=1; window.p53Swipe(body,function(b){ peDelBtn(b); },function(b){ var e=prog[b.dataset.id]; if(!e) return; var D2=peData();
-      p53EditVals({title:'Edit '+D2.name,msg:DAGEN[new Date(e.t).getDay()]+' '+dLab(e.t)+' '+new Date(e.t).getFullYear(),fields:[{value:fmtV(e.v),unit:D2.unit}]}).then(function(v){ if(v) { window.__progSetVals([b.dataset.id],v); renderSheet(true); } }); }); }
+      p53EditVals({title:'Edit '+D2.name,date:e.d,fields:[{value:fmtV(e.v),unit:D2.unit}]}).then(function(v){ if(v) { window.__progSetVals([b.dataset.id],v,v.date); renderSheet(true); } }); }); }
     function peDelBtn(b){ (function(){
       if(b.dataset.gap){ var dd=b.dataset.id.split('@').pop(); if(window.__histDropDayAll) window.__histDropDayAll(b.dataset.gap,dd); renderProg(); renderSheet(true); try{ document.dispatchEvent(new Event('p53-prog')); }catch(_e){} return; }
       var e=prog[b.dataset.id]; if(!e) return;
@@ -4751,7 +4763,9 @@ window.__congrats=function(o){
       it.ks.forEach(function(k){ var id=(it.ids||[]).filter(function(x){ return P[x]&&P[x].k===k; })[0]; if(!id) return; ids.push(id);
         var inp=it.li.querySelector('.exr-in[data-note="'+k+'"]'); fields.push({label:it.ks.length>1?((inp&&inp.getAttribute('aria-label'))||'').replace(/\s+—.*$/,''):'',value:P[id].v,unit:it.f[k].u}); });
       if(!ids.length) return;
-      p53EditVals({title:'Edit '+it.name,msg:calBox.dataset.dl||'',fields:fields}).then(function(v){ if(v&&window.__progSetVals) window.__progSetVals(ids,v); }); });
+      p53EditVals({title:'Edit '+it.name,date:sel,fields:fields}).then(function(v){ if(!v||!window.__progSetVals) return;
+        if(v.date&&v.date!==sel){ var q=v.date.split('-'); sel=v.date; ym={y:+q[0],m:+q[1]-1}; } /* andere datum: kalender springt mee naar die dag */
+        window.__progSetVals(ids,v,v.date); }); });
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){

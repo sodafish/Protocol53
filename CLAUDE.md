@@ -191,6 +191,9 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   niet bij cardio, lichter) · gemeten waarde (supersets 'a / b'). Rechts naast de datum staat subtiel 'Swipe to edit or delete' (`.cx-hint`). Veeg naar RECHTS = donkere Edit-knop links (`.cx-edit`, zelfde mechaniek, 10 px
   naast de rij) → `p53EditVals({title,msg,fields})` (klein venster, één veld per invulveld, supersets twee) → `window.__progSetVals(ids,vals)` past de
   meting(en) in `prog` aan (zelfde id, dus overal mee; op vraag van Tom, 9 okt). Ook in het edit-blad van de grafiek (behalve 'No value'-rijen).
+  Het venster heeft bovenaan ook een datumveld (`p53EditVals({date})` → resultaat `.date`, max vandaag; het waardeveld heet dan 'Weight'/'Value'),
+  `__progSetVals(ids,vals,d)` verhuist de meting bij een andere dag: nieuw id met de nieuwe datum (zelfde uur en `w`, oud id gewist, bij botsing
+  achtervoegsel `~…`); de kalender springt mee naar die dag (op vraag van Tom, 10 okt).
   Reps in de rij kort gehouden: enkel het stuk met cijfers ('2 rounds × 10–15'). Veeg naar links op een rij (`.cx-row`, pointer events; de knop `.cx-del` (88 px) zit ín de rij, 10 px rechts ernaast (`right:-98px`), en schuift mee in; open = rij −98 px) = rode Delete-knop (tekst wit in licht, `--paper` = donker in dark mode); naam mag afbreken (`min-width:0`) zodat de rechtse tekst nooit over de rand/onder Delete loopt
   (`.cx-del`) → tik = meteen wissen (geen extra bevestiging, op vraag van Tom) → `window.__progDelIds(ids)` wist de metingen in `prog` (de hoofdbron; zelfde regels als het vuilbakje, ook het vinkje
   van de lopende workout) (op vraag van Tom, 9 okt). Geen duur of sessiebeheer meer in de kalender (`sess` wordt wel nog bewaard).
