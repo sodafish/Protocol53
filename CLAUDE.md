@@ -79,6 +79,11 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   Leeftijd herberekend bij laden en bij terugkeren naar de app.
 - Calorieën, geslacht, lengte en gewicht zijn op vraag van Tom weer weggehaald (niet opnieuw toevoegen zonder vraag).
 
+## Guide
+- Onderaan Guide (na Sleep) staat 'How Statistics works' (op vraag van Tom, 10 okt): twee korte secties Muscle Balance en Strength Progress
+  (zelfde stijl als Intensity: `.section-title sub` + `.section-note` + `.tip ul`). Pas die tekst mee aan als de berekening (MUSCLES-gewichten,
+  periodes, `SUG_MIN`, `chainPct`) verandert.
+
 ## Diet
 - Diet en Guide: de eerste kaders beginnen op dezelfde hoogte als de tabs op Workout/Statistics (115 px op 375 px; `#p-voeding,#p-kracht{padding-top:.6rem}`, eerste marges 0; op vraag van Tom).
 - Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom). Alle frequentie-pillen zijn gevuld (groen/goud/rood met tekst in `--paper`, dus ook leesbaar in donker; op vraag van Tom).
