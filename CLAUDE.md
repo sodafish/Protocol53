@@ -336,6 +336,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px, icoon Material Symbols 'sticky_note_2' (vroeger sd_card_alert) outlined FILL 0 · wght 400 · GRAD 0 · opsz 24 (SVG van fonts.gstatic.com), 24 px, op vraag van Tom). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet ook 'End workout' (confirm 'End workout?')
   en staat op elke pagina, ook op Workout (9 okt).
+- Uit Chest verwijderd (geen Gym visual-video; op vraag van Tom, 10 okt): Low-to-High Cable Fly, Plyo Push-Ups, Dumbbell Floor Press, Decline Dumbbell Press (rijen + POP.g2).
 - Uit Quads verwijderd (geen video; op vraag van Tom, 10 okt): Hack Squat Machine, Barbell Front Squat, Pistol Squat, Sissy Squat, Bodyweight Split Squat (rijen + POP.g1; MUSCLES/RISK/NAMES blijven voor oude data).
 - Uit de warm-up verwijderd (op vraag van Tom, 10 okt): World’s Greatest Stretch, Cat-Cow Stretch, Hip Circles, Inchworm, Arm Circles (rijen + POP.g0; LET OP bij bewerken van de POP-regel: `.split(' ')` heeft een spatie, nooit globaal " '" vervangen; oude sleutels in cfg worden genegeerd; NAMES/EX/VID-restjes onschadelijk).
 - WARM-UP IS GEEN EIGEN TAB MEER (op vraag van Tom, 10 okt): tabs = Open Gym · Cardio · eGym (volgorde op vraag van Tom, 10 okt; ook in Settings › Open the app on). De warm-up (g0) staat bovenaan Open Gym én eGym
