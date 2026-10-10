@@ -336,7 +336,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px, icoon Material Symbols 'sticky_note_2' (vroeger sd_card_alert) outlined FILL 0 · wght 400 · GRAD 0 · opsz 24 (SVG van fonts.gstatic.com), 24 px, op vraag van Tom). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet ook 'End workout' (confirm 'End workout?')
   en staat op elke pagina, ook op Workout (9 okt).
-- Uit de warm-up verwijderd (op vraag van Tom, 10 okt): World’s Greatest Stretch, Cat-Cow Stretch, Hip Circles, Inchworm, Arm Circles (rijen + POP.g0; oude sleutels in cfg worden genegeerd; NAMES/EX/VID-restjes onschadelijk).
+- Uit de warm-up verwijderd (op vraag van Tom, 10 okt): World’s Greatest Stretch, Cat-Cow Stretch, Hip Circles, Inchworm, Arm Circles (rijen + POP.g0; LET OP bij bewerken van de POP-regel: `.split(' ')` heeft een spatie, nooit globaal " '" vervangen; oude sleutels in cfg worden genegeerd; NAMES/EX/VID-restjes onschadelijk).
 - WARM-UP IS GEEN EIGEN TAB MEER (op vraag van Tom, 10 okt): tabs = Open Gym · Cardio · eGym (volgorde op vraag van Tom, 10 okt; ook in Settings › Open the app on). De warm-up (g0) staat bovenaan Open Gym én eGym
   (`SPLIT.full`/`SPLIT.egym` beginnen met g0; niet bij Cardio), met een gewone groepskop 'Warm-up' + potlood (zelfde stijl als 'Quads'); ook de eGym-kop
   is nu een gewone groepskop (Cardio houdt de kleine tussenkop). Niet inklappen als ze af is (bewust, op vraag van Tom). Ook geen doorstrepen meer: een warm-up-oefening afvinken streept de andere niet door en de kop wordt niet 'af' (`paintChecks`, alleen eGym g10 kan nog `grp-done` krijgen). Een bewaarde keuze 'warmup'
@@ -387,10 +387,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   alleen zichtbaar bij de keuze EGYM (`data-split="egym"`). Rijen `eg-…` met invulveld kg en schermnaam 'EGYM …' (zoals in de EGYM-app; uniek in NAMES).
   Standaard aan (Toms circuit, volgorde in POP = volgorde van het circuit): Rotary Torso (2 × 6), Lat Pulldown, Leg Press, Abdominal Crunch,
   Seated Row, Leg Extension, Triceps Press, Back Extension, Chest Press (2 × 15); uit: Leg Curl, Shoulder Press, Butterfly, Butterfly Reverse,
-  Biceps Curl, Hip Abduction, Hip Adduction, Glute, Squat. Elk met MUSCLES (telt dus in Coverage), eigen EX-uitleg (`eg…`, + 'Enter the weight the
+  Biceps Curl, Hip Abduction, Hip Adduction, Glute, Squat, Hip Thrust, Calf Raise. Elk met MUSCLES (telt dus in Coverage), eigen EX-uitleg (`eg…`, + 'Enter the weight the
   EGYM screen shows.') en beelden van het vergelijkbare toestel via alias (VID/ANIM/IMG van bv. widepulldown, legpress, chestmachine; script bij `SSL`);
   Eigen EGYM-beelden van Tom (`EGI`, `img/egym/<naam>.jpg`, 640 px op wit, één beeld met bewegingspijl, bron 'Image: EGYM', klasse `.sheet-eg`)
-  winnen van video/animatie/foto's; voor 14 toestellen (niet voor Butterfly, Butterfly Reverse, Biceps Curl, Squat: die houden de alias). Circuit-logica (`paintChecks`): niets doorstrepen, kop pas af als alle actieve oefeningen gedaan zijn.
+  winnen van video/animatie/foto's; voor alle toestellen (10 okt: ook Butterfly `fly`, Butterfly Reverse `revfly`, Biceps Curl `curl`, Squat `squat`). Nieuw (10 okt, standaard uit, beeld van Tom): eGym Hip Thrust (`eg-hip-thrust`, EX `eghipthrust`, bil/ham) en eGym Calf Raise (`eg-calf`, EX `egcalf`, kuit). Circuit-logica (`paintChecks`): niets doorstrepen, kop pas af als alle actieve oefeningen gedaan zijn.
   Mixen kan: EGYM afvinken, dan de dropdown op Full body zetten en losse oefeningen afvinken in dezelfde workout. Kalender (`prog()`): enkel g10 =
   'EGYM', g10 + andere krachtgroepen = 'EGYM + Open Gym' (of Upper/Lower). De kalender noemt een gemengde krachtworkout 'Open Gym' (vroeger 'Full body').
 
