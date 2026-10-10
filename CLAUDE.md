@@ -147,7 +147,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   beschikbare (`eff`) zonder de keuze te overschrijven.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
-- Tabnamen (op vraag van Tom, 10 okt): **Muscle Balance** · **Strength Progress** · **History** (vroeger Balance · Progress · Calendar; ook de `::before`-titels op tablet en de verborgen kop `h2.prog-t`). Intern blijft `body`/`prog`/`cal`.
+- Tabnamen (op vraag van Tom, 10 okt): **Balance** · **Strength** · **History** (13u59: korter, vroeger Muscle Balance · Strength Progress; ook de Guide-koppen onder 'How Statistics works') (vroeger Balance · Progress · Calendar; ook de `::before`-titels op tablet en de verborgen kop `h2.prog-t`). Intern blijft `body`/`prog`/`cal`.
 - Tabs bovenaan Statistics/Results (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout), volgorde (9 okt) **Balance** (eerst; schermnaam 'Balance', vroeger 'Muscle Balance') · **Progress** (vroeger 'Strength Progress') (`#plist` + lege melding `#plEmpty`, `data-sv=prog`) ·
   Muscle Balance (vroeger 'Balance'/'Muscles'; knoppen `#stabs>button` breedte volgens tekst, 13.5 px; periode + figuur + spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`). Stop workout (met vinkjes) → Balance, bovenaan.
 - Actieve tab in `#wtabs`/`#stabs`: pil in `--paper-soft` (zelfde kleur als de achtergrond van de Front/Back-schakelaar `.bal-seg`; op vraag van Tom, 10 okt; vroeger `--ink` 9%) met accenttekst (variant A; zwart/wit en volle terracotta (D) geprobeerd en teruggedraaid op vraag van Tom).
@@ -336,7 +336,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px, icoon Material Symbols 'sticky_note_2' (vroeger sd_card_alert) outlined FILL 0 · wght 400 · GRAD 0 · opsz 24 (SVG van fonts.gstatic.com), 24 px, op vraag van Tom). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet ook 'End workout' (confirm 'End workout?')
   en staat op elke pagina, ook op Workout (9 okt).
-- WARM-UP IS GEEN EIGEN TAB MEER (op vraag van Tom, 10 okt): tabs = Open Gym · eGym · Cardio. De warm-up (g0) staat bovenaan Open Gym én eGym
+- WARM-UP IS GEEN EIGEN TAB MEER (op vraag van Tom, 10 okt): tabs = Open Gym · Cardio · eGym (volgorde op vraag van Tom, 10 okt; ook in Settings › Open the app on). De warm-up (g0) staat bovenaan Open Gym én eGym
   (`SPLIT.full`/`SPLIT.egym` beginnen met g0; niet bij Cardio), met een gewone groepskop 'Warm-up' + potlood (zelfde stijl als 'Quads'); ook de eGym-kop
   is nu een gewone groepskop (Cardio houdt de kleine tussenkop). Niet inklappen als ze af is (bewust, op vraag van Tom). Ook geen doorstrepen meer: een warm-up-oefening afvinken streept de andere niet door en de kop wordt niet 'af' (`paintChecks`, alleen eGym g10 kan nog `grp-done` krijgen). Een bewaarde keuze 'warmup'
   (fitlog-split of p53-start) wordt Open Gym / 'Where I left off'. De oude g0-regels (kop hoogte 0, zwevend potlood, `.first-sub`) zijn weg uit de CSS;
