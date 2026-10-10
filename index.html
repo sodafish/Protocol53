@@ -4877,6 +4877,8 @@ window.__congrats=function(o){
      'Earlier'/'Later' of vegen = 6 maanden verder; tik op een maand = kalender springt erheen. Lopende maand gearceerd ('so far'). */
   var MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], winEnd=null, monFirst=null;
   function mi(y,m){ return y*12+m; }
+  /* cardio in uren, afgerond op een half uur (op vraag van Tom, 10 okt): ½ · 3½ · 12; groot getal onder het uur in minuten */
+  function hr(min){ var q=Math.round(min/30)/2, w=Math.floor(q); return q===0?(min>0?'<½':'0'):(w?String(w):'')+(q>w?'½':''); }
   function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'); if(!box||!sc) return;
     var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; return; } box.hidden=false;
     var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), f=keys[0].split('-'); monFirst=mi(+f[0],+f[1]-1);
@@ -4885,14 +4887,14 @@ window.__congrats=function(o){
     if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
     winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
     var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; });
-    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||{d:0,s:0,c:0}; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c)}); }
-    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||{d:0,s:0,c:0}; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c)}; }
+    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||{d:0,s:0,c:0}; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c),h:hr(a.c)}); }
+    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||{d:0,s:0,c:0}; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c)}; } sel.h=hr(sel.c);
     var run=selI===nowI, when=run?'so far in '+MON[sel.m]:'in '+MON[sel.m]+(sel.y!==cur.getFullYear()?' '+sel.y:'');
     function lab(r,j){ return MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); }
-    sc.innerHTML=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets'],['Cardio','c','min']].map(function(t){ var k=t[1], mx=1;
-      L.forEach(function(r){ mx=Math.max(mx,r[k]); });
-      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+sel[k]+'<small>'+t[2]+' '+when+'</small></b></div><div class="mon-row">'+
-        L.map(function(r){ var v=r[k]; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(v?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+v+' '+t[0].toLowerCase()+'"><span>'+v+'</span><i style="height:'+(v?Math.max(3,Math.round(46*v/mx)):0)+'px"></i></button>'; }).join('')+
+    sc.innerHTML=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets'],['Cardio','h',sel.c&&sel.c<60?'min':'h']].map(function(t){ var k=t[1], mx=1;
+      L.forEach(function(r){ mx=Math.max(mx,k==='h'?r.c/60:r[k]); });
+      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(k==='h'&&sel.c&&sel.c<60?sel.c:sel[k])+'<small>'+t[2]+' '+when+'</small></b></div><div class="mon-row">'+
+        L.map(function(r){ var v=r[k], vl=v; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(r[k==='h'?'c':k]?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+(k==='h'?r.c+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+vl+'</span><i style="height:'+(r[k==='h'?'c':k]?Math.max(3,Math.round(46*(k==='h'?r.c/60:v)/mx)):0)+'px"></i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true">'+L.map(function(r,j){ return '<button type="button" tabindex="-1" class="'+(r.i===selI?'sel':'')+'" data-i="'+r.i+'">'+lab(r,j)+'</button>'; }).join('')+'</div></div>'; }).join('');
     sc.querySelectorAll('[data-i]').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
     var a=L[0], z=L[5]; document.getElementById('monRange').textContent=MS[a.m]+(a.y!==z.y?' '+a.y:'')+' – '+MS[z.m]+' '+z.y;
@@ -4918,7 +4920,7 @@ window.__congrats=function(o){
       html+='<button type="button" class="cal-d'+(on?' on':'')+(fut?' fut':'')+(key===today?' today':'')+'" data-d="'+key+'"'+(on?'':' tabindex="-1"')+' aria-label="'+d+' '+MON[m]+(on?', workout':'')+'"><span>'+d+'</span><i></i></button>';
     }
     grid.innerHTML=html;
-    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' training day':' training days')+' · '+amount(msets,mmin):'No workouts';
+    document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' training day':' training days')+' · '+amount(msets,mmin).replace(/(\d+) min cardio/,function(x,n){ return +n>=60?hr(+n)+' h cardio':x; }):'No workouts'; /* maandtotaal cardio in uren vanaf 60 min */
     var cur=new Date(); document.querySelector('.cal-nav[data-m="1"]').disabled=(y===cur.getFullYear()&&m===cur.getMonth());
     if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
     grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
