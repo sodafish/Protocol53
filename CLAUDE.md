@@ -199,7 +199,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   Training days · Sets · Cardio (in uren en minuten: '40m', '1h 20m', '7h 35m', '2h' (op vraag van Tom korter dan 'min'); `hr(min)`; op vraag van Tom, 10 okt; vroeger even per half uur;
   lange waarden breken boven de staaf op de spatie; groot getal met kleine eenheden `small.u`; ook het maandtotaal boven de kalender, de dagen blijven '40 min'); kop = label links + groot getal (Fraunces 24) van de GEKOZEN kalendermaand ('… so far in October' voor de
   lopende maand, anders 'in September'). 6 maanden naast elkaar (venster `winEnd`), staafjes in inkt 20% op papier, gekozen maand accent,
-  lopende maand gearceerd (`.run`). Ruimte: kop → grafiek klein (.15rem, rij 62 px), tussen de grafieken groot (2.6rem), zodat de kop zichtbaar bij de grafiek eronder hoort (op vraag van Tom). Navigatie: kalenderpijltjes (venster schuift mee als de maand erbuiten valt), tik op een staaf/maand = kalender
+  lopende maand gearceerd (`.run`). Ruimte: kop → grafiek .7rem (op vraag van Tom iets meer dan eerst .15rem; rij 62 px), tussen de grafieken groot (2.6rem), zodat de kop zichtbaar bij de grafiek eronder hoort (op vraag van Tom). Navigatie: kalenderpijltjes (venster schuift mee als de maand erbuiten valt), tik op een staaf/maand = kalender
   springt erheen, 'Earlier'/'Later' onderaan (`#monPrev`/`#monNext`) of horizontaal vegen = 6 maanden verder (kalender springt naar de laatste maand
   van het venster); niet vóór de eerste trainingsmaand, niet voorbij deze maand. Geen data = verborgen.
 - Kalender onderaan Coverage (`#cal`, kop 'Calendar' (vroeger 'Workouts'), eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
