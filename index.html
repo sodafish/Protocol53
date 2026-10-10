@@ -1114,6 +1114,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-c span{font-size:10.5px;color:var(--muted);margin-bottom:3px;font-variant-numeric:tabular-nums;line-height:1;}
 .mon-c i{display:block;width:70%;border-radius:4px 4px 0 0;background:color-mix(in srgb,var(--ink) 20%,var(--paper));transition:height .25s ease;}
 .mon-c.z span{opacity:.45;}
+.mon-c i{position:relative;overflow:hidden;}
+.mon-c i b{position:absolute;left:0;right:0;bottom:0;background:var(--gold);opacity:.6;} /* eGym-deel van de staaf */
+.mon-c.sel i b{opacity:1;}
+.mon-key{margin:-.35rem 0 .7rem;font-size:12px;color:var(--muted);text-align:right;} /* enkel als er eGym in beeld is (op vraag van Tom) */
+.mon-key i{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--gold);margin-right:.3rem;vertical-align:0;}
 .mon-c.sel i{background:var(--accent);} .mon-c.sel span{color:var(--accent);font-weight:600;}
 .mon-c.run i{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* lopende maand: gearceerd */
 .mon-mo{padding-top:.4rem;}
@@ -4857,7 +4862,7 @@ window.__congrats=function(o){
       if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||''}; (it.ids=it.ids||[]).push(id); } /* oefeningenlijst onder de dag */
       if(o.ex[ek]) return; o.ex[ek]=1;
       if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
-      else o.sets+=window.__setsFor?(+window.__setsFor(k,li)||0):3; });
+      else{ var sv=window.__setsFor?(+window.__setsFor(k,li)||0):3; o.sets+=sv; if(li&&li.dataset.grp==='g10') o.egs=(o.egs||0)+sv; } }); /* egs = sets van eGym (maandoverzicht) */
     return days;
   }
   /* programma per workout, afgeleid uit de groepen met een meting: enkel cardio = Cardio; enkel g2/g4/g5/g7 = Upper body;
@@ -4889,15 +4894,18 @@ window.__congrats=function(o){
     if(winEnd==null) winEnd=nowI;
     if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
     winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
-    var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; });
-    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||{d:0,s:0,c:0}; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c),h:hr(a.c)}); }
-    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||{d:0,s:0,c:0}; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c)}; } sel.h=hr(sel.c);
+    var Z={d:0,s:0,c:0,ed:0,es:0};
+    var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0,ed:0,es:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; a.es+=o.egs||0;
+      if(Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })) a.ed++; }); /* eGym-dagen en -sets (op vraag van Tom: enkel zichtbaar als er eGym was) */
+    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||Z; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c),h:hr(a.c),ed:a.ed,es:a.es}); }
+    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||Z; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c),ed:a0.ed,es:a0.es}; } sel.h=hr(sel.c);
     var run=selI===nowI, when=run?'so far in '+MON[sel.m]:'in '+MON[sel.m]+(sel.y!==cur.getFullYear()?' '+sel.y:'');
     function lab(r,j){ return MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); }
+    var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||sel.ed>0;
     sc.innerHTML=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets'],['Cardio','h','']].map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ mx=Math.max(mx,k==='h'?r.c/60:r[k]); });
-      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(k==='h'?sel.h.replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):sel[k])+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div><div class="mon-row">'+
-        L.map(function(r){ var v=r[k], vl=v; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(r[k==='h'?'c':k]?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+(k==='h'?r.c+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+vl+'</span><i style="height:'+(r[k==='h'?'c':k]?Math.max(3,Math.round(46*(k==='h'?r.c/60:v)/mx)):0)+'px"></i></button>'; }).join('')+
+      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(k==='h'?sel.h.replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):sel[k])+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+sel[EGK[k]]+' '+(k==='d'?(sel[EGK[k]]===1?'day':'days'):(sel[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row">'+
+        L.map(function(r){ var v=r[k], vl=v; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(r[k==='h'?'c':k]?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+(k==='h'?r.c+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+vl+'</span><i style="height:'+(r[k==='h'?'c':k]?Math.max(3,Math.round(46*(k==='h'?r.c/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true">'+L.map(function(r,j){ return '<button type="button" tabindex="-1" class="'+(r.i===selI?'sel':'')+'" data-i="'+r.i+'">'+lab(r,j)+'</button>'; }).join('')+'</div></div>'; }).join('');
     sc.querySelectorAll('[data-i]').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
     var a=L[0], z=L[5]; document.getElementById('monRange').textContent=MS[a.m]+(a.y!==z.y?' '+a.y:'')+' – '+MS[z.m]+' '+z.y;
