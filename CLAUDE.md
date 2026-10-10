@@ -369,6 +369,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   OUTDOOR / INDOOR (op vraag van Tom, 10 okt): tussenkoppen in g8 via `SUBS.g8` + `cat` (Outdoor = c-walk, c-walkjog, c-jog, c-bike, c-padel (Padel naar Outdoor op vraag van Tom, 10 okt); de rest Indoor). Walking (`c-walk`) = buiten, Cycling (`c-bike`) = buiten (geen beeld meer, enkel tekst; hun loopband-/hometrainerbeelden gingen naar de
   nieuwe binnenvarianten Treadmill Walk (`c-treadwalk`, EX `ctreadwalk`) en Exercise Bike (`c-xbike`, EX `cxbike`), beide standaard uit; GIF's gekopieerd).
   Oude metingen van c-walk/c-bike blijven onder Walking/Cycling staan.
+  Outdoor-cardio (Walking, Walk-Jog Outdoors, Jogging, Cycling, Padel) toont GEEN beelden in het uitlegblad, enkel tekst (op vraag van Tom, 10 okt; de trail-foto's zijn uit IMG gehaald, bestanden blijven staan).
   uit: Incline Walk (`c-incline`), Stairmaster (`c-stairs`), Recumbent Bike (`c-recumbent`). Labels '· impact' / '· outdoors' via `.exr-eqp`.
   Eigen namen (uniek t.o.v. de warm-up!) met EX-uitleg (zone 2) en foto's (`cwalk`… in NAMES/EX/IMG; nieuw: trail, jogtread, recumbent).
   Werkt als kracht: afvinken (getal verplicht) = meting per workout, oog-knop = uitleg + grafiek + edit, timer/End, N×.
