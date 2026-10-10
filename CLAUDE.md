@@ -358,8 +358,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   rijen met sleutels `c-…` en een invulveld in minuten (`placeholder="min"`, data-note = sleutel): standaard aan Walking (`c-walk`,
   foto's walking = loopband), Walk-Jog Outdoors (`c-walkjog`), Jogging (`c-jog`, 'Easy pace · 20–45 min · impact', foto's = die van walk-jog; op vraag van Tom; bestaande cardiokeuzes krijgen het erbij via `migrate()`, vlag `jg`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`),
   Cycling (`c-bike`), Padel (`c-padel`, 'Intervals · 60–90 min', geen foto's: het uitlegblad toont dan enkel tekst + tip);
-  OUTDOOR / INDOOR (op vraag van Tom, 10 okt): tussenkoppen in g8 via `SUBS.g8` + `cat` (Outdoor = c-walk, c-walkjog, c-jog, c-bike; de rest Indoor,
-  ook Padel). Walking (`c-walk`) = buiten, Cycling (`c-bike`) = buiten (geen beeld meer, enkel tekst; hun loopband-/hometrainerbeelden gingen naar de
+  OUTDOOR / INDOOR (op vraag van Tom, 10 okt): tussenkoppen in g8 via `SUBS.g8` + `cat` (Outdoor = c-walk, c-walkjog, c-jog, c-bike, c-padel (Padel naar Outdoor op vraag van Tom, 10 okt); de rest Indoor). Walking (`c-walk`) = buiten, Cycling (`c-bike`) = buiten (geen beeld meer, enkel tekst; hun loopband-/hometrainerbeelden gingen naar de
   nieuwe binnenvarianten Treadmill Walk (`c-treadwalk`, EX `ctreadwalk`) en Exercise Bike (`c-xbike`, EX `cxbike`), beide standaard uit; GIF's gekopieerd).
   Oude metingen van c-walk/c-bike blijven onder Walking/Cycling staan.
   uit: Incline Walk (`c-incline`), Stairmaster (`c-stairs`), Recumbent Bike (`c-recumbent`). Labels '· impact' / '· outdoors' via `.exr-eqp`.
