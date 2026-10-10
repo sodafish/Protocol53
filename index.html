@@ -1242,7 +1242,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 @media (max-width:350px){.wtabs button{font-size:13px;}}
 @media (max-width:350px){ .note-jump{width:42px;height:42px;} }
 .note-jump svg{color:var(--accent);}
-.wo-end{position:fixed;z-index:61;right:16px;bottom:calc(10px + 64px + 12px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:.5rem;
+.wo-end{position:fixed;z-index:61;right:16px;bottom:calc(var(--nav-b) + 64px + 12px);display:inline-flex;align-items:center;gap:.5rem;
   min-height:48px;padding:0 1.15rem 0 1rem;border:0;border-radius:999px;background:var(--ink);color:var(--paper);cursor:pointer;
   font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 20px rgba(0,0,0,.18);
   -webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .25s ease;}
@@ -1253,7 +1253,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .wo-end-t:empty{display:none;}
 #s-d3 .reset-chk.reset-top[aria-disabled="true"]{opacity:.35;pointer-events:none;}
 body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
-.gnav{position:fixed;z-index:60;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:10px;
+:root{--nav-b:max(10px,calc(env(safe-area-inset-bottom,0px) - 12px));} /* navbar lager: zakt in de veilige zone, net boven de iPhone-streep (op vraag van Tom, 10 okt; vroeger 10 px + volle veilige zone) */
+.gnav{position:fixed;z-index:60;left:0;right:0;bottom:var(--nav-b);display:flex;align-items:center;justify-content:center;gap:10px;
   padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;}
 .gnav>*{pointer-events:auto;}
 .gnav-pill{display:flex;flex:1;max-width:440px;height:64px;padding:5px;border-radius:32px;gap:4px;}
