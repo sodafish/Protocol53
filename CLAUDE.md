@@ -419,6 +419,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   Nieuwe oefening: foto's (Free Exercise DB) + zo mogelijk een animatie toevoegen (sleutel in de `ANIM`-lijst + bestand in img/anim).
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
+- Geen herhalingsbereiken meer (op vraag van Tom, 10 okt): elke oefening heeft één doel (8, 10, 12 of 15; zwaarste 8, meeste 10/12, kleine spieren en isolatie 15; warm-up idem één getal). Omzetting: 6–10/8–10/5–8… → 8, 8–12 → 10, 10–12/10–15/8–15 → 12, 12–15/12–20/15–20/10–20 → 15 (Goblet Squat en Incline DB Press → 10). Tijd blijft een bereik (plank-sec, cardio-min, bird dog-hold). Guide › Intensity herschreven: vast doel, verhogen als alle sets het doel halen met ~2 in reserve. Eigen sets/reps van Tom in cfg/sets blijven voorrang hebben. Nieuwe oefening: één getal, geen bereik.
 - Sets & reps per oefening: in het keuzeblad een rond knopje met icoon '123' (Material Symbols, inline SVG 24 px, viewBox bijgesneden tot `120 -840 720 720`, glyph verticaal gecentreerd) (`.gs-set`; standaard lichter, aangepast = gewone tint, zoals de i-knop) opent
   `#set-sheet` (bovenop, klasse `.top`) met stepper Sets (0–10, 0 = geen 'N ×') en tekstveld 'Reps or time', voorbeeld
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
