@@ -920,6 +920,8 @@ textarea.sess-note::placeholder{color:var(--muted-soft);}
 
 #p53-login{position:fixed;inset:0;z-index:200;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px));}
 #p53-login[hidden]{display:none;}
+#p53-login label[hidden],#p53-login button[hidden]{display:none;} /* anders toont display:flex het verborgen veld toch */
+#p53-login .lg-forgot{margin-top:-.6rem;font-size:13.5px;}
 #p53-login .lg-card{width:100%;max-width:380px;display:flex;flex-direction:column;gap:.9rem;}
 #p53-login h1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:40px;line-height:1;margin:0 0 .2rem;color:var(--ink);}
 #p53-login h1 em{color:var(--accent);font-weight:500;}
@@ -1116,7 +1118,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pf-f{display:flex;flex-direction:column;gap:.4rem;}
 .pf-form input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;min-height:48px;width:100%;box-sizing:border-box;-webkit-appearance:none;}
 .pf-form input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
-#dobMsg:empty{display:none;}
+#dobMsg:empty,#pwMsg:empty{display:none;}
 .st-page{margin-top:0;}
 /* instellingen-knop rechtsboven in de kop + blad #st-sheet (op vraag van Tom, 10 okt) */
 .hd-set{margin-left:auto;align-self:center;flex:none;width:36px;height:36px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -2194,6 +2196,13 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </form>
     </div>
     <div class="st-sec">
+      <form class="pf-form" id="pwForm" novalidate>
+      <label class="set-lab pf-f">New password<input type="password" id="pwIn" autocomplete="new-password" minlength="6" placeholder="At least 6 characters"></label>
+      <p class="gs-msg" id="pwMsg" role="status"></p>
+      <div class="set-act"><span></span><button type="submit" class="set-save">Change password</button></div>
+      </form>
+    </div>
+    <div class="st-sec">
       <p class="set-lab">Your data</p>
       <p class="st-note st-user" id="stUser"></p>
       <p class="st-note">Your data is in your own database and saved across all your devices. Make a backup now and then, for example once a month.</p>
@@ -2219,6 +2228,13 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   var ss=document.getElementById('stStart');
   if(ss){ try{ ss.value=localStorage.getItem('p53-start')||''; }catch(e){}
     ss.addEventListener('change',function(){ try{ if(ss.value) localStorage.setItem('p53-start',ss.value); else localStorage.removeItem('p53-start'); }catch(e){} }); }
+  var pf=document.getElementById('pwForm'), pin=document.getElementById('pwIn'), pm=document.getElementById('pwMsg'), pt=null;
+  if(pf) pf.addEventListener('submit',function(e){ e.preventDefault(); var v=pin.value; pm.classList.remove('ok'); clearTimeout(pt);
+    if(v.length<6){ pm.textContent='Use at least 6 characters.'; pin.focus(); return; }
+    if(!window.p53ChangePw){ pm.textContent='Not available right now.'; return; }
+    pm.textContent='Saving…';
+    window.p53ChangePw(v).then(function(){ pin.value=''; pin.blur(); pm.textContent='Password changed.'; pm.classList.add('ok'); pt=setTimeout(function(){ pm.textContent=''; pm.classList.remove('ok'); },3000); },
+      function(err){ pm.textContent=err&&err.message==='offline'?'You’re offline. Try again once you’re online.':/different/i.test(err&&err.message||'')?'Choose a password you haven’t used before.':(err&&err.message)||'Something went wrong.'; }); });
   window.__p53settings=show;
   btn.addEventListener('click',function(){ if(window.__p53profileOpen) window.__p53profileOpen(); else show(); });
   bg.addEventListener('click',hide); sh.querySelector('.sheet-x').addEventListener('click',hide);
