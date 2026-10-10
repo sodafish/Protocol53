@@ -323,6 +323,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   is nu een gewone groepskop (Cardio houdt de kleine tussenkop). Niet inklappen als ze af is (bewust, op vraag van Tom). Een bewaarde keuze 'warmup'
   (fitlog-split of p53-start) wordt Open Gym / 'Where I left off'. De oude g0-regels (kop hoogte 0, zwevend potlood, `.first-sub`) zijn weg uit de CSS;
   wat hieronder over de Warm-up-tab staat, is de oude werking.
+- Nummering van de groepskoppen (op vraag van Tom, 10 okt; enkel de getallen op het scherm, sleutels g0–g10 blijven): Open Gym = 1 Warm-up, 2 Quads,
+  3 Chest, 4 Hamstrings…, 5 Back, 6 Shoulders, 7 Core, 8 Arms; eGym = 1 Warm-up, 2 eGym; Cardio = 1 Cardio. Alle koppen hebben dezelfde stijl (getal +
+  titel + potlood); de Cardio-kop krijgt in cardiomodus dezelfde padding-top als de eerste kop (1.8rem), zodat lijn en potlood op elke tab even hoog staan.
+  Waar in deze notities nog 'groep 1 Quads' e.d. staat, gaat het over de sleutel (g1), niet over het getal op het scherm.
 - Keuze via tabs (op vraag van Tom, vervangt de dropdown): `#wtabs` (pil met 4 knoppen `role=tab`, `data-split`): Warm-up · Open Gym · EGYM · Cardio,
   direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 8px`, zelfde 8 px als de `--paper`-ring rondom; op vraag van Tom terug van 20 px; z-index 45; ring in `--paper` + (alleen als `.stuck`) een vlak van
   20 px erboven zodat er niets door schemert — niet altijd, anders bedekt het de onderkant van 'Start workout'; klasse `.stuck` = schaduw). Actieve tab: zelfde pil als de actieve navbar-knop (`--ink` 9% + accentkleur, 600). Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open
