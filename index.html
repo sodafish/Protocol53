@@ -15,7 +15,7 @@
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#1B1411':v==='light'?'#F7F2EA':(i?'#1B1411':'#F7F2EA')); }); };
   if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
-  try{ var st=localStorage.getItem('p53-start'); if(st&&/^(warmup|full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
+  try{ var st=localStorage.getItem('p53-start'); if(st&&/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -804,7 +804,6 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exr.grp-skip{opacity:.4;}
 .exsub.sub-off{opacity:.45;}
 .exgrp:has(.grp-n),.exgrp:has(.grp-edit){display:flex;align-items:baseline;gap:.6rem;}
-.exgrp[data-grp="g0"]{align-items:center;}
 .grp-n{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:34px;line-height:.9;letter-spacing:0;text-transform:none;color:var(--accent);min-width:1.1ch;}
 .exgrp.grp-done .grp-n{color:var(--muted-soft);}
 .grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
@@ -1227,17 +1226,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* groter tikvlak voor het vinkje (op vraag van Tom): onzichtbare zone rond de cirkel, tot de rand van de rij en een stuk naar rechts */
 #s-d3 .exr .chk{position:relative;}
 #s-d3 .exr .chk::after{content:"";position:absolute;top:-14px;bottom:-14px;left:-16px;right:-22px;}
-/* Warm-up, eGym en Cardio: de tab zegt het al, dus geen titel; enkel het potlood rechts (op vraag van Tom) */
-#s-d3 .exgrp:is([data-grp="g0"]) .grp-t{display:none;}
-/* eGym en Cardio: titel als kleine tussenkop, zoals 'Cardio' onder Warm-up (op vraag van Tom) */
-#s-d3 .exl .exgrp:is([data-grp="g8"],[data-grp="g10"]){justify-content:space-between;align-items:center;}
-#s-d3 .exgrp:is([data-grp="g8"],[data-grp="g10"]) .grp-t{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transform:translateY(-2px);}
-#s-d3 .exl .exgrp:is([data-grp="g0"],[data-grp="g8"],[data-grp="g10"]){justify-content:flex-end;padding-top:2.4rem;padding-bottom:.5rem;} /* zelfde hoogte als Open Gym (groep 1), zodat het potlood op elke tab op dezelfde plaats staat */
-/* warm-up: geen eigen kopregel; het potlood zweeft rechts op de regel van de eerste tussenkop (Cardio), zodat potlood én eerste lijn
-   op dezelfde plaats staan als op de andere tabs */
-#s-d3 .exl .exgrp[data-grp="g0"]{position:relative;height:0;padding:0!important;border-bottom:0;}
-#s-d3 .exl .exgrp[data-grp="g0"] .grp-edit{position:absolute;right:0;top:39px;}
-#s-d3 .exl .exsub.first-sub{padding-top:47px;padding-bottom:18px;} /* eerste ZICHTBARE tussenkop van de warm-up (ook als Cardio leeg is) */
+/* Cardio: titel als kleine tussenkop (op vraag van Tom). Warm-up en eGym: gewone groepskop, want ze staan nu onder elkaar (10 okt) */
+#s-d3 .exl .exgrp:is([data-grp="g8"]){justify-content:space-between;align-items:center;}
+#s-d3 .exgrp:is([data-grp="g8"]) .grp-t{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transform:translateY(-2px);}
+#s-d3 .exl .exgrp:is([data-grp="g8"]){justify-content:flex-end;padding-top:2.4rem;padding-bottom:.5rem;} /* zelfde hoogte als Open Gym (groep 1), zodat het potlood op elke tab op dezelfde plaats staat */
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
 .wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
@@ -1464,7 +1456,6 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gx-t small{font-size:12.5px;color:var(--muted);}
 .exgrp.split-off + .gx-empty{display:none;}
 #s-d3 .exl .exgrp.g-empty .grp-edit{visibility:hidden;}
-#s-d3 .exl .exgrp[data-grp="g0"].g-empty{height:auto;padding:1.6rem 0 .3rem!important;}
 .cx-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
 .cx-hint{font-size:12px;color:var(--muted-soft);} /* subtiele hint (op vraag van Tom) */
 .cal-ex .cx-h{padding-top:2rem;} .cal-ex > .cx-h:first-child{padding-top:2.8rem;} /* ruimte onder de datum, niet boven de lijn (op vraag van Tom) */ /* meer ruimte tussen de groepen (op vraag van Tom) */
@@ -1605,7 +1596,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </div>
     </div>
     <div class="wtabs wdock" id="wtabs">
-      <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="warmup">Warm-up</button><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="cardio">Cardio</button></div>
+      <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="cardio">Cardio</button></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
@@ -2188,7 +2179,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
-      <select id="stStart" class="st-sel"><option value="">Where I left off</option><option value="warmup">Workout · Warm-up</option><option value="full">Workout · Open Gym</option><option value="egym">Workout · eGym</option><option value="cardio">Workout · Cardio</option></select>
+      <select id="stStart" class="st-sel"><option value="">Where I left off</option><option value="full">Workout · Open Gym</option><option value="egym">Workout · eGym</option><option value="cardio">Workout · Cardio</option></select>
       <p class="st-note">Applies each time the app starts.</p>
     </div>
     <div class="st-sec">
@@ -2222,7 +2213,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
   function hide(){ if(!open) return; open=false; var a=document.activeElement; if(a&&sh.contains(a)&&a.blur) a.blur(); bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); (last&&last.focus?last:btn).focus({preventScroll:true}); }
   var ss=document.getElementById('stStart');
-  if(ss){ try{ ss.value=localStorage.getItem('p53-start')||''; }catch(e){}
+  if(ss){ try{ var sv=localStorage.getItem('p53-start')||''; if(!/^(full|egym|cardio)$/.test(sv)){ sv=''; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
     ss.addEventListener('change',function(){ try{ if(ss.value) localStorage.setItem('p53-start',ss.value); else localStorage.removeItem('p53-start'); }catch(e){} }); }
   window.__p53settings=show;
   btn.addEventListener('click',function(){ if(window.__p53profileOpen) window.__p53profileOpen(); else show(); });
@@ -4475,10 +4466,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
 /* ---- Full / Upper / Lower: verbergt groepen die je vandaag niet traint (Warm-up altijd). Keuze in localStorage fitlog-split ---- */
 (function(){
   /* Cardio = alleen groep 8 (geen warm-up); Full/Upper/Lower = nooit groep 8 */
-  var KEY='fitlog-split', LKEY='fitlog-split-last', SPLIT={warmup:['g0'],full:['g1','g2','g3','g4','g5','g6','g7'],upper:['g2','g4','g5','g7'],lower:['g1','g3','g6'],egym:['g10'],cardio:['g8']};
+  var KEY='fitlog-split', LKEY='fitlog-split-last', SPLIT={full:['g0','g1','g2','g3','g4','g5','g6','g7'],upper:['g0','g2','g4','g5','g7'],lower:['g0','g1','g3','g6'],egym:['g0','g10'],cardio:['g8']}; /* warm-up staat bovenaan Open Gym en eGym, geen eigen tab meer (op vraag van Tom, 10 okt) */
   var btn=document.getElementById('splitBtn'), pop=document.getElementById('splitPop'), lbl=document.getElementById('splitLbl'); if(!btn||!pop) return;
   var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio'};
-  var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* Upper/Lower niet meer te kiezen */
+  var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
   var tabs=document.getElementById('wtabs');
   function apply(){
     var keep=SPLIT[cur];

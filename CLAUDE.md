@@ -318,6 +318,11 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   `#noteJump` staat rechts in de balk (`.wd-note`, 38 px, icoon Material Symbols 'sticky_note_2' (vroeger sd_card_alert) outlined FILL 0 · wght 400 · GRAD 0 · opsz 24 (SVG van fonts.gstatic.com), 24 px, op vraag van Tom). De oude `.tools-row` is `hidden` (enkel nog de verborgen dropdown erin), dus de
   tabs staan nu even hoog als `#stabs` op Statistics (115 px op 375 px). De zwevende pil heet ook 'End workout' (confirm 'End workout?')
   en staat op elke pagina, ook op Workout (9 okt).
+- WARM-UP IS GEEN EIGEN TAB MEER (op vraag van Tom, 10 okt): tabs = Open Gym · eGym · Cardio. De warm-up (g0) staat bovenaan Open Gym én eGym
+  (`SPLIT.full`/`SPLIT.egym` beginnen met g0; niet bij Cardio), met een gewone groepskop 'Warm-up' + potlood (zelfde stijl als 'Quads'); ook de eGym-kop
+  is nu een gewone groepskop (Cardio houdt de kleine tussenkop). Niet inklappen als ze af is (bewust, op vraag van Tom). Een bewaarde keuze 'warmup'
+  (fitlog-split of p53-start) wordt Open Gym / 'Where I left off'. De oude g0-regels (kop hoogte 0, zwevend potlood, `.first-sub`) zijn weg uit de CSS;
+  wat hieronder over de Warm-up-tab staat, is de oude werking.
 - Keuze via tabs (op vraag van Tom, vervangt de dropdown): `#wtabs` (pil met 4 knoppen `role=tab`, `data-split`): Warm-up · Open Gym · EGYM · Cardio,
   direct onder de tools-row (Start) in `#s-d3`, `position:sticky` onder de statusbalk (`top: safe-area + 8px`, zelfde 8 px als de `--paper`-ring rondom; op vraag van Tom terug van 20 px; z-index 45; ring in `--paper` + (alleen als `.stuck`) een vlak van
   20 px erboven zodat er niets door schemert — niet altijd, anders bedekt het de onderkant van 'Start workout'; klasse `.stuck` = schaduw). Actieve tab: zelfde pil als de actieve navbar-knop (`--ink` 9% + accentkleur, 600). Upper/Lower zijn niet meer te kiezen (opgeslagen keuze → Open
