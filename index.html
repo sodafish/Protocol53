@@ -1259,6 +1259,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 20px rgba(0,0,0,.18);
   -webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .25s ease;}
 .wo-end[hidden]{display:none;}
+.wo-end.is-start{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .wo-end.is-start svg{color:var(--paper);} /* Start workout: zelfde verloop als de actieve navbar-knop */
+body:not([data-view="workout"]) .wo-end.is-start{display:none;} /* Start enkel op Workout; End op elke pagina */
 .wo-end:active{transform:scale(.96);}
 .wo-end svg{color:var(--accent);}
 .wo-end-t{font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:500;opacity:.85;}
@@ -2466,7 +2468,11 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var stp=document.getElementById('woStop'); if(stp) stp.hidden=!on;
     var dk=document.getElementById('wtabs'); if(dk) dk.classList.remove('on');
     var wg=document.getElementById('wdGo'); if(wg) wg.hidden=true; /* End workout enkel rechtsonder (op vraag van Tom) */
-    if(fl) fl.hidden=!on; document.body.classList.toggle('wo-on',on);
+    /* zwevende knop rechtsonder: vóór de workout 'Start workout' (enkel op Workout), tijdens de workout 'End workout' + tijd (op vraag van Tom, 10 okt) */
+    if(fl){ fl.hidden=false; fl.classList.toggle('is-start',!on); fl.setAttribute('aria-label',on?'End workout':'Start workout');
+      var lb=fl.querySelector('.wo-end-l'); if(lb) lb.textContent=on?'End workout':'Start workout';
+      var ic=fl.querySelector('svg'); if(ic) ic.innerHTML=on?'<rect x="5" y="5" width="14" height="14" rx="2.5"/>':'<path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.2-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/>'; }
+    document.body.classList.add('wo-on');
   }
   window.__paintWoBtns=paintWoBtns;
   setTimeout(function(){ woRun(!!woStart); paintWoBtns(); },0);
@@ -2498,6 +2504,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var woEnd=document.getElementById('woEnd'), woStop=document.getElementById('woStop');
   if(woStop&&woEnd) woStop.addEventListener('click',function(){ woEnd.click(); });
   if(woEnd) woEnd.addEventListener('click',function(){
+    if(!woActive()){ woRun(true); paintWoBtns(); return; } /* Start workout: timer loopt, knop wordt End workout */
     var dur=woStart?Math.max(1,Math.round((Date.now()-woStart)/60000)):null;
     /* niets afgevinkt: gewoon stoppen, zonder vraag en zonder vuurwerk */
     var any=false; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) any=true; });

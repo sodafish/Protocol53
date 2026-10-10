@@ -312,6 +312,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
   de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
   naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
+- START/END WORKOUT (op vraag van Tom, 10 okt): de zwevende pil rechtsonder (`#woEnd`) is er altijd. Vóór de workout = 'Start workout' (klasse `.is-start`,
+  play-icoon, terracotta-verloop zoals de actieve navbar-knop, enkel zichtbaar op Workout); tik = timer start (`woRun(true)`), geen scroll/tabwissel.
+  Tijdens de workout = 'End workout' + tijd (donker, op elke pagina), zelfde End-logica als vroeger; End zonder vinkjes → terug naar Start.
+  Een vinkje zetten start de workout ook en schakelt de knop om (`paintWoBtns`, aangeroepen vanuit `paintChecks`). Body heeft nu altijd `wo-on` (ruimte onderaan).
 - Workout-blok (op vraag van Tom, 9 okt, naar een voorbeeld met een navbar + balk eronder): `#wtabs` (klasse `.wtabs wdock`) = de tabs (`.wd-tabs`,
   role=tablist, eigen witte pil met afgeronde onderkant) + daaronder een balk `.wd-go` in één afgerond, plakkend blok. Vóór de start: balk in
   accentkleur (verloop) met 'Start workout' — WEG (op vraag van Tom, 9 okt): geen startknop meer, de timer start bij het eerste vinkje en de balk `#wdGo` (met End + notitieknop `#noteJump`) is ALTIJD `hidden`: End workout staat (op vraag van Tom, 9 okt) weer altijd als zwevende pil `#woEnd` rechtsonder, ook op Workout; de notitieknop is dus niet zichtbaar. `startTab()` bestaat nog maar wordt niet meer aangeroepen. Tijdens een workout: balk in `--ink` met
