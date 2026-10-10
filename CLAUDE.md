@@ -119,9 +119,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
 - Vier knoppen links (op vraag van Tom, 9 okt): Last Workout (`dag`; de laatste trainingsdag → totaal aantal sets), 7 Days (`week` → totaal aantal sets),
-  30 Days (`maand`) en 90 Days (`kwart`, laatste 90 dagen; 13.5 px, tussenruimte zoveel als past (op vraag van Tom, 10 okt): .85rem (375 px), 1.05rem vanaf 385 px, 1.2rem vanaf 400 px; ≤ 360 px 12.5 px/.45rem) → gemiddeld per week; rechts in dezelfde rij een ronde knop `#balEdit` (icoon Material Symbols 'edit_calendar' als inline SVG 20 px, ook op `#prEdit`; op vraag van Tom, offline-veilig i.p.v. de webfont) (`.per-edit`, accent als actief) = eigen periode
+  30 Days (`maand`, ook totaal sinds 10 okt, op vraag van Tom) en 90 Days (`kwart`, laatste 90 dagen; 13.5 px, tussenruimte zoveel als past (op vraag van Tom, 10 okt): .85rem (375 px), 1.05rem vanaf 385 px, 1.2rem vanaf 400 px; ≤ 360 px 12.5 px/.45rem) → gemiddeld per week; rechts in dezelfde rij een ronde knop `#balEdit` (icoon Material Symbols 'edit_calendar' als inline SVG 20 px, ook op `#prEdit`; op vraag van Tom, offline-veilig i.p.v. de webfont) (`.per-edit`, accent als actief) = eigen periode
   (`per='range'`, op vraag van Tom, 9 okt; Year/All zijn weg, bewaarde oude keuzes → 30d). Venster `p53EditRange` binnen de eerste/laatste training;
-  bewaard in localStorage `fitlog-stats-range` `{f,t}` (leeg = volgt eerste/laatste); `balRange(evs)`. Langer dan 7 dagen = gemiddeld per week. Tekst eronder
+  bewaard in localStorage `fitlog-stats-range` `{f,t}` (leeg = volgt eerste/laatste); `balRange(evs)`. Langer dan 30 dagen = gemiddeld per week (tot 30 dagen = totaal; op vraag van Tom, 10 okt; vroeger > 7 dagen). Tekst eronder
   '27 Sep – 9 Oct 2026, 4 training days, sets per week.'. Selectors op de periodeknoppen gebruiken `.stats-per button[data-d]` (het potlood niet).
 De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijst relatief t.o.v. de best getrainde spier.
 - Balance-figuur (`#statsFig`) = de gewone twee figuren voor/achter, kleur = sets (zoals altijd).
@@ -165,7 +165,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   enkel het groeps-% krijgt de accentkleur, altijd (ook 0%) (tussenkop en oefening niet; op vraag van Tom).  Rechts op elke rij een rond icoon (`.pl-chart`, Material Symbols 'timeline', 36 px cirkel zoals de andere icoonknoppen; vroeger een pijltje). Tik (rij of icoon) = uitlegblad met enkel de grafiek ('Your progress', geen beeld/uitleg; `window.__p53info.chart`, op vraag van Tom). Verborgen zolang er niets gemeten is. Ververst bij `p53-prog` en `p53-groups`.
 
 - **Suggestions** (op vraag van Tom, 9 okt): knop `#sugBtn` (enkel lampje-icoon in een ronde 36 px-knop, wél in accentkleur (icoon + rand 45%): er zit belangrijke info achter; op vraag van Tom, 9 okt) rechts op de regel van `#statsSub` (`.stats-subrow`) opent blad `#sug-sheet`.
-  Rekent over de laatste 4 weken (los van de gekozen periode; via `events()`, dus de metingen): sets per week per spier, gewogen (MUSCLES).
+  Rekent over de laatste 30 dagen (op vraag van Tom, 10 okt; vroeger 4 weken), omgerekend naar sets per week (los van de gekozen periode; via `events()`, dus de metingen): sets per week per spier, gewogen (MUSCLES).
   'Give more attention' = spieren onder het minimum `SUG_MIN` (grote spieren 8, zijkant/achterkant schouder, armen, buik, onderrug, kuiten 3–5;
   NIET onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee, op vraag van Tom), max. 5, laagste % eerst,
   met staafje en 'Try: …' (actieve oefeningen met die spier als hoofdspier, meest gedaan eerst) of 'Add to your list: …' (uitgezette). 'Balance' =
