@@ -1411,11 +1411,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wd-pill{display:flex;gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
 .wd-tabs{align-items:flex-end;}
 /* label boven elke pil: zachte beige band zonder rand, de pil valt over de onderkant (op vraag van Tom, 10 okt) */
-.wd-blk{display:flex;flex-direction:column;border-radius:26px;background:var(--paper-soft);}
+.wd-blk{display:flex;flex-direction:column;border-radius:26px;background:var(--line);} /* band in de kleur van de pil-rand (stylingtest Tom, 10 okt) */
 .wd-blk-str{flex:1 1 auto;min-width:0;}
 .wd-blk-card{flex:none;width:calc((100% - 36px) / 3 + 10px);} /* alle drie de tabs even breed (Open Gym, eGym, Cardio; op vraag van Tom, 10 okt) */
 .wd-card{width:100%;}
-.wd-band{display:block;height:30px;padding-top:7px;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.wd-band{display:block;height:30px;padding-top:7px;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);}
 .wd-blk .wd-pill{margin-top:-4px;} /* de pillen zelf op dezelfde hoogte als de tabs op Statistics; het label schuift erboven (op vraag van Tom, 10 okt) */
 .wtabs .wd-card button{flex:1 1 0;padding:0 .3rem;}
 .wtabs.wdock,.wtabs.wdock.on{background:var(--paper);}
