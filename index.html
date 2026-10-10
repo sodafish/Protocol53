@@ -1105,12 +1105,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-leg{display:flex;align-items:center;gap:.35rem;font-size:12px;color:var(--muted);}
 .mon-leg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-left:.3rem;}
 .mon-leg i:first-child{margin-left:0;}
-.mon .og{background:var(--accent);} .mon .eg{background:var(--gold);} .mon .cd{background:var(--green);}
-.mon-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;}
+.mon .og{background:var(--accent);} .mon .eg{background:var(--gold);} .mon .cd{background:var(--muted);} /* enkel kleuren die al in de app staan (op vraag van Tom) */
+.mon-scroll{position:relative;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-left:5.4rem;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;}
 .mon-scroll::-webkit-scrollbar{display:none;}
-.mon-g{display:grid;grid-auto-flow:column;grid-template-rows:auto auto auto auto auto;grid-auto-columns:minmax(54px,1fr);min-width:100%;}
-.mon-g>.mon-lab{position:sticky;left:0;z-index:1;background:var(--paper);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  display:flex;align-items:center;padding-right:.5rem;width:3.6rem;}
+.mon-g{display:grid;grid-auto-flow:column;grid-template-rows:auto auto auto auto auto;grid-template-columns:5.4rem;grid-auto-columns:minmax(52px,1fr);min-width:100%;}
+.mon-g>.mon-lab{position:sticky;left:0;z-index:1;background:var(--paper);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;padding-right:.4rem;width:5.4rem;white-space:nowrap;letter-spacing:.05em;}
+.mon-lab::after{content:'';position:absolute;top:0;bottom:0;right:-10px;width:10px;background:linear-gradient(90deg,var(--paper),transparent);opacity:0;transition:opacity .2s;pointer-events:none;}
+.mon-scroll.scrolled .mon-lab::after{opacity:1;}
+.mon-bars{scroll-snap-align:start;}
 .mon-c{display:contents;}
 .mon-bars{height:112px;display:flex;align-items:flex-end;justify-content:center;gap:2px;border-bottom:1px solid var(--line);padding:0 2px;}
 .mon-bar{width:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
@@ -4894,7 +4897,7 @@ window.__congrats=function(o){
     var mx=1; list.forEach(function(k){ var a=M[k]; mx=Math.max(mx,a.og,a.eg,a.cd); });
     var selK=ym.y+'-'+('0'+(ym.m+1)).slice(-2);
     function bar(v,c){ return '<span class="mon-bar'+(v?'':' z')+'"><span>'+v+'</span><i class="'+c+'" style="height:'+(v?Math.max(4,Math.round(86*v/mx)):0)+'px"></i></span>'; }
-    var h='<div class="mon-g"><span class="mon-lab" style="grid-row:1;grid-column:1"></span><span class="mon-lab" style="grid-row:2;grid-column:1"></span><span class="mon-lab" style="grid-row:3;grid-column:1">Days</span><span class="mon-lab" style="grid-row:4;grid-column:1">Sets</span><span class="mon-lab" style="grid-row:5;grid-column:1">Cardio<br>min</span>';
+    var h='<div class="mon-g"><span class="mon-lab" style="grid-row:1;grid-column:1"></span><span class="mon-lab" style="grid-row:2;grid-column:1"></span><span class="mon-lab" style="grid-row:3;grid-column:1">Days</span><span class="mon-lab" style="grid-row:4;grid-column:1">Sets</span><span class="mon-lab" style="grid-row:5;grid-column:1">Cardio min</span>';
     list.forEach(function(k,i){ var a=M[k], lab=MS[a.m]+((a.m===0||i===0)?' ’'+String(a.y).slice(2):''), sel=k===selK?' mon-sel':'', col='grid-column:'+(i+2);
       h+='<button type="button" class="mon-btn mon-bars'+sel+'" data-k="'+k+'" style="grid-row:1;'+col+'" aria-label="'+MON[a.m]+' '+a.y+': '+a.og+' Open Gym, '+a.eg+' eGym, '+a.cd+' cardio days">'+bar(a.og,'og')+bar(a.eg,'eg')+bar(a.cd,'cd')+'</button>'+
         '<button type="button" class="mon-btn mon-m'+sel+'" data-k="'+k+'" style="grid-row:2;'+col+'">'+lab+'</button>'+
@@ -4904,7 +4907,12 @@ window.__congrats=function(o){
     sc.innerHTML=h+'</div>';
     /* .mon-sel staat op de knoppen zelf; de kolomachtergrond via de staafjesknop */
     sc.querySelectorAll('.mon-btn').forEach(function(b){ b.addEventListener('click',function(){ var q=b.dataset.k.split('-'); ym={y:+q[0],m:+q[1]-1}; sel=null; render(); }); });
-    var sig=list.length+'|'+list[list.length-1]; if(sig!==monSig){ monSig=sig; sc.scrollLeft=sc.scrollWidth; } /* nieuwste maand rechts in beeld */
+    /* eerste keer: nieuwste maand rechts in beeld; daarna (ook via de pijltjes van de kalender) de gekozen maand in beeld houden */
+    var sig=list.length+'|'+list[list.length-1]; if(sig!==monSig){ monSig=sig; sc.scrollLeft=sc.scrollWidth; }
+    else{ var cb=sc.querySelector('.mon-bars.mon-sel'); if(cb){ var lw=sc.querySelector('.mon-lab').offsetWidth, l=cb.offsetLeft-lw, r=cb.offsetLeft+cb.offsetWidth-sc.clientWidth;
+      if(sc.scrollLeft>l) sc.scrollLeft=l; else if(sc.scrollLeft<r) sc.scrollLeft=r; } }
+    sc.classList.toggle('scrolled',sc.scrollLeft>2);
+    if(!sc.__mon){ sc.__mon=1; sc.addEventListener('scroll',function(){ sc.classList.toggle('scrolled',sc.scrollLeft>2); },{passive:true}); }
   }
   function render(){
     var days=data(); renderMon(days); var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());

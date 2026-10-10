@@ -196,8 +196,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   + duur · oefeningen; tik of 4,5 s = weg. Geen geluid (op vraag van Tom weggehaald). Bij reduced motion zonder vuurwerk.
 - Maandoverzicht bovenaan History (op vraag van Tom, 10 okt): `#calMon` (`.mon`, titel 'Per month' + legende), `renderMon(days)` in het kalenderscript
   (zelfde dagdata als de kalender). Per maand (eerste maand met data → deze maand, horizontaal scrollbaar, nieuwste rechts, kolom ≥ 54 px, sticky
-  rijlabels links): drie staafjes = dagen Open Gym (g1–g7, accent) · eGym (g10, `--gold`) · Cardio (g8 of minuten, `--green`), getal erboven;
+  rijlabels links): drie staafjes = dagen Open Gym (g1–g7, accent) · eGym (g10, `--gold`) · Cardio (g8 of minuten, `--muted`; geen groen: enkel kleuren die al in de app staan, op vraag van Tom), getal erboven;
   rijen Days (trainingsdagen) · Sets · Cardio min. Tik op een maand = kalender springt erheen (gekozen maand in accent). Geen data = verborgen.
+  Rijlabel 'Cardio min' op één regel (labelkolom 5.4rem, `grid-template-columns`). ±5 maanden in beeld op 375 px; vegen opzij, scroll-snap (proximity),
+  zachte vervaging rechts van de labels zodra er links meer is (`.scrolled`); de pijltjes van de kalender houden de gekozen maand in beeld.
 - Kalender onderaan Coverage (`#cal`, kop 'Calendar' (vroeger 'Workouts'), eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
