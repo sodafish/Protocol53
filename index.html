@@ -1280,7 +1280,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .wtabs.stuck{box-shadow:0 0 0 8px var(--paper),0 -20px 0 8px var(--paper),0 10px 22px -10px rgba(0,0,0,.28);}
 .wtabs button{appearance:none;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;flex:1 1 0;min-width:0;min-height:44px;padding:0 .3rem;border:0;border-radius:999px;
   background:transparent;color:var(--muted);font:500 14.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .12s ease;}
-.wtabs button[aria-selected="true"]{background:var(--paper-soft);color:var(--accent);font-weight:600;} /* zelfde pil als de actieve navbar-knop */
+.wtabs button[aria-selected="true"]{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));color:var(--paper);font-weight:600;} /* actieve tab bovenaan = stijl van de vroegere actieve navbar-knop (test Tom, 10 okt) */ /* zelfde pil als de actieve navbar-knop */
 .wtabs button:active{transform:scale(.97);}
 .wtabs button:focus-visible{outline:2.5px solid var(--accent);outline-offset:-2px;}
 @media (max-width:350px){.wtabs button{font-size:13px;}}
@@ -1306,7 +1306,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gnav-pill{display:flex;flex:1;max-width:440px;height:64px;padding:5px;border-radius:32px;gap:4px;}
 .gnav-i{flex:1;appearance:none;border:none;cursor:pointer;border-radius:27px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font:600 11px 'Work Sans',system-ui,sans-serif;letter-spacing:.02em;-webkit-tap-highlight-color:transparent;transition:background-color .25s ease,color .25s ease,transform .12s ease;}
-.gnav-i[aria-selected="true"]{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));color:var(--paper);} /* zelfde stijl als de Start workout-balk (op vraag van Tom) */
+.gnav-i[aria-selected="true"]{background:var(--ink);color:var(--paper);} /* navbar actief = zwart (wit in donker) (test Tom, 10 okt) */ /* zelfde stijl als de Start workout-balk (op vraag van Tom) */
 .gnav-i:active{transform:scale(.96);}
 .gnav-more{flex:none;width:64px;height:64px;border-radius:50%;appearance:none;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,color .2s ease;}
 .gnav-more.on{color:var(--accent);}
@@ -1444,7 +1444,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .pill-ind{position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:999px;background:var(--paper-soft); /* zelfde kleur als de Front/Back-schakelaar (op vraag van Tom, 10 okt) */
   transition:transform .34s cubic-bezier(.3,.7,.2,1),width .34s cubic-bezier(.3,.7,.2,1),height .34s cubic-bezier(.3,.7,.2,1);}
 .pill-ind.no-anim{transition:none;}
-.gnav-pill>.pill-ind{border-radius:27px;background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));}
+.gnav-pill>.pill-ind{border-radius:27px;background:var(--ink);}
+.wtabs .pill-ind{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} /* Workout- en Statistics-tabs: actieve pil in accentverloop */
 .has-ind>button{position:relative;z-index:1;}
 .has-ind>button[aria-selected="true"]{background:transparent!important;}
 @media (prefers-reduced-motion:reduce){.pill-ind{transition:none;}}
