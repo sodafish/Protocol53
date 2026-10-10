@@ -1131,6 +1131,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .st-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);}
 .st-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .st-user:empty{display:none;}
+.st-body .app-tools{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;} /* knoppen samen over de volle breedte: Export bovenaan, Log out + Reset ernaast (op vraag van Tom, 10 okt) */
+.st-body .app-tools button{width:100%;padding-left:.6rem;padding-right:.6rem;}
+.st-body .app-tools button:first-child{grid-column:1 / -1;}
 .st-sel{font:400 16px 'Work Sans',system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem 2.4rem .7rem .9rem;min-height:48px;width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;}
 .st-sel:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
