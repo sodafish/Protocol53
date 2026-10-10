@@ -1014,10 +1014,13 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 .stats-fig.bal .draw .bal-ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:balLn .7s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:var(--d);}
 .stats-fig.bal .draw .bal-dot{transform-box:fill-box;transform-origin:center;animation:balPop .35s ease backwards;animation-delay:var(--d);}
 .stats-fig.bal .draw .bal-tx{animation:balFd .45s ease backwards;animation-delay:calc(var(--d) + .4s);}
+.stats-fig.bal .predraw .bal-ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);} /* vóór het intekenen al in de beginstand, anders flitst de volle figuur even (op vraag van Tom, 10 okt) */
+.stats-fig.bal .predraw .bal-dot{transform-box:fill-box;transform-origin:center;transform:scale(0);}
+.stats-fig.bal .predraw .bal-tx{opacity:0;}
 @keyframes balLn{to{stroke-dashoffset:0;}}
 @keyframes balPop{from{transform:scale(0);}}
 @keyframes balFd{from{opacity:0;}}
-@media (prefers-reduced-motion:reduce){.stats-fig.bal .draw .bal-ln,.stats-fig.bal .draw .bal-dot,.stats-fig.bal .draw .bal-tx{animation:none;stroke-dashoffset:0;}}
+@media (prefers-reduced-motion:reduce){.stats-fig.bal .predraw .bal-ln,.stats-fig.bal .predraw .bal-dot,.stats-fig.bal .predraw .bal-tx{transform:none;opacity:1;stroke-dashoffset:0;} .stats-fig.bal .draw .bal-ln,.stats-fig.bal .draw .bal-dot,.stats-fig.bal .draw .bal-tx{animation:none;stroke-dashoffset:0;}}
 .stats>.sv>.stats-per button[aria-disabled="true"]{opacity:.35;cursor:default;}
 .stats-list{list-style:none;margin:2.6rem 0 0;padding:0;}
 .stats-list li{display:grid;grid-template-columns:10.6rem 1fr 2.4rem;align-items:center;gap:.7rem;padding:.42rem 0;border-bottom:1px solid var(--line-soft);font-size:14px;}
@@ -2190,7 +2193,6 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
       <p class="st-note">Your age shows after Protocol.</p>
       <p class="gs-msg" id="dobMsg" role="status"></p>
-      <div class="set-act"><span></span><button type="submit" id="dobSave" class="set-save">Save</button></div>
       </form>
     </div>
     <div class="st-sec">
@@ -3126,7 +3128,11 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.s!==cur) show(b.dataset.s,true); }); });
     show(cur,false);
     /* lijntjes tekenen zich in bij het openen van Balance */
-    window.__balDraw=function(){ fig.querySelectorAll('figure[data-side]').forEach(function(f){ if(!f.offsetParent) return; f.classList.remove('draw'); void f.offsetWidth; f.classList.add('draw'); clearTimeout(f._t); f._t=setTimeout(function(){ f.classList.remove('draw'); },2000); }); };
+    window.__balPre=function(){ fig.querySelectorAll('figure[data-side]').forEach(function(f){ if(f.classList.contains('draw')) return; f.classList.add('predraw'); clearTimeout(f._p); f._p=setTimeout(function(){ f.classList.remove('predraw'); },1500); }); }; /* veiligheid: nooit blijvend verborgen */
+    var bdTry=0;
+    window.__balDraw=function(){ var vis=[].some.call(fig.querySelectorAll('figure[data-side]'),function(f){ return !!f.offsetParent; });
+      if(!vis){ if(bdTry++<20) setTimeout(window.__balDraw,40); return; } bdTry=0; /* pagina nog niet zichtbaar (wisselen duurt even): opnieuw proberen */
+      fig.querySelectorAll('figure[data-side]').forEach(function(f){ if(!f.offsetParent) return; f.classList.remove('predraw'); f.classList.remove('draw'); void f.offsetWidth; f.classList.add('draw'); clearTimeout(f._t); f._t=setTimeout(function(){ f.classList.remove('draw'); },2000); }); };
   })();
   renderStats();
   /* ---- Kracht: subtabs Training / Statistieken ---- */
@@ -4238,7 +4244,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     view=v;
     items.forEach(function(b){ b.setAttribute('aria-selected',b.dataset.view===v?'true':'false'); });
     if(title) title.textContent=NAMES[v]||'';
-    if(v==='progress'&&document.body.dataset.view!=='progress'&&window.__balDraw) setTimeout(window.__balDraw,60); /* lijntjes intekenen bij openen */
+    if(v==='progress'&&document.body.dataset.view!=='progress'&&window.__balDraw){ if(window.__balPre) window.__balPre(); setTimeout(window.__balDraw,60); } /* lijntjes intekenen bij openen */
     document.body.dataset.view=v;
   }
   /* terug naar Workout = verder waar je was (scrollpositie onthouden); andere pagina's beginnen bovenaan */
@@ -4545,11 +4551,14 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   window.__p53profileOpen=openSheet;
   if(btn) btn.addEventListener('click',openSheet);
   var form=document.getElementById('pfForm');
-  if(form) form.addEventListener('submit',function(e){ e.preventDefault();
-      var v=inp.value; msg.classList.remove('ok');
-      if(age(v)==null){ msg.textContent='Enter a valid date of birth.'; inp.focus(); return; }
-      dob=v; store(true); inp.blur(); msg.textContent='Saved.'; msg.classList.add('ok');
-      clearTimeout(mt); mt=setTimeout(function(){ msg.textContent=''; msg.classList.remove('ok'); },2500); });
+  /* automatisch bewaren zodra de datum gekozen is, geen Save-knop meer (op vraag van Tom, 10 okt) */
+  function saveDob(){ var v=inp.value; msg.classList.remove('ok');
+      if(!v||v===dob) return;
+      if(age(v)==null){ msg.textContent='Enter a valid date of birth.'; return; }
+      dob=v; store(true); msg.textContent='Saved.'; msg.classList.add('ok');
+      clearTimeout(mt); mt=setTimeout(function(){ msg.textContent=''; msg.classList.remove('ok'); },2500); }
+  if(inp){ inp.addEventListener('change',saveDob); inp.addEventListener('blur',saveDob); }
+  if(form) form.addEventListener('submit',function(e){ e.preventDefault(); saveDob(); inp.blur(); });
   /* uit de aanmelding: wat nog ontbreekt aanvullen */
   function fromUser(u){ var m=u&&u.user_metadata; if(!m||!got) return; if(m.dob&&!dob){ dob=m.dob; store(true); } }
   paint();
@@ -4649,7 +4658,7 @@ window.__congrats=function(o){
   var KEY='fitlog-stats-view', cur='body'; try{ cur=localStorage.getItem(KEY)||'body'; }catch(e){} if(!/^(body|cal|prog)$/.test(cur)) cur='body';
   function apply(){ tabs.querySelectorAll('[data-sv]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.sv===cur?'true':'false'); });
     document.querySelectorAll('#s-stats .sv').forEach(function(x){ x.hidden=x.dataset.sv!==cur; }); }
-  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} apply(); if(v==='prog'&&window.__balDraw) setTimeout(window.__balDraw,30); }
+  function set(v){ cur=v; try{ localStorage.setItem(KEY,v); }catch(e){} if(v==='prog'&&window.__balPre) window.__balPre(); apply(); if(v==='prog'&&window.__balDraw) window.__balDraw(); }
   window.__statsView=function(v){ set(v); };
   function keep(wasStuck){ var pane=tabs.parentElement, h=document.documentElement;
     if(!wasStuck){ pane.style.minHeight=''; return; }

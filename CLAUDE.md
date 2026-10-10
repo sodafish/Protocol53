@@ -69,7 +69,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   andere icoonknoppen, Material Symbols 'settings' inline SVG 20 px) rechts op de regel van 'Protocol 53' in de kop → onderblad `#st-sheet`/`#st-bg`
   (inhoud `.st-body#settings`; script vlak voor `#woEnd`, `window.__p53settings()` opent het). Inhoud: Appearance (`.st-seg`: System · Light · Dark,
   standaard System; per toestel in localStorage `p53-theme`, niet in de database; script in `<head>` zet `data-theme` op `<html>` vóór het tekenen
-  en past de `theme-color`-meta's aan, `window.__p53theme(v)`; de CSS kende `[data-theme]` al), dan geboortedatum `#dobIn` + Save (melding 'Saved.' in `#dobMsg.ok`, 2,5 s),
+  en past de `theme-color`-meta's aan, `window.__p53theme(v)`; de CSS kende `[data-theme]` al), dan geboortedatum `#dobIn`, automatisch bewaard bij `change`/`blur` (geen Save-knop meer, op vraag van Tom, 10 okt; melding 'Saved.' in `#dobMsg.ok`, 2,5 s),
   dan 'Open the app on' (`#stStart`, select: Where I left off (standaard) · Workout · Warm-up/Open Gym/eGym/Cardio; per toestel in localStorage `p53-start`;
   het `<head>`-script zet bij elke start `fitlog-where`={v:'workout',y:0} en `fitlog-split` vóór de andere scripts ze lezen; op vraag van Tom, 10 okt),
   dan 'Your data' (`.st-sec`) met 'Signed in as e-mail' (`#stUser`, uit `__p53user`), Export backup, Log out en Reset data (`#resetData`).
@@ -134,6 +134,8 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   van een oefening (ooit) telt niet (leereffect; eerst twee, op vraag van Tom één), een stap telt als ze EINDIGT in de periode (vertrek mag ervoor liggen = vooruitgang sinds de laatste meting vóór de periode; 9 okt, na kritische controle); per week (ma–zo, `weekKey`) per oefening de som van haar log-stapjes, dan het
   gemiddelde over de oefeningen van die week; weken vermenigvuldigd. Wisselen van oefening breekt het getal dus niet. Een oefening telt pas mee vanaf 3 metingen. Achteruitgang (lager gewicht) telt negatief mee.
   Lijntjes tekenen zich in (`.draw`, `window.__balDraw`) bij openen van Statistics/Progress en bij wisselen van kant.
+  Geen flits meer bij openen (op vraag van Tom, 10 okt): `window.__balPre()` zet vóór het tonen klasse `.predraw` (lijnen/bolletjes/tekst al in de beginstand,
+  na 1,5 s vanzelf weg als veiligheid); `__balDraw` tekent synchroon bij wisselen van tab en probeert tot 20× om de 40 ms opnieuw zolang de pagina nog niet zichtbaar is.
 - Periodes zonder data uitgegrijsd (op vraag van Tom, 9 okt; `aria-disabled`, 35%, klik doet niets): Last workout altijd, Week vanaf de eerste meting,
   30d als de oudste meting > 7 dagen terug ligt, 90d > 30 dagen; potlood uit zolang er geen data is. Staat de bewaarde keuze uit, dan toont `renderStats` de langste
   beschikbare (`eff`) zonder de keuze te overschrijven.
