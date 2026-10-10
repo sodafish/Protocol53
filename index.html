@@ -1058,7 +1058,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   display:flex;align-items:center;justify-content:center;background:transparent;color:var(--muted);}
 /* potlood hoger: even ver boven de lijn als het lampje/Front-Back eronder (11 px, op vraag van Tom); 'translate' laat de druk-schaal (transform) vrij */
 .stats>.sv>.stats-per .per-edit,.pr-range .pr-edit{translate:0 -8.7px;}
-.stats>.sv>.stats-per .per-edit.on{border-color:var(--accent);color:var(--accent);}
+.stats>.sv>.stats-per .per-edit.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--accent);} /* zelfde rand als het lampje (op vraag van Tom, 10 okt) */
 .stats>.sv>.stats-per .per-edit:disabled{opacity:.35;cursor:default;}
 @media (max-width:360px){.stats>.sv>.stats-per button[data-d]{font-size:12.5px;} .stats>.sv>.stats-per{gap:.45rem;}}
 @media (max-width:340px){.stats>.sv>.stats-per button[data-d]{font-size:11.5px;} .stats>.sv>.stats-per{gap:.3rem;}}
@@ -1489,7 +1489,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .pr-range p{margin:0;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
 .pr-range p small{font-size:13px;font-weight:500;color:var(--muted-soft);}
 .pr-edit{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:2px;}
-.pr-edit.on{border-color:var(--accent);color:var(--accent);} /* eigen periode actief (ook op Progress) */
+.pr-edit.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--accent);} /* eigen periode actief (ook op Progress) */
 .pr-edit:active{background:var(--paper-soft);transform:scale(.95);}
 .pr-edit[hidden]{display:none;}
 .cf-in i{font-style:normal;font-size:14px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;min-width:2.2em;}
@@ -2852,7 +2852,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var f=prR.f&&prR.f>b.min&&prR.f<=b.max?prR.f:b.min, t=prR.t&&prR.t<b.max&&prR.t>=f?prR.t:b.max;
     return {from:new Date(f+'T00:00:00').getTime(),to:new Date(t+'T23:59:59.999').getTime(),f:f,t:t,b:b,all:f===b.min&&t===b.max}; };
   function prLabel(){ var el=document.getElementById('prRange'), btn=document.getElementById('prEdit'); if(!el) return; var r=window.__progRange();
-    if(!r.b){ el.innerHTML='<small>No measurements yet</small>'; if(btn){ btn.hidden=true; btn.classList.remove('on'); } return; } if(btn){ btn.hidden=false; btn.classList.toggle('on',!r.all); }
+    if(!r.b){ el.innerHTML='<small>No measurements yet</small>'; if(btn){ btn.hidden=true; btn.classList.remove('on'); } return; } if(btn){ btn.hidden=false; btn.classList.toggle('on',!r.all||!!prR.set); } /* oranje na elke keuze in het venster, ook 'all data' (op vraag van Tom, 10 okt) */
     function lab(d,y){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+(y?' '+x.getFullYear():''); }
     var sameY=r.f.slice(0,4)===r.t.slice(0,4);
     el.innerHTML=(r.f===r.t?lab(r.t,true):lab(r.f,!sameY)+' – '+lab(r.t,true))+(r.all?' <small>· all data</small>':''); }
@@ -2860,7 +2860,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   (function(){ var btn=document.getElementById('prEdit'); if(!btn) return;
     btn.addEventListener('click',function(){ var r=window.__progRange(); if(!r.b) return;
       p53EditRange({title:'Progress period',msg:'You have measurements from '+dLabel(r.b.min)+' to '+dLabel(r.b.max)+'.',min:r.b.min,max:r.b.max,from:r.f,to:r.t}).then(function(v){ if(!v) return;
-        prR=v==='all'?{}:{f:v.from===r.b.min?null:v.from,t:v.to===r.b.max?null:v.to};
+        prR=v==='all'?{set:1}:{f:v.from===r.b.min?null:v.from,t:v.to===r.b.max?null:v.to,set:1};
         try{ localStorage.setItem(PRKEY,JSON.stringify(prR)); }catch(e){}
         renderStats(); try{ document.dispatchEvent(new Event('p53-prange')); }catch(e){} if(window.__balDraw) window.__balDraw(); }); }); })();
   function renderStats(){ setTimeout(paintCounts,0); if(window.__renderCal) setTimeout(window.__renderCal,0);
