@@ -1098,6 +1098,32 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pl-v em{display:block;font-style:normal;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:.1rem;}
 .pl-v.up b,.pl-v.up>span{color:var(--accent);} /* groot getal = toename in % (op vraag van Tom) */
 .pl-chev{flex:none;color:var(--muted-soft);}
+/* maandoverzicht bovenaan History (op vraag van Tom, 10 okt) */
+.mon{margin:0 0 2.6rem;}
+.mon-top{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:0 0 .9rem;}
+.mon-top b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
+.mon-leg{display:flex;align-items:center;gap:.35rem;font-size:12px;color:var(--muted);}
+.mon-leg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-left:.3rem;}
+.mon-leg i:first-child{margin-left:0;}
+.mon .og{background:var(--accent);} .mon .eg{background:var(--gold);} .mon .cd{background:var(--green);}
+.mon-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;}
+.mon-scroll::-webkit-scrollbar{display:none;}
+.mon-g{display:grid;grid-auto-flow:column;grid-template-rows:auto auto auto auto auto;grid-auto-columns:minmax(54px,1fr);min-width:100%;}
+.mon-g>.mon-lab{position:sticky;left:0;z-index:1;background:var(--paper);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;padding-right:.5rem;width:3.6rem;}
+.mon-c{display:contents;}
+.mon-bars{height:112px;display:flex;align-items:flex-end;justify-content:center;gap:2px;border-bottom:1px solid var(--line);padding:0 2px;}
+.mon-bar{width:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.mon-bar i{display:block;width:100%;border-radius:3px 3px 0 0;min-height:0;}
+.mon-bar span{font-size:10px;font-variant-numeric:tabular-nums;color:var(--muted);line-height:1;margin-bottom:3px;}
+.mon-bar.z span{color:var(--muted-soft);opacity:.6;}
+.mon-m{text-align:center;font-size:12.5px;color:var(--muted);padding:.45rem 0 .5rem;white-space:nowrap;}
+.mon-v{text-align:center;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;padding:.42rem 0;border-top:1px solid var(--line-soft);}
+.mon-v.z{color:var(--muted-soft);font-weight:400;}
+.mon-btn{appearance:none;border:0;background:transparent;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.mon-m.mon-sel{color:var(--accent);font-weight:600;}
+.mon-bars.mon-sel{background:color-mix(in srgb,var(--ink) 4%,transparent);border-radius:8px 8px 0 0;}
+.mon-note{margin:.8rem 0 0;font-size:12.5px;color:var(--muted-soft);}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
 .cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
 .cal-title b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
@@ -1857,6 +1883,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </div>
       <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">History</h2>
+        <div class="mon" id="calMon" hidden>
+          <div class="mon-top"><b>Per month</b><span class="mon-leg"><i class="og"></i>Open Gym<i class="eg"></i>eGym<i class="cd"></i>Cardio</span></div>
+          <div class="mon-scroll" id="calMonS"></div>
+          <p class="mon-note">Bars show training days per type. Tap a month to open it below.</p>
+        </div>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
           <div class="cal-title"><b id="calMonth"></b><span id="calSum"></span></div>
           <button type="button" class="cal-nav" data-m="1" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
@@ -4847,8 +4878,36 @@ window.__congrats=function(o){
   function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&n!=='Cardio'&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
   /* '17 sets + 20 min cardio' (plus als er kracht én cardio was) */
   function amount(st,mn){ return [st?st+(st===1?' set':' sets'):'',mn?Math.round(mn)+' min cardio':''].filter(Boolean).join(' + '); }
+  /* maandoverzicht (op vraag van Tom, 10 okt): per maand dagen Open Gym / eGym / Cardio (staafjes), trainingsdagen, sets, cardiominuten.
+     Bron = dezelfde dagdata als de kalender. Tik op een maand = kalender springt naar die maand. */
+  var MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], monSig='';
+  function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'); if(!box||!sc) return;
+    var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; return; } box.hidden=false;
+    var M={}, f=keys[0].split('-'), y=+f[0], m=+f[1]-1, cur=new Date(), list=[];
+    while(y<cur.getFullYear()||(y===cur.getFullYear()&&m<=cur.getMonth())){ var k=y+'-'+('0'+(m+1)).slice(-2); M[k]={y:y,m:m,og:0,eg:0,cd:0,days:0,sets:0,min:0}; list.push(k); if(++m>11){ m=0; y++; } }
+    keys.forEach(function(d){ var o=days[d], a=M[d.slice(0,7)]; if(!a) return; var gs={};
+      Object.keys(o.ws).forEach(function(w){ Object.keys(o.ws[w]).forEach(function(g){ gs[g]=1; }); });
+      a.days++; a.sets+=o.sets; a.min+=o.min;
+      if(Object.keys(gs).some(function(g){ return /^g[1-7]$/.test(g); })) a.og++;
+      if(gs.g10) a.eg++;
+      if(gs.g8||o.min>0) a.cd++; });
+    var mx=1; list.forEach(function(k){ var a=M[k]; mx=Math.max(mx,a.og,a.eg,a.cd); });
+    var selK=ym.y+'-'+('0'+(ym.m+1)).slice(-2);
+    function bar(v,c){ return '<span class="mon-bar'+(v?'':' z')+'"><span>'+v+'</span><i class="'+c+'" style="height:'+(v?Math.max(4,Math.round(86*v/mx)):0)+'px"></i></span>'; }
+    var h='<div class="mon-g"><span class="mon-lab" style="grid-row:1;grid-column:1"></span><span class="mon-lab" style="grid-row:2;grid-column:1"></span><span class="mon-lab" style="grid-row:3;grid-column:1">Days</span><span class="mon-lab" style="grid-row:4;grid-column:1">Sets</span><span class="mon-lab" style="grid-row:5;grid-column:1">Cardio<br>min</span>';
+    list.forEach(function(k,i){ var a=M[k], lab=MS[a.m]+((a.m===0||i===0)?' ’'+String(a.y).slice(2):''), sel=k===selK?' mon-sel':'', col='grid-column:'+(i+2);
+      h+='<button type="button" class="mon-btn mon-bars'+sel+'" data-k="'+k+'" style="grid-row:1;'+col+'" aria-label="'+MON[a.m]+' '+a.y+': '+a.og+' Open Gym, '+a.eg+' eGym, '+a.cd+' cardio days">'+bar(a.og,'og')+bar(a.eg,'eg')+bar(a.cd,'cd')+'</button>'+
+        '<button type="button" class="mon-btn mon-m'+sel+'" data-k="'+k+'" style="grid-row:2;'+col+'">'+lab+'</button>'+
+        '<span class="mon-v'+(a.days?'':' z')+'" style="grid-row:3;'+col+'">'+a.days+'</span>'+
+        '<span class="mon-v'+(a.sets?'':' z')+'" style="grid-row:4;'+col+'">'+a.sets+'</span>'+
+        '<span class="mon-v'+(a.min?'':' z')+'" style="grid-row:5;'+col+'">'+Math.round(a.min)+'</span>'; });
+    sc.innerHTML=h+'</div>';
+    /* .mon-sel staat op de knoppen zelf; de kolomachtergrond via de staafjesknop */
+    sc.querySelectorAll('.mon-btn').forEach(function(b){ b.addEventListener('click',function(){ var q=b.dataset.k.split('-'); ym={y:+q[0],m:+q[1]-1}; sel=null; render(); }); });
+    var sig=list.length+'|'+list[list.length-1]; if(sig!==monSig){ monSig=sig; sc.scrollLeft=sc.scrollWidth; } /* nieuwste maand rechts in beeld */
+  }
   function render(){
-    var days=data(), y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
+    var days=data(); renderMon(days); var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
     var cnt=0, msets=0, mmin=0, lastOn=null, html='', key='';
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
