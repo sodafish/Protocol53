@@ -359,7 +359,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   hele sessie; per toestel in localStorage `fitlog-egm` (standaard Eccentric), `window.__egMethod()`. Elke eGym-meting (`progRecord` en 'Add' via `progPut`)
   krijgt `m:'ecc'|'reg'`; oude eGym-metingen zonder `m` = Eccentric (alles tot 10 okt was excentrisch). Het uitlegblad toont per methode een eigen blok
   'Your progress · Eccentric' / '· Regular' met eigen grafiek. Het Edit-venster (veeg naar rechts, kalender én edit-blad) toont bij eGym ook 'Method' (`p53EditVals({method})` → `.method`;
-  `__progSetVals(ids,vals,d,m)` zet `m`); het edit-blad toont achter de datum ' · Eccentric'/' · Regular'. Het getal dat Tom invult = het kg-getal uit het eGym-overzicht (basis-/duwgewicht).
+  `__progSetVals(ids,vals,d,m)` zet `m`); het edit-blad toont achter de datum ' · Eccentric'/' · Regular'. Het 'Add'-formulier in het edit-blad heeft bij eGym bovenaan dezelfde schakelaar (`.pe-meth`, start op de sessiemethode, keuze in `peSh.__m` → `progPut(k,d,v,m)`). Het getal dat Tom invult = het kg-getal uit het eGym-overzicht (basis-/duwgewicht).
 - Schrijfwijze op het scherm: 'eGym' (op vraag van Tom, 9 okt; tab, namen 'eGym …' in rijen én NAMES-sleutels, uitleg, kalender 'eGym'/'Open Gym + eGym'). Intern blijft `egym`/`g10`/`eg-…`.
 - Groep 10 'EGYM' (Toms EGYM-circuit in de gym; tussen g7 en g8 in `#s-d3`, kop zonder nummer, potlood/keuzeblad):
   alleen zichtbaar bij de keuze EGYM (`data-split="egym"`). Rijen `eg-…` met invulveld kg en schermnaam 'EGYM …' (zoals in de EGYM-app; uniek in NAMES).

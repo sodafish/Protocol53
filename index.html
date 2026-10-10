@@ -845,6 +845,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 .sheet-bg{touch-action:none;}
 .pe-sheet .pe-add{margin:0 0 1.2rem;}
+.pe-add .pe-meth{grid-column:1 / -1;} .pe-add .pe-meth button{min-height:38px;font-size:14px;color:var(--muted);background:transparent;padding:0;} .pe-add .pe-meth button[aria-pressed="true"]{background:var(--surface);color:var(--accent);}
 .pe-sub{margin:-.5rem 0 1rem;font-size:13.5px;color:var(--muted);}
 .sheet-grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto .7rem;}
 .sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.9rem;}
@@ -3267,8 +3268,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     return out;
   }
   var peBg=document.getElementById('pe-bg'), peSh=document.getElementById('pe-sheet'), peOpen=false, peLast=null, peKey=null;
-  function progPut(k,d,v){
-    var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d+'@m', ev={k:k,d:d,t:t,v:v,w:'m'}; if(/^eg-/.test(k)) ev.m=window.__egMethod?window.__egMethod():'ecc'; /* handmatig: één per veld per dag, naast de workouts */
+  function progPut(k,d,v,mth){
+    var p=d.split('-'), t=new Date(+p[0],+p[1]-1,+p[2],12).getTime(), id=k+'@'+d+'@m', ev={k:k,d:d,t:t,v:v,w:'m'}; if(/^eg-/.test(k)) ev.m=mth||(window.__egMethod?window.__egMethod():'ecc'); /* handmatig: één per veld per dag, naast de workouts */
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
@@ -3301,6 +3302,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var D=peData(), body=peSh.querySelector('.pe-body');
     peSh.querySelector('#pe-t').textContent=D.name;
     var fv=keepForm&&body.querySelector('.pe-add')?{d:body.querySelector('[name=d]').value}:null;
+    var EGK=/^eg-/.test(D.k); if(!keepForm||!peSh.__m) peSh.__m=window.__egMethod?window.__egMethod():'ecc'; /* eGym: methode voor 'Add' (op vraag van Tom, 10 okt) */
     var rows=D.all.map(function(e){
       var dt=new Date(e.t);
       var tm=(D.perDay[e.d]>1&&typeof e.w==='number')?' · '+dt.getHours()+':'+('0'+dt.getMinutes()).slice(-2):''; /* twee workouts die dag: uur erbij */
@@ -3310,7 +3312,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     }).join('');
     var nm=D.all.length-D.gaps;
     body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Swipe right to edit, left to delete.':'No measurements yet. Add one.')+'</p>'+
-      '<form class="pe-add"><input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
+      '<form class="pe-add">'+(EGK?'<div class="st-seg pe-meth" role="group" aria-label="Method"><button type="button" data-m="ecc">Eccentric</button><button type="button" data-m="reg">Regular</button></div>':'')+'<input type="date" name="d" value="'+(fv?fv.d:ymd(Date.now()))+'" max="'+ymd(Date.now())+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="'+D.unit+'" aria-label="Value in '+D.unit+'"><button type="submit">Add</button></form>'+
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No measurements yet.</li>')+'</ul>';
     body.querySelectorAll('.pe-fill').forEach(function(b){ b.addEventListener('click',function(){
       var f=body.querySelector('.pe-add'); f.d.value=b.dataset.d;
@@ -3329,11 +3331,13 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
         renderProg(); renderSheet(true);
     }).call(null); }
     var f=body.querySelector('.pe-add');
+    if(EGK){ var pm=function(){ f.querySelectorAll('.pe-meth button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.m===peSh.__m?'true':'false'); }); };
+      f.querySelectorAll('.pe-meth button').forEach(function(b){ b.addEventListener('click',function(){ peSh.__m=b.dataset.m; pm(); }); }); pm(); }
     f.addEventListener('submit',function(ev){ ev.preventDefault();
       var d=f.d.value, v=numOf(f.v.value);
       if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ f.d.focus(); return; }
       if(v==null){ f.v.focus(); return; }
-      progPut(D.k,d,v); renderProg(); renderSheet(true);
+      progPut(D.k,d,v,EGK?peSh.__m:null); renderProg(); renderSheet(true);
     });
   }
   /* ook te openen vanuit het uitlegvenster, voor één oefening (komt dan bovenop) */
