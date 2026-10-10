@@ -320,7 +320,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   en staat op elke pagina, ook op Workout (9 okt).
 - WARM-UP IS GEEN EIGEN TAB MEER (op vraag van Tom, 10 okt): tabs = Open Gym · eGym · Cardio. De warm-up (g0) staat bovenaan Open Gym én eGym
   (`SPLIT.full`/`SPLIT.egym` beginnen met g0; niet bij Cardio), met een gewone groepskop 'Warm-up' + potlood (zelfde stijl als 'Quads'); ook de eGym-kop
-  is nu een gewone groepskop (Cardio houdt de kleine tussenkop). Niet inklappen als ze af is (bewust, op vraag van Tom). Een bewaarde keuze 'warmup'
+  is nu een gewone groepskop (Cardio houdt de kleine tussenkop). Niet inklappen als ze af is (bewust, op vraag van Tom). Ook geen doorstrepen meer: een warm-up-oefening afvinken streept de andere niet door en de kop wordt niet 'af' (`paintChecks`, alleen eGym g10 kan nog `grp-done` krijgen). Een bewaarde keuze 'warmup'
   (fitlog-split of p53-start) wordt Open Gym / 'Where I left off'. De oude g0-regels (kop hoogte 0, zwevend potlood, `.first-sub`) zijn weg uit de CSS;
   wat hieronder over de Warm-up-tab staat, is de oude werking.
 - Nummering van de groepskoppen (op vraag van Tom, 10 okt; enkel de getallen op het scherm, sleutels g0–g10 blijven): Open Gym = 1 Warm-up, 2 Quads,

@@ -2385,7 +2385,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(wu){ var dn=function(r){ return r.classList.contains('done'); }, car=rows.filter(function(r){ return r.dataset.sub==='Cardio'; }), mob=rows.filter(function(r){ return r.dataset.sub!=='Cardio'; });
         anyDone=car.some(dn) || (mob.length>0 && mob.every(dn)); }
       if(g.dataset.grp==='g10') anyDone=rows.length>0&&rows.every(function(r){ return r.classList.contains('done'); }); /* eGym-circuit: af als alles gedaan is */
-      if(!wu && g.dataset.grp!=='g10') anyDone=false; /* spiergroepen: niet meer doorstrepen na één oefening (op vraag van Tom) */
+      if(g.dataset.grp!=='g10') anyDone=false; /* spiergroepen én warm-up: niet meer doorstrepen na één oefening (op vraag van Tom; warm-up sinds 10 okt) */
       g.classList.toggle('grp-done',anyDone);
       /* één oefening gedaan = groep af: de andere worden doorgestreept (blijven wel aanklikbaar); niet bij de opwarming */
       var multi=g.dataset.grp==='g8'||g.dataset.grp==='g10'; /* cardio: je kunt er meerdere combineren, dus niets doorstrepen */
