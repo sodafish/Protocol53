@@ -95,7 +95,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Eén `@media (min-width:1000px)`-blok onderaan de CSS; daaronder (gsm, tablet portrait) verandert niets (pixelvergelijking 375/390 px voor/na = gelijk).
 - Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met DRIE gelijke kolommen (10 okt; 9 okt twee, daarvoor drie) over dezelfde
   totale breedte (pagina tot 84rem, `body[data-view=progress]`): Balance · Strength · History naast elkaar (alle `.sv` tegelijk zichtbaar,
-  `[hidden]` overschreven; titels via `::before`). In Strength de infographic voor en achter naast elkaar (schakelaar `.bal-seg` verborgen, captions zichtbaar).
+  `[hidden]` overschreven; titels via `::before`). Strength-infographic zoals op gsm: één zijde met Front/Back-schakelaar (op vraag van Tom, 10 okt; vroeger voor en achter naast elkaar).
 - Workout: tot 72rem breed, oefeningen in twee kolommen (`#s-d3 .exl` grid; groepskoppen, tussenkoppen, 'Add exercises' over de volle breedte).
 - Diet en Guide (10 okt): tot 72rem breed (zoals Workout), CSS-multicolumn in twee kolommen (`column-count:2` op `#p-voeding`/`#p-kracht`,
   blokken `break-inside:avoid`, vloeien links van boven naar onder, dan rechts). Over de volle breedte (`column-span:all`): Diet-notities
