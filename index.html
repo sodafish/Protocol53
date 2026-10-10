@@ -4362,8 +4362,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var HOME='w0-pull-aparts w0-bodyweight-squats w0-glute-bridge w0-jump-rope d2-dumbbell-reverse-lunges d3-bulgarian-split-squat d1-goblet-squat x1-db-step-up x1-db-split-squat x1-db-squat x1-walking-lunge x1-jump-squat x1-bw-walking-lunge x1-db-forward-lunge d1-dumbbell-chest-press d3-push-ups x2-db-fly x2-incline-pushup x2-decline-pushup x2-db-bench d1-dumbbell-romanian-deadlift x3-hip-thrust x3-single-leg-rdl x3-donkey-kick x3-db-calf-raise d3-chest-supported-row d3-eenarmige-dumbbell-row d1-seated-dumbbell-shoulder-press d2-dumbbell-lateral-raise x5-front-raise x5-db-shrug d3-bird-dog d1-plank x7-side-plank d1-farmers-carry x7-dead-bug x7-russian-twist x7-crunches x7-bicycle-crunch x7-superman d3-dumbbell-biceps-curl x8-hammer-curl x8-concentration-curl x8-wrist-curl x8-spider-curl x8-kickback x8-bench-dips x8-diamond-pushup'.split(' ');
   window.__p53home=HOME;
   function isHome(g){ return window.__split==='home'&&(!g||/^g[0-7]$/.test(g)); } /* Cardio (g8) en eGym (g10) houden hun gewone keuze */
-  function on(g){ if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
-  function setOn(g,act){ if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
+  /* eGym heeft een eigen warm-upkeuze (cfg.eg0; op vraag van Tom, 10 okt): zelfde lijst, apart onthouden; zolang leeg = die van Open Gym */
+  function isEgW(g){ return window.__split==='egym'&&g==='g0'; }
+  function on(g){ if(isEgW(g)) return cfg.eg0||cfg.g0||DEF.g0||[]; if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
+  function setOn(g,act){ if(isEgW(g)){ cfg.eg0=act; return; } if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
   document.addEventListener('p53-split',function(){ apply(); if(open) render(); });
   function apply(){
     Object.keys(DEF).forEach(function(g){ var act=on(g); rows(g).forEach(function(li){ li.classList.toggle('ex-off',act.indexOf(keyOf(li))<0); }); });
