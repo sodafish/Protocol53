@@ -14,6 +14,8 @@
   window.__p53theme=function(v){ var r=document.documentElement; if(v==='light'||v==='dark') r.setAttribute('data-theme',v); else r.removeAttribute('data-theme');
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#1B1411':v==='light'?'#F7F2EA':(i?'#1B1411':'#F7F2EA')); }); };
   if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
+  /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
+  try{ var st=localStorage.getItem('p53-start'); if(st&&/^(warmup|full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -1126,6 +1128,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .st-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);}
 .st-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 .st-user:empty{display:none;}
+.st-sel{font:400 16px 'Work Sans',system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.7rem 2.4rem .7rem .9rem;min-height:48px;width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;}
+.st-sel:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
 .st-user b{color:var(--ink);font-weight:600;}
 .st-page .st-sec{margin-top:2rem;}
 #dobMsg.ok{color:var(--accent);}
@@ -2176,6 +2181,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <div class="st-seg" role="group" aria-label="Appearance"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div>
     </div>
     <div class="st-sec">
+      <label class="set-lab pf-f" for="stStart">Open the app on</label>
+      <select id="stStart" class="st-sel"><option value="">Where I left off</option><option value="warmup">Workout · Warm-up</option><option value="full">Workout · Open Gym</option><option value="egym">Workout · eGym</option><option value="cardio">Workout · Cardio</option></select>
+      <p class="st-note">Applies each time the app starts.</p>
+    </div>
+    <div class="st-sec">
       <form class="pf-form" id="pfForm" novalidate>
       <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
       <p class="st-note">Your age shows after Protocol.</p>
@@ -2206,6 +2216,9 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     if(window.__p53theme) window.__p53theme(v); paint(); }); });
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
   function hide(){ if(!open) return; open=false; var a=document.activeElement; if(a&&sh.contains(a)&&a.blur) a.blur(); bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); (last&&last.focus?last:btn).focus({preventScroll:true}); }
+  var ss=document.getElementById('stStart');
+  if(ss){ try{ ss.value=localStorage.getItem('p53-start')||''; }catch(e){}
+    ss.addEventListener('change',function(){ try{ if(ss.value) localStorage.setItem('p53-start',ss.value); else localStorage.removeItem('p53-start'); }catch(e){} }); }
   window.__p53settings=show;
   btn.addEventListener('click',function(){ if(window.__p53profileOpen) window.__p53profileOpen(); else show(); });
   bg.addEventListener('click',hide); sh.querySelector('.sheet-x').addEventListener('click',hide);
