@@ -70,7 +70,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   (inhoud `.st-body#settings`; script vlak voor `#woEnd`, `window.__p53settings()` opent het). Inhoud: Appearance (`.st-seg`: System · Light · Dark,
   standaard System; per toestel in localStorage `p53-theme`, niet in de database; script in `<head>` zet `data-theme` op `<html>` vóór het tekenen
   en past de `theme-color`-meta's aan, `window.__p53theme(v)`; de CSS kende `[data-theme]` al), dan geboortedatum `#dobIn`, automatisch bewaard bij `change`/`blur` (geen Save-knop meer, op vraag van Tom, 10 okt; melding 'Saved.' in `#dobMsg.ok`, 2,5 s),
-  dan 'Open the app on' (`#stStart`, select: Where I left off (standaard) · Workout · Warm-up/Open Gym/eGym/Cardio; per toestel in localStorage `p53-start`;
+  dan 'Open the app on' (`#stStart`, select: Workout · Open Gym (standaard, ook zonder bewaarde keuze; 10 okt) · Where I left off (`last`) · Workout · eGym/Cardio; per toestel in localStorage `p53-start`;
   het `<head>`-script zet bij elke start `fitlog-where`={v:'workout',y:0} en `fitlog-split` vóór de andere scripts ze lezen; op vraag van Tom, 10 okt),
   dan 'Your data' (`.st-sec`) met 'Signed in as e-mail' (`#stUser`, uit `__p53user`), Export backup (volle breedte), daaronder Log out + Reset data naast elkaar (`#resetData`; grid in `.st-body .app-tools`, op vraag van Tom, 10 okt).
   Tik op het getal (`button#ageBtn`) of het tandwiel → `window.__p53profileOpen` (vult het datumveld) → `__p53settings()`.

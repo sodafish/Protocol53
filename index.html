@@ -15,7 +15,7 @@
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#1B1411':v==='light'?'#F7F2EA':(i?'#1B1411':'#F7F2EA')); }); };
   if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
-  try{ var st=localStorage.getItem('p53-start'); if(st&&/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
+  try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -2179,7 +2179,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
-      <select id="stStart" class="st-sel"><option value="">Where I left off</option><option value="full">Workout · Open Gym</option><option value="egym">Workout · eGym</option><option value="cardio">Workout · Cardio</option></select>
+      <select id="stStart" class="st-sel"><option value="full">Workout · Open Gym</option><option value="last">Where I left off</option><option value="egym">Workout · eGym</option><option value="cardio">Workout · Cardio</option></select>
       <p class="st-note">Applies each time the app starts.</p>
     </div>
     <div class="st-sec">
@@ -2213,8 +2213,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
   function hide(){ if(!open) return; open=false; var a=document.activeElement; if(a&&sh.contains(a)&&a.blur) a.blur(); bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); (last&&last.focus?last:btn).focus({preventScroll:true}); }
   var ss=document.getElementById('stStart');
-  if(ss){ try{ var sv=localStorage.getItem('p53-start')||''; if(!/^(full|egym|cardio)$/.test(sv)){ sv=''; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
-    ss.addEventListener('change',function(){ try{ if(ss.value) localStorage.setItem('p53-start',ss.value); else localStorage.removeItem('p53-start'); }catch(e){} }); }
+  if(ss){ try{ var sv=localStorage.getItem('p53-start')||'full'; if(!/^(full|egym|cardio|last)$/.test(sv)){ sv='full'; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
+    ss.addEventListener('change',function(){ try{ localStorage.setItem('p53-start',ss.value); }catch(e){} }); }
   window.__p53settings=show;
   btn.addEventListener('click',function(){ if(window.__p53profileOpen) window.__p53profileOpen(); else show(); });
   bg.addEventListener('click',hide); sh.querySelector('.sheet-x').addEventListener('click',hide);
