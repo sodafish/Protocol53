@@ -65,10 +65,13 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Profiel (leeftijd in de titel)
 - Alleen in de kop van de app: `Protocol <em id="ageNum">` + leeftijd; zonder geboortedatum 53. App-naam, `<title>` en
   icoon blijven generiek ('Protocol'). Het inlogscherm toont gewoon 'Protocol'.
-- 'Settings' staat als laatste sectie onderaan de pagina Guide (`#settings`, `.superhead` + `.st-page`; op vraag van Tom, 9 okt; vroeger
-  onderblad `#dob-sheet`, nu weg): geboortedatum `#dobIn` + Save (melding 'Saved.' in `#dobMsg.ok`, 2,5 s), daaronder 'Your data' (`.st-sec`)
-  met Export backup, Log out en Reset data (`#resetData`). Tik op het getal (`button#ageBtn`, `window.__p53profileOpen`) = naar Guide en
-  scrollen naar Settings (`window.__go('kracht', yFn)`).
+- Settings (op vraag van Tom, 10 okt; vroeger onderaan Guide, nog vroeger `#dob-sheet`): rond tandwiel-icoon `#setBtn` (`.hd-set`, 36 px cirkel zoals de
+  andere icoonknoppen, Material Symbols 'settings' inline SVG 20 px) rechts op de regel van 'Protocol 53' in de kop → onderblad `#st-sheet`/`#st-bg`
+  (inhoud `.st-body#settings`; script vlak voor `#woEnd`, `window.__p53settings()` opent het). Inhoud: Appearance (`.st-seg`: System · Light · Dark,
+  standaard System; per toestel in localStorage `p53-theme`, niet in de database; script in `<head>` zet `data-theme` op `<html>` vóór het tekenen
+  en past de `theme-color`-meta's aan, `window.__p53theme(v)`; de CSS kende `[data-theme]` al), dan geboortedatum `#dobIn` + Save (melding 'Saved.' in `#dobMsg.ok`, 2,5 s),
+  dan 'Your data' (`.st-sec`) met 'Signed in as e-mail' (`#stUser`, uit `__p53user`), Export backup, Log out en Reset data (`#resetData`).
+  Tik op het getal (`button#ageBtn`) of het tandwiel → `window.__p53profileOpen` (vult het datumveld) → `__p53settings()`.
 - Opslag: collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. Bij 'Create account' is de
   geboortedatum verplicht (`cloud.js`, `user_metadata.dob` via `signUp`). `cloud.js` zet `window.__p53user` en stuurt event `p53-user`.
   Leeftijd herberekend bij laden en bij terugkeren naar de app.
