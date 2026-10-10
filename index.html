@@ -1098,35 +1098,28 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pl-v em{display:block;font-style:normal;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:.1rem;}
 .pl-v.up b,.pl-v.up>span{color:var(--accent);} /* groot getal = toename in % (op vraag van Tom) */
 .pl-chev{flex:none;color:var(--muted-soft);}
-/* maandoverzicht bovenaan History (op vraag van Tom, 10 okt) */
-.mon{margin:0 0 2.6rem;}
-.mon-top{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:0 0 .9rem;}
-.mon-top b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
-.mon-leg{display:flex;align-items:center;gap:.35rem;font-size:12px;color:var(--muted);}
-.mon-leg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-left:.3rem;}
-.mon-leg i:first-child{margin-left:0;}
-.mon .og{background:var(--accent);} .mon .eg{background:var(--gold);} .mon .cd{background:var(--muted);} /* enkel kleuren die al in de app staan (op vraag van Tom) */
-.mon-scroll{position:relative;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-left:5.4rem;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;}
-.mon-scroll::-webkit-scrollbar{display:none;}
-.mon-g{display:grid;grid-auto-flow:column;grid-template-rows:auto auto auto auto auto;grid-template-columns:5.4rem;grid-auto-columns:minmax(52px,1fr);min-width:100%;}
-.mon-g>.mon-lab{position:sticky;left:0;z-index:1;background:var(--paper);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  display:flex;align-items:center;padding-right:.4rem;width:5.4rem;white-space:nowrap;letter-spacing:.05em;}
-.mon-lab::after{content:'';position:absolute;top:0;bottom:0;right:-10px;width:10px;background:linear-gradient(90deg,var(--paper),transparent);opacity:0;transition:opacity .2s;pointer-events:none;}
-.mon-scroll.scrolled .mon-lab::after{opacity:1;}
-.mon-bars{scroll-snap-align:start;}
-.mon-c{display:contents;}
-.mon-bars{height:112px;display:flex;align-items:flex-end;justify-content:center;gap:2px;border-bottom:1px solid var(--line);padding:0 2px;}
-.mon-bar{width:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
-.mon-bar i{display:block;width:100%;border-radius:3px 3px 0 0;min-height:0;}
-.mon-bar span{font-size:10px;font-variant-numeric:tabular-nums;color:var(--muted);line-height:1;margin-bottom:3px;}
-.mon-bar.z span{color:var(--muted-soft);opacity:.6;}
-.mon-m{text-align:center;font-size:12.5px;color:var(--muted);padding:.45rem 0 .5rem;white-space:nowrap;}
-.mon-v{text-align:center;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;padding:.42rem 0;border-top:1px solid var(--line-soft);}
-.mon-v.z{color:var(--muted-soft);font-weight:400;}
-.mon-btn{appearance:none;border:0;background:transparent;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.mon-m.mon-sel{color:var(--accent);font-weight:600;}
-.mon-bars.mon-sel{background:color-mix(in srgb,var(--ink) 4%,transparent);border-radius:8px 8px 0 0;}
-.mon-note{margin:.8rem 0 0;font-size:12.5px;color:var(--muted-soft);}
+/* maandoverzicht bovenaan History (op vraag van Tom, 10 okt; variant B: drie kleine grafieken, elk eigen schaal) */
+.mon{margin:0 0 2.4rem;touch-action:pan-y;}
+.mon-blk{margin:0 0 1.4rem;}
+.mon-hd{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;margin:0 0 .5rem;}
+.mon-hd .mon-l{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.mon-hd b{font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.mon-hd b small{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:500;color:var(--muted);margin-left:.3rem;}
+.mon-row,.mon-mo{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.mon-row{height:70px;align-items:end;border-bottom:1px solid var(--line);}
+.mon-c{appearance:none;border:0;background:transparent;padding:0;margin:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.mon-c span{font-size:10.5px;color:var(--muted);margin-bottom:3px;font-variant-numeric:tabular-nums;line-height:1;}
+.mon-c i{display:block;width:70%;border-radius:4px 4px 0 0;background:color-mix(in srgb,var(--ink) 20%,var(--paper));transition:height .25s ease;}
+.mon-c.z span{opacity:.45;}
+.mon-c.sel i{background:var(--accent);} .mon-c.sel span{color:var(--accent);font-weight:600;}
+.mon-c.run i{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* lopende maand: gearceerd */
+.mon-mo{padding-top:.4rem;}
+.mon-mo button{appearance:none;border:0;background:transparent;padding:0;font:inherit;font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;cursor:pointer;}
+.mon-mo button.sel{color:var(--accent);font-weight:600;}
+.mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-.2rem 0 0;font-size:12.5px;color:var(--muted-soft);}
+.mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
+.mon-nav button[disabled]{opacity:.35;cursor:default;}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
 .cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
 .cal-title b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
@@ -1886,10 +1879,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </div>
       <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">History</h2>
-        <div class="mon" id="calMon" hidden>
-          <div class="mon-top"><b>Per month</b><span class="mon-leg"><i class="og"></i>Open Gym<i class="eg"></i>eGym<i class="cd"></i>Cardio</span></div>
-          <div class="mon-scroll" id="calMonS"></div>
-          <p class="mon-note">Bars show training days per type. Tap a month to open it below.</p>
+        <div class="mon" id="calMon" hidden><div id="calMonS"></div>
+          <div class="mon-nav"><button type="button" id="monPrev">‹ Earlier</button><span id="monRange"></span><button type="button" id="monNext">Later ›</button></div>
         </div>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
           <div class="cal-title"><b id="calMonth"></b><span id="calSum"></span></div>
@@ -4881,39 +4872,40 @@ window.__congrats=function(o){
   function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&n!=='Cardio'&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
   /* '17 sets + 20 min cardio' (plus als er kracht én cardio was) */
   function amount(st,mn){ return [st?st+(st===1?' set':' sets'):'',mn?Math.round(mn)+' min cardio':''].filter(Boolean).join(' + '); }
-  /* maandoverzicht (op vraag van Tom, 10 okt): per maand dagen Open Gym / eGym / Cardio (staafjes), trainingsdagen, sets, cardiominuten.
-     Bron = dezelfde dagdata als de kalender. Tik op een maand = kalender springt naar die maand. */
-  var MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], monSig='';
+  /* maandoverzicht (op vraag van Tom, 10 okt; variant B): drie kleine grafieken (trainingsdagen, sets, cardiominuten), elk met eigen schaal,
+     6 maanden; groot getal = de gekozen maand van de kalender. Venster schuift mee als de gekozen maand erbuiten valt (pijltjes kalender),
+     'Earlier'/'Later' of vegen = 6 maanden verder; tik op een maand = kalender springt erheen. Lopende maand gearceerd ('so far'). */
+  var MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], winEnd=null, monFirst=null;
+  function mi(y,m){ return y*12+m; }
   function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'); if(!box||!sc) return;
     var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; return; } box.hidden=false;
-    var M={}, f=keys[0].split('-'), y=+f[0], m=+f[1]-1, cur=new Date(), list=[];
-    while(y<cur.getFullYear()||(y===cur.getFullYear()&&m<=cur.getMonth())){ var k=y+'-'+('0'+(m+1)).slice(-2); M[k]={y:y,m:m,og:0,eg:0,cd:0,days:0,sets:0,min:0}; list.push(k); if(++m>11){ m=0; y++; } }
-    keys.forEach(function(d){ var o=days[d], a=M[d.slice(0,7)]; if(!a) return; var gs={};
-      Object.keys(o.ws).forEach(function(w){ Object.keys(o.ws[w]).forEach(function(g){ gs[g]=1; }); });
-      a.days++; a.sets+=o.sets; a.min+=o.min;
-      if(Object.keys(gs).some(function(g){ return /^g[1-7]$/.test(g); })) a.og++;
-      if(gs.g10) a.eg++;
-      if(gs.g8||o.min>0) a.cd++; });
-    var mx=1; list.forEach(function(k){ var a=M[k]; mx=Math.max(mx,a.og,a.eg,a.cd); });
-    var selK=ym.y+'-'+('0'+(ym.m+1)).slice(-2);
-    function bar(v,c){ return '<span class="mon-bar'+(v?'':' z')+'"><span>'+v+'</span><i class="'+c+'" style="height:'+(v?Math.max(4,Math.round(86*v/mx)):0)+'px"></i></span>'; }
-    var h='<div class="mon-g"><span class="mon-lab" style="grid-row:1;grid-column:1"></span><span class="mon-lab" style="grid-row:2;grid-column:1"></span><span class="mon-lab" style="grid-row:3;grid-column:1">Days</span><span class="mon-lab" style="grid-row:4;grid-column:1">Sets</span><span class="mon-lab" style="grid-row:5;grid-column:1">Cardio min</span>';
-    list.forEach(function(k,i){ var a=M[k], lab=MS[a.m]+((a.m===0||i===0)?' ’'+String(a.y).slice(2):''), sel=k===selK?' mon-sel':'', col='grid-column:'+(i+2);
-      h+='<button type="button" class="mon-btn mon-bars'+sel+'" data-k="'+k+'" style="grid-row:1;'+col+'" aria-label="'+MON[a.m]+' '+a.y+': '+a.og+' Open Gym, '+a.eg+' eGym, '+a.cd+' cardio days">'+bar(a.og,'og')+bar(a.eg,'eg')+bar(a.cd,'cd')+'</button>'+
-        '<button type="button" class="mon-btn mon-m'+sel+'" data-k="'+k+'" style="grid-row:2;'+col+'">'+lab+'</button>'+
-        '<span class="mon-v'+(a.days?'':' z')+'" style="grid-row:3;'+col+'">'+a.days+'</span>'+
-        '<span class="mon-v'+(a.sets?'':' z')+'" style="grid-row:4;'+col+'">'+a.sets+'</span>'+
-        '<span class="mon-v'+(a.min?'':' z')+'" style="grid-row:5;'+col+'">'+Math.round(a.min)+'</span>'; });
-    sc.innerHTML=h+'</div>';
-    /* .mon-sel staat op de knoppen zelf; de kolomachtergrond via de staafjesknop */
-    sc.querySelectorAll('.mon-btn').forEach(function(b){ b.addEventListener('click',function(){ var q=b.dataset.k.split('-'); ym={y:+q[0],m:+q[1]-1}; sel=null; render(); }); });
-    /* eerste keer: nieuwste maand rechts in beeld; daarna (ook via de pijltjes van de kalender) de gekozen maand in beeld houden */
-    var sig=list.length+'|'+list[list.length-1]; if(sig!==monSig){ monSig=sig; sc.scrollLeft=sc.scrollWidth; }
-    else{ var cb=sc.querySelector('.mon-bars.mon-sel'); if(cb){ var lw=sc.querySelector('.mon-lab').offsetWidth, l=cb.offsetLeft-lw, r=cb.offsetLeft+cb.offsetWidth-sc.clientWidth;
-      if(sc.scrollLeft>l) sc.scrollLeft=l; else if(sc.scrollLeft<r) sc.scrollLeft=r; } }
-    sc.classList.toggle('scrolled',sc.scrollLeft>2);
-    if(!sc.__mon){ sc.__mon=1; sc.addEventListener('scroll',function(){ sc.classList.toggle('scrolled',sc.scrollLeft>2); },{passive:true}); }
+    var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), f=keys[0].split('-'); monFirst=mi(+f[0],+f[1]-1);
+    var selI=mi(ym.y,ym.m), minEnd=Math.min(nowI,monFirst+5);
+    if(winEnd==null) winEnd=nowI;
+    if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
+    winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
+    var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; });
+    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||{d:0,s:0,c:0}; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c)}); }
+    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||{d:0,s:0,c:0}; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c)}; }
+    var run=selI===nowI, when=run?'so far in '+MON[sel.m]:'in '+MON[sel.m]+(sel.y!==cur.getFullYear()?' '+sel.y:'');
+    function lab(r,j){ return MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); }
+    sc.innerHTML=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets'],['Cardio','c','min']].map(function(t){ var k=t[1], mx=1;
+      L.forEach(function(r){ mx=Math.max(mx,r[k]); });
+      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+sel[k]+'<small>'+t[2]+' '+when+'</small></b></div><div class="mon-row">'+
+        L.map(function(r){ var v=r[k]; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(v?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+v+' '+t[0].toLowerCase()+'"><span>'+v+'</span><i style="height:'+(v?Math.max(3,Math.round(46*v/mx)):0)+'px"></i></button>'; }).join('')+
+        '</div><div class="mon-mo" aria-hidden="true">'+L.map(function(r,j){ return '<button type="button" tabindex="-1" class="'+(r.i===selI?'sel':'')+'" data-i="'+r.i+'">'+lab(r,j)+'</button>'; }).join('')+'</div></div>'; }).join('');
+    sc.querySelectorAll('[data-i]').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
+    var a=L[0], z=L[5]; document.getElementById('monRange').textContent=MS[a.m]+(a.y!==z.y?' '+a.y:'')+' – '+MS[z.m]+' '+z.y;
+    document.getElementById('monPrev').disabled=winEnd<=minEnd; document.getElementById('monNext').disabled=winEnd>=nowI;
   }
+  /* 6 maanden verder of terug; de kalender springt naar de laatste maand van het nieuwe venster */
+  function monPage(dir){ var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), minEnd=Math.min(nowI,(monFirst==null?nowI:monFirst+5));
+    var ne=Math.max(minEnd,Math.min(nowI,winEnd+6*dir)); if(ne===winEnd) return; winEnd=ne; ym={y:Math.floor(ne/12),m:ne%12}; render(); }
+  (function(){ var p=document.getElementById('monPrev'), n=document.getElementById('monNext'), box=document.getElementById('calMon'); if(!p) return;
+    p.addEventListener('click',function(){ monPage(-1); }); n.addEventListener('click',function(){ monPage(1); });
+    var x0=null, y0=0; box.addEventListener('touchstart',function(e){ var t=e.touches[0]; x0=t.clientX; y0=t.clientY; },{passive:true});
+    box.addEventListener('touchend',function(e){ if(x0==null) return; var t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0; x0=null;
+      if(Math.abs(dx)>50&&Math.abs(dx)>1.5*Math.abs(dy)) monPage(dx>0?-1:1); },{passive:true}); })();
   function render(){
     var days=data(); renderMon(days); var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');

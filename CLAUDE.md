@@ -194,12 +194,13 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   Sessie in collectie `sess` (id `jjjj-mm-dd@start`, `{d,s,e,n}`; cache `fitlog-sess`, ook in de back-up).
   Vuurwerk `window.__congrats({min,n})`: overlay `.cg` met canvas-vuurwerk (accent/goud/crème), 'Congratulations!' (Fraunces, één regel)
   + duur · oefeningen; tik of 4,5 s = weg. Geen geluid (op vraag van Tom weggehaald). Bij reduced motion zonder vuurwerk.
-- Maandoverzicht bovenaan History (op vraag van Tom, 10 okt): `#calMon` (`.mon`, titel 'Per month' + legende), `renderMon(days)` in het kalenderscript
-  (zelfde dagdata als de kalender). Per maand (eerste maand met data → deze maand, horizontaal scrollbaar, nieuwste rechts, kolom ≥ 54 px, sticky
-  rijlabels links): drie staafjes = dagen Open Gym (g1–g7, accent) · eGym (g10, `--gold`) · Cardio (g8 of minuten, `--muted`; geen groen: enkel kleuren die al in de app staan, op vraag van Tom), getal erboven;
-  rijen Days (trainingsdagen) · Sets · Cardio min. Tik op een maand = kalender springt erheen (gekozen maand in accent). Geen data = verborgen.
-  Rijlabel 'Cardio min' op één regel (labelkolom 5.4rem, `grid-template-columns`). ±5 maanden in beeld op 375 px; vegen opzij, scroll-snap (proximity),
-  zachte vervaging rechts van de labels zodra er links meer is (`.scrolled`); de pijltjes van de kalender houden de gekozen maand in beeld.
+- Maandoverzicht bovenaan History (op vraag van Tom, 10 okt; gekozen uit vier voorstellen = variant B; eGym/Open Gym-onderscheid bewust weg):
+  `#calMon`, `renderMon(days)` in het kalenderscript (zelfde dagdata als de kalender). Drie kleine grafieken onder elkaar, elk eigen schaal:
+  Training days · Sets · Cardio (min); kop = label links + groot getal (Fraunces 24) van de GEKOZEN kalendermaand ('… so far in October' voor de
+  lopende maand, anders 'in September'). 6 maanden naast elkaar (venster `winEnd`), staafjes in inkt 20% op papier, gekozen maand accent,
+  lopende maand gearceerd (`.run`). Navigatie: kalenderpijltjes (venster schuift mee als de maand erbuiten valt), tik op een staaf/maand = kalender
+  springt erheen, 'Earlier'/'Later' onderaan (`#monPrev`/`#monNext`) of horizontaal vegen = 6 maanden verder (kalender springt naar de laatste maand
+  van het venster); niet vóór de eerste trainingsmaand, niet voorbij deze maand. Geen data = verborgen.
 - Kalender onderaan Coverage (`#cal`, kop 'Calendar' (vroeger 'Workouts'), eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
   `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
