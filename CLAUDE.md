@@ -476,7 +476,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
-- De i-knop (intern nog zo genoemd) toont Material Symbols 'visibility' (oog) als inline SVG `INFO_ICON`, 20 px,
+- De i-knop toont Material Symbols 'info_i' (op vraag van Tom, 10 okt; vroeger 'visibility' (oog)) als inline SVG `INFO_ICON` (viewBox 0 -960 960 960, pad uit npm @material-symbols/svg-400), 20 px,
   viewBox `0 -980 960 960` zodat het oog verticaal gecentreerd staat (vroeger een getekende Fraunces-'i');
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.
