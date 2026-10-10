@@ -3111,19 +3111,19 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       return '<figure><svg viewBox="28 0 144 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+'">'+bodySvg(v[0])+'</svg></figure>'; }).join('');
     /* Progress: infographic met lijntjes */
     fig=document.getElementById('progFig'); if(!fig) return;
-    var SKEY='fitlog-bal-side', cur='front'; try{ cur=localStorage.getItem(SKEY)==='back'?'back':'front'; }catch(e){}
+    var SKEY='fitlog-bal-side', cur='front'; /* opent altijd op Front (op vraag van Tom, 10 okt); de keuze wordt niet meer onthouden */
     fig.innerHTML='<div class="bal-seg" role="group" aria-label="Side"><button type="button" data-s="front">Front</button><button type="button" data-s="back">Back</button></div><div class="bal-figs">'+
       [['front','Front'],['back','Back']].map(function(v){
       return '<figure data-side="'+v[0]+'"><svg viewBox="-58 0 316 '+VH+'" role="img" aria-label="Body, '+v[1].toLowerCase()+', strength progress per muscle">'+bodySvg(v[0])+callouts(v[0])+'</svg><figcaption>'+v[1]+'</figcaption></figure>';
     }).join('')+'</div><p class="bal-hint" id="progHint" hidden>Log an exercise three times to see your progress here.</p>';
-    function show(s,anim){ cur=s; try{ localStorage.setItem(SKEY,s); }catch(e){}
+    function show(s,anim){ cur=s;
       fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.s===s?'true':'false'); });
       fig.querySelectorAll('figure[data-side]').forEach(function(f){ f.classList.toggle('on',f.dataset.side===s);
         if(anim&&f.dataset.side===s){ f.classList.remove('draw'); void f.offsetWidth; f.classList.add('draw'); clearTimeout(f._t); f._t=setTimeout(function(){ f.classList.remove('draw'); },2000); } }); }
     fig.querySelectorAll('.bal-seg button').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.s!==cur) show(b.dataset.s,true); }); });
     show(cur,false);
     /* lijntjes tekenen zich in bij het openen van Balance */
-    window.__balPre=function(){ fig.querySelectorAll('figure[data-side]').forEach(function(f){ if(f.classList.contains('draw')) return; f.classList.add('predraw'); clearTimeout(f._p); f._p=setTimeout(function(){ f.classList.remove('predraw'); },1500); }); }; /* veiligheid: nooit blijvend verborgen */
+    window.__balPre=function(){ if(cur!=='front') show('front',false); fig.querySelectorAll('figure[data-side]').forEach(function(f){ if(f.classList.contains('draw')) return; f.classList.add('predraw'); clearTimeout(f._p); f._p=setTimeout(function(){ f.classList.remove('predraw'); },1500); }); }; /* veiligheid: nooit blijvend verborgen */
     var bdTry=0;
     window.__balDraw=function(){ var vis=[].some.call(fig.querySelectorAll('figure[data-side]'),function(f){ return !!f.offsetParent; });
       if(!vis){ if(bdTry++<20) setTimeout(window.__balDraw,40); return; } bdTry=0; /* pagina nog niet zichtbaar (wisselen duurt even): opnieuw proberen */
