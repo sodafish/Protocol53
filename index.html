@@ -83,6 +83,10 @@ window.p53EditVals=function(o){
       dl.innerHTML='<span>Date</span><span class="cf-in"><input type="date" autocomplete="off"></span>'; din=dl.querySelector('input');
       var td=new Date(), mx=td.getFullYear()+'-'+('0'+(td.getMonth()+1)).slice(-2)+'-'+('0'+td.getDate()).slice(-2);
       din.value=o.date; din.max=mx>o.date?mx:o.date; box.appendChild(dl); }
+    /* optionele eGym-methode (o.method = 'ecc'|'reg'); resultaat krijgt dan .method (op vraag van Tom, 10 okt) */
+    var mth=o.method||null; if(mth){ var md=document.createElement('div'); md.className='cf-f cf-meth'; md.innerHTML='<span>Method</span><div class="st-seg"><button type="button" data-m="ecc">Eccentric</button><button type="button" data-m="reg">Regular</button></div>';
+      var pm=function(){ md.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.m===mth?'true':'false'); }); };
+      md.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){ mth=b.dataset.m; pm(); }); }); pm(); box.appendChild(md); }
     (o.fields||[]).forEach(function(f){ var l=document.createElement('label'); l.className='cf-f';
       if(din&&!f.label) f=Object.assign({},f,{label:f.unit==='kg'?'Weight':'Value'});
       l.innerHTML='<span></span><span class="cf-in"><input type="text" inputmode="decimal" autocomplete="off"><i></i></span>';
@@ -96,6 +100,7 @@ window.p53EditVals=function(o){
     bg.querySelector('form').addEventListener('submit',function(e){ e.preventDefault(); var out=[], bad=null;
       bg.querySelectorAll('input:not([type=date])').forEach(function(i){ var m=String(i.value).replace(',','.').match(/\d+(?:\.\d+)?/); if(!m&&!bad) bad=i; out.push(m?parseFloat(m[0]):null); });
       if(din){ if(!/^\d{4}-\d{2}-\d{2}$/.test(din.value)||din.value>din.max){ if(!bad) bad=din; } else out.date=din.value; }
+      if(mth) out.method=mth;
       if(bad){ bad.focus(); bad.classList.add('need'); return; } done(out); });
     bg.querySelector('.cf-no').addEventListener('click',function(){ done(null); });
     bg.addEventListener('click',function(e){ if(e.target===bg) done(null); });
@@ -1519,6 +1524,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .pr-edit.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--accent);} /* eigen periode actief (ook op Progress) */
 .pr-edit:active{background:var(--paper-soft);transform:scale(.95);}
 .pr-edit[hidden]{display:none;}
+.cf-meth .st-seg{margin-top:.1rem;} .cf-meth .st-seg button{min-height:40px;font-size:14px;text-transform:none;letter-spacing:0;}
 .cf-in i{font-style:normal;font-size:14px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;min-width:2.2em;}
 .pl-chart{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);}
 .pl-list button:active .pl-chart{background:var(--paper-soft);transform:scale(.95);}
@@ -3268,7 +3274,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
   /* waarde van een bestaande meting aanpassen (veeg naar rechts → Edit, kalender en edit-blad) */
   /* met d ('jjjj-mm-dd', andere dag): meting verhuist naar die dag (nieuw id met de nieuwe datum, zelfde uur en workout; oud id weg) */
-  window.__progSetVals=function(ids,vals,d){ var moved={}; ids.forEach(function(id,i){ var e=prog[id], v=vals[i]; if(!e||typeof v!=='number'||isNaN(v)) return; e.v=v;
+  window.__progSetVals=function(ids,vals,d,mth){ var moved={}; ids.forEach(function(id,i){ var e=prog[id], v=vals[i]; if(!e||typeof v!=='number'||isNaN(v)) return; e.v=v; if(mth&&/^eg-/.test(e.k)) e.m=mth;
       if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&d!==e.d){ var p=d.split('-'), o=new Date(e.t), nt=new Date(+p[0],+p[1]-1,+p[2],o.getHours(),o.getMinutes(),o.getSeconds()).getTime();
         var nid=e.w==='m'?e.k+'@'+d+'@m':sessId(e.k,d,e.w); if(prog[nid]) nid+='~'+Date.now().toString(36); /* bestaat er al een meting met dat id: niet overschrijven */
         e=Object.assign({},e,{d:d,t:nt}); delete prog[id]; if(progCol) progCol.doc(id).delete().catch(function(){}); id=nid; }
@@ -3299,7 +3305,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var dt=new Date(e.t);
       var tm=(D.perDay[e.d]>1&&typeof e.w==='number')?' · '+dt.getHours()+':'+('0'+dt.getMinutes()).slice(-2):''; /* twee workouts die dag: uur erbij */
       /* veeg naar links om te verwijderen, zoals in de kalender (op vraag van Tom) */
-      return '<li class="cx'+(e.gap?' pe-gap" data-d="'+e.d:'')+'"><div class="cx-row">'+(e.gap?'':'<button type="button" class="cx-edit" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'">Edit</button>')+'<span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+'</span>'+
+      return '<li class="cx'+(e.gap?' pe-gap" data-d="'+e.d:'')+'"><div class="cx-row">'+(e.gap?'':'<button type="button" class="cx-edit" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'">Edit</button>')+'<span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+(/^eg-/.test(e.k)?' · '+((e.m||'ecc')==='reg'?'Regular':'Eccentric'):'')+'</span>'+
         (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+'<button type="button" class="cx-del" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'">Delete</button></div></li>';
     }).join('');
     var nm=D.all.length-D.gaps;
@@ -3311,7 +3317,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var cur=document.querySelector('#s-d3 .exr-in[data-note="'+D.k+'"]'); if(cur&&!f.v.value&&numOf(cur.value)!=null) f.v.value=cur.value; /* waarde uit het veld als voorstel */
       f.v.focus(); }); });
     if(!body.__sw&&window.p53Swipe){ body.__sw=1; window.p53Swipe(body,function(b){ peDelBtn(b); },function(b){ var e=prog[b.dataset.id]; if(!e) return; var D2=peData();
-      p53EditVals({title:'Edit '+D2.name,date:e.d,fields:[{value:fmtV(e.v),unit:D2.unit}]}).then(function(v){ if(v) { window.__progSetVals([b.dataset.id],v,v.date); renderSheet(true); } }); }); }
+      p53EditVals({title:'Edit '+D2.name,date:e.d,method:/^eg-/.test(e.k)?(e.m||'ecc'):null,fields:[{value:fmtV(e.v),unit:D2.unit}]}).then(function(v){ if(v) { window.__progSetVals([b.dataset.id],v,v.date,v.method); renderSheet(true); } }); }); }
     function peDelBtn(b){ (function(){
       if(b.dataset.gap){ var dd=b.dataset.id.split('@').pop(); if(window.__histDropDayAll) window.__histDropDayAll(b.dataset.gap,dd); renderProg(); renderSheet(true); try{ document.dispatchEvent(new Event('p53-prog')); }catch(_e){} return; }
       var e=prog[b.dataset.id]; if(!e) return;
@@ -4853,9 +4859,10 @@ window.__congrats=function(o){
       it.ks.forEach(function(k){ var id=(it.ids||[]).filter(function(x){ return P[x]&&P[x].k===k; })[0]; if(!id) return; ids.push(id);
         var inp=it.li.querySelector('.exr-in[data-note="'+k+'"]'); fields.push({label:it.ks.length>1?((inp&&inp.getAttribute('aria-label'))||'').replace(/\s+—.*$/,''):'',value:P[id].v,unit:it.f[k].u}); });
       if(!ids.length) return;
-      p53EditVals({title:'Edit '+it.name,date:sel,fields:fields}).then(function(v){ if(!v||!window.__progSetVals) return;
+      var eg=ids.length&&P[ids[0]]&&/^eg-/.test(P[ids[0]].k)?(P[ids[0]].m||'ecc'):null;
+      p53EditVals({title:'Edit '+it.name,date:sel,method:eg,fields:fields}).then(function(v){ if(!v||!window.__progSetVals) return;
         if(v.date&&v.date!==sel){ var q=v.date.split('-'); sel=v.date; ym={y:+q[0],m:+q[1]-1}; } /* andere datum: kalender springt mee naar die dag */
-        window.__progSetVals(ids,v,v.date); }); });
+        window.__progSetVals(ids,v,v.date,v.method); }); });
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
