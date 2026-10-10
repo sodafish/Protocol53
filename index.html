@@ -1122,6 +1122,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-1.4rem 0 0;font-size:12.5px;color:var(--muted-soft);}
 .mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
 .mon-nav button[disabled]{opacity:.35;cursor:default;}
+.cal-none{margin:1.2rem 0 0;font-size:14px;color:var(--muted-soft);}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
 .cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
 .cal-title b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
@@ -4839,7 +4840,7 @@ window.__congrats=function(o){
   var grid=document.getElementById('calGrid'); if(!grid) return;
   var MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var now=new Date(), ym={y:now.getFullYear(),m:now.getMonth()}, sel=null;
+  var now=new Date(), ym={y:now.getFullYear(),m:now.getMonth()}, sel=null, stay=null;
   function nameOf(k){
     var li=document.querySelector('#s-d3 .exr[data-key="'+k+'"]')||(function(){ var i=document.querySelector('#s-d3 [data-note="'+k+'"]'); return i&&i.closest('.exr'); })();
     var n=li&&li.querySelector('.exr-n'); return n?n.firstChild.textContent.trim():null;
@@ -4927,15 +4928,16 @@ window.__congrats=function(o){
     document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' training day':' training days')+' · '+amount(msets,mmin).replace(/(\d+) min cardio/,function(x,n){ return hr(+n)+' cardio'; }):'No workouts'; /* maandtotaal cardio in uren vanaf 60 min */
     var cur=new Date(); document.querySelector('.cal-nav[data-m="1"]').disabled=(y===cur.getFullYear()&&m===cur.getMonth());
     document.querySelector('.cal-nav[data-m="-1"]').disabled=(y*12+m<=fy*12+fm);
-    if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
+    if(stay&&stay===sel&&sel.slice(0,7)===key.slice(0,7)){ /* na een edit: op deze dag blijven, ook als ze nu leeg is */ }
+    else{ stay=null; if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn; }
     grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
       b.addEventListener('click',function(){ sel=b.dataset.d; render(); }); });
     var box=document.getElementById('calDay');
     if(!sel){ box.innerHTML=cnt?'':'Days you train get a dot.'; return; }
-    var o=days[sel], p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
+    var o=days[sel]||{ex:{},sets:0,ws:{},min:0,items:{}}, p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
     /* datum, dan per regel: kracht ('Open Gym + eGym · 25 sets') en cardio ('Cardio · 40 min') */
     var pg=progs(o), lines=[]; if(o.sets||pg) lines.push((pg||'Strength')+' · '+o.sets+(o.sets===1?' set':' sets')); if(o.min) lines.push('Cardio · '+Math.round(o.min)+' min');
-    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()], exl=exList(o); box.innerHTML='<div class="cx-top"><b>'+dl+'</b>'+(exl?'<span class="cx-hint">Swipe to edit or delete</span>':'')+'</div>'+exl; box.dataset.dl=dl;
+    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()], exl=exList(o); box.innerHTML='<div class="cx-top"><b>'+dl+'</b>'+(exl?'<span class="cx-hint">Swipe to edit or delete</span>':'')+'</div>'+(exl||'<p class="cal-none">Nothing logged on this day.</p>'); box.dataset.dl=dl;
   }
   /* oefeningen van die dag, gegroepeerd per programma (Open Gym, eGym, Cardio) in workoutvolgorde, met gemeten waarde + sets/reps;
      veeg naar links = verwijderen (met bevestiging), wist de meting(en) in de grafiekdata (op vraag van Tom) */
@@ -4969,7 +4971,7 @@ window.__congrats=function(o){
       if(!ids.length) return;
       var eg=ids.length&&P[ids[0]]&&/^eg-/.test(P[ids[0]].k)?(P[ids[0]].m||'ecc'):null;
       p53EditVals({title:'Edit '+it.name,date:sel,method:eg,fields:fields}).then(function(v){ if(!v||!window.__progSetVals) return;
-        if(v.date&&v.date!==sel){ var q=v.date.split('-'); sel=v.date; ym={y:+q[0],m:+q[1]-1}; } /* andere datum: kalender springt mee naar die dag */
+        stay=sel; /* andere datum: de kalender blijft op deze dag staan, de oefening verhuist (op vraag van Tom, 10 okt) */
         window.__progSetVals(ids,v,v.date,v.method); }); });
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
