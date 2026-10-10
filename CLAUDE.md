@@ -93,11 +93,13 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Tablet / breed scherm (≥ 1000 px; op vraag van Tom, 9 okt)
 - Eén `@media (min-width:1000px)`-blok onderaan de CSS; daaronder (gsm, tablet portrait) verandert niets (pixelvergelijking 375/390 px voor/na = gelijk).
-- Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met TWEE kolommen (9 okt; vroeger drie): links Progress (over twee rijen, infographic
-  voor en achter naast elkaar, schakelaar `.bal-seg` verborgen, captions zichtbaar), rechts Balance met Calendar eronder (alle `.sv` tegelijk zichtbaar,
-  `[hidden]` overschreven; titels via `::before`), pagina tot 84rem breed (`body[data-view=progress]`). Diet/Guide in twee kolommen: nog niet, enkel geopperd.
+- Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met DRIE gelijke kolommen (10 okt; 9 okt twee, daarvoor drie) over dezelfde
+  totale breedte (pagina tot 84rem, `body[data-view=progress]`): Balance · Strength · History naast elkaar (alle `.sv` tegelijk zichtbaar,
+  `[hidden]` overschreven; titels via `::before`). In Strength de infographic voor en achter naast elkaar (schakelaar `.bal-seg` verborgen, captions zichtbaar).
 - Workout: tot 72rem breed, oefeningen in twee kolommen (`#s-d3 .exl` grid; groepskoppen, tussenkoppen, 'Add exercises' over de volle breedte).
-- Diet en Guide blijven zoals op gsm (52rem).
+- Diet en Guide (10 okt): tot 72rem breed (zoals Workout), CSS-multicolumn in twee kolommen (`column-count:2` op `#p-voeding`/`#p-kracht`,
+  blokken `break-inside:avoid`, vloeien links van boven naar onder, dan rechts). Over de volle breedte (`column-span:all`): Diet-notities
+  (`.note-head` + `.sess-note`), Guide `.superhead` en `.cards` (four, row3); zo staan de Guide-secties per kopje in twee kolommen.
 
 ## Navigatie
 - Navbar-hoogte (op vraag van Tom, 10 okt): `bottom: var(--nav-b)` = max(10 px, veilige zone − 12 px) → op een iPhone met streep ±22 px van de onderrand i.p.v. ±44 px; de End workout-pil volgt mee.

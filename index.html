@@ -1585,11 +1585,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   /* Statistics = één dashboard: Balance · Progress · Calendar naast elkaar, geen tabs */
   body[data-view="progress"] .wrap,body[data-view="progress"] main.wrap{max-width:84rem;}
   #s-stats #stabs{display:none;}
-  /* twee kolommen (op vraag van Tom, 9 okt): links Progress (infographic voor en achter naast elkaar + lijst), rechts Balance met Calendar eronder */
-  #s-stats section.stats{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0 3.5rem;align-items:start;}
-  #s-stats section.stats>.sv[data-sv="prog"]{grid-column:1;grid-row:1/span 2;}
-  #s-stats section.stats>.sv[data-sv="body"]{grid-column:2;grid-row:1;}
-  #s-stats section.stats>.sv[data-sv="cal"]{grid-column:2;grid-row:2;margin-top:3rem;}
+  /* drie kolommen over dezelfde totale breedte (op vraag van Tom, 10 okt; vroeger twee): Balance · Strength · History */
+  #s-stats section.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 3rem;align-items:start;}
+  #s-stats section.stats>.sv[data-sv="body"]{grid-column:1;grid-row:1;}
+  #s-stats section.stats>.sv[data-sv="prog"]{grid-column:2;grid-row:1;}
+  #s-stats section.stats>.sv[data-sv="cal"]{grid-column:3;grid-row:1;}
   .stats-fig.bal{max-width:none;}
   .stats-fig.bal .bal-seg{display:none;}
   .stats-fig.bal .bal-figs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.4rem;}
@@ -1607,6 +1607,14 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   body[data-view="workout"] .wrap,body[data-view="workout"] main.wrap{max-width:72rem;}
   #s-d3 .exl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:3rem;}
   #s-d3 .exl>li.exgrp,#s-d3 .exl>li.exsub,#s-d3 .exl>li.gx-empty,#s-d3 .exl>li:not(.exr){grid-column:1/-1;}
+  /* Diet en Guide: zelfde breedte als Workout, blokken in twee kolommen (lopen van boven naar onder, links dan rechts);
+     notities, Guide-kopjes (superhead) en de kaartenrijen over de volle breedte (op vraag van Tom, 10 okt) */
+  body[data-view="voeding"] .wrap,body[data-view="voeding"] main.wrap,body[data-view="kracht"] .wrap,body[data-view="kracht"] main.wrap{max-width:72rem;}
+  #p-voeding:not([hidden]),#p-kracht:not([hidden]){column-count:2;column-gap:3rem;}
+  #p-voeding>*,#p-kracht>*{break-inside:avoid;}
+  #p-voeding>.note-head,#p-voeding>.sess-note,#p-kracht>.superhead,#p-kracht>.cards{column-span:all;}
+  #p-voeding>.note-head{margin-top:2.2rem;}
+  #p-kracht>.superhead{break-after:avoid;}
 }
 </style>
 
