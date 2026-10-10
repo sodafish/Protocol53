@@ -15,7 +15,7 @@
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#1B1411':v==='light'?'#F7F2EA':(i?'#1B1411':'#F7F2EA')); }); };
   if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
-  try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio|home)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
+  try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -1413,12 +1413,13 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 /* label boven elke pil: zachte beige band zonder rand, de pil valt over de onderkant (op vraag van Tom, 10 okt) */
 .wd-blk{display:flex;flex-direction:column;border-radius:26px;background:var(--paper-soft);}
 .wd-blk-str{flex:1 1 auto;min-width:0;}
-.wd-blk-card{flex:none;}
+.wd-blk-card{flex:none;width:calc((100% - 36px) / 3 + 10px);} /* alle drie de tabs even breed (Open Gym, eGym, Cardio; op vraag van Tom, 10 okt) */
+.wd-card{width:100%;}
 .wd-band{display:block;height:24px;padding-top:5px;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
 .wd-blk .wd-pill{margin-top:-4px;}
 #wtabs{margin-top:-20px;}
 #wtabs:not(.stuck){box-shadow:none;} /* de papierring is enkel nodig als de tabs plakken; anders bedekt hij het paginalabel 'Workout' */ /* de pillen zelf op dezelfde hoogte als de tabs op Statistics; het label schuift erboven (op vraag van Tom, 10 okt) */
-.wtabs .wd-card button{flex:none;padding:0 1.05rem;}
+.wtabs .wd-card button{flex:1 1 0;padding:0 .3rem;}
 .wtabs.wdock,.wtabs.wdock.on{background:var(--paper);}
 .wd-go[hidden]{display:none;} /* geen startknop meer: de balk verschijnt pas bij het eerste vinkje (op vraag van Tom) */
 .wd-go{display:flex;align-items:center;min-height:48px;padding:0 6px 0 4px;color:var(--paper);}
@@ -1642,11 +1643,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <div class="pane" id="s-d3">
     <div class="tools-row" hidden>
       <div class="split-sel" hidden>
-        <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Gym</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Open Gym</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="split-pop" id="splitPop" role="menu" hidden>
           <button type="button" role="menuitemradio" data-split="warmup"><span>Warm-up</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <hr class="sm-sep" role="separator">
-          <button type="button" role="menuitemradio" data-split="full"><span>Gym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-split="full"><span>Open Gym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <button type="button" role="menuitemradio" data-split="egym"><span>eGym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <hr class="sm-sep" role="separator">
           <button type="button" role="menuitemradio" data-split="cardio"><span>Cardio</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
@@ -1657,7 +1658,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </div>
     </div>
     <div class="wtabs wdock" id="wtabs">
-      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><span class="wd-band" aria-hidden="true">Strength</span><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home">Home</button></div></div><div class="wd-blk wd-blk-card"><span class="wd-band" aria-hidden="true">Cardio</span><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div></div>
+      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><span class="wd-band" aria-hidden="true">Strength</span><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button></div></div><div class="wd-blk wd-blk-card"><span class="wd-band" aria-hidden="true">Cardio</span><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
@@ -1901,7 +1902,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <li class="exgrp">Outdoors</li>
       <li class="exr exr-c"><span class="exr-i">01</span><div class="exr-t"><div class="exr-n">Brisk walking</div><div class="exr-d"><strong>Knee-friendly alternative to jogging.</strong> Walk briskly enough to stay in zone 2: short sentences work, a conversation doesn't. Low impact and easy to keep up for an hour.</div></div></li>
       <li class="exr exr-c"><span class="exr-i">02</span><div class="exr-t"><div class="exr-n">Outdoor walk-jogging or running</div><div class="exr-d"><strong>The only form with a real bone stimulus.</strong> Alternate jogging and walking blocks to keep your heart rate on target. Daylight and fresh air help your sleep. With your meniscus, jogging can be sensitive — choose brisk walking instead.</div></div></li>
-      <li class="exgrp">Gym</li>
+      <li class="exgrp">Open Gym</li>
       <li class="exr exr-c"><span class="exr-i">03</span><div class="exr-t"><div class="exr-n">Treadmill, jog and walk blocks</div><div class="exr-d">Same bone stimulus as outdoors, but inside. Alternate jogging and walking blocks to keep your heart rate on target.</div></div></li>
       <li class="exr exr-c"><span class="exr-i">04</span><div class="exr-t"><div class="exr-n">Rowing machine</div><div class="exr-d">Most muscle mass in one movement, no impact. You control the intensity precisely with your stroke rate.</div></div></li>
       <li class="exr exr-c"><span class="exr-i">05</span><div class="exr-t"><div class="exr-n">Cross-trainer</div><div class="exr-d">Whole body moving, joint-friendly, easy to hold at one pace.</div></div></li>
@@ -2218,7 +2219,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
-      <select id="stStart" class="st-sel"><option value="full">Workout · Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option><option value="home">Workout · Home</option></select>
+      <select id="stStart" class="st-sel"><option value="full">Workout · Open Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option></select>
       <p class="st-note">Applies each time the app starts.</p>
     </div>
     <div class="st-sec">
@@ -2252,7 +2253,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
   function hide(){ if(!open) return; open=false; var a=document.activeElement; if(a&&sh.contains(a)&&a.blur) a.blur(); bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); (last&&last.focus?last:btn).focus({preventScroll:true}); }
   var ss=document.getElementById('stStart');
-  if(ss){ try{ var sv=localStorage.getItem('p53-start')||'full'; if(!/^(full|egym|cardio|home|last)$/.test(sv)){ sv='full'; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
+  if(ss){ try{ var sv=localStorage.getItem('p53-start')||'full'; if(!/^(full|egym|cardio|last)$/.test(sv)){ sv='full'; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
     ss.addEventListener('change',function(){ try{ localStorage.setItem('p53-start',ss.value); }catch(e){} }); }
   window.__p53settings=show;
   btn.addEventListener('click',function(){ if(window.__p53profileOpen) window.__p53profileOpen(); else show(); });
@@ -4551,8 +4552,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   /* Cardio = alleen groep 8 (geen warm-up); Full/Upper/Lower = nooit groep 8 */
   var KEY='fitlog-split', LKEY='fitlog-split-last', SPLIT={full:['g0','g1','g2','g3','g4','g5','g6','g7'],upper:['g0','g2','g4','g5','g7'],lower:['g0','g1','g3','g6'],egym:['g0','g10'],cardio:['g8'],home:['g0','g1','g2','g3','g4','g5','g6','g7']}; /* Home: zelfde groepen, eigen keuze, enkel thuisoefeningen (op vraag van Tom, 10 okt) */ /* warm-up staat bovenaan Open Gym en eGym, geen eigen tab meer (op vraag van Tom, 10 okt) */
   var btn=document.getElementById('splitBtn'), pop=document.getElementById('splitPop'), lbl=document.getElementById('splitLbl'); if(!btn||!pop) return;
-  var NAME={warmup:'Warm-up',full:'Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio',home:'Home'};
-  var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
+  var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio',home:'Home'};
+  var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower'||cur==='home') cur='full'; /* Home is voorlopig verborgen (op vraag van Tom, 10 okt) */ /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
   var tabs=document.getElementById('wtabs');
   function apply(){
     var keep=SPLIT[cur];
@@ -4853,7 +4854,7 @@ window.__congrats=function(o){
   function prog0(g){
     if(g.every(function(x){ return UP[x]; })) return 'Upper body';
     if(g.every(function(x){ return LO[x]; })) return 'Lower body';
-    return 'Gym'; }
+    return 'Open Gym'; }
   /* programma's van de dag; 'Cardio' niet apart, de minuten staan al in '+ N min cardio' */
   function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&n!=='Cardio'&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
   /* '17 sets + 20 min cardio' (plus als er kracht én cardio was) */
@@ -4932,8 +4933,8 @@ window.__congrats=function(o){
   function exList(o){ var its=Object.keys(o.items||{}).map(function(e){ return o.items[e]; });
     EXI=[]; if(!its.length) return '';
     its.sort(function(a,b){ return a.li===b.li?0:(a.li.compareDocumentPosition(b.li)&4?-1:1); });
-    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; }, G={}, ORDER=['Gym','eGym','Cardio'];
-    its.forEach(function(it){ var g=it.li.dataset.grp, nm=g==='g10'?'eGym':g==='g8'?'Cardio':'Gym'; (G[nm]=G[nm]||[]).push(it); });
+    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; }, G={}, ORDER=['Open Gym','eGym','Cardio'];
+    its.forEach(function(it){ var g=it.li.dataset.grp, nm=g==='g10'?'eGym':g==='g8'?'Cardio':'Open Gym'; (G[nm]=G[nm]||[]).push(it); });
     var html='';
     ORDER.forEach(function(nm){ var arr=G[nm]; if(!arr) return; var tot=0;
       var rows=arr.map(function(it){ var n=it.li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'', k=it.li.dataset.key||'';
@@ -4943,7 +4944,7 @@ window.__congrats=function(o){
         if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name,ks:ks,f:it.f,u:u,li:it.li});
         return '<li class="cx"><div class="cx-row"><button type="button" class="cx-edit" data-i="'+(EXI.length-1)+'" tabindex="-1">Edit</button><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button></div></li>'; }).join('');
-      var lab=nm; if(nm==='Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
+      var lab=nm; if(nm==='Open Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
         var gs={}; arr.forEach(function(it){ var g=it.li.dataset.grp; if(g!=='g6') gs[g]=1; }); var gk=Object.keys(gs);
         lab+=' · '+(!gk.length?'Core':gk.every(function(x){ return UP[x]; })?'Upper Body':gk.every(function(x){ return LO[x]; })?'Lower Body':'Full Body'); }
       html+='<li class="cx-h"><span>'+lab+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
