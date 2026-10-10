@@ -203,7 +203,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   springt erheen, 'Earlier'/'Later' onderaan (`#monPrev`/`#monNext`) of horizontaal vegen = 6 maanden verder (kalender springt naar de laatste maand
   van het venster); niet vóór de eerste trainingsmaand, niet voorbij deze maand. Geen data = verborgen.
 - Kalender onderaan Coverage (`#cal`, kop 'Calendar' (vroeger 'Workouts'), eigen script onderaan `index.html`, `window.__renderCal`, ververst mee met
-  `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand), week begint op maandag, bolletje
+  `renderStats`), bewust eenvoudig (op vraag van Tom): maand met pijltjes (niet voorbij deze maand, en niet vóór de eerste maand met data: linkerpijl uit, `ym` geklemd; zonder data blijft het deze maand; op vraag van Tom, 10 okt), week begint op maandag, bolletje
   in de accentkleur op elke dag met een meting in de grafiek (geen warm-up),
   vandaag in accentkleur, bovenaan 'N training days · N sets' (sets van die maand; op vraag van Tom telt het dagen, twee workouts op één dag = één dag). Tik op een dag = eronder (1.25rem ruimte onder de kalender, ~26 px van de laatste cijfers tot de lijn met de datum; de grote ruimte staat ONDER de datum: eerste tussenkop padding-top 2.8rem; op vraag van Tom) de datum en daaronder per regel 'Programma · N sets' en 'Cardio · N min' (op vraag van Tom) (som van de sets van elke oefening
   die dag, één keer per oefening). Programma (`prog()` in het kalenderscript) wordt per workout afgeleid uit de groepen met een meting: g10 = EGYM (+ rest), enkel g8 = Cardio,

@@ -4911,7 +4911,9 @@ window.__congrats=function(o){
     box.addEventListener('touchend',function(e){ if(x0==null) return; var t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0; x0=null;
       if(Math.abs(dx)>50&&Math.abs(dx)>1.5*Math.abs(dy)) monPage(dx>0?-1:1); },{passive:true}); })();
   function render(){
-    var days=data(); renderMon(days); var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
+    var days=data(), dk=Object.keys(days).sort(), c0=new Date(), fk=dk.length?dk[0].split('-'):null, fy=fk?+fk[0]:c0.getFullYear(), fm=fk?+fk[1]-1:c0.getMonth();
+    if(ym.y*12+ym.m<fy*12+fm) ym={y:fy,m:fm}; /* niet terug vóór de eerste maand met data (op vraag van Tom, 10 okt) */
+    renderMon(days); var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
     var cnt=0, msets=0, mmin=0, lastOn=null, html='', key='';
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
@@ -4924,6 +4926,7 @@ window.__congrats=function(o){
     grid.innerHTML=html;
     document.getElementById('calSum').textContent=cnt?cnt+(cnt===1?' training day':' training days')+' · '+amount(msets,mmin).replace(/(\d+) min cardio/,function(x,n){ return hr(+n)+' cardio'; }):'No workouts'; /* maandtotaal cardio in uren vanaf 60 min */
     var cur=new Date(); document.querySelector('.cal-nav[data-m="1"]').disabled=(y===cur.getFullYear()&&m===cur.getMonth());
+    document.querySelector('.cal-nav[data-m="-1"]').disabled=(y*12+m<=fy*12+fm);
     if(!sel||sel.slice(0,7)!==key.slice(0,7)||!days[sel]) sel=lastOn;
     grid.querySelectorAll('.cal-d.on').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
       b.addEventListener('click',function(){ sel=b.dataset.d; render(); }); });
