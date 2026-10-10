@@ -108,7 +108,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 ## Statistieken (Workout/Progress → Progress)
 Figuur voor/achter + lijst per spier. Periodes (`per`, onthouden in localStorage `fitlog-stats-per`):
 - Vier knoppen links (op vraag van Tom, 9 okt): Last Workout (`dag`; de laatste trainingsdag → totaal aantal sets), 7 Days (`week` → totaal aantal sets),
-  30 Days (`maand`) en 90 Days (`kwart`, laatste 90 dagen; 13.5 px, tussenruimte .7rem zodat alles op 375 px past; ≤ 360 px 12.5 px/.45rem) → gemiddeld per week; rechts in dezelfde rij een ronde knop `#balEdit` (icoon Material Symbols 'edit_calendar' als inline SVG 20 px, ook op `#prEdit`; op vraag van Tom, offline-veilig i.p.v. de webfont) (`.per-edit`, accent als actief) = eigen periode
+  30 Days (`maand`) en 90 Days (`kwart`, laatste 90 dagen; 13.5 px, tussenruimte zoveel als past (op vraag van Tom, 10 okt): .85rem (375 px), 1.05rem vanaf 385 px, 1.2rem vanaf 400 px; ≤ 360 px 12.5 px/.45rem) → gemiddeld per week; rechts in dezelfde rij een ronde knop `#balEdit` (icoon Material Symbols 'edit_calendar' als inline SVG 20 px, ook op `#prEdit`; op vraag van Tom, offline-veilig i.p.v. de webfont) (`.per-edit`, accent als actief) = eigen periode
   (`per='range'`, op vraag van Tom, 9 okt; Year/All zijn weg, bewaarde oude keuzes → 30d). Venster `p53EditRange` binnen de eerste/laatste training;
   bewaard in localStorage `fitlog-stats-range` `{f,t}` (leeg = volgt eerste/laatste); `balRange(evs)`. Langer dan 7 dagen = gemiddeld per week. Tekst eronder
   '27 Sep – 9 Oct 2026, 4 training days, sets per week.'. Selectors op de periodeknoppen gebruiken `.stats-per button[data-d]` (het potlood niet).

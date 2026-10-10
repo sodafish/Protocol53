@@ -1049,7 +1049,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .stats>.sv>.stats-per{display:flex;gap:1.5rem;justify-content:flex-start;border-bottom:1px solid var(--line);}
 .stats>.sv>.stats-per button{flex:none;min-height:40px;padding:0 .1rem;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-weight:600;font-size:14px;}
 .stats>.sv>.stats-per button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--accent);}
-.stats>.sv>.stats-per{justify-content:flex-start;gap:.7rem;align-items:center;}
+.stats>.sv>.stats-per{justify-content:flex-start;gap:.85rem;align-items:center;} /* meer lucht tussen de periodes (op vraag van Tom, 10 okt; zoveel als past) */
+@media (min-width:385px){.stats>.sv>.stats-per{gap:1.05rem;}}
+@media (min-width:400px){.stats>.sv>.stats-per{gap:1.2rem;}}
 .stats>.sv>.stats-per button[data-d]{font-size:13.5px;}
 /* potlood rechts in de periode-rij van Balance: eigen periode (op vraag van Tom, 9 okt) */
 .stats>.sv>.stats-per .per-edit{margin-left:auto;flex:none;width:36px;height:36px;min-height:0;padding:0;border:1.5px solid var(--line);border-radius:50%;margin-bottom:2px;
