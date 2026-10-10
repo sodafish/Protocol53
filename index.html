@@ -2890,8 +2890,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      eerste → laatste meting binnen het bereik (minstens twee). Een spier telt de oefeningen waar ze hoofdspier is (1);
      waarde = gemiddelde van de twee meest gemeten (zoals de groepen onder Progress). */
   function progRows(fn){ document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
-      if(!/^g[1-7]$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return; /* eGym (g10) telt niet in Progress: wisselende methode, toestel past gewicht zelf aan (op vraag van Tom, 10 okt) */
-      var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return; fn(li,ins[0].dataset.note); }); }
+      if(!/^g([1-7]|10)$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return;
+      var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return;
+      if(li.dataset.grp==='g10'){ fn(li,ins[0].dataset.note+'#ecc'); fn(li,ins[0].dataset.note+'#reg'); return; } /* eGym terug in Progress, elke methode als aparte reeks (op vraag van Tom, 10 okt) */
+      fn(li,ins[0].dataset.note); }); }
   /* KETTINGINDEX (op vraag van Tom, 9 okt): elke oefening wordt enkel met zichzelf vergeleken (meting → volgende meting),
      de eerste meting van een oefening (ooit) telt niet (leereffect; op vraag van Tom enkel de eerste). Per week (ma–zo): per oefening de som van haar
      stapjes (log), daarna het gemiddelde over de oefeningen die die week gedaan zijn; de weken worden vermenigvuldigd.
@@ -3249,7 +3251,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function pidx(){ if(PIDX) return PIDX; var o={}; Object.keys(prog).forEach(function(id){ var e=prog[id]; if(e&&typeof e.v==='number') (o[e.k]=o[e.k]||[]).push(e); });
     Object.keys(o).forEach(function(k){ o[k].sort(function(a,b){ return a.t-b.t; }); }); return PIDX=o; }
   window.addEventListener('p53-prog',function(){ PIDX=null; },true);
-  window.__progPts=function(k){ return (pidx()[k]||[]).slice(); };
+  window.__progPts=function(k){ var h=String(k).indexOf('#'); if(h>0){ var m=k.slice(h+1); return (pidx()[k.slice(0,h)]||[]).filter(function(e){ return (e.m||'ecc')===m; }); } return (pidx()[k]||[]).slice(); }; /* 'eg-…#ecc' / '#reg' = enkel die eGym-methode (op vraag van Tom, 10 okt) */
   window.__progFmt={d:dLabY,v:fmtV};
   function niceTicks(lo,hi){
     var span=hi-lo||1, step=Math.pow(10,Math.floor(Math.log10(span/3))), err=span/3/step;
@@ -4711,21 +4713,22 @@ window.__congrats=function(o){
     document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
       /* eGym-oefeningen staan onder hun spiergroep (hoofdspier), niet als eigen groep (op vraag van Tom, 9 okt) */
       var gk=li.dataset.grp, sub=li.dataset.sub||'';
-      if(gk==='g10') return; /* eGym telt niet in Progress (op vraag van Tom, 10 okt); EGMAP blijft voor als het ooit terug moet */
+      var EGM=null; if(gk==='g10'){ var mm=window.__musclesFor?window.__musclesFor(li.dataset.key,li)||{}:{}, pm=Object.keys(mm).filter(function(m){ return mm[m]===1; })[0], to=EGMAP[pm]; if(!to) return; gk=to[0]; sub=to[1]||''; EGM=1; } /* eGym onder de spiergroep van de hoofdspier, per methode een rij */
       var G=byG[gk]; if(!G) return; /* geen warm-up en cardio */
       if(li.dataset.sub==='Supersets'||li.querySelectorAll('.exr-in[data-note]').length>1) return; /* geen supersets (op vraag van Tom) */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]');
-      [].forEach.call(ins,function(inp){ if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
-        G.notes.push(inp.dataset.note); var sk=sub; (G.sn[sk]=G.sn[sk]||[]).push(inp.dataset.note); /* voor de kettingindex van groep/tussenkop */
+      var SER=[]; [].forEach.call(ins,function(inp){ if(EGM){ SER.push({inp:inp,k:inp.dataset.note+'#ecc',nm:name+' · Eccentric'}); SER.push({inp:inp,k:inp.dataset.note+'#reg',nm:name+' · Regular'}); } else SER.push({inp:inp,k:inp.dataset.note,nm:name}); });
+      SER.forEach(function(S){ var inp=S.inp; if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
+        G.notes.push(S.k); var sk=sub; (G.sn[sk]=G.sn[sk]||[]).push(S.k); /* voor de kettingindex van groep/tussenkop */
         /* zelfde regels als de kettingindex: de allereerste meting telt nooit (leereffect); basis = laatste meting vóór de periode, anders de eerste erin;
            enkel tonen als er een echte stap is (dus vanaf de derde meting) */
-        var allx=window.__progPts(inp.dataset.note).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
+        var allx=window.__progPts(S.k).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
         var before=allx.filter(function(x){ return x.t<R.from; }).pop(), first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
         var unit=inp.placeholder||'kg', d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
-        G.r.push({p:pct,n:pts.length,t:last.t||0,sub:sub,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(name)+'</span>'+
+        G.r.push({p:pct,n:pts.length,t:last.t||0,sub:sub,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(S.nm)+'</span>'+
           '<span class="pl-v">'+pc(pct)+'<em>'+F.v(last.v)+' '+esc(unit)+' · '+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+'</em></span>'+CHEV+'</button></li>'}); n++; });
     });
     /* progressie van een (sub)groep = gemiddelde % van de twee meest gemeten oefeningen (enkel oefeningen met minstens twee metingen; één oefening = die);
