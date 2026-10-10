@@ -375,7 +375,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   'Start' scrolt naar de eerste zichtbare groepskop.
 - Groep 8 'Cardio' (onderaan in `#s-d3`, kop zonder nummer, met potlood/keuzeblad zoals de andere groepen, geen uitleg-regel):
   rijen met sleutels `c-…` en een invulveld in minuten (`placeholder="min"`, data-note = sleutel): standaard aan Walking (`c-walk`,
-  foto's walking = loopband), Walk-Jog Outdoors (`c-walkjog`), Jogging (`c-jog`, 'Easy pace · 20–45 min · impact', foto's = die van walk-jog; op vraag van Tom; bestaande cardiokeuzes krijgen het erbij via `migrate()`, vlag `jg`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`),
+  foto's walking = loopband), Walk-Jog (`c-walkjog`; heette 'Walk-Jog Outdoors', ingekort op vraag van Tom, 10 okt: staat al onder Outdoor), Jogging (`c-jog`, 'Easy pace · 20–45 min · impact', foto's = die van walk-jog; op vraag van Tom; bestaande cardiokeuzes krijgen het erbij via `migrate()`, vlag `jg`), Treadmill Walk-Jog (`c-treadjog`), Rower (`c-row`), Elliptical (`c-elliptical`),
   Cycling (`c-bike`), Padel (`c-padel`, 'Intervals · 60–90 min', geen foto's: het uitlegblad toont dan enkel tekst + tip);
   OUTDOOR / INDOOR (op vraag van Tom, 10 okt): tussenkoppen in g8 via `SUBS.g8` + `cat` (Outdoor = c-walk, c-walkjog, c-jog, c-bike, c-padel (Padel naar Outdoor op vraag van Tom, 10 okt); de rest Indoor). Walking (`c-walk`) = buiten, Cycling (`c-bike`) = buiten (geen beeld meer, enkel tekst; hun loopband-/hometrainerbeelden gingen naar de
   nieuwe binnenvarianten Treadmill Walk (`c-treadwalk`, EX `ctreadwalk`) en Exercise Bike (`c-xbike`, EX `cxbike`), beide standaard uit; GIF's gekopieerd).
