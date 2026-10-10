@@ -355,6 +355,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   Telt NIET in Coverage (spieren: `events()` slaat `w0-` en `c-` over); de kalender telt cardio als minuten i.p.v. sets: '17 sets + 20 min cardio' (plus als er
   kracht én cardio was; `amount()`), per dag en per maand. Een cardio-oefening streept de andere cardio-rijen niet door (je mag combineren). End workout met alleen cardio
   blijft op Workout (geen sprong naar Coverage), wel vuurwerk. De pagina Cardio onder More blijft als uitleg.
+- eGym-METHODE (op vraag van Tom, 10 okt): in de eGym-kop (g10) onder de titel 'Method' + schakelaar Eccentric · Regular (`.eg-meth`, `.st-seg`), voor de
+  hele sessie; per toestel in localStorage `fitlog-egm` (standaard Eccentric), `window.__egMethod()`. Elke eGym-meting (`progRecord` en 'Add' via `progPut`)
+  krijgt `m:'ecc'|'reg'`; oude eGym-metingen zonder `m` = Eccentric (alles tot 10 okt was excentrisch). Het uitlegblad toont per methode een eigen blok
+  'Your progress · Eccentric' / '· Regular' met eigen grafiek. Het getal dat Tom invult = het kg-getal uit het eGym-overzicht (basis-/duwgewicht).
 - Schrijfwijze op het scherm: 'eGym' (op vraag van Tom, 9 okt; tab, namen 'eGym …' in rijen én NAMES-sleutels, uitleg, kalender 'eGym'/'Open Gym + eGym'). Intern blijft `egym`/`g10`/`eg-…`.
 - Groep 10 'EGYM' (Toms EGYM-circuit in de gym; tussen g7 en g8 in `#s-d3`, kop zonder nummer, potlood/keuzeblad):
   alleen zichtbaar bij de keuze EGYM (`data-split="egym"`). Rijen `eg-…` met invulveld kg en schermnaam 'EGYM …' (zoals in de EGYM-app; uniek in NAMES).
