@@ -1512,9 +1512,9 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   #s-stats section.stats>.sv,#s-stats section.stats>.sv[hidden]{display:block!important;min-width:0;}
   #s-stats section.stats>.sv[data-sv="body"]{order:1;} #s-stats section.stats>.sv[data-sv="prog"]{order:2;} #s-stats section.stats>.sv[data-sv="cal"]{order:3;}
   #s-stats section.stats>.sv::before{display:block;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line);font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;color:var(--ink);}
-  #s-stats section.stats>.sv[data-sv="body"]::before{content:'Balance';}
-  #s-stats section.stats>.sv[data-sv="prog"]::before{content:'Progress';}
-  #s-stats section.stats>.sv[data-sv="cal"]::before{content:'Calendar';}
+  #s-stats section.stats>.sv[data-sv="body"]::before{content:'Muscle Balance';}
+  #s-stats section.stats>.sv[data-sv="prog"]::before{content:'Strength Progress';}
+  #s-stats section.stats>.sv[data-sv="cal"]::before{content:'History';}
   #s-stats .cal{margin-top:0;}
   #s-stats .pl-empty{padding-top:1rem;}
   /* Workout: breder, oefeningen in twee kolommen; groepskoppen en tussenkoppen over de volle breedte */
@@ -1803,7 +1803,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 
   <div class="pane" id="s-stats" role="tabpanel" aria-labelledby="k-stats" hidden>
     <div class="wtabs stabs" id="stabs" role="tablist" aria-label="Statistics">
-      <button type="button" role="tab" data-sv="body" aria-selected="true">Balance</button><button type="button" role="tab" data-sv="prog" aria-selected="false">Progress</button><button type="button" role="tab" data-sv="cal" aria-selected="false">Calendar</button>
+      <button type="button" role="tab" data-sv="body" aria-selected="true">Muscle Balance</button><button type="button" role="tab" data-sv="prog" aria-selected="false">Strength Progress</button><button type="button" role="tab" data-sv="cal" aria-selected="false">History</button>
     </div>
     <section class="stats" aria-label="Progress">
       <div class="sv" data-sv="body">
@@ -1815,7 +1815,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <ol class="stats-list" id="statsList"></ol>
       </div>
       <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
-        <h2 class="prog-t">Calendar</h2>
+        <h2 class="prog-t">History</h2>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
           <div class="cal-title"><b id="calMonth"></b><span id="calSum"></span></div>
           <button type="button" class="cal-nav" data-m="1" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>

@@ -134,6 +134,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   beschikbare (`eff`) zonder de keuze te overschrijven.
 `hist` bewaart alles (nooit opschonen), dus extra periodes kunnen zonder datamigratie.
 
+- Tabnamen (op vraag van Tom, 10 okt): **Muscle Balance** · **Strength Progress** · **History** (vroeger Balance · Progress · Calendar; ook de `::before`-titels op tablet en de verborgen kop `h2.prog-t`). Intern blijft `body`/`prog`/`cal`.
 - Tabs bovenaan Statistics/Results (op vraag van Tom): `#stabs` (klasse `.wtabs stabs`, zelfde plakkende pil als op Workout), volgorde (9 okt) **Balance** (eerst; schermnaam 'Balance', vroeger 'Muscle Balance') · **Progress** (vroeger 'Strength Progress') (`#plist` + lege melding `#plEmpty`, `data-sv=prog`) ·
   Muscle Balance (vroeger 'Balance'/'Muscles'; knoppen `#stabs>button` breedte volgens tekst, 13.5 px; periode + figuur + spierlijst, wrapper `.sv[data-sv=body]`) · **Calendar** (`#cal`, `data-sv=cal`). Stop workout (met vinkjes) → Balance, bovenaan.
 - Actieve tab in `#wtabs`/`#stabs`: zachte grijze pil (`--ink` 9%) met accenttekst (variant A; zwart/wit en volle terracotta (D) geprobeerd en teruggedraaid op vraag van Tom).
