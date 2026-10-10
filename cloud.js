@@ -3,9 +3,6 @@
 (function(){
   var SB_URL='https://vfcdcnrxtwwcqqksrxad.supabase.co';
   var SB_KEY='sb_publishable_slEtU8zK73VJbSc5zun36Q_Xc6pJhrn';
-  /* link uit de mail 'reset password' (op vraag van Tom, 10 okt): #…type=recovery (of een fout, bv. verlopen link); vóór createClient lezen, die wist de hash */
-  var HASH=location.hash||'', RECOVERY=/type=recovery/.test(HASH), LINKERR=/error_code=|error=/.test(HASH)?(/otp_expired/.test(HASH)?'This reset link has expired. Request a new one below.':'This link is no longer valid. Request a new one below.'):'';
-  var REDIRECT=location.origin+location.pathname;
   var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'p53-auth'}});
   window.__sb=sb;
 
@@ -128,20 +125,11 @@
       '<p class="lg-msg" role="status"></p>'+
       '<button type="submit" class="lg-main">Log in</button>'+
       '<button type="button" class="lg-alt">No account yet? Create account</button>'+
-      '<button type="button" class="lg-alt lg-forgot">Forgot password?</button>'+
     '</form>';
     document.body.appendChild(o);
-    var f=o.querySelector('form'), m=o.querySelector('.lg-msg'), signup=false, reset=false, fg=o.querySelector('.lg-forgot');
+    var f=o.querySelector('form'), m=o.querySelector('.lg-msg'), signup=false;
     if(msg) m.textContent=msg;
-    /* wachtwoord vergeten: enkel e-mail, Supabase stuurt een link die terugkomt naar de app (type=recovery) */
-    function setReset(on){ reset=on; signup=false; f.pw.closest('label').hidden=on; o.querySelector('.lg-dob').hidden=true;
-      o.querySelector('.lg-main').textContent=on?'Send reset link':'Log in';
-      o.querySelector('.lg-alt').textContent='No account yet? Create account'; o.querySelector('.lg-alt').hidden=on;
-      fg.textContent=on?'Back to log in':'Forgot password?'; m.textContent=on?'Enter your email. We’ll send you a link to choose a new password.':''; }
-    fg.addEventListener('click',function(){ setReset(!reset); });
-    if(msg&&msg===LINKERR){ setReset(true); m.textContent=msg; }
     o.querySelector('.lg-alt').addEventListener('click',function(){
-      if(reset) setReset(false);
       signup=!signup;
       o.querySelector('.lg-main').textContent=signup?'Create account':'Log in';
       this.textContent=signup?'Already have an account? Log in':'No account yet? Create account';
@@ -152,12 +140,6 @@
     f.addEventListener('submit',function(e){
       e.preventDefault();
       var email=f.email.value.trim(), pw=f.pw.value;
-      if(reset){ if(!/\S+@\S+\.\S+/.test(email)){ m.textContent='Enter your email address.'; return; }
-        m.textContent='Sending…';
-        sb.auth.resetPasswordForEmail(email,{redirectTo:REDIRECT}).then(function(r){
-          if(r.error){ m.textContent=/rate|limit|seconds/i.test(r.error.message)?'Too many requests. Wait a little and try again.':r.error.message; return; }
-          m.textContent='If there’s an account for this address, you’ll get an email with a link. Open it, choose a new password, then log in here.';
-        },function(){ m.textContent='No connection. Try again once you are online.'; }); return; }
       if(!email||pw.length<6){ m.textContent='Enter your email and a password of at least 6 characters.'; return; }
       var dob=f.dob.value;
       if(signup && !/^\d{4}-\d{2}-\d{2}$/.test(dob)){ m.textContent='Enter your date of birth.'; return; }
@@ -171,41 +153,14 @@
     });
   }
 
-  /* na de link uit de mail: nieuw wachtwoord kiezen, daarna gewoon verder */
-  function showNewPw(u){
-    try{ history.replaceState(null,'',REDIRECT); }catch(e){}
-    var o=document.createElement('div'); o.id='p53-login';
-    o.innerHTML='<form class="lg-card" novalidate>'+
-      '<h1>Protocol</h1>'+
-      '<p class="lg-sub">Choose a new password for '+String(u.email||'your account').replace(/</g,'&lt;')+'.</p>'+
-      '<label>New password<input type="password" name="pw" autocomplete="new-password" required minlength="6"></label>'+
-      '<p class="lg-msg" role="status"></p>'+
-      '<button type="submit" class="lg-main">Save password</button>'+
-    '</form>';
-    document.body.appendChild(o);
-    var f=o.querySelector('form'), m=o.querySelector('.lg-msg');
-    f.addEventListener('submit',function(e){ e.preventDefault(); var pw=f.pw.value;
-      if(pw.length<6){ m.textContent='Use at least 6 characters.'; return; }
-      m.textContent='Saving…';
-      sb.auth.updateUser({password:pw}).then(function(r){
-        if(r.error){ m.textContent=/different/i.test(r.error.message)?'Choose a password you haven’t used before.':r.error.message; return; }
-        o.remove(); start(u);
-      },function(){ m.textContent='No connection. Try again once you are online.'; }); });
-  }
-  /* wachtwoord wijzigen terwijl je ingelogd bent (Settings) */
-  window.p53ChangePw=function(pw){ if(!navigator.onLine) return Promise.reject(new Error('offline'));
-    return sb.auth.updateUser({password:pw}).then(function(r){ if(r.error) throw r.error; }); };
-
   function boot(){
-    if(LINKERR){ try{ history.replaceState(null,'',REDIRECT); }catch(e){} }
     sb.auth.getSession().then(function(r){
       var s=r&&r.data&&r.data.session;
-      if(s&&RECOVERY){ showNewPw(s.user); return; }
       if(s){ start(s.user); return; }
       /* geen sessie: offline toch verder met wat er lokaal staat */
       if(!navigator.onLine && Object.keys(cache).length){ resolveDb(db); return; }
-      showLogin(LINKERR);
-    },function(){ showLogin(LINKERR); });
+      showLogin();
+    },function(){ showLogin(); });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 

@@ -73,13 +73,6 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   dan 'Open the app on' (`#stStart`, select: Where I left off (standaard) · Workout · Warm-up/Open Gym/eGym/Cardio; per toestel in localStorage `p53-start`;
   het `<head>`-script zet bij elke start `fitlog-where`={v:'workout',y:0} en `fitlog-split` vóór de andere scripts ze lezen; op vraag van Tom, 10 okt),
   dan 'Your data' (`.st-sec`) met 'Signed in as e-mail' (`#stUser`, uit `__p53user`), Export backup, Log out en Reset data (`#resetData`).
-  Wachtwoord (op vraag van Tom, 10 okt): in Settings 'New password' + 'Change password' (`#pwForm`, `window.p53ChangePw` in cloud.js = `updateUser`, enkel online).
-  Inlogscherm: 'Forgot password?' (`.lg-forgot`) → enkel e-mail → `resetPasswordForEmail(email,{redirectTo: app-URL})`; de link komt terug met `#…type=recovery`
-  (cloud.js leest `location.hash` VÓÓR `createClient`, die wist hem) → scherm 'Choose a new password' (`showNewPw`, `updateUser`) → gewoon verder (`start`).
-  Verlopen/ongeldige link (`#error…`) → inlogscherm in reset-modus met uitleg. Supabase-instelling nodig: Authentication › URL Configuration, Site URL en/of
-  Redirect URL `https://sodafish.github.io/Protocol53/`. Mails via de ingebouwde Supabase-mail: laag maximum per uur en mogelijk enkel naar teamadressen;
-  voor andere gebruikers eigen SMTP (bv. Resend) instellen als het nodig blijkt. Op iOS opent de link in Safari (aparte opslag van de beginscherm-app):
-  daar nieuw wachtwoord kiezen, daarna in de app inloggen. `#p53-login label[hidden]`/`button[hidden]` krijgen display:none (anders toonde display:flex ze).
   Tik op het getal (`button#ageBtn`) of het tandwiel → `window.__p53profileOpen` (vult het datumveld) → `__p53settings()`.
 - Opslag: collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. Bij 'Create account' is de
   geboortedatum verplicht (`cloud.js`, `user_metadata.dob` via `signUp`). `cloud.js` zet `window.__p53user` en stuurt event `p53-user`.
