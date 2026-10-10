@@ -86,7 +86,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 
 ## Diet
 - Diet en Guide: de eerste kaders beginnen op dezelfde hoogte als de tabs op Workout/Statistics (115 px op 375 px; `#p-voeding,#p-kracht{padding-top:.6rem}`, eerste marges 0; op vraag van Tom).
-- Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom). Alle frequentie-pillen zijn gevuld (groen/goud/rood met tekst in `--paper`, dus ook leesbaar in donker; op vraag van Tom).
+- Frequentie-badge 'Freely' (`b-vrij`) is overal 'Often' (`b-groen`) geworden (op vraag van Tom). Alle frequentie-pillen zijn gevuld met tekst in `--paper` (ook leesbaar in donker). Kleuren (op vraag van Tom, 10 okt): Often = donkergroen `--green`, Moderate = lichtgroen `--diet-mid`, Occasionally = bruin `--diet-low`; NOOIT rood (alles is gezond, enkel de frequentie verschilt). Klassen heten nog `b-amber`/`b-rood`; ook het lijntje links van de rij (`tr.row-amber/row-rood`) volgt die kleuren.
 - Elke voedingsrij toont onder de naam `<span class="nut">N kcal · N g protein <i>/ eenheid</i></span>` (op vraag van Tom, 9 okt; richtwaarden,
   ranges bij groepen zoals vette vis). Eenheid: per stuk waar dat logisch is (egg, avocado, piece fruit, slice, scoop, tin, tbsp,
   handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij. Getoond als zachte pil (`#p-voeding .nut`, 6% inkt). Eiwit enkel waar relevant: niet bij groenten, fruit, olie, avocado, olijven, cacao, chocolade, hummus, stevia, water (daar enkel kcal). De pil '★ Top protein' is weg (op vraag van Tom).
@@ -478,7 +478,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   'Shows as', Save en 'Reset to default'. Opslag: localStorage `fitlog-sets` + cfg/doc `sets` (`{sleutel:{s,r}}`).
   `applySets` vervangt de eerste tekst van `.exr-s` (origineel in `ORIG`); de statistieken lezen de sets uit die tekst,
   dus een aangepast aantal telt mee voor nieuwe afvinkingen.
-- De i-knop toont Material Symbols 'info_i' (op vraag van Tom, 10 okt; vroeger 'visibility' (oog)) als inline SVG `INFO_ICON` (viewBox 0 -960 960 960, pad uit npm @material-symbols/svg-400), 20 px,
+- De i-knop toont Material Symbols 'visibility' (oog) als inline SVG `INFO_ICON` (10 okt even 'info_i' geprobeerd, op vraag van Tom terug naar het oog), 20 px,
   viewBox `0 -980 960 960` zodat het oog verticaal gecentreerd staat (vroeger een getekende Fraunces-'i');
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.

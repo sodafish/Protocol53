@@ -134,7 +134,7 @@ window.p53EditVals=function(o){
   --plum-soft:#9a6478;
   --muted:#6b6559;
   --muted-soft:#8a8270;
-  --rood:#b23a1e;
+  --rood:#b23a1e;--diet-mid:#6E8F4E;--diet-low:#8A5A36;
   --line:#c4bca3;
   --line-soft:#d6cfb8;
   --text:var(--ink);
@@ -277,8 +277,8 @@ td{padding:.75rem .8rem;border-bottom:1px solid var(--line);vertical-align:top;f
 td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:.98rem;}
 tr:last-child td{border-bottom:none;}
 tr.row-groen td:first-child{box-shadow:inset 3px 0 0 var(--green);}
-tr.row-amber td:first-child{box-shadow:inset 3px 0 0 var(--gold);}
-tr.row-rood td:first-child{box-shadow:inset 3px 0 0 var(--rood);}
+tr.row-amber td:first-child{box-shadow:inset 3px 0 0 var(--diet-mid);}
+tr.row-rood td:first-child{box-shadow:inset 3px 0 0 var(--diet-low);}
 tr.hl td{background:var(--paper-soft);}
 tr.hl strong{font-weight:600;color:var(--accent);}
 tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
@@ -377,8 +377,8 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
     padding:1rem 1.1rem;margin-bottom:.6rem;}
   table.stack tr:last-child{margin-bottom:0;}
   table.stack tr.row-groen{border-left:3px solid var(--green);}
-  table.stack tr.row-amber{border-left:3px solid var(--gold);}
-  table.stack tr.row-rood{border-left:3px solid var(--rood);}
+  table.stack tr.row-amber{border-left:3px solid var(--diet-mid);}
+  table.stack tr.row-rood{border-left:3px solid var(--diet-low);}
   table.stack td{display:block;border:none;padding:0;font-size:.9rem;font-weight:400;line-height:1.55;}
   table.stack tr td:first-child,
   table.stack tr.row-groen td:first-child,
@@ -501,8 +501,8 @@ td .note{margin-top:0;max-width:9rem;}
   table.stack tr{display:grid;grid-template-columns:1fr auto;column-gap:.75rem;row-gap:.3rem;align-items:start;
     background:none;border:none;border-bottom:1px solid var(--line);padding:.8rem 0 .8rem .8rem;margin:0;}
   table.stack tr.row-groen{border-left:3px solid var(--green);}
-  table.stack tr.row-amber{border-left:3px solid var(--gold);}
-  table.stack tr.row-rood{border-left:3px solid var(--rood);}
+  table.stack tr.row-amber{border-left:3px solid var(--diet-mid);}
+  table.stack tr.row-rood{border-left:3px solid var(--diet-low);}
   table.stack td{margin:0;}
   table.stack td:first-child{grid-column:1;grid-row:1;align-self:center;font-size:1rem;margin:0;}
   table.stack td[data-label="Frequency"],
@@ -566,21 +566,21 @@ td .note{margin-top:0;max-width:9rem;}
 :root{
   --ink:#2A1D16; --paper:#F7F2EA; --paper-soft:#EFE6D8; --paper-dark:#E3D7C4; --surface:#FBF8F3;
   --terra:#9A4424; --terra-soft:#C4764F; --muted:#5E4A3E; --muted-soft:#8A7868;
-  --line:#D9CBB8; --line-soft:#E6DCCB; --rood:#A3321F;
+  --line:#D9CBB8; --line-soft:#E6DCCB; --rood:#A3321F;--diet-mid:#6E8F4E;--diet-low:#8A5A36;
   --green:#4A6B3E; --gold:#8C6A2E; --blue:#2F6FA8;
 }
 body[data-tab]{--accent:#9A4424;--accent-soft:#C4764F;}
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --ink:#F1E8DC; --paper:#1B1411; --paper-soft:#30251F; --paper-dark:#3A2E27; --surface:#241B17;
-    --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;
+    --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
     --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
   }
   :root:not([data-theme="light"]) body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
 }
 :root[data-theme="dark"]{
   --ink:#F1E8DC; --paper:#1B1411; --paper-soft:#30251F; --paper-dark:#3A2E27; --surface:#241B17;
-  --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;
+  --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
   --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
 }
 :root[data-theme="dark"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
@@ -1464,8 +1464,9 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 
 /* Diet: frequentie-pillen altijd gevuld (op vraag van Tom) */
 #p-voeding .badge.b-groen{background:var(--green);border-color:var(--green);color:var(--paper);}
-#p-voeding .badge.b-amber{background:var(--gold);border-color:var(--gold);color:var(--paper);}
-#p-voeding .badge.b-rood{background:var(--rood);border-color:var(--rood);color:var(--paper);}
+/* donkergroen → lichtgroen → bruin, geen rood: alles is gezond, enkel de frequentie verschilt (op vraag van Tom, 10 okt) */
+#p-voeding .badge.b-amber{background:var(--diet-mid);border-color:var(--diet-mid);color:var(--paper);}
+#p-voeding .badge.b-rood{background:var(--diet-low);border-color:var(--diet-low);color:var(--paper);}
 
 /* Strength Progress: enkel het groepspercentage krijgt kleur (op vraag van Tom) */
 .pl-list .pl-sh b.up{color:var(--ink);}
@@ -4228,7 +4229,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     });
   }
   document.addEventListener('p53-prog',function(){ if(!sh.hidden && curName) progBlock(curName); });
-  var INFO_ICON='<svg class="ib-i" width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M430.5-720.59q-20.5-20.59-20.5-49.5t20.59-49.41q20.59-20.5 49.5-20.5t49.41 20.59q20.5 20.59 20.5 49.5t-20.59 49.41q-20.59 20.5-49.5 20.5t-49.41-20.59ZM430-120v-480h100v480H430Z"/></svg>'; window.__p53infoIcon=INFO_ICON;
+  var INFO_ICON='<svg class="ib-i" width="20" height="20" viewBox="0 -980 960 960" fill="currentColor" aria-hidden="true"><path d="M600.5-379.5Q650-429 650-500t-49.5-120.5Q551-670 480-670t-120.5 49.5Q310-571 310-500t49.5 120.5Q409-330 480-330t120.5-49.5Zm-200-41Q368-453 368-500t32.5-79.5Q433-612 480-612t79.5 32.5Q592-547 592-500t-32.5 79.5Q527-388 480-388t-79.5-32.5ZM216-283Q98-366 40-500q58-134 176-217t264-83q146 0 264 83t176 217q-58 134-176 217t-264 83q-146 0-264-83Zm264-217Zm222.5 174.5Q804-391 857-500q-53-109-154.5-174.5T480-740q-121 0-222.5 65.5T102-500q54 109 155.5 174.5T480-260q121 0 222.5-65.5Z"/></svg>'; window.__p53infoIcon=INFO_ICON;
   var INFO_BTN='<button type="button" class="info-b" aria-label="How to">'+INFO_ICON+'</button>';
   document.querySelectorAll('#s-d3 .exr-n, #s-d3 .wu-list li > span:first-child').forEach(function(n){
     if(n.querySelector('.info-b')) return;
