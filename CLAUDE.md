@@ -196,7 +196,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   + duur · oefeningen; tik of 4,5 s = weg. Geen geluid (op vraag van Tom weggehaald). Bij reduced motion zonder vuurwerk.
 - Maandoverzicht bovenaan History (op vraag van Tom, 10 okt; gekozen uit vier voorstellen = variant B; eGym/Open Gym-onderscheid bewust weg):
   `#calMon`, `renderMon(days)` in het kalenderscript (zelfde dagdata als de kalender). Drie kleine grafieken onder elkaar, elk eigen schaal:
-  Training days · Sets · Cardio (in uren en minuten: '40min', '1h 20min', '7h 35min', '2h'; `hr(min)`; op vraag van Tom, 10 okt; vroeger even per half uur;
+  Training days · Sets · Cardio (in uren en minuten: '40m', '1h 20m', '7h 35m', '2h' (op vraag van Tom korter dan 'min'); `hr(min)`; op vraag van Tom, 10 okt; vroeger even per half uur;
   lange waarden breken boven de staaf op de spatie; groot getal met kleine eenheden `small.u`; ook het maandtotaal boven de kalender, de dagen blijven '40 min'); kop = label links + groot getal (Fraunces 24) van de GEKOZEN kalendermaand ('… so far in October' voor de
   lopende maand, anders 'in September'). 6 maanden naast elkaar (venster `winEnd`), staafjes in inkt 20% op papier, gekozen maand accent,
   lopende maand gearceerd (`.run`). Navigatie: kalenderpijltjes (venster schuift mee als de maand erbuiten valt), tik op een staaf/maand = kalender
