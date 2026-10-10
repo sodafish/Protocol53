@@ -403,7 +403,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   `li.gx-empty` met gestippelde knop '+ Add exercises · Tap to choose from the list' die het keuzeblad van die groep opent (`apply()` zet/verwijdert hem).
   Testen: `window.__p53freshTest()` (alleen lokaal, bewaart niets). Invulvelden starten leeg (geen value in de HTML). Binnen een groep staan álle mogelijke oefeningen als gewone
   rijen in de HTML met `data-grp="g1"`; uitgezette rijen krijgen klasse `ex-off` (verborgen).
-- Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Titel + kruisje blijven
+- Potloodknop `.grp-edit` in de groepskop opent onderblad `#grp-sheet` met schakelaars (`.sw`). Geen scheidingslijn tussen de infotekst bovenaan en de lijst (`.gs-list` zonder border-top; regel van Tom, 10 okt: nooit een divider onder een infotekst bovenaan een blad). Titel + kruisje blijven
   bovenaan staan (sticky `.sheet-head`; bij scrollen klasse `.stuck` = dunne lijn eronder). Minstens
   één oefening blijft aan. Keuze in localStorage `fitlog-groups` en Supabase collectie `cfg`, doc `groups`
   (`{g1:[sleutels die aan staan]}`); zonder keuze gelden de rijen die in de HTML niet `ex-off` zijn.
