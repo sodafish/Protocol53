@@ -15,7 +15,7 @@
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#1B1411':v==='light'?'#F7F2EA':(i?'#1B1411':'#F7F2EA')); }); };
   if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
-  try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
+  try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio|home)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -1406,7 +1406,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wtabs.wdock{flex-direction:column;gap:0;padding:0;border:none;border-radius:26px;overflow:hidden;
   background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));}
 .wtabs.wdock.on{background:var(--ink);}
-.wd-tabs{display:flex;gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
+.wd-tabs{display:flex;gap:8px;padding:0;background:var(--paper);} /* twee pillen: kracht (Open Gym · eGym · Home) en Cardio apart (op vraag van Tom, 10 okt, variant B) */
+.wd-pill{display:flex;gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
+.wd-str{flex:1 1 auto;min-width:0;}
+.wd-card{flex:none;}
+.wtabs .wd-card button{flex:none;padding:0 1.05rem;}
+.wtabs.wdock,.wtabs.wdock.on{background:var(--paper);}
 .wd-go[hidden]{display:none;} /* geen startknop meer: de balk verschijnt pas bij het eerste vinkje (op vraag van Tom) */
 .wd-go{display:flex;align-items:center;min-height:48px;padding:0 6px 0 4px;color:var(--paper);}
 .wtabs.wdock.on .wd-go{color:var(--paper);}
@@ -1428,7 +1433,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 #p-voeding>.section:first-child>.rules,#p-kracht>.cards:first-child{margin-top:0!important;}
 
 /* ---- schuivende pil: tabs (Workout, Results) en navbar; de achtergrond van de actieve knop is één element dat zacht verschuift (op vraag van Tom) ---- */
-.wd-tabs,.gnav-pill{position:relative;}
+.wd-tabs,.wd-pill,.gnav-pill{position:relative;}
 .pill-ind{position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:999px;background:var(--paper-soft); /* zelfde kleur als de Front/Back-schakelaar (op vraag van Tom, 10 okt) */
   transition:transform .34s cubic-bezier(.3,.7,.2,1),width .34s cubic-bezier(.3,.7,.2,1),height .34s cubic-bezier(.3,.7,.2,1);}
 .pill-ind.no-anim{transition:none;}
@@ -1628,11 +1633,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <div class="pane" id="s-d3">
     <div class="tools-row" hidden>
       <div class="split-sel" hidden>
-        <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Open Gym</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button type="button" id="splitBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Workout type"><span id="splitLbl">Gym</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="split-pop" id="splitPop" role="menu" hidden>
           <button type="button" role="menuitemradio" data-split="warmup"><span>Warm-up</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <hr class="sm-sep" role="separator">
-          <button type="button" role="menuitemradio" data-split="full"><span>Open Gym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+          <button type="button" role="menuitemradio" data-split="full"><span>Gym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <button type="button" role="menuitemradio" data-split="egym"><span>eGym</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
           <hr class="sm-sep" role="separator">
           <button type="button" role="menuitemradio" data-split="cardio"><span>Cardio</span><svg class="sm-ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
@@ -1643,7 +1648,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </div>
     </div>
     <div class="wtabs wdock" id="wtabs">
-      <div class="wd-tabs" role="tablist" aria-label="Workout type"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="cardio">Cardio</button><button type="button" role="tab" data-split="egym">eGym</button></div>
+      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home">Home</button></div><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
@@ -2204,7 +2209,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
-      <select id="stStart" class="st-sel"><option value="full">Workout · Open Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option></select>
+      <select id="stStart" class="st-sel"><option value="full">Workout · Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option><option value="home">Workout · Home</option></select>
       <p class="st-note">Applies each time the app starts.</p>
     </div>
     <div class="st-sec">
@@ -2238,7 +2243,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
   function hide(){ if(!open) return; open=false; var a=document.activeElement; if(a&&sh.contains(a)&&a.blur) a.blur(); bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); (last&&last.focus?last:btn).focus({preventScroll:true}); }
   var ss=document.getElementById('stStart');
-  if(ss){ try{ var sv=localStorage.getItem('p53-start')||'full'; if(!/^(full|egym|cardio|last)$/.test(sv)){ sv='full'; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
+  if(ss){ try{ var sv=localStorage.getItem('p53-start')||'full'; if(!/^(full|egym|cardio|home|last)$/.test(sv)){ sv='full'; localStorage.removeItem('p53-start'); } ss.value=sv; }catch(e){}
     ss.addEventListener('change',function(){ try{ localStorage.setItem('p53-start',ss.value); }catch(e){} }); }
   window.__p53settings=show;
   btn.addEventListener('click',function(){ if(window.__p53profileOpen) window.__p53profileOpen(); else show(); });
@@ -4345,7 +4350,13 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function defaults(g){ return rows(g).filter(function(li){ return !li.classList.contains('ex-off'); }).map(keyOf); }
   var DEF={}; document.querySelectorAll('.grp-edit').forEach(function(b){ DEF[b.dataset.grp]=defaults(b.dataset.grp); });
   var ODEF0=[].slice.call(document.querySelectorAll('#s-d3 .exr[data-grp]:not(.ex-off)'));
-  function on(g){ return cfg[g]||DEF[g]||[]; }
+  /* Home (op vraag van Tom, 10 okt): eigen keuze per groep in cfg.home (start leeg); enkel oefeningen met lichaamsgewicht, halters, bank/stoel, elastiek of springtouw */
+  var HOME='w0-pull-aparts w0-bodyweight-squats w0-glute-bridge w0-jump-rope d2-dumbbell-reverse-lunges d3-bulgarian-split-squat d1-goblet-squat x1-db-step-up x1-db-split-squat x1-db-squat x1-walking-lunge x1-jump-squat x1-bw-walking-lunge x1-db-forward-lunge d1-dumbbell-chest-press d3-push-ups x2-db-fly x2-incline-pushup x2-decline-pushup x2-db-bench d1-dumbbell-romanian-deadlift x3-hip-thrust x3-single-leg-rdl x3-donkey-kick x3-db-calf-raise d3-chest-supported-row d3-eenarmige-dumbbell-row d1-seated-dumbbell-shoulder-press d2-dumbbell-lateral-raise x5-front-raise x5-db-shrug d3-bird-dog d1-plank x7-side-plank d1-farmers-carry x7-dead-bug x7-russian-twist x7-crunches x7-bicycle-crunch x7-superman d3-dumbbell-biceps-curl x8-hammer-curl x8-concentration-curl x8-wrist-curl x8-spider-curl x8-kickback x8-bench-dips x8-diamond-pushup'.split(' ');
+  window.__p53home=HOME;
+  function isHome(g){ return window.__split==='home'&&(!g||/^g[0-7]$/.test(g)); } /* Cardio (g8) en eGym (g10) houden hun gewone keuze */
+  function on(g){ if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
+  function setOn(g,act){ if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
+  document.addEventListener('p53-split',function(){ apply(); if(open) render(); });
   function apply(){
     Object.keys(DEF).forEach(function(g){ var act=on(g); rows(g).forEach(function(li){ li.classList.toggle('ex-off',act.indexOf(keyOf(li))<0); }); });
     /* lege groep: subtiele knop 'Add exercises' onder de kop, opent het keuzeblad (nieuwe gebruiker start leeg; op vraag van Tom) */
@@ -4448,7 +4459,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function render(){
     var act=on(cur);
     /* volgorde: eerst zonder aandachtspunt, dan met label (Back!, Knees! …), dan gevaarlijk (driehoekje); binnen elke laag op populariteit (POP) */
-    var ordered=rows(cur); /* al gesorteerd door sortRows */
+    var ordered=rows(cur).filter(function(li){ return !isHome(cur)||HOME.indexOf(keyOf(li))>=0; }); /* al gesorteerd door sortRows; Home: enkel thuisoefeningen */
     var lastSub=null;
     list.innerHTML=ordered.map(function(li){ var subH=''; if(li.dataset.sub&&li.dataset.sub!==lastSub){ lastSub=li.dataset.sub; subH='<li class="gs-sub-h">'+lastSub+'</li>'; }
       return subH+(function(){ var k=keyOf(li), eqp=li.querySelector('.exr-s .exr-eqp'), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;
@@ -4464,7 +4475,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       else{ if(i>=0) act.splice(i,1); } /* een groep mag leeg zijn (nieuwe gebruiker kiest zelf; op vraag van Tom) */
       msg.textContent='';
       var order=rows(cur).map(keyOf); act.sort(function(a,b){ return order.indexOf(a)-order.indexOf(b); });
-      cfg[cur]=act; save(); apply(); c.closest('li').classList.toggle('off',!c.checked);
+      setOn(cur,act); save(); apply(); c.closest('li').classList.toggle('off',!c.checked);
     }); });
   }
   /* slepen om de volgorde te wijzigen (greep links), alleen binnen dezelfde tussenkop; bewaard in cfg.order[groep] */
@@ -4529,9 +4540,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
 /* ---- Full / Upper / Lower: verbergt groepen die je vandaag niet traint (Warm-up altijd). Keuze in localStorage fitlog-split ---- */
 (function(){
   /* Cardio = alleen groep 8 (geen warm-up); Full/Upper/Lower = nooit groep 8 */
-  var KEY='fitlog-split', LKEY='fitlog-split-last', SPLIT={full:['g0','g1','g2','g3','g4','g5','g6','g7'],upper:['g0','g2','g4','g5','g7'],lower:['g0','g1','g3','g6'],egym:['g0','g10'],cardio:['g8']}; /* warm-up staat bovenaan Open Gym en eGym, geen eigen tab meer (op vraag van Tom, 10 okt) */
+  var KEY='fitlog-split', LKEY='fitlog-split-last', SPLIT={full:['g0','g1','g2','g3','g4','g5','g6','g7'],upper:['g0','g2','g4','g5','g7'],lower:['g0','g1','g3','g6'],egym:['g0','g10'],cardio:['g8'],home:['g0','g1','g2','g3','g4','g5','g6','g7']}; /* Home: zelfde groepen, eigen keuze, enkel thuisoefeningen (op vraag van Tom, 10 okt) */ /* warm-up staat bovenaan Open Gym en eGym, geen eigen tab meer (op vraag van Tom, 10 okt) */
   var btn=document.getElementById('splitBtn'), pop=document.getElementById('splitPop'), lbl=document.getElementById('splitLbl'); if(!btn||!pop) return;
-  var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio'};
+  var NAME={warmup:'Warm-up',full:'Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio',home:'Home'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
   var tabs=document.getElementById('wtabs');
   function apply(){
@@ -4539,7 +4550,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
     document.body.classList.toggle('split-cardio',cur==='cardio');
-    window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
+    document.body.classList.toggle('split-home',cur==='home');
+    var was=window.__split; window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
+    if(was!==cur) document.dispatchEvent(new Event('p53-split')); /* groepskeuze: Home heeft een eigen selectie */
     lbl.textContent=NAME[cur];
     pop.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.split===cur?'true':'false'); });
     if(tabs) tabs.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.split===cur?'true':'false'); });
@@ -4831,7 +4844,7 @@ window.__congrats=function(o){
   function prog0(g){
     if(g.every(function(x){ return UP[x]; })) return 'Upper body';
     if(g.every(function(x){ return LO[x]; })) return 'Lower body';
-    return 'Open Gym'; }
+    return 'Gym'; }
   /* programma's van de dag; 'Cardio' niet apart, de minuten staan al in '+ N min cardio' */
   function progs(o){ var r=[]; Object.keys(o.ws).forEach(function(w){ var n=prog(o.ws[w]); if(n&&n!=='Cardio'&&r.indexOf(n)<0) r.push(n); }); return r.join(' + '); }
   /* '17 sets + 20 min cardio' (plus als er kracht én cardio was) */
@@ -4910,8 +4923,8 @@ window.__congrats=function(o){
   function exList(o){ var its=Object.keys(o.items||{}).map(function(e){ return o.items[e]; });
     EXI=[]; if(!its.length) return '';
     its.sort(function(a,b){ return a.li===b.li?0:(a.li.compareDocumentPosition(b.li)&4?-1:1); });
-    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; }, G={}, ORDER=['Open Gym','eGym','Cardio'];
-    its.forEach(function(it){ var g=it.li.dataset.grp, nm=g==='g10'?'eGym':g==='g8'?'Cardio':'Open Gym'; (G[nm]=G[nm]||[]).push(it); });
+    var fv=window.__progFmt?window.__progFmt.v:function(x){ return x; }, G={}, ORDER=['Gym','eGym','Cardio'];
+    its.forEach(function(it){ var g=it.li.dataset.grp, nm=g==='g10'?'eGym':g==='g8'?'Cardio':'Gym'; (G[nm]=G[nm]||[]).push(it); });
     var html='';
     ORDER.forEach(function(nm){ var arr=G[nm]; if(!arr) return; var tot=0;
       var rows=arr.map(function(it){ var n=it.li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'', k=it.li.dataset.key||'';
@@ -4921,7 +4934,7 @@ window.__congrats=function(o){
         if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name,ks:ks,f:it.f,u:u,li:it.li});
         return '<li class="cx"><div class="cx-row"><button type="button" class="cx-edit" data-i="'+(EXI.length-1)+'" tabindex="-1">Edit</button><span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+' · </i>':'')+esc(val)+'</em><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button></div></li>'; }).join('');
-      var lab=nm; if(nm==='Open Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
+      var lab=nm; if(nm==='Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
         var gs={}; arr.forEach(function(it){ var g=it.li.dataset.grp; if(g!=='g6') gs[g]=1; }); var gk=Object.keys(gs);
         lab+=' · '+(!gk.length?'Core':gk.every(function(x){ return UP[x]; })?'Upper Body':gk.every(function(x){ return LO[x]; })?'Lower Body':'Full Body'); }
       html+='<li class="cx-h"><span>'+lab+'</span><span>'+(nm==='Cardio'?Math.round(tot)+' min':tot+(tot===1?' set':' sets'))+'</span></li>'+rows; });
@@ -5001,7 +5014,7 @@ window.__congrats=function(o){
     new MutationObserver(function(){ place(!first); }).observe(box,{subtree:true,attributes:true,attributeFilter:['aria-selected']});
     if(window.ResizeObserver) new ResizeObserver(function(){ place(false); }).observe(box);
     place(false); setTimeout(function(){ first=false; place(false); },0); }
-  setup(document.querySelector('#wtabs .wd-tabs')); setup(document.getElementById('stabs')); setup(document.querySelector('.gnav-pill'));
+  document.querySelectorAll('#wtabs .wd-pill').forEach(setup); setup(document.getElementById('stabs')); setup(document.querySelector('.gnav-pill'));
 })();
 </script>
 </body>
