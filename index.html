@@ -4483,12 +4483,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var x0=first.t, x1=last.t; if(x1<=x0) x1=x0+1;
       var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo-=pad; hi+=pad;
       function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
-      /* lange pauze tussen twee testen (> 120 dagen) = stippellijn: niet gemeten, dus geen verloop suggereren (op vraag van Tom, 11 okt) */
-      var d='', dg='', GAP=120*864e5; pts.forEach(function(e,i){ var P=X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1);
-        if(!i){ d='M'+P; return; } var q=pts[i-1], Q=X(q.t).toFixed(1)+' '+Y(q.v).toFixed(1);
-        if(e.t-q.t>GAP){ dg+='M'+Q+' L'+P+' '; d+=' M'+P; } else d+=' L'+P; });
+      /* volle lijn door alle testen: elke test telt mee, ook na een lange pauze (op vraag van Tom, 11 okt: de stippellijn bij een pauze > 120 dagen
+         leek op 'telt niet mee', zoals de stippel bij de eerste meting van gewone oefeningen; weggehaald) */
+      var d=pts.map(function(e,i){ return (i?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
       host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Strength test chart">'+base+
-        (dg?'<path d="'+dg+'" fill="none" stroke="var(--accent)" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="3 5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>':'')+
         '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'+
         pts.map(function(e){ return '<circle cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'; }).join('')+
         '<text x="0" y="'+(H-4)+'" '+TX+'>'+F.d(x0)+'</text><text x="'+W+'" y="'+(H-4)+'" '+TX+' text-anchor="end">'+F.d(x1)+'</text></svg>';
