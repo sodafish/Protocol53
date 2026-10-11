@@ -3544,6 +3544,11 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(!snap.metadata.fromCache) Object.keys(next).forEach(function(id){ var e=next[id], to=e&&MIGK[e.k]; if(!to) return;
         var nid=to+id.slice(id.indexOf('@')); if(!next[nid]){ next[nid]=Object.assign({},e,{k:to}); progCol.doc(nid).set(next[nid]).catch(function(){}); }
         delete next[id]; progCol.doc(id).delete().catch(function(){}); });
+      /* metingen van oefeningen die niet meer in de app staan (verwijderd) wissen; ze telden mee in History maar stonden nergens in een lijst
+         (op vraag van Tom, 11 okt). Veiligheidskopie van wat gewist werd in localStorage 'p53-orphans'. */
+      if(!snap.metadata.fromCache){ var NOTES={}, nn=0; document.querySelectorAll('[data-note]').forEach(function(x){ if(!NOTES[x.dataset.note]){ NOTES[x.dataset.note]=1; nn++; } });
+        if(nn>50){ var gone=[]; Object.keys(next).forEach(function(id){ var e=next[id]; if(e&&e.k&&!NOTES[e.k]){ gone.push([id,e]); delete next[id]; progCol.doc(id).delete().catch(function(){}); } });
+          if(gone.length){ try{ var ar=JSON.parse(localStorage.getItem('p53-orphans')||'[]'); localStorage.setItem('p53-orphans',JSON.stringify(ar.concat(gone).slice(-1000))); }catch(_e){} } } }
       prog=next; saveProgLocal(); renderProg();
       /* (vroeger: bij een lege prog alle ingevulde velden als meting bewaren; weg, want metingen ontstaan alleen bij afvinken of met het potlood) */
     },function(){});
@@ -4883,7 +4888,7 @@ window.__congrats=function(o){
       var li=window.__liByNote?window.__liByNote(p.k):null, k=li?(li.dataset.key||(li.querySelector('.note[data-note]')||{}).dataset.note):p.k;
       if(!k||/^w0-/.test(k)) return;
       var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0,items:{}}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w;
-      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||''}; (it.ids=it.ids||[]).push(id); } /* oefeningenlijst onder de dag */
+      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||'',m:/^eg-/.test(p.k)?(p.m||'ecc'):null}; (it.ids=it.ids||[]).push(id); } /* oefeningenlijst onder de dag */
       if(o.ex[ek]) return; o.ex[ek]=1;
       if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
       else{ var sv=window.__setsFor?(+window.__setsFor(k,li)||0):3; o.sets+=sv; if(li&&li.dataset.grp==='g10') o.egs=(o.egs||0)+sv; } }); /* egs = sets van eGym (maandoverzicht) */
@@ -4985,6 +4990,7 @@ window.__congrats=function(o){
       var rows=arr.map(function(it){ var n=it.li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'', k=it.li.dataset.key||'';
         var ks=[].map.call(it.li.querySelectorAll('.exr-in[data-note]'),function(x){ return x.dataset.note; }).filter(function(q){ return it.f[q]; });
         var u=ks.length?it.f[ks[0]].u:'', val=ks.map(function(q){ return fv(it.f[q].v); }).join(' / ')+(u?' '+u:'');
+        if(ks.length&&it.f[ks[0]].m) name+=' · '+(it.f[ks[0]].m==='reg'?'Regular':'Eccentric'); /* eGym: methode erbij (op vraag van Tom, 11 okt) */
         var sx=it.li.querySelector('.exr-s'), reps=nm==='Cardio'?'':(sx&&sx.firstChild&&sx.firstChild.nodeType===3?sx.firstChild.textContent.replace(/[·\s]+$/,'').trim():''); reps=(reps.split('·').map(function(x){ return x.trim(); }).filter(function(x){ return /\d/.test(x); })[0]||'').replace(/\s*\(.*$/,''); /* kort: enkel het stuk met sets/reps (supersets: '2 rounds × 10–15') */
         if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name,ks:ks,f:it.f,u:u,li:it.li});

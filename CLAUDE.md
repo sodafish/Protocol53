@@ -286,6 +286,9 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Nooit een bestaande sleutel hergebruiken voor een andere oefening.
 - Nieuwe spiergroep nodig? Toevoegen aan `MLAB` én een vlak tekenen in de figuur (front/back, `m`).
 
+## Opruimen
+- Metingen (`prog`) van oefeningen die niet meer in de app staan (geen element met die `data-note`) worden bij elke serversnapshot gewist (op vraag van Tom, 11 okt; ze telden mee in de History-totalen maar stonden in geen enkele lijst). Kopie van wat gewist werd: localStorage `p53-orphans` (max 1000). Een oefening verwijderen = haar metingen verdwijnen dus ook; wil je ze bewaren, laat de rij dan staan met `ex-off`.
+
 ## Progressie per oefening
 - Het blok 'Active exercises' onder Progress (`#prog`) is verborgen (`hidden`): progressie bekijk je nu onder de uitleg
   (i-knop). De code erachter blijft, want `#pe-sheet`, `prog` en `window.__progPts` worden ook door het uitlegvenster gebruikt.
@@ -397,7 +400,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   hele sessie; per toestel in localStorage `fitlog-egm` (standaard Eccentric), `window.__egMethod()`. Elke eGym-meting (`progRecord` en 'Add' via `progPut`)
   krijgt `m:'ecc'|'reg'`; oude eGym-metingen zonder `m` = Eccentric (alles tot 10 okt was excentrisch). Het uitlegblad toont per methode een eigen blok
   'Your progress · Eccentric' / '· Regular' met eigen grafiek. Het Edit-venster (veeg naar rechts, kalender én edit-blad) toont bij eGym ook 'Method' (`p53EditVals({method})` → `.method`;
-  `__progSetVals(ids,vals,d,m)` zet `m`); het edit-blad toont achter de datum ' · Eccentric'/' · Regular'. Het 'Add'-formulier in het edit-blad heeft bij eGym bovenaan dezelfde schakelaar (`.pe-meth`, start op de sessiemethode, keuze in `peSh.__m` → `progPut(k,d,v,m)`). Het getal dat Tom invult = het kg-getal uit het eGym-overzicht (basis-/duwgewicht). Invulvelden eGym volgen de methode (op vraag van Tom, 11 okt): `syncFromChart` toont de laatste meting van de GEKOZEN methode (`__progPts(note+'#'+methode)`), leeg als die methode op dat toestel nog niet gemeten is; wissel stuurt event `p53-egm` → `syncFromChart`. Niet aangeraakt: zelf getypt en nog niet afgevinkt (`at` > laatste meting), of rij afgevinkt in de lopende workout.
+  `__progSetVals(ids,vals,d,m)` zet `m`); het edit-blad toont achter de datum ' · Eccentric'/' · Regular'. Het 'Add'-formulier in het edit-blad heeft bij eGym bovenaan dezelfde schakelaar (`.pe-meth`, start op de sessiemethode, keuze in `peSh.__m` → `progPut(k,d,v,m)`). Het getal dat Tom invult = het kg-getal uit het eGym-overzicht (basis-/duwgewicht). Kalender (dagenlijst): eGym-rijen tonen de methode achter de naam ('eGym Leg Press · Eccentric'; op vraag van Tom, 11 okt). Invulvelden eGym volgen de methode (op vraag van Tom, 11 okt): `syncFromChart` toont de laatste meting van de GEKOZEN methode (`__progPts(note+'#'+methode)`), leeg als die methode op dat toestel nog niet gemeten is; wissel stuurt event `p53-egm` → `syncFromChart`. Niet aangeraakt: zelf getypt en nog niet afgevinkt (`at` > laatste meting), of rij afgevinkt in de lopende workout.
 - Schrijfwijze op het scherm: 'eGym' (op vraag van Tom, 9 okt; tab, namen 'eGym …' in rijen én NAMES-sleutels, uitleg, kalender 'eGym'/'Open Gym + eGym'). Intern blijft `egym`/`g10`/`eg-…`.
 - Groep 10 'EGYM' (Toms EGYM-circuit in de gym; tussen g7 en g8 in `#s-d3`, kop zonder nummer, potlood/keuzeblad):
   alleen zichtbaar bij de keuze EGYM (`data-split="egym"`). Rijen `eg-…` met invulveld kg en schermnaam 'EGYM …' (zoals in de EGYM-app; uniek in NAMES).
