@@ -1016,6 +1016,11 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 .bal-seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 13.5px 'Work Sans',system-ui,sans-serif;padding:.4rem 1.1rem;border-radius:999px;cursor:pointer;}
 .bal-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;}
 .bal-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+/* Front/Back gecentreerd achter het hoofd: Front links, Back rechts (op vraag van Tom, 11 okt; variant B: gat 100 px, knoppen 84 px; vroeger rechtsboven).
+   De figuur ligt erboven en laat aanrakingen door, zodat de knoppen klikbaar blijven. */
+.stats-fig.bal .bal-seg{left:50%;right:auto;top:12px;transform:translateX(-50%);gap:100px;z-index:0;}
+.stats-fig.bal .bal-seg button{width:84px;padding-left:0;padding-right:0;}
+.stats-fig.bal .bal-figs{position:relative;z-index:1;pointer-events:none;}
 .stats-fig.bal figure{display:none;}
 .stats-fig.bal figure.on{display:block;}
 .stats-fig.bal figcaption{display:none;}
@@ -1608,7 +1613,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .stats>.sv>.stats-per button[data-r]{font-size:13.5px;}
 @media (max-width:360px){.stats>.sv>.stats-per button[data-r]{font-size:12.5px;}}
 .pr-fig{margin-top:1rem;}
-.pr-lab{display:flex;align-items:baseline;justify-content:space-between;gap:.2rem .8rem;flex-wrap:wrap;padding:0;} /* geen lijn eronder (op vraag van Tom, 11 okt) */
+.pr-fig #progFig{margin-top:1.6rem;} /* lucht tussen Whole body en het hoofd */
+.pr-lab{display:flex;align-items:baseline;justify-content:space-between;gap:.2rem .5rem;flex-wrap:wrap;padding:0;}
+.pr-dt{white-space:nowrap;font-size:12.5px!important;} /* periode rechts op de regel van Whole body (op vraag van Tom, 11 okt) */
+@media (max-width:370px){.pr-lab .pr-tot span{letter-spacing:.08em;} .pr-lab .pr-tot b{font-size:23px;}} /* geen lijn eronder (op vraag van Tom, 11 okt) */
 .pr-lab p{margin:0;}
 .pr-lab:has(#prBody[hidden]):has(#prRange:empty){display:none;} /* geen metingen: geen lege regel */
 .pr-tot{display:flex;align-items:baseline;gap:.45rem;}
