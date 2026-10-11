@@ -1634,13 +1634,6 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .ip-test .pe-list{margin-top:.2rem;}
 
 /* krachttest-knop bij eGym-oefeningen (op vraag van Tom, 11 okt): rond zoals het oog, links ervan */
-.et-b{appearance:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;margin:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);align-self:center;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
-.et-b:active{background:var(--paper-soft);transform:scale(.95);}
-.et-b:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
-#s-d3 .exr.has-info.has-test{grid-template-columns:2.4rem 1fr 36px 36px 4.2rem;}
-#s-d3 .exr.has-info.has-test > .et-b{grid-column:3;grid-row:1;}
-#s-d3 .exr.has-info.has-test > .info-b{grid-column:4;grid-row:1;}
-#s-d3 .exr.has-info.has-test > .exr-in{grid-column:5;grid-row:1;}
 </style>
 
 <header class="top">
@@ -2185,7 +2178,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <li><strong>Sets come from the exercise</strong> (3 × 10 = 3 sets), including your own changes.</li>
       <li><strong>Period.</strong> Last workout, 7 days and 30 days show the total. 90 days and custom periods longer than 30 days show the average per week.</li>
       <li><strong>Colour is relative.</strong> Your most trained muscle is the darkest; the others are shaded against it. Warm-up and cardio don’t count.</li>
-      <li><strong>Suggestions</strong> (the lamp) look at the last 30 days: muscles below a weekly minimum (8 sets for large muscles, 3–5 for smaller ones) and pairs out of balance, such as chest versus back.</li>
+      <li><strong>Suggestions</strong> (the lamp) follow the period you pick: muscles below a weekly minimum (8 sets for large muscles, 3–5 for smaller ones, scaled to the period; for the last workout spread over the workouts you do in a week) and pairs out of balance, such as chest versus back.</li>
     </ul></div>
   </div>
 
@@ -3071,6 +3064,15 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var co=t.parentNode&&t.parentNode.parentNode; if(co) co.style.display=(m in bp||PRIM[m])?'':'none'; });
     var ph=document.getElementById('progHint'); if(ph) ph.hidden=Object.keys(bp).length>0;
     var n=Object.keys(days).length, sub=document.getElementById('statsSub'), head;
+    /* suggesties volgen de gekozen periode (op vraag van Tom, 11 okt): doel = weekminimum omgerekend naar die periode */
+    var spanW=1; if(!perWeek){ var WK=7*864e5, sinceFirst=evs.length?(now-oldest)/WK:1;
+      if(eff==='dag'){ var d30={}; evs.forEach(function(e){ if(now-e.t<=30*864e5) d30[dayKey(e.t)]=1; });
+        var spanD=Math.max(7,Math.min(30,span/864e5)), freq=Math.max(1,Math.min(7,Object.keys(d30).length/(spanD/7))); spanW=1/freq; }
+      else if(eff==='week') spanW=Math.min(1,sinceFirst);
+      else if(eff==='maand') spanW=Math.min(30/7,sinceFirst);
+      else if(eff==='range') spanW=(BR.to-BR.from)/WK;
+      spanW=Math.max(1/7,spanW); }
+    window.__balState={sc:score,n:n,eff:eff,perWeek:perWeek,spanW:spanW};
     if(eff==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
     else if(eff==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
     else if(eff==='maand') head='Last 30 days, '+n+(n===1?' training day':' training days');
@@ -3078,7 +3080,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     else if(eff==='range'){ var lb=function(d,y){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+(y?' '+x.getFullYear():''); };
       head=(BR.f===BR.t?lb(BR.t,true):lb(BR.f,BR.f.slice(0,4)!==BR.t.slice(0,4))+' – '+lb(BR.t,true))+', '+n+(n===1?' training day':' training days')+(perWeek?', sets per week':''); }
     else { var f=new Date(first); head='Since '+f.getDate()+' '+MAANDEN[f.getMonth()]+' '+f.getFullYear()+', '+n+(n===1?' training day':' training days'); }
-    sub.textContent=n ? head+'.'
+    window.__balState.head=head; sub.textContent=n ? head+'.'
       : 'No data in this period yet. Tick off exercises and the figure fills in.';
     var fmt=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+''); };
     var rows=Object.keys(MLAB).sort(function(a,b){ return score[b]-score[a]; });
@@ -3089,26 +3091,22 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   /* ---- Suggestions: welke spieren verdienen de komende trainingen meer aandacht (laatste 30 dagen, omgerekend naar sets per week, gewogen) ---- */
   var SUG_MIN={borst:8,lats:8,midrug:8,quad:8,ham:8,bil:8,sz:5,sa:4,onderrug:3,bi:4,tri:4,buik:4,kuit:4}; /* geen onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee via andere oefeningen (op vraag van Tom) */
   var SUG_PAIRS=[['borst',['lats','midrug'],'Chest','Back'],['quad',['ham'],'Quads','Hamstrings'],['bi',['tri'],'Biceps','Triceps'],['sv',['sa'],'Front delts','Rear delts'],['buik',['onderrug'],'Abs','Lower back']];
-  function sugData(){ var now=Date.now(), W=30*864e5, sc={}, first=now, days={};
-    Object.keys(MLAB).forEach(function(m){ sc[m]=0; });
-    events().forEach(function(e){ if(!e.t||now-e.t>W) return; first=Math.min(first,e.t); days[dayKey(e.t)]=1;
-      var s=e.s||3, m=e.m||{}; Object.keys(m).forEach(function(k){ if(k in sc) sc[k]+=s*m[k]; }); });
-    var weeks=Math.max(1,Math.min(30/7,(now-first)/(7*864e5))); Object.keys(sc).forEach(function(k){ sc[k]/=weeks; });
-    return {sc:sc,days:Object.keys(days).length}; }
+  function sugData(){ var B=window.__balState; if(!B){ renderStats(); B=window.__balState; } return B||{sc:{},n:0,spanW:1,perWeek:true}; }
   function exFor(m){ var act=[], off=[];
     document.querySelectorAll('#s-d3 .exr[data-grp]').forEach(function(li){ var g=li.dataset.grp; if(!/^g([1-7]|10)$/.test(g)) return;
       var k=chkKey(li), mm=musclesFor(k,li)||{}; if(mm[m]!==1) return; var n=li.querySelector('.exr-n'); n=n?n.firstChild.textContent.trim():''; if(!n) return;
       (li.classList.contains('ex-off')?off:act).push({n:n,c:window.__exStat?window.__exStat(k).n:0}); });
     act.sort(function(a,b){ return b.c-a.c; });
     return act.length?{list:act.slice(0,2).map(function(x){ return x.n; }),add:false}:{list:off.slice(0,2).map(function(x){ return x.n; }),add:true}; }
-  function sugHTML(){ var D=sugData(), sc=D.sc, f=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+''); }, esc=function(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
-    if(D.days<2) return '<p class="sug-intro">Train for a week or two and this fills in. Suggestions look at your last 30 days.</p>';
-    var low=Object.keys(SUG_MIN).filter(function(m){ return sc[m]<SUG_MIN[m]; }).sort(function(a,b){ return sc[a]/SUG_MIN[a]-sc[b]/SUG_MIN[b]; }).slice(0,5);
+  function sugHTML(){ var D=sugData(), sc=D.sc, W=D.perWeek?1:D.spanW, T=function(m){ return SUG_MIN[m]*W; }, f=function(v){ return v>=10?Math.round(v)+'':(Math.round(v*10)/10+''); }, esc=function(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
+    if(!D.n) return '<p class="sug-intro">No training in this period yet. Choose another period or tick off a few exercises.</p>';
+    var low=Object.keys(SUG_MIN).filter(function(m){ return (sc[m]||0)<T(m)-1e-9; }).sort(function(a,b){ return (sc[a]||0)/T(a)-(sc[b]||0)/T(b); }).slice(0,5);
     var bal=[]; SUG_PAIRS.forEach(function(p){ var a=sc[p[0]], b=p[1].reduce(function(x,k){ return x+sc[k]; },0)/p[1].length, hi=Math.max(a,b), lo=Math.min(a,b);
-      if(hi>=3&&hi>=1.8*Math.max(lo,.5)){ var big=a>b?p[2]:p[3], small=a>b?p[3]:p[2], r=lo>0?hi/lo:null; bal.push(esc(big)+(/s$/.test(big)?' get ':' gets ')+(r&&r<10?(Math.round(r*10)/10)+'×':'far')+' more work than '+esc(small)+'. Give '+esc(small)+' a bit more attention.'); } });
-    var h='<p class="sug-intro">Based on your last 30 days · '+D.days+' training days.</p>';
+      if(hi>=3*W&&hi>=1.8*Math.max(lo,.5*W)){ var big=a>b?p[2]:p[3], small=a>b?p[3]:p[2], r=lo>0?hi/lo:null; bal.push(esc(big)+(/s$/.test(big)?' get ':' gets ')+(r&&r<10?(Math.round(r*10)/10)+'×':'far')+' more work than '+esc(small)+'. Give '+esc(small)+' a bit more attention.'); } });
+    var tf=function(v){ return v>=10?Math.round(v)+'':(Math.max(1,Math.round(v*2)/2)+''); };
+    var h='<p class="sug-intro">'+esc(D.head||'')+(D.head?'. ':'')+(D.perWeek?'Minimums in sets per week.':D.eff==='dag'?'Minimums: your weekly target spread over the workouts you do in a week.':'Minimums: the weekly target scaled to this period.')+'</p>';
     if(low.length){ h+='<p class="sug-h">Give more attention</p><ul class="sug-list">'+low.map(function(m){ var ex=exFor(m);
-      return '<li><div class="sug-row"><b>'+MLAB[m]+'</b><span>'+f(sc[m])+' <i>/ '+SUG_MIN[m]+' sets a week</i></span></div><span class="sug-bar"><i style="width:'+Math.min(100,Math.round(100*sc[m]/SUG_MIN[m]))+'%"></i></span>'+
+      return '<li><div class="sug-row"><b>'+MLAB[m]+'</b><span>'+f(sc[m]||0)+' <i>/ '+(D.perWeek?SUG_MIN[m]+' sets a week':tf(T(m))+' sets')+'</i></span></div><span class="sug-bar"><i style="width:'+Math.min(100,Math.round(100*(sc[m]||0)/T(m)))+'%"></i></span>'+
         (ex.list.length?'<small>'+(ex.add?'Add to your list: ':'Try: ')+ex.list.map(esc).join(', ')+'</small>':'')+'</li>'; }).join('')+'</ul>'; }
     if(bal.length) h+='<p class="sug-h">Balance</p><ul class="sug-bal">'+bal.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ul>';
     if(!low.length&&!bal.length) h+='<p class="sug-ok">Nicely balanced — every muscle gets enough work. Keep it up.</p>';
@@ -5188,23 +5186,6 @@ window.__congrats=function(o){
   window.addEventListener('scroll',q,{passive:true}); window.addEventListener('resize',q);
   new MutationObserver(q).observe(document.body,{attributes:true,attributeFilter:['data-tab','class']});
   q();
-})();
-</script>
-<script>
-/* ---- krachttest-knop in de eGym-rijen (op vraag van Tom, 11 okt): tik = venster om het resultaat van een test van nu in te vullen ---- */
-(function(){
-  var ICON='<svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M418-340q24 24 62 23.5t56-27.5l224-336-336 224q-27 18-28.5 55t22.5 61Zm62-460q59 0 113.5 16.5T696-734l-76 48q-33-17-68.5-25.5T480-720q-133 0-226.5 93.5T160-400q0 42 11.5 83t32.5 77h552q23-38 33.5-79t10.5-85q0-36-8.5-70T766-540l48-76q30 47 47.5 100T880-406q1 57-13 109t-41 99q-11 18-30 28t-40 10H204q-21 0-40-10t-30-28q-26-45-40-95.5T80-400q0-83 31.5-155.5t86-127Q252-737 325-768.5T480-800Zm7 313Z"/></svg>';
-  function td(){ var x=new Date(); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
-  document.querySelectorAll('#s-d3 .exr[data-grp="g10"]').forEach(function(li){
-    var inp=li.querySelector('.exr-in[data-note]'); if(!inp||li.querySelector('.et-b')) return;
-    var k=inp.dataset.note, n=li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'';
-    var b=document.createElement('button'); b.type='button'; b.className='et-b'; b.setAttribute('aria-label','Strength test '+name); b.innerHTML=ICON;
-    var eye=li.querySelector(':scope > .info-b'); li.insertBefore(b,eye||inp); li.classList.add('has-test');
-    b.addEventListener('click',function(e){ e.stopPropagation(); if(!window.__etestPut) return;
-      var last=window.__etestPts?window.__etestPts(k).slice(-1)[0]:null;
-      p53EditVals({title:'Strength test',msg:name+(last?' · last test '+(window.__progFmt?window.__progFmt.v(last.v):last.v)+' kg':''),date:td(),fields:[{label:'Result',value:'',unit:'kg'}]})
-        .then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0]); }); });
-  });
 })();
 </script>
 </body>
