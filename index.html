@@ -8,12 +8,12 @@
 <meta name="apple-mobile-web-app-title" content="Protocol">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#F7F2EA" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#161D26" media="(prefers-color-scheme: dark)">
-<script>/* thema per toestel: System (standaard) / Light / Dark, localStorage p53-theme (op vraag van Tom, 10 okt) */
+<meta name="theme-color" content="#251A15" media="(prefers-color-scheme: dark)">
+<script>/* thema per toestel: System (standaard) / Light / Dark / Blue, localStorage p53-theme (op vraag van Tom, 10 okt) */
 (function(){ var t=null; try{ t=localStorage.getItem('p53-theme'); }catch(e){}
-  window.__p53theme=function(v){ var r=document.documentElement; if(v==='light'||v==='dark') r.setAttribute('data-theme',v); else r.removeAttribute('data-theme');
-    document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#161D26':v==='light'?'#F7F2EA':(i?'#161D26':'#F7F2EA')); }); };
-  if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
+  window.__p53theme=function(v){ var r=document.documentElement; if(v==='light'||v==='dark'||v==='blue') r.setAttribute('data-theme',v); else r.removeAttribute('data-theme');
+    document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='blue'?'#161D26':v==='dark'?'#251A15':v==='light'?'#F7F2EA':(i?'#251A15':'#F7F2EA')); }); };
+  if(t==='light'||t==='dark'||t==='blue') document.documentElement.setAttribute('data-theme',t);
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
   try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
@@ -116,6 +116,7 @@ window.p53EditVals=function(o){
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+:root{--glass-rgb:38,50,65;--knob:#263241;--tabs-solid:#212B38;}
 :root{
   --ink:#1a1815;
   --paper:#f5f1e8;
@@ -572,18 +573,25 @@ td .note{margin-top:0;max-width:9rem;}
 body[data-tab]{--accent:#9A4424;--accent-soft:#C4764F;}
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#F5EFE6; --paper:#161D26; --paper-soft:#0F151C; --paper-dark:#2A3542; --surface:#131A23;
-    --muted:#A5B0BC; --muted-soft:#76828F; --line:#313D4A; --line-soft:#2A3542; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
-    --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
+    --ink:#F5EFE6; --paper:#251A15; --paper-soft:#1C120D; --paper-dark:#413129; --surface:#221711;
+    --muted:#B9ADA2; --muted-soft:#8C7E73; --line:#493831; --line-soft:#413129; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
+    --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; --glass-rgb:61,46,35; --knob:#3D2E23; --tabs-solid:#35281E; color-scheme:dark;
   }
   :root:not([data-theme="light"]) body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
 }
 :root[data-theme="dark"]{
-  --ink:#F5EFE6; --paper:#161D26; --paper-soft:#0F151C; --paper-dark:#2A3542; --surface:#131A23;
-  --muted:#A5B0BC; --muted-soft:#76828F; --line:#313D4A; --line-soft:#2A3542; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
-  --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
+  --ink:#F5EFE6; --paper:#251A15; --paper-soft:#1C120D; --paper-dark:#413129; --surface:#221711;
+  --muted:#B9ADA2; --muted-soft:#8C7E73; --line:#493831; --line-soft:#413129; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
+  --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; --glass-rgb:61,46,35; --knob:#3D2E23; --tabs-solid:#35281E; color-scheme:dark;
 }
 :root[data-theme="dark"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
+/* Blue: de blauwe skin als aparte keuze in Settings (op vraag van Tom, 11 okt) */
+:root[data-theme="blue"]{
+  --ink:#F5EFE6; --paper:#161D26; --paper-soft:#0F151C; --paper-dark:#2A3542; --surface:#131A23;
+  --muted:#A5B0BC; --muted-soft:#76828F; --line:#313D4A; --line-soft:#2A3542; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
+  --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; --glass-rgb:38,50,65; --knob:#263241; --tabs-solid:#212B38; color-scheme:dark;
+}
+:root[data-theme="blue"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
 
 body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
 .eyebrow{font-weight:600;font-size:12px;letter-spacing:.16em;}
@@ -602,7 +610,7 @@ body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
 .masthead .stamp.warn::before{content:"";flex:none;margin-top:.42em;width:8px;height:8px;border-radius:50%;background:var(--accent);}
 .masthead .stamp.warn{color:#C8361A;} .masthead .stamp.warn::before{background:#C8361A;}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .masthead .stamp.warn{color:#F2714E;} :root:not([data-theme="light"]) .masthead .stamp.warn::before{background:#F2714E;}}
-:root[data-theme="dark"] .masthead .stamp.warn{color:#F2714E;} :root[data-theme="dark"] .masthead .stamp.warn::before{background:#F2714E;}
+:root[data-theme="dark"] .masthead .stamp.warn,:root[data-theme="blue"] .masthead .stamp.warn{color:#F2714E;} :root[data-theme="dark"] .masthead .stamp.warn::before,:root[data-theme="blue"] .masthead .stamp.warn::before{background:#F2714E;}
 
 /* hoofdtabs: pil-schakelaar zoals de Cupkeuring */
 .tabbar{background:var(--paper);padding-block:10px;}
@@ -862,7 +870,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .sheet-warn{margin:1rem 0 0;padding:.75rem .9rem;border-radius:12px;background:color-mix(in srgb,#C8361A 10%,transparent);font-size:13.5px;line-height:1.45;}
 .sheet-warn strong{color:#C8361A;}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sheet-warn strong{color:#F2714E;}}
-:root[data-theme="dark"] .sheet-warn strong{color:#F2714E;}
+:root[data-theme="dark"] .sheet-warn strong,:root[data-theme="blue"] .sheet-warn strong{color:#F2714E;}
 .sheet-vid{display:flex;align-items:center;justify-content:center;gap:.55rem;margin-top:1.1rem;min-height:48px;border-radius:999px;background:var(--ink);color:var(--surface);text-decoration:none;
   font-family:'Work Sans',system-ui,sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
 .sheet-vid:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
@@ -1259,11 +1267,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pg-title{flex-basis:100%;margin:.45rem 0 0;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
 .glass{background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(26px) saturate(140%);backdrop-filter:blur(26px) saturate(140%);
   border:1px solid rgba(255,255,255,.65);box-shadow:0 14px 40px rgba(30,20,12,.18),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(0,0,0,.05);}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:rgba(38,50,65,.42);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);border-color:rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.16);}}
-:root[data-theme="dark"] .glass{background:rgba(38,50,65,.42);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);border-color:rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.16);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:rgba(var(--glass-rgb),.42);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);border-color:rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.16);}}
+:root[data-theme="dark"] .glass,:root[data-theme="blue"] .glass{background:rgba(var(--glass-rgb),.42);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);border-color:rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.16);}
 /* schakelaars in donker: actieve knop lichter dan het (verzonken) spoor, op vraag van Tom */
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bal-seg button[aria-pressed="true"],:root:not([data-theme="light"]) .st-seg button[aria-pressed="true"],:root:not([data-theme="light"]) .pe-add .pe-meth button[aria-pressed="true"]{background:#263241;}}
-:root[data-theme="dark"] .bal-seg button[aria-pressed="true"],:root[data-theme="dark"] .st-seg button[aria-pressed="true"],:root[data-theme="dark"] .pe-add .pe-meth button[aria-pressed="true"]{background:#263241;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bal-seg button[aria-pressed="true"],:root:not([data-theme="light"]) .st-seg button[aria-pressed="true"],:root:not([data-theme="light"]) .pe-add .pe-meth button[aria-pressed="true"]{background:var(--knob);}}
+:root[data-theme="dark"] .bal-seg button[aria-pressed="true"],:root[data-theme="blue"] .bal-seg button[aria-pressed="true"],:root[data-theme="dark"] .st-seg button[aria-pressed="true"],:root[data-theme="blue"] .st-seg button[aria-pressed="true"],:root[data-theme="dark"] .pe-add .pe-meth button[aria-pressed="true"],:root[data-theme="blue"] .pe-add .pe-meth button[aria-pressed="true"]{background:var(--knob);}
 .note-jump{width:48px;height:48px;flex:none;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
 .note-jump:active{background:var(--paper-soft);transform:scale(.95);}
 .note-jump[hidden]{display:none;}
@@ -1346,7 +1354,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .cf-yes{border:none;background:var(--ink);color:var(--paper);}
 .cf-yes.danger{background:#C8361A;color:#fff;}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cf-yes.danger{background:#E0573A;}}
-:root[data-theme="dark"] .cf-yes.danger{background:#E0573A;}
+:root[data-theme="dark"] .cf-yes.danger,:root[data-theme="blue"] .cf-yes.danger{background:#E0573A;}
 @media (prefers-reduced-motion:reduce){.cf-bg,.cf-card{transition:none;}}
 
 /* ════════════ OEFENINGEN PER GROEP KIEZEN ════════════ */
@@ -1554,7 +1562,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .sug-note{margin:1.2rem 0 .4rem;font-size:12.5px;line-height:1.45;color:var(--muted-soft);}
 .cal-ex li.cx,.pe-list li.cx{display:block;padding:0;} /* rij vult de breedte, Delete blijft eronder verborgen */
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cx-del{color:var(--paper);}}
-:root[data-theme="dark"] .cx-del{color:var(--paper);} /* Delete-tekst donker in dark mode (op vraag van Tom) */
+:root[data-theme="dark"] .cx-del,:root[data-theme="blue"] .cx-del{color:var(--paper);} /* Delete-tekst donker in dark mode (op vraag van Tom) */
 .cx-row>*:first-child{flex:1 1 auto;min-width:0;} /* lange naam mag afbreken: de rechtse tekst loopt nooit over de rand (of onder Delete) */
 .cx-row>em,.cx-row>.pe-v{flex:none;white-space:nowrap;text-align:right;}
 
@@ -1616,12 +1624,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 }
 
 /* onderbladen en vensters in donker: zelfde glas als de navbar (op vraag van Tom, 11 okt) */
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sheet,:root:not([data-theme="light"]) .cf-card{background:rgba(38,50,65,.84);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);box-shadow:0 -14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.16);}:root:not([data-theme="light"]) #grp-sheet .sheet-head{background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}:root:not([data-theme="light"]) .gs-list li[data-k],:root:not([data-theme="light"]) .pe-list .cx-row{background:transparent;}:root:not([data-theme="light"]) .gs-list li.dragging{background:#263241;}}
-:root[data-theme="dark"] .sheet,:root[data-theme="dark"] .cf-card{background:rgba(38,50,65,.84);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);box-shadow:0 -14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.16);}:root[data-theme="dark"] #grp-sheet .sheet-head{background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}:root[data-theme="dark"] .gs-list li[data-k],:root[data-theme="dark"] .pe-list .cx-row{background:transparent;}:root[data-theme="dark"] .gs-list li.dragging{background:#263241;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sheet,:root:not([data-theme="light"]) .cf-card{background:rgba(var(--glass-rgb),.84);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);box-shadow:0 -14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.16);}:root:not([data-theme="light"]) #grp-sheet .sheet-head{background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}:root:not([data-theme="light"]) .gs-list li[data-k],:root:not([data-theme="light"]) .pe-list .cx-row{background:transparent;}:root:not([data-theme="light"]) .gs-list li.dragging{background:var(--knob);}}
+:root[data-theme="dark"] .sheet,:root[data-theme="blue"] .sheet,:root[data-theme="dark"] .cf-card,:root[data-theme="blue"] .cf-card{background:rgba(var(--glass-rgb),.84);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);box-shadow:0 -14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.16);}:root[data-theme="dark"] #grp-sheet .sheet-head,:root[data-theme="blue"] #grp-sheet .sheet-head{background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}:root[data-theme="dark"] .gs-list li[data-k],:root[data-theme="blue"] .gs-list li[data-k],:root[data-theme="dark"] .pe-list .cx-row,:root[data-theme="blue"] .pe-list .cx-row{background:transparent;}:root[data-theme="dark"] .gs-list li.dragging,:root[data-theme="blue"] .gs-list li.dragging{background:var(--knob);}
 
 /* tabs bovenaan in donker: kleur van de navbar, ondoorzichtig (backdrop-filter op de plakkende tabs gaf op iOS een renderfout; zwevend glas getest en teruggedraaid op vraag van Tom, 11 okt) */
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wtabs:not(.wdock),:root:not([data-theme="light"]) .wd-pill{background:#212B38;border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}}
-:root[data-theme="dark"] .wtabs:not(.wdock),:root[data-theme="dark"] .wd-pill{background:#212B38;border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wtabs:not(.wdock),:root:not([data-theme="light"]) .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}}
+:root[data-theme="dark"] .wtabs:not(.wdock),:root[data-theme="blue"] .wtabs:not(.wdock),:root[data-theme="dark"] .wd-pill,:root[data-theme="blue"] .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}
 </style>
 
 <header class="top">
@@ -2231,7 +2239,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <div class="st-body" id="settings">
     <div class="st-first">
       <p class="set-lab">Appearance</p>
-      <div class="st-seg" role="group" aria-label="Appearance"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button></div>
+      <div class="st-seg" role="group" aria-label="Appearance"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button><button type="button" data-th="blue">Blue</button></div>
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
@@ -2260,7 +2268,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 <script>
 /* ---- instellingen-blad (tandwiel rechtsboven): thema, geboortedatum, je gegevens (op vraag van Tom, 10 okt) ---- */
 (function(){ var btn=document.getElementById('setBtn'), bg=document.getElementById('st-bg'), sh=document.getElementById('st-sheet'); if(!btn||!sh) return; var open=false, last=null;
-  function cur(){ var t=null; try{ t=localStorage.getItem('p53-theme'); }catch(e){} return t==='light'||t==='dark'?t:'system'; }
+  function cur(){ var t=null; try{ t=localStorage.getItem('p53-theme'); }catch(e){} return t==='light'||t==='dark'||t==='blue'?t:'system'; }
   function paint(){ var c=cur(); sh.querySelectorAll('.st-seg button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.th===c?'true':'false'); });
     var u=window.__p53user, el=document.getElementById('stUser'); if(el){ if(u&&u.email){ el.innerHTML='Signed in as <b></b>'; el.querySelector('b').textContent=u.email; } else el.textContent=''; } }
   sh.querySelectorAll('.st-seg button').forEach(function(b){ b.addEventListener('click',function(){ var v=b.dataset.th;
