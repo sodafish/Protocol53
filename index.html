@@ -2203,6 +2203,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   <div class="sheet-head"><h3 id="pe-t">Measurements</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="pe-body"></div>
 </div>
+<div class="sheet-bg top" id="et-bg" hidden></div>
+<div class="sheet pe-sheet top" id="et-sheet" role="dialog" aria-modal="true" aria-labelledby="et-t" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head"><h3 id="et-t">Strength tests</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="pe-body"></div>
+</div>
 <div class="sheet-bg" hidden></div>
 <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
@@ -3654,6 +3660,31 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(oldId&&oldId!==id){ delete T[oldId]; if(col) col.doc(oldId).delete().catch(function(){}); }
     T[id]=e; save(); if(col) col.doc(id).set(e).catch(function(){}); };
   window.__etestDel=function(id){ delete T[id]; save(); if(col) col.doc(id).delete().catch(function(){}); };
+  /* bewerkblad zoals bij de andere grafieken: bovenaan datum + resultaat + Add, daaronder alle testen (veeg rechts = Edit, links = Delete) */
+  var esh=null, ebg=null, eKey=null, eName='', eOpen=false, eLast=null;
+  function ymdT(){ var x=new Date(); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+  function render(){ if(!esh||!eKey) return; var F=window.__progFmt, pts=window.__etestPts(eKey), DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], body=esh.querySelector('.pe-body');
+    esh.querySelector('#et-t').textContent='Strength tests';
+    var rows=pts.slice().reverse().map(function(e){ var x=new Date(e.t);
+      return '<li class="cx"><div class="cx-row"><button type="button" class="cx-edit" tabindex="-1" data-id="'+e.id+'">Edit</button><span class="pe-d">'+DN[x.getDay()]+' '+F.d(e.t)+'</span><span class="pe-v">'+F.v(e.v)+' kg</span><button type="button" class="cx-del" tabindex="-1" data-id="'+e.id+'" aria-label="Delete test of '+F.d(e.t)+'">Delete</button></div></li>'; }).join('');
+    body.innerHTML='<p class="pe-sub">'+eName.replace(/[<>&]/g,'')+' · '+(pts.length?pts.length+(pts.length===1?' test':' tests')+'. Swipe right to edit, left to delete.':'No tests yet. Add the result the eGym app shows, with the date of the test.')+'</p>'+
+      '<form class="pe-add"><input type="date" name="d" value="'+ymdT()+'" max="'+ymdT()+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="kg" aria-label="Result in kg"><button type="submit">Add</button></form>'+
+      '<ul class="pe-list">'+(rows||'<li class="pe-empty">No tests yet.</li>')+'</ul>';
+    body.querySelector('.pe-add').addEventListener('submit',function(e){ e.preventDefault(); var f=e.target, m=String(f.v.value).replace(',','.').match(/\d+(?:\.\d+)?/);
+      if(!m){ f.v.focus(); f.v.classList.add('need'); return; } if(!/^\d{4}-\d{2}-\d{2}$/.test(f.d.value)){ f.d.focus(); return; }
+      window.__etestPut(eKey,f.d.value,parseFloat(m[0])); render(); });
+  }
+  function eOpenSheet(){ eOpen=true; eLast=document.activeElement; render(); ebg.hidden=false; esh.hidden=false; esh.scrollTop=0;
+    requestAnimationFrame(function(){ ebg.classList.add('on'); esh.classList.add('on'); }); esh.querySelector('.sheet-x').focus({preventScroll:true}); }
+  function eClose(){ if(!eOpen) return; eOpen=false; ebg.classList.remove('on'); esh.classList.remove('on');
+    setTimeout(function(){ if(!eOpen){ ebg.hidden=true; esh.hidden=true; esh.querySelector('.pe-body').innerHTML=''; eKey=null; } },320); if(eLast) eLast.focus({preventScroll:true}); }
+  window.__etestEdit=function(k,name){ esh=esh||document.getElementById('et-sheet'); ebg=ebg||document.getElementById('et-bg'); if(!esh) return;
+    if(!esh.__init){ esh.__init=1; ebg.addEventListener('click',eClose); esh.querySelector('.sheet-x').addEventListener('click',eClose);
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&eOpen){ e.stopPropagation(); eClose(); } },true);
+      if(window.p53Swipe) window.p53Swipe(esh.querySelector('.pe-body'),function(b){ window.__etestDel(b.dataset.id); render(); },function(b){
+        var e=window.__etestPts(eKey).filter(function(x){ return x.id===b.dataset.id; })[0]; if(!e) return;
+        p53EditVals({title:'Edit strength test',msg:eName,date:e.d,fields:[{label:'Result',value:e.v,unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null){ window.__etestPut(eKey,v.date,v[0],e.id); render(); } }); }); }
+    eKey=k; eName=name||''; eOpenSheet(); };
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('etest');
     col.onSnapshot(function(snap){ var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
       if(snap.metadata.fromCache) Object.keys(T).forEach(function(id){ if(!next[id]) next[id]=T[id]; });
@@ -4183,7 +4214,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   }
 
   /* ---------- venster ---------- */
-  var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
+  var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#et-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#et-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
   var cur=null, lastFocus=null;
   function open(name,btn,over,chartOnly){
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
@@ -4314,13 +4345,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       return '<li class="cx"><div class="cx-row"><button type="button" class="cx-edit" tabindex="-1" data-id="'+e.id+'">Edit</button><span class="pe-d">'+DN[x.getDay()]+' '+F.d(e.t)+'</span><span class="pe-v">'+F.v(e.v)+' kg</span><button type="button" class="cx-del" tabindex="-1" data-id="'+e.id+'" aria-label="Delete test of '+F.d(e.t)+'">Delete</button></div></li>'; }).join('');
     box.innerHTML='<p class="ip-t">Strength tests</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(last?F.v(last.v):'–')+'</span><span class="ph-u">kg</span><span class="ph-d">'+
       (!last?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' kg</b> since '+F.d(first.t))+'</span></div>'+
-      '<button type="button" class="prog-edit ip-add" aria-label="Add strength test"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+      '<button type="button" class="prog-edit ip-edit ip-tedit" aria-label="Edit strength tests"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div>'+
       '<div class="ip-chart"></div>'+
-      '<p class="ip-note">'+(pts.length?'This is how eGym progress counts in Strength. Swipe right to edit, left to delete.':'Enter the result the eGym app shows for this machine after a strength test. Add earlier tests with their date. This is how eGym progress counts in Strength.')+'</p>'+
-      (rows?'<ul class="pe-list">'+rows+'</ul>':'');
-    function td(){ var x=new Date(); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
-    box.querySelector('.ip-add').addEventListener('click',function(){
-      p53EditVals({title:'Strength test',msg:name,date:td(),fields:[{label:'Result',value:'',unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0]); }); });
+      (pts.length?'':'<p class="ip-note">Tap the edit button to add the result the eGym app shows after a strength test, also earlier tests with their date. This is how eGym progress counts in Strength.</p>');
     /* grafiek zoals de andere progressiegrafieken, maar volle lijn vanaf de eerste test (die telt mee; op vraag van Tom, 11 okt) */
     var host=box.querySelector('.ip-chart');
     function draw(){
@@ -4339,10 +4366,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
         '<text x="0" y="'+(H-4)+'" '+TX+'>'+F.d(x0)+'</text><text x="'+W+'" y="'+(H-4)+'" '+TX+' text-anchor="end">'+F.d(x1)+'</text></svg>';
     }
     requestAnimationFrame(function(){ requestAnimationFrame(draw); });
-    var ul=box.querySelector('.pe-list');
-    if(ul&&window.p53Swipe) window.p53Swipe(ul,function(b){ window.__etestDel(b.dataset.id); },function(b){
-      var e=pts.filter(function(x){ return x.id===b.dataset.id; })[0]; if(!e) return;
-      p53EditVals({title:'Strength test',msg:name,date:e.d,fields:[{label:'Result',value:e.v,unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0],e.id); }); });
+    box.querySelector('.ip-tedit').addEventListener('click',function(){ if(window.__etestEdit) window.__etestEdit(k,name); });
     return box;
   }
   document.addEventListener('p53-prog',function(){ if(!sh.hidden && curName) progBlock(curName); });
