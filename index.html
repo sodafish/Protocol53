@@ -1632,6 +1632,15 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 :root[data-theme="dark"] .wtabs:not(.wdock),:root[data-theme="blue"] .wtabs:not(.wdock),:root[data-theme="dark"] .wd-pill,:root[data-theme="blue"] .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}
 .ip-test .ip-note{margin:.2rem 0 .7rem;font-size:13px;line-height:1.45;color:var(--muted);}
 .ip-test .pe-list{margin-top:.2rem;}
+
+/* krachttest-knop bij eGym-oefeningen (op vraag van Tom, 11 okt): rond zoals het oog, links ervan */
+.et-b{appearance:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;margin:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);align-self:center;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
+.et-b:active{background:var(--paper-soft);transform:scale(.95);}
+.et-b:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
+#s-d3 .exr.has-info.has-test{grid-template-columns:2.4rem 1fr 36px 36px 4.2rem;}
+#s-d3 .exr.has-info.has-test > .et-b{grid-column:3;grid-row:1;}
+#s-d3 .exr.has-info.has-test > .info-b{grid-column:4;grid-row:1;}
+#s-d3 .exr.has-info.has-test > .exr-in{grid-column:5;grid-row:1;}
 </style>
 
 <header class="top">
@@ -5179,6 +5188,23 @@ window.__congrats=function(o){
   window.addEventListener('scroll',q,{passive:true}); window.addEventListener('resize',q);
   new MutationObserver(q).observe(document.body,{attributes:true,attributeFilter:['data-tab','class']});
   q();
+})();
+</script>
+<script>
+/* ---- krachttest-knop in de eGym-rijen (op vraag van Tom, 11 okt): tik = venster om het resultaat van een test van nu in te vullen ---- */
+(function(){
+  var ICON='<svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M418-340q24 24 62 23.5t56-27.5l224-336-336 224q-27 18-28.5 55t22.5 61Zm62-460q59 0 113.5 16.5T696-734l-76 48q-33-17-68.5-25.5T480-720q-133 0-226.5 93.5T160-400q0 42 11.5 83t32.5 77h552q23-38 33.5-79t10.5-85q0-36-8.5-70T766-540l48-76q30 47 47.5 100T880-406q1 57-13 109t-41 99q-11 18-30 28t-40 10H204q-21 0-40-10t-30-28q-26-45-40-95.5T80-400q0-83 31.5-155.5t86-127Q252-737 325-768.5T480-800Zm7 313Z"/></svg>';
+  function td(){ var x=new Date(); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+  document.querySelectorAll('#s-d3 .exr[data-grp="g10"]').forEach(function(li){
+    var inp=li.querySelector('.exr-in[data-note]'); if(!inp||li.querySelector('.et-b')) return;
+    var k=inp.dataset.note, n=li.querySelector('.exr-n'), name=n?n.firstChild.textContent.trim():'';
+    var b=document.createElement('button'); b.type='button'; b.className='et-b'; b.setAttribute('aria-label','Strength test '+name); b.innerHTML=ICON;
+    var eye=li.querySelector(':scope > .info-b'); li.insertBefore(b,eye||inp); li.classList.add('has-test');
+    b.addEventListener('click',function(e){ e.stopPropagation(); if(!window.__etestPut) return;
+      var last=window.__etestPts?window.__etestPts(k).slice(-1)[0]:null;
+      p53EditVals({title:'Strength test',msg:name+(last?' · last test '+(window.__progFmt?window.__progFmt.v(last.v):last.v)+' kg':''),date:td(),fields:[{label:'Result',value:'',unit:'kg'}]})
+        .then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0]); }); });
+  });
 })();
 </script>
 </body>
