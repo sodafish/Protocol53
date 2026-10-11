@@ -2230,7 +2230,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <li><strong>Only exercises in kg count,</strong> and each one is compared only with itself: every measurement against the one before.</li>
       <li><strong>Your very first measurement doesn’t count.</strong> The first session is mostly learning the movement, so an exercise appears from its third measurement. eGym strength tests count from the first test.</li>
       <li><strong>Period.</strong> 3 months, 1 year, all data or your own dates (calendar button).</li>
-      <li><strong>Per exercise:</strong> the change from the last measurement before the period (at most 120 days before it, otherwise the first one in it) to the latest. A lower weight counts as a decline.</li>
+      <li><strong>Per exercise:</strong> the change from the last measurement before the period (at most 120 days before it, otherwise the first one in it; for eGym strength tests any earlier test) to the latest. A lower weight counts as a decline.</li>
       <li><strong>Per muscle and per group:</strong> the average progress of its exercises. A group with subgroups (Back, Arms) is the average of those subgroups, so Arms is the average of biceps and triceps.</li>
       <li><strong>Whole body</strong> is the average of the groups that have progress in the period, each group weighing the same. An indicator, not a measurement.</li>
       <li><strong>The figure</strong> uses only exercises where that muscle is the main muscle. For eGym the strength test results count, not the training weights; supersets don’t count. Add test results with the chart button next to Method in the eGym header, older tests too.</li>
@@ -3027,9 +3027,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      notes = invulvelden; → {p: %, n: aantal stapjes, k: aantal oefeningen} of null. */
   var BASEGAP=120*864e5; window.__baseGap=BASEGAP;
   function chainPct(notes,from,to){ if(!window.__progPts) return null; var L=[], n=0;
-    notes.forEach(function(note){ var pa=window.__progPts(note), pts=/#test$/.test(note)?pa:pa.slice(1), sum=0, c=0; /* eerste meting telt niet (behalve bij de eGym-krachttest) */
+    notes.forEach(function(note){ var isT=/#test$/.test(note), pa=window.__progPts(note), pts=isT?pa:pa.slice(1), sum=0, c=0; /* eerste meting telt niet (behalve bij de eGym-krachttest) */
       for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen) */
-        if(pts[i-1].t<from-BASEGAP) continue; /* maar niet meer dan 120 dagen vóór de periode: anders telt bv. bij 3 Months een test van 2 jaar terug als vertrek (op vraag van Tom, 11 okt) */
+        if(!isT&&pts[i-1].t<from-BASEGAP) continue; /* eGym-krachttest: alles telt mee, ook een oude test als vertrek (op vraag van Tom, 11 okt) */ /* maar niet meer dan 120 dagen vóór de periode: anders telt bv. bij 3 Months een test van 2 jaar terug als vertrek (op vraag van Tom, 11 okt) */
         var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue; sum+=Math.log(b/a); c++; }
       if(c){ L.push(sum); n+=c; } });
     if(!L.length) return null;
@@ -5046,7 +5046,7 @@ window.__congrats=function(o){
         /* zelfde regels als de kettingindex: de allereerste meting telt nooit (leereffect); basis = laatste meting vóór de periode, anders de eerste erin;
            enkel tonen als er een echte stap is (dus vanaf de derde meting) */
         var allx=/#test$/.test(S.k)?window.__progPts(S.k):window.__progPts(S.k).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
-        var before=allx.filter(function(x){ return x.t<R.from&&x.t>=R.from-(window.__baseGap||0); }).pop(), /* vertrek vóór de periode: max. 120 dagen ervoor (zoals chainPct) */ first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
+        var isT=/#test$/.test(S.k), before=allx.filter(function(x){ return x.t<R.from&&(isT||x.t>=R.from-(window.__baseGap||0)); }).pop(), /* eGym-krachttest: geen grens */ /* vertrek vóór de periode: max. 120 dagen ervoor (zoals chainPct) */ first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
         var unit=inp.placeholder||'kg', d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
