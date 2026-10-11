@@ -3073,7 +3073,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       else if(eff==='range') spanW=(BR.to-BR.from)/WK;
       spanW=Math.max(1/7,spanW); }
     window.__balState={sc:score,n:n,eff:eff,perWeek:perWeek,spanW:spanW};
-    if(eff==='dag'){ var d=new Date(last); head=last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
+    var live=eff==='dag'&&last&&window.__woStart&&window.__woStart()&&last>=window.__woStart(); /* lopende workout: 'This workout' (op vraag van Tom, 11 okt) */
+    if(eff==='dag'){ var d=new Date(last); head=live?'This workout':last?'Last workout, '+DAGEN[d.getDay()]+' '+d.getDate()+' '+MAANDEN[d.getMonth()]:'Last workout'; }
     else if(eff==='week') head='Last 7 days, '+n+(n===1?' training day':' training days');
     else if(eff==='maand') head='Last 30 days, '+n+(n===1?' training day':' training days');
     else if(eff==='kwart') head='Last 90 days, '+n+(n===1?' training day':' training days');
@@ -3104,7 +3105,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var bal=[]; SUG_PAIRS.forEach(function(p){ var a=sc[p[0]], b=p[1].reduce(function(x,k){ return x+sc[k]; },0)/p[1].length, hi=Math.max(a,b), lo=Math.min(a,b);
       if(hi>=3*W&&hi>=1.8*Math.max(lo,.5*W)){ var big=a>b?p[2]:p[3], small=a>b?p[3]:p[2], r=lo>0?hi/lo:null; bal.push(esc(big)+(/s$/.test(big)?' get ':' gets ')+(r&&r<10?(Math.round(r*10)/10)+'×':'far')+' more work than '+esc(small)+'. Give '+esc(small)+' a bit more attention.'); } });
     var tf=function(v){ return v>=10?Math.round(v)+'':(Math.max(1,Math.round(v*2)/2)+''); };
-    var h='<p class="sug-intro">'+esc(D.head||'')+(D.head?'. ':'')+(D.perWeek?'Minimums in sets per week.':D.eff==='dag'?'Minimums: your weekly target spread over the workouts you do in a week.':'Minimums: the weekly target scaled to this period.')+'</p>';
+    var h='<p class="sug-intro">'+esc(D.head||'')+(D.head?'. ':'')+(D.perWeek?'Minimums in sets per week.':D.eff==='dag'?'Aim for about '+tf(8*W)+' sets per large muscle per workout.':'Minimums: the weekly target scaled to this period.')+'</p>';
     if(low.length){ h+='<p class="sug-h">Give more attention</p><ul class="sug-list">'+low.map(function(m){ var ex=exFor(m);
       return '<li><div class="sug-row"><b>'+MLAB[m]+'</b><span>'+f(sc[m]||0)+' <i>/ '+(D.perWeek?SUG_MIN[m]+' sets a week':tf(T(m))+' sets')+'</i></span></div><span class="sug-bar"><i style="width:'+Math.min(100,Math.round(100*(sc[m]||0)/T(m)))+'%"></i></span>'+
         (ex.list.length?'<small>'+(ex.add?'Add to your list: ':'Try: ')+ex.list.map(esc).join(', ')+'</small>':'')+'</li>'; }).join('')+'</ul>'; }
