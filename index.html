@@ -1232,10 +1232,23 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .cx-add{appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;margin:1.4rem 0 0;min-height:44px;padding:0 1.1rem 0 .9rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 14px 'Work Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;}
 .cx-add svg{color:var(--accent);}
 .cx-add:active{background:var(--paper-soft);transform:scale(.97);}
-.egs-row{display:flex;align-items:center;justify-content:space-between;gap:.8rem;width:100%;min-height:56px;padding:0;appearance:none;cursor:pointer;border:0;border-bottom:1px solid var(--line-soft);background:none;text-align:left;font:500 15px 'Work Sans',system-ui,sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent;}
-.egs-row i{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:transparent;}
-.egs-row[aria-pressed="true"] i{background:var(--accent);border-color:var(--accent);color:var(--paper);}
-.egs-row small{display:block;font-size:12.5px;color:var(--muted-soft);margin-top:.1rem;}
+.ebt-h.egs-h{margin:1.8rem 0 .2rem;}
+.egs-row.two{flex-wrap:wrap;padding-bottom:.6rem;}
+.egs-row.two .egs-n{flex:1 1 calc(100% - 3.5rem);}
+.egs-row.two .egs-v:first-of-type{margin-left:auto;}
+.egs-list{margin-top:.2rem;}
+.egs-row{display:flex;align-items:center;gap:.7rem;min-height:56px;border-bottom:1px solid var(--line-soft);}
+.egs-ck{flex:none;appearance:none;cursor:pointer;width:44px;height:44px;margin-left:-8px;padding:0;border:0;background:none;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+.egs-ck i{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:transparent;}
+.egs-ck[aria-pressed="true"] i{background:var(--accent);border-color:var(--accent);color:var(--paper);}
+.egs-n{flex:1;min-width:0;font-size:15px;color:var(--ink);line-height:1.25;}
+.egs-n small{display:block;font-size:12.5px;color:var(--muted-soft);margin-top:.1rem;}
+.egs-v{flex:none;display:flex;align-items:center;gap:.3rem;}
+.egs-v input{width:4.2rem;min-height:40px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 16px 'Work Sans',system-ui,sans-serif;padding:0 .55rem;text-align:right;font-variant-numeric:tabular-nums;-webkit-appearance:none;}
+.egs-v input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
+.egs-v input.need{border-color:var(--accent);}
+.egs-v span{width:1.9rem;font-size:12.5px;color:var(--muted);}
+.egs-row:not(.on) .egs-v{opacity:.45;}
 .ebt-msg{min-height:1.4em;margin:.6rem 0 0;font-size:13.5px;color:var(--muted);text-align:center;}
 .ebt-msg.ok{color:var(--green);}
 .ebt-h{margin:2rem 0 .3rem;font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
@@ -2301,7 +2314,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 <div class="sheet-bg" id="egs-bg" hidden></div>
 <div class="sheet pe-sheet" id="egs-sheet" role="dialog" aria-modal="true" aria-labelledby="egs-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head"><h3 id="egs-t">eGym session</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-head"><h3 id="egs-t">Session</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="pe-body"></div>
 </div>
 <div class="sheet-bg top" id="et-bg" hidden></div>
@@ -3489,6 +3502,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){});
   }
   /* eGym achteraf (History › Add eGym session, op vraag van Tom, 11 okt): markering 'getraind' zoals afvinken, handmatig (w='m', 12u) */
+  window.__progAdd=function(k,d,v){ progPut(k,d,v); renderProg(); }; /* handmatige meting (History › Add session) */
   window.__progMark=function(k,d){ var p=d.split('-'), id=k+'@'+d+'@m', ev={k:k,d:d,t:new Date(+p[0],+p[1]-1,+p[2],12).getTime(),v:0,x:1,w:'m'};
     prog[id]=ev; saveProgLocal(); if(progCol) progCol.doc(id).set(ev).catch(function(){}); renderProg(); };
   function progDel(id){ delete prog[id]; saveProgLocal(); if(progCol) progCol.doc(id).delete().catch(function(){}); }
@@ -4702,6 +4716,15 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   /* eGym heeft een eigen warm-upkeuze (cfg.eg0; op vraag van Tom, 10 okt): zelfde lijst, apart onthouden; zolang leeg = die van Open Gym */
   function isEgW(g){ return window.__split==='egym'&&g==='g0'; }
   function on(g){ if(isEgW(g)) return cfg.eg0||cfg.g0||DEF.g0||[]; if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
+  /* actieve oefeningen per groep over alle actieve programma's (History › Add session; op vraag van Tom, 11 okt) */
+  window.__p53active=function(){ var P=window.__p53progs?window.__p53progs():['full','egym','cardio'], r={};
+    function add(g,ks){ r[g]=r[g]||[]; (ks||[]).forEach(function(k){ if(r[g].indexOf(k)<0) r[g].push(k); }); }
+    var G=['g0','g1','g2','g3','g4','g5','g6','g7'];
+    if(P.indexOf('full')>=0) G.forEach(function(g){ add(g,cfg[g]||DEF[g]); });
+    if(P.indexOf('home')>=0) G.forEach(function(g){ add(g,((cfg.home&&cfg.home[g])||[]).filter(function(k){ return HOME.indexOf(k)>=0; })); });
+    if(P.indexOf('egym')>=0){ add('g0',cfg.eg0||cfg.g0||DEF.g0); add('g10',cfg.g10||DEF.g10); }
+    if(P.indexOf('cardio')>=0) add('g8',cfg.g8||DEF.g8);
+    return r; };
   function setOn(g,act){ if(isEgW(g)){ cfg.eg0=act; return; } if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
   document.addEventListener('p53-split',function(){ apply(); if(open) render(); });
   function apply(){
@@ -5319,30 +5342,56 @@ window.__congrats=function(o){
         if(EG){ if(v.date===sel) return; var w=ids.map(function(id){ return P[id]?P[id].v:0; }); w.date=v.date; v=w; }
         stay=sel; /* andere datum: de kalender blijft op deze dag staan, de oefening verhuist (op vraag van Tom, 10 okt) */
         window.__progSetVals(ids,v,v.date); }); });
-  /* ---- eGym-sessie achteraf (op vraag van Tom, 11 okt): knop onder de dag → blad met datum + vinklijst toestellen.
-     Aanvinken = markering 'getraind' (__progMark, w='m'), uitvinken = alle metingen van dat toestel op die dag weg. */
+  /* ---- sessie achteraf toevoegen/aanpassen (op vraag van Tom, 11 okt; eerst enkel eGym): knop onder de dag → blad met datum +
+     alle actieve oefeningen van de actieve programma's (Warm-up, spiergroepen, eGym, Cardio), met vinkje en waardeveld (kg/reps/min).
+     Aanvinken = meting (__progAdd, w='m'; eGym = markering __progMark), waarde wijzigen = __progSetVals, uitvinken = metingen van die dag weg. */
   var EGP='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
-  function egOn(d){ var r={}, P=window.__progAll?window.__progAll():{}; Object.keys(P).forEach(function(id){ var e=P[id]; if(e&&e.d===d&&/^eg-/.test(e.k)&&typeof e.v==='number') (r[e.k]=r[e.k]||[]).push(id); }); return r; }
-  function addBtn(o){ if(!document.querySelector('#s-d3 .exr[data-grp="g10"]')) return ''; var has=Object.keys(egOn(sel)).length;
-    return '<button type="button" class="cx-add">'+EGP+(has?'Change eGym session':'Add eGym session')+'</button>'; }
-  var gsh=null, gbg=null, gOpen=false, gLast=null, gD=null, gSel={}, gAll=false;
-  function gMach(){ return [].slice.call(document.querySelectorAll('#s-d3 .exl > li.exr[data-grp="g10"]')).map(function(li){ var inp=li.querySelector('.exr-in[data-note]'), n=li.querySelector('.exr-n');
-      return inp&&n?{k:inp.dataset.note,name:n.firstChild.textContent.trim().replace(/^eGym\s+/,''),on:!li.classList.contains('ex-off')}:null; }).filter(Boolean); }
-  function gPre(){ var had=egOn(gD); gSel={}; Object.keys(had).forEach(function(k){ gSel[k]=1; });
-    if(!Object.keys(gSel).length) gMach().forEach(function(m){ if(m.on) gSel[m.k]=1; }); } /* nieuwe sessie: alle actieve toestellen staan al aan */
-  function gRender(){ var body=gsh.querySelector('.pe-body'), today=ymd(Date.now()), had=egOn(gD), M=gMach();
-    var vis=M.filter(function(m){ return gAll||m.on||had[m.k]; }), rest=M.length-vis.length;
-    body.innerHTML='<p class="pe-sub">Tick the machines you trained. Each one counts as a training in your statistics.</p>'+
+  var CKS='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  function rowKey(li){ var i=li.querySelector('.exr-in[data-note]'); return li.dataset.key||(i&&i.dataset.note); }
+  function ins(li){ return [].slice.call(li.querySelectorAll('.exr-in[data-note]')); }
+  /* metingen van een dag per veld: {veld:[ids]}, nieuwste laatst */
+  function onDay(d){ var r={}, P=window.__progAll?window.__progAll():{};
+    Object.keys(P).forEach(function(id){ var e=P[id]; if(e&&e.d===d&&typeof e.v==='number') (r[e.k]=r[e.k]||[]).push(id); });
+    Object.keys(r).forEach(function(k){ r[k].sort(function(a,b){ return (P[a].t||0)-(P[b].t||0); }); }); return r; }
+  function addBtn(o){ var has=Object.keys(o.items||{}).length||Object.keys(WU[sel]||{}).length;
+    return '<button type="button" class="cx-add">'+EGP+(has?'Edit session':'Add session')+'</button>'; }
+  var gsh=null, gbg=null, gOpen=false, gLast=null, gD=null, gSel={}, gVal={};
+  function gRows(){ var A=window.__p53active?window.__p53active():null, had=onDay(gD), out=[];
+    document.querySelectorAll('#s-d3 .exl > li.exgrp[data-grp]').forEach(function(h){ var g=h.dataset.grp, t=h.querySelector('.grp-t'), list=[];
+      [].slice.call(document.querySelectorAll('#s-d3 .exl > li.exr[data-grp="'+g+'"]')).forEach(function(li){ var k=rowKey(li), fs=ins(li); if(!k||!fs.length) return;
+        var logged=fs.some(function(f){ return had[f.dataset.note]; });
+        if(logged||(A?(A[g]||[]).indexOf(k)>=0:!li.classList.contains('ex-off'))) list.push({li:li,k:k,fs:fs,logged:logged}); });
+      if(list.length) out.push({g:g,name:t?t.textContent.trim():'',list:list}); });
+    return out; }
+  function gPre(){ var had=onDay(gD), P=window.__progAll?window.__progAll():{}, fv=window.__progFmt?window.__progFmt.v:String; gSel={}; gVal={};
+    gRows().forEach(function(G){ G.list.forEach(function(r){ if(r.logged) gSel[r.k]=1;
+      r.fs.forEach(function(f){ var n=f.dataset.note, ids=had[n], v=null;
+        if(ids) v=P[ids[ids.length-1]].v; else if(f.type!=='hidden'&&window.__progPts){ var pts=window.__progPts(n); if(pts&&pts.length) v=pts[pts.length-1].v; } /* nieuw: laatste waarde voorstellen */
+        gVal[n]=v==null?'':fv(v); }); }); }); }
+  function gRender(){ var body=gsh.querySelector('.pe-body'), today=ymd(Date.now());
+    body.innerHTML='<p class="pe-sub">Tick what you did and check the values. Only exercises from your active workouts are listed.</p>'+
       '<div class="ebt-date"><label for="egsD">Date</label><input id="egsD" type="date" value="'+gD+'" max="'+today+'"></div>'+
-      '<div class="ebt-list" role="group" aria-label="Machines">'+vis.map(function(m){ return '<button type="button" class="egs-row" data-k="'+esc(m.k)+'" aria-pressed="'+(gSel[m.k]?'true':'false')+'"><span>'+esc(m.name)+(had[m.k]?'<small>Logged</small>':'')+'</span><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i></button>'; }).join('')+'</div>'+
-      (rest?'<button type="button" class="ebt-more">Show all machines ('+rest+' more)</button>':'')+
-      '<button type="button" class="ebt-save">Save</button>';
+      gRows().map(function(G){ return '<p class="ebt-h egs-h">'+esc(G.name)+'</p><div class="ebt-list egs-list">'+G.list.map(function(r){ var n=r.li.querySelector('.exr-n'), nm=n?n.firstChild.textContent.trim():r.k;
+        var fl=r.fs.filter(function(f){ return f.type!=='hidden'; });
+        return '<div class="egs-row'+(gSel[r.k]?' on':'')+(fl.length>1?' two':'')+'" data-k="'+esc(r.k)+'"><button type="button" class="egs-ck" aria-pressed="'+(gSel[r.k]?'true':'false')+'" aria-label="'+esc(nm)+'"><i>'+CKS+'</i></button><span class="egs-n">'+esc(nm)+(r.logged?'<small>Logged</small>':'')+'</span>'+
+          fl.map(function(f){ var u=f.placeholder||''; return '<label class="egs-v"><input type="text" inputmode="decimal" autocomplete="off" data-n="'+esc(f.dataset.note)+'" value="'+esc(gVal[f.dataset.note]||'')+'" aria-label="'+esc(f.getAttribute('aria-label')||nm)+'"><span>'+esc(u)+'</span></label>'; }).join('')+'</div>'; }).join('')+'</div>'; }).join('')+
+      '<button type="button" class="ebt-save">Save</button><p class="ebt-msg" aria-live="polite"></p>';
     body.querySelector('#egsD').addEventListener('change',function(e){ var v=e.target.value; if(!/^\d{4}-\d{2}-\d{2}$/.test(v)||v>today) return; gD=v; gPre(); gRender(); });
-    body.querySelectorAll('.egs-row').forEach(function(b){ b.addEventListener('click',function(){ var k=b.dataset.k; if(gSel[k]) delete gSel[k]; else gSel[k]=1; b.setAttribute('aria-pressed',gSel[k]?'true':'false'); }); });
-    var mo=body.querySelector('.ebt-more'); if(mo) mo.addEventListener('click',function(){ gAll=true; gRender(); });
-    body.querySelector('.ebt-save').addEventListener('click',function(){ var had=egOn(gD), del=[];
-      Object.keys(gSel).forEach(function(k){ if(!had[k]&&window.__progMark) window.__progMark(k,gD); });
-      Object.keys(had).forEach(function(k){ if(!gSel[k]) del=del.concat(had[k]); });
+    function setRow(row,on){ var k=row.dataset.k; if(on) gSel[k]=1; else delete gSel[k]; row.classList.toggle('on',on); row.querySelector('.egs-ck').setAttribute('aria-pressed',on?'true':'false'); }
+    body.querySelectorAll('.egs-row').forEach(function(row){ row.querySelector('.egs-ck').addEventListener('click',function(){ var on=!gSel[row.dataset.k]; setRow(row,on);
+        var e=on&&[].filter.call(row.querySelectorAll('input'),function(i){ return !i.value.trim(); })[0]; if(e) e.focus(); });
+      row.querySelectorAll('input').forEach(function(i){ i.addEventListener('input',function(){ gVal[i.dataset.n]=i.value; i.classList.remove('need'); if(i.value.trim()&&!gSel[row.dataset.k]) setRow(row,true); }); }); });
+    body.querySelector('.ebt-save').addEventListener('click',function(){ var had=onDay(gD), P=window.__progAll?window.__progAll():{}, bad=null, ops=[];
+      function num(x){ var m=String(x||'').replace(',','.').match(/\d+(?:\.\d+)?/); return m?parseFloat(m[0]):null; }
+      gRows().forEach(function(G){ G.list.forEach(function(r){ var row=body.querySelector('.egs-row[data-k="'+r.k+'"]');
+        r.fs.forEach(function(f){ var n=f.dataset.note, ids=had[n]||[], hid=f.type==='hidden';
+          if(!gSel[r.k]){ if(ids.length) ops.push(['del',ids]); return; }
+          if(hid){ if(!ids.length) ops.push(['mark',n]); return; } /* eGym: enkel 'getraind' */
+          var v=num(gVal[n]); if(v==null){ if(!bad&&row) bad=row.querySelector('input[data-n="'+n+'"]'); return; }
+          if(!ids.length) ops.push(['add',n,v]); else{ var last=ids[ids.length-1]; if(P[last].v!==v) ops.push(['set',last,v]); } }); }); });
+      if(bad){ bad.classList.add('need'); bad.focus(); var m=body.querySelector('.ebt-msg'); m.textContent='Enter a value for each ticked exercise.'; return; }
+      var del=[]; ops.forEach(function(o){ if(o[0]==='del') del=del.concat(o[1]); else if(o[0]==='mark'&&window.__progMark) window.__progMark(o[1],gD);
+        else if(o[0]==='add'&&window.__progAdd) window.__progAdd(o[1],gD,o[2]); else if(o[0]==='set'&&window.__progSetVals) window.__progSetVals([o[1]],[o[2]]); });
       if(del.length&&window.__progDelIds) window.__progDelIds(del);
       var p=gD.split('-'); ym={y:+p[0],m:+p[1]-1}; sel=pick=gD; gClose(); render(); }); }
   function gClose(){ if(!gOpen) return; gOpen=false; gbg.classList.remove('on'); gsh.classList.remove('on');
@@ -5350,7 +5399,7 @@ window.__congrats=function(o){
   function egsOpen(d){ gsh=gsh||document.getElementById('egs-sheet'); gbg=gbg||document.getElementById('egs-bg'); if(!gsh) return;
     if(!gsh.__init){ gsh.__init=1; gbg.addEventListener('click',gClose); gsh.querySelector('.sheet-x').addEventListener('click',gClose);
       document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&gOpen){ e.stopPropagation(); gClose(); } },true); }
-    gOpen=true; gLast=document.activeElement; gD=d||ymd(Date.now()); gAll=false; gPre(); gRender(); gbg.hidden=false; gsh.hidden=false; gsh.scrollTop=0;
+    gOpen=true; gLast=document.activeElement; gD=d||ymd(Date.now()); gPre(); gRender(); gbg.hidden=false; gsh.hidden=false; gsh.scrollTop=0;
     requestAnimationFrame(function(){ gbg.classList.add('on'); gsh.classList.add('on'); }); gsh.querySelector('.sheet-x').focus({preventScroll:true}); }
   window.__egsOpen=egsOpen;
   window.__renderCal=render;
