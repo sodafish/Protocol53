@@ -5282,7 +5282,7 @@ window.__congrats=function(o){
         var sx=it.li.querySelector('.exr-s'), reps=(nm==='Cardio'||nm==='Warm-up')?'':(sx&&sx.firstChild&&sx.firstChild.nodeType===3?sx.firstChild.textContent.replace(/[·\s]+$/,'').trim():''); reps=(reps.split('·').map(function(x){ return x.trim(); }).filter(function(x){ return /\d/.test(x); })[0]||'').replace(/\s*\(.*$/,''); /* kort: enkel het stuk met sets/reps (supersets: '2 rounds × 10–15') */
         if(nm==='Warm-up'){} /* warm-up telt niet mee */ else if(nm==='Cardio') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
         EXI.push({ids:it.ids||[],name:name,ks:ks,f:it.f,u:u,li:it.li});
-        return '<li class="cx"><div class="cx-row">'+(EG?'':'<button type="button" class="cx-edit" data-i="'+(EXI.length-1)+'" tabindex="-1">Edit</button>')+'<span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+(val?' · ':'')+'</i>':'')+esc(val)+'</em><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button></div></li>'; }).join('');
+        return '<li class="cx"><div class="cx-row">'+('<button type="button" class="cx-edit" data-i="'+(EXI.length-1)+'" tabindex="-1">Edit</button>')+'<span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+(val?' · ':'')+'</i>':'')+esc(val)+'</em><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button></div></li>'; }).join('');
       var lab=nm; if(nm==='Open Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
         var gs={}; arr.forEach(function(it){ var g=it.li.dataset.grp; if(g!=='g6') gs[g]=1; }); var gk=Object.keys(gs);
         lab+=' · '+(!gk.length?'Core':gk.every(function(x){ return UP[x]; })?'Upper Body':gk.every(function(x){ return LO[x]; })?'Lower Body':'Full Body'); }
@@ -5295,10 +5295,11 @@ window.__congrats=function(o){
       it.ks.forEach(function(k){ var id=(it.ids||[]).filter(function(x){ return P[x]&&P[x].k===k; })[0]; if(!id) return; ids.push(id);
         var inp=it.li.querySelector('.exr-in[data-note="'+k+'"]'); fields.push({label:it.ks.length>1?((inp&&inp.getAttribute('aria-label'))||'').replace(/\s+—.*$/,''):'',value:P[id].v,unit:it.f[k].u}); });
       if(!ids.length) return;
-      var eg=ids.length&&P[ids[0]]&&/^eg-/.test(P[ids[0]].k)?(P[ids[0]].m||'ecc'):null;
-      p53EditVals({title:'Edit '+it.name,date:sel,method:eg,fields:fields}).then(function(v){ if(!v||!window.__progSetVals) return;
+      var EG=/^eg-/.test(P[ids[0]].k); /* eGym: enkel de datum (geen gewicht/methode meer; op vraag van Tom, 11 okt) */
+      p53EditVals({title:'Edit '+it.name,msg:EG?'Move this exercise to another day.':'',date:sel,fields:EG?[]:fields}).then(function(v){ if(!v||!window.__progSetVals) return;
+        if(EG){ if(v.date===sel) return; var w=ids.map(function(id){ return P[id]?P[id].v:0; }); w.date=v.date; v=w; }
         stay=sel; /* andere datum: de kalender blijft op deze dag staan, de oefening verhuist (op vraag van Tom, 10 okt) */
-        window.__progSetVals(ids,v,v.date,v.method); }); });
+        window.__progSetVals(ids,v,v.date); }); });
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
