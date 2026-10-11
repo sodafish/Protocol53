@@ -2187,7 +2187,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <li><strong>Only exercises in kg count,</strong> and each one is compared only with itself: every measurement against the one before.</li>
       <li><strong>Your very first measurement doesn’t count.</strong> The first session is mostly learning the movement, so an exercise appears from its third measurement. eGym strength tests count from the first test.</li>
       <li><strong>Per exercise:</strong> the change from the last measurement before the period (or the first one in it) to the latest. A lower weight counts as a decline.</li>
-      <li><strong>Per muscle and per group</strong> the steps are combined week by week: each week the average of the exercises you did, then the weeks are multiplied. Swapping exercises doesn’t distort the result.</li>
+      <li><strong>Per muscle and per group:</strong> the average progress of its exercises. A group with subgroups (Back, Arms) is the average of those subgroups, so Arms is the average of biceps and triceps.</li>
       <li><strong>The figure</strong> uses only exercises where that muscle is the main muscle. For eGym the strength test results count, not the training weights; supersets don’t count.</li>
     </ul></div>
   </div>
@@ -2970,14 +2970,17 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      stapjes (log), daarna het gemiddelde over de oefeningen die die week gedaan zijn; de weken worden vermenigvuldigd.
      Zo blijft het getal kloppen als je van oefening wisselt. notes = invulvelden (data-note). → {p: %, n: aantal stapjes} of null. */
   function weekKey(t){ var d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d.getTime(); }
-  function chainPct(notes,from,to){ if(!window.__progPts) return null; var W={}, n=0;
-    notes.forEach(function(note){ var pa=window.__progPts(note), pts=/#test$/.test(note)?pa:pa.slice(1); /* eerste meting telt niet (behalve bij de eGym-krachttest) */
-      for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen: vooruitgang sinds de laatste meting vóór de periode) */
-        var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue;
-        var wk=weekKey(pts[i].t); W[wk]=W[wk]||{}; W[wk][note]=(W[wk][note]||0)+Math.log(b/a); n++; } });
-    if(!n) return null; var sum=0;
-    Object.keys(W).forEach(function(wk){ var o=W[wk], ks=Object.keys(o); sum+=ks.reduce(function(a,k){ return a+o[k]; },0)/ks.length; });
-    return {p:(Math.exp(sum)-1)*100,n:n}; }
+  /* GEMIDDELDE (op vraag van Tom, 11 okt; vroeger een kettingindex per week, die bij oefeningen in verschillende weken de stijgingen
+     vermenigvuldigde: biceps +16% en triceps +13% gaf +31%). Nu: per oefening haar eigen vooruitgang in de periode (stapjes meting → volgende
+     meting, eerste meting ooit telt niet behalve bij de eGym-krachttest), daarna het (meetkundig) gemiddelde over de oefeningen met een stap.
+     notes = invulvelden; → {p: %, n: aantal stapjes, k: aantal oefeningen} of null. */
+  function chainPct(notes,from,to){ if(!window.__progPts) return null; var L=[], n=0;
+    notes.forEach(function(note){ var pa=window.__progPts(note), pts=/#test$/.test(note)?pa:pa.slice(1), sum=0, c=0; /* eerste meting telt niet (behalve bij de eGym-krachttest) */
+      for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen) */
+        var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue; sum+=Math.log(b/a); c++; }
+      if(c){ L.push(sum); n+=c; } });
+    if(!L.length) return null;
+    return {p:(Math.exp(L.reduce(function(a,x){ return a+x; },0)/L.length)-1)*100,n:n,k:L.length}; }
   window.__chainPct=chainPct;
   function balPct(from,to){
     var by={}, out={};
@@ -4931,13 +4934,14 @@ window.__congrats=function(o){
       return v.length?v.reduce(function(a,x){ return a+x.p; },0)/v.length:null; }
     function pc(v){ v=Math.round(v||0); return '<b class="'+(v>0?'up':'')+'">'+(v<0?'−':v>0?'+':'')+Math.abs(v)+'%</b>'; }
     function rws(r){ return r.slice().sort(function(a,b){ return b.p-a.p; }).map(function(x){ return x.h; }).join(''); }
-    /* groep en tussenkop = kettingindex over al hun oefeningen (wisselen van oefening breekt het getal niet; eerste meting per oefening telt niet) */
+    /* tussenkop en groep zonder tussenkoppen = gemiddelde vooruitgang van hun oefeningen (chainPct) */
     function ch(notes){ var c=window.__chainPct?window.__chainPct(notes||[],R.from,R.to):null; return c?c.p:0; }
     groups.forEach(function(g){ var body='', avg; if(!g.r.length) return; /* groep pas tonen als er iets onder staat */
       if(g.subs.length){
-        g.subs.forEach(function(k){ var r=g.r.filter(function(x){ return x.sub===k; }); if(!r.length) return; /* tussenkop pas tonen als er iets onder staat */
-          body+='<li class="pl-sh" aria-hidden="true"><span>'+esc(k)+'</span>'+pc(ch(g.sn[k]))+'</li>'+rws(r); });
-        avg=ch(g.notes); }
+        var sl=[]; g.subs.forEach(function(k){ var r=g.r.filter(function(x){ return x.sub===k; }); if(!r.length) return; /* tussenkop pas tonen als er iets onder staat */
+          var sv=ch(g.sn[k]); sl.push(Math.log(1+sv/100));
+          body+='<li class="pl-sh" aria-hidden="true"><span>'+esc(k)+'</span>'+pc(sv)+'</li>'+rws(r); });
+        avg=sl.length?(Math.exp(sl.reduce(function(a,x){ return a+x; },0)/sl.length)-1)*100:0; } /* groep = gemiddelde van haar tussenkoppen (Arms = gemiddelde van Biceps en Triceps; op vraag van Tom, 11 okt) */
       else { avg=ch(g.notes); body=rws(g.r); }
       html+='<li class="pl-h" aria-hidden="true"><span>'+esc(g.t)+'</span>'+pc(avg)+'</li>'+body; });
     list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
