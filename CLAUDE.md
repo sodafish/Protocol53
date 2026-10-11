@@ -92,15 +92,12 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   ranges bij groepen zoals vette vis). Eenheid: per stuk waar dat logisch is (egg, avocado, piece fruit, slice, scoop, tin, tbsp,
   handful, 2 squares), anders per 100 g (raw/cooked/dry erbij); 0-waarden zonder eenheid. Nieuwe voedingsrij: zo'n regel erbij. Getoond als zachte pil (`#p-voeding .nut`, 6% inkt). Eiwit enkel waar relevant: niet bij groenten, fruit, olie, avocado, olijven, cacao, chocolade, hummus, stevia, water (daar enkel kcal). De pil '★ Top protein' is weg (op vraag van Tom).
 
-## Tablet / breed scherm (≥ 1000 px; op vraag van Tom, 9 okt)
-- Eén `@media (min-width:1000px)`-blok onderaan de CSS; daaronder (gsm, tablet portrait) verandert niets (pixelvergelijking 375/390 px voor/na = gelijk).
-- Statistics = dashboard: `#stabs` verborgen, `section.stats` als grid met DRIE gelijke kolommen (10 okt; 9 okt twee, daarvoor drie) over dezelfde
-  totale breedte (pagina tot 84rem, `body[data-view=progress]`): Balance · Strength · History naast elkaar (alle `.sv` tegelijk zichtbaar,
-  `[hidden]` overschreven; titels via `::before`). Strength-infographic zoals op gsm: één zijde met Front/Back-schakelaar (op vraag van Tom, 10 okt; vroeger voor en achter naast elkaar).
-- Workout: tot 72rem breed, oefeningen in twee kolommen (`#s-d3 .exl` grid; groepskoppen, tussenkoppen, 'Add exercises' over de volle breedte).
-- Diet en Guide (10 okt): tot 72rem breed (zoals Workout), CSS-multicolumn in twee kolommen (`column-count:2` op `#p-voeding`/`#p-kracht`,
-  blokken `break-inside:avoid`, vloeien links van boven naar onder, dan rechts). Over de volle breedte (`column-span:all`): Diet-notities
-  (`.note-head` + `.sess-note`), Guide `.superhead` en `.cards` (four, row3); zo staan de Guide-secties per kopje in twee kolommen.
+## Altijd gsm-weergave (op vraag van Tom, 11 okt; vervangt de tablet-layout van 9–10 okt)
+- Geen tablet- of desktoplayout meer: op elk scherm dezelfde gsm-kolom, gecentreerd. `--app-w: 430px` (blok 'ALTIJD GSM-WEERGAVE' onderaan de CSS)
+  is de max-breedte van `.wrap`/`main.wrap` en van de onderbladen (`.sheet`); `--app-gut` (de lege rand links/rechts) schuift de vaste knoppen
+  (`.to-top`, `.wo-end`) mee naar de rand van de kolom.
+- De vroegere `@media(max-width:640px)`/`(max-width:520px)`-blokken zijn `@media all{…}` geworden: de gsm-regels gelden altijd.
+  Kleine fijnregels voor smalle toestellen (≤ 380/360/350 px) blijven media queries. Geen nieuwe breakpoints voor brede schermen toevoegen.
 
 ## Navigatie
 - Navbar-hoogte (op vraag van Tom, 10 okt): `bottom: var(--nav-b)` = max(10 px, veilige zone − 12 px) → op een iPhone met streep ±22 px van de onderrand i.p.v. ±44 px; de End workout-pil volgt mee.

@@ -158,7 +158,7 @@ body{
   overscroll-behavior-x:none;width:100%;max-width:100%;
   padding-bottom:calc(120px + env(safe-area-inset-bottom));
 }
-.wrap,main.wrap{max-width:52rem;margin:0 auto;
+.wrap,main.wrap{max-width:var(--app-w);margin:0 auto;
   padding-left:calc(1.4rem + env(safe-area-inset-left));
   padding-right:calc(1.4rem + env(safe-area-inset-right));}
 h1,h2,h3{font-family:'Fraunces',Georgia,serif;}
@@ -247,7 +247,7 @@ main.wrap{padding-top:2.4rem;}
 /* accent tint per card kept subtle: number uses tab accent by default */
 .c-1 .big{color:var(--accent);} .c-2 .big{color:var(--blue);}
 .c-3 .big{color:var(--gold);} .c-4 .big{color:var(--accent);}
-@media(max-width:640px){
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */
   .masthead{gap:.25rem;padding:1.3rem 0 1.1rem;}
   main.wrap{padding-top:1.4rem;}
   .cards,.cards.two,.cards.four,.cards.row3{grid-template-columns:1fr;border:1px solid var(--ink);}
@@ -308,7 +308,7 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
   line-height:1;color:var(--accent);letter-spacing:-0.02em;}
 .rule .txt{font-family:'Work Sans',system-ui,sans-serif;font-size:.7rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.12em;line-height:1.4;margin-top:.6rem;color:var(--ink);}
-@media(max-width:640px){
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */
   .rules{grid-template-columns:1fr 1fr;}
   .rule{border-bottom:1px solid var(--line);}
   .rule:nth-child(odd){border-right:1px solid var(--line);}
@@ -332,7 +332,7 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
 
 /* ── twee kolommen ── */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;margin-top:1.2rem;}
-@media(max-width:640px){.cols{grid-template-columns:1fr;}}
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */.cols{grid-template-columns:1fr;}}
 .col{background:var(--paper);border:1px solid var(--line);padding:1.6rem;}
 .col h3{font-family:'Fraunces',Georgia,serif;font-size:1.35rem;font-weight:500;color:var(--ink);
   padding-bottom:.7rem;border-bottom:2px solid var(--ink);margin-bottom:.7rem;}
@@ -372,7 +372,7 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
 .reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
 /* ── mobiel: stacked tabellen ── */
-@media(max-width:640px){
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */
   .scroll{margin:1rem 0 0;padding:0;}
   table.stack{min-width:0;display:block;border:none;background:none;}
   table.stack thead{display:none;}
@@ -397,7 +397,7 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
   table.stack td[data-label="Frequency"],
   table.stack td[data-label="Telt mee"]{margin-top:.5rem;}
 }
-@media(max-width:520px){
+@media all{ /* vroeger max-width:520px */
   table{min-width:26rem;font-size:.84rem;}
   th,td{padding:.6rem .55rem;}
   .section-title{font-size:1.45rem;}
@@ -416,7 +416,7 @@ tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
   font-family:'Work Sans',system-ui,sans-serif;font-size:.85rem;font-weight:400;color:var(--ink);
   -webkit-appearance:none;}
 td .note{margin-top:0;max-width:9rem;}
-@media(max-width:640px){td .note{max-width:none;}}
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */td .note{max-width:none;}}
 .note::placeholder{color:var(--muted-soft);}
 .note.exr-in::placeholder{color:var(--muted-soft);opacity:.55;font-weight:500;}
 .note:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
@@ -470,7 +470,7 @@ td .note{margin-top:0;max-width:9rem;}
 .wk-t em{font-style:normal;font-family:'Work Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;color:var(--muted);margin-left:.6rem;}
 
 /* ════════════ PHONE-FIRST ════════════ */
-@media(max-width:640px){
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */
   .wrap,main.wrap{padding-left:calc(1.1rem + env(safe-area-inset-left));padding-right:calc(1.1rem + env(safe-area-inset-right));}
   .masthead{padding:1rem 0 .9rem;}
   .tab{padding:1rem .15rem .95rem;}
@@ -681,7 +681,7 @@ th{font-weight:600;font-size:11px;letter-spacing:.12em;border-bottom:1.5px solid
 td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
 .badge{border-radius:999px;font-weight:600;font-size:10.5px;letter-spacing:.06em;padding:.2rem .6rem;}
 .b-vrij{color:#FFFFFF;} .b-super{color:var(--paper);}
-@media(max-width:640px){
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */
   .scroll table.stack{background:none;border:none;border-radius:0;overflow:visible;}
   table.stack{border-top:1.5px solid var(--line);}
   table.stack td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;}
@@ -694,7 +694,7 @@ td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
 .exr-d{font-size:14px;line-height:1.5;color:var(--muted);margin-top:.3rem;}
 .exr-d strong{color:var(--ink);font-weight:600;}
 
-@media(max-width:640px){.seg-b{font-size:13.5px;padding:.7rem .15rem .65rem;}}
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */.seg-b{font-size:13.5px;padding:.7rem .15rem .65rem;}}
 
 .exr-opt > *{opacity:.5;transition:opacity .2s ease;}
 .exr-opt:focus-within > *{opacity:1;}
@@ -853,7 +853,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .sheet-bg.top{z-index:97;} .sheet.top{z-index:98;}
 .sheet-bg{position:fixed;inset:0;background:rgba(20,14,10,.42);z-index:90;opacity:0;transition:opacity .25s ease;}
 .sheet-bg.on{opacity:1;}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:91;margin:0 auto;max-width:var(--app-w);max-height:88vh;overflow:auto;background:var(--surface);color:var(--ink);
   border-radius:22px 22px 0 0;padding:.6rem 1.25rem calc(1.4rem + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .32s cubic-bezier(.22,.61,.36,1);}
 .sheet.on{transform:none;}
 .sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
@@ -1280,7 +1280,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   margin:0 -1.4rem 1rem;padding:0 1.4rem;box-shadow:inset 0 -1.5px 0 var(--line);
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 1.2rem,#000 calc(100% - 2rem),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 1.2rem,#000 calc(100% - 2rem),transparent 100%);}
 .prog-chips::-webkit-scrollbar{display:none;}
-@media(max-width:640px){.prog-chips{margin:0 -1.1rem 1rem;padding:0 1.1rem;}}
+@media all{ /* vroeger max-width:640px: altijd gsm-weergave */.prog-chips{margin:0 -1.1rem 1rem;padding:0 1.1rem;}}
 .prog-chips .pc{flex:none;appearance:none;cursor:pointer;min-height:46px;padding:0 .85rem;border:none;background:transparent;
   font:600 15px 'Work Sans',system-ui,sans-serif;color:var(--muted);white-space:nowrap;-webkit-tap-highlight-color:transparent;
   box-shadow:inset 0 -3px 0 transparent;transition:color .2s ease,box-shadow .25s ease;}
@@ -1689,37 +1689,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .pl-chart{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);}
 .pl-list button:active .pl-chart{background:var(--paper-soft);transform:scale(.95);}
 
-/* ================= TABLET / BREED SCHERM (≥ 1000 px), mobiel blijft ongewijzigd (op vraag van Tom) ================= */
-@media (min-width:1000px){
-  /* Statistics = één dashboard: Balance · Progress · Calendar naast elkaar, geen tabs */
-  body[data-view="progress"] .wrap,body[data-view="progress"] main.wrap{max-width:84rem;}
-  #s-stats #stabs{display:none;}
-  /* drie kolommen over dezelfde totale breedte (op vraag van Tom, 10 okt; vroeger twee): Balance · Strength · History */
-  #s-stats section.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 3rem;align-items:start;}
-  #s-stats section.stats>.sv[data-sv="body"]{grid-column:1;grid-row:1;}
-  #s-stats section.stats>.sv[data-sv="prog"]{grid-column:2;grid-row:1;}
-  #s-stats section.stats>.sv[data-sv="cal"]{grid-column:3;grid-row:1;}
-  #s-stats section.stats>.sv,#s-stats section.stats>.sv[hidden]{display:block!important;min-width:0;}
-  #s-stats section.stats>.sv[data-sv="body"]{order:1;} #s-stats section.stats>.sv[data-sv="prog"]{order:2;} #s-stats section.stats>.sv[data-sv="cal"]{order:3;}
-  #s-stats section.stats>.sv::before{display:block;margin:0 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line);font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;color:var(--ink);}
-  #s-stats section.stats>.sv[data-sv="body"]::before{content:'Balance';}
-  #s-stats section.stats>.sv[data-sv="prog"]::before{content:'Strength';}
-  #s-stats section.stats>.sv[data-sv="cal"]::before{content:'History';}
-  #s-stats .cal{margin-top:0;}
-  #s-stats .pl-empty{padding-top:1rem;}
-  /* Workout: breder, oefeningen in twee kolommen; groepskoppen en tussenkoppen over de volle breedte */
-  body[data-view="workout"] .wrap,body[data-view="workout"] main.wrap{max-width:72rem;}
-  #s-d3 .exl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:3rem;}
-  #s-d3 .exl>li.exgrp,#s-d3 .exl>li.exsub,#s-d3 .exl>li.gx-empty,#s-d3 .exl>li:not(.exr){grid-column:1/-1;}
-  /* Diet en Guide: zelfde breedte als Workout, blokken in twee kolommen (lopen van boven naar onder, links dan rechts);
-     notities, Guide-kopjes (superhead) en de kaartenrijen over de volle breedte (op vraag van Tom, 10 okt) */
-  body[data-view="voeding"] .wrap,body[data-view="voeding"] main.wrap,body[data-view="kracht"] .wrap,body[data-view="kracht"] main.wrap{max-width:72rem;}
-  #p-voeding:not([hidden]),#p-kracht:not([hidden]){column-count:2;column-gap:3rem;}
-  #p-voeding>*,#p-kracht>*{break-inside:avoid;}
-  #p-voeding>.note-head,#p-voeding>.sess-note,#p-kracht>.superhead,#p-kracht>.cards{column-span:all;}
-  #p-voeding>.note-head{margin-top:2.2rem;}
-  #p-kracht>.superhead{break-after:avoid;}
-}
+
+/* ================= ALTIJD GSM-WEERGAVE (op vraag van Tom, 11 okt): ook op tablet en web één gsm-kolom, gecentreerd ================= */
+:root{--app-w:430px;--app-gut:max(0px,calc((100vw - var(--app-w)) / 2));}
+.to-top{right:calc(var(--app-gut) + var(--tt-r,calc(28px + env(safe-area-inset-right,0px))));}
+.wo-end{right:calc(var(--app-gut) + 16px);}
 
 /* onderbladen en vensters in donker: zelfde glas als de navbar (op vraag van Tom, 11 okt) */
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sheet,:root:not([data-theme="light"]) .cf-card{background:rgba(var(--glass-rgb),.84);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);box-shadow:0 -14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.16);}:root:not([data-theme="light"]) #grp-sheet .sheet-head{background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}:root:not([data-theme="light"]) .gs-list li[data-k],:root:not([data-theme="light"]) .pe-list .cx-row{background:transparent;}:root:not([data-theme="light"]) .gs-list li.dragging{background:var(--knob);}}
