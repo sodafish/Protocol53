@@ -789,6 +789,8 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .wu-or{list-style:none;display:flex;align-items:center;gap:.8rem;padding:.35rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:none!important;}
 .wu-or::before,.wu-or::after{content:"";flex:1;height:1px;background:var(--line);}
 .exr-wu:has(+ .wu-or){border-bottom:none!important;}
+.exr-s .cnt-p{color:var(--accent);font-weight:600;} /* krachttoename achter N× (op vraag van Tom, 11 okt) */
+.exr-s .cnt-p.neg{color:var(--neg);}
 .cnt-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;}
 .eq{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:6px;border:1.2px solid var(--line);font-family:inherit;font:600 12px/1 system-ui,-apple-system,sans-serif;letter-spacing:0;color:var(--muted);vertical-align:3px;margin-left:.15rem;text-decoration:none;}
 .eq-c{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent);}
@@ -2693,6 +2695,16 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
         var w=line.querySelector('.exr-warn'); if(w) line.insertBefore(el,w); else line.appendChild(el);
       }
       el.querySelector('.cnt-n').textContent=(line.classList.contains('wu-cnt')?'':'· ')+c.n+'×';
+      /* krachttoename achter N× (op vraag van Tom, 11 okt): enkel kg-oefeningen met één veld (geen warm-up, cardio, supersets).
+         Gewone oefening: vanaf de TWEEDE meting (de eerste telt niet) → laatste, dus pas vanaf 3 metingen. eGym: krachttest, eerste → laatste test. */
+      var pe=el.querySelector('.cnt-p'), pct=null, g=li.dataset.grp, ins=li.querySelectorAll('.exr-in[data-note]');
+      if(ins.length===1&&g!=='g0'&&g!=='g8'){ var nt=ins[0].dataset.note, pts=null;
+        if(g==='g10'){ if(window.__etestPts) pts=window.__etestPts(nt); }
+        else if((ins[0].placeholder||'')==='kg'&&window.__progPts){ pts=window.__progPts(nt).slice(1); }
+        if(pts&&pts.length>1&&pts[0].v>0) pct=Math.round((pts[pts.length-1].v/pts[0].v-1)*100); }
+      if(pct==null){ if(pe) pe.remove(); }
+      else{ if(!pe){ pe=document.createElement('span'); pe.className='cnt-p'; var dt=el.querySelector('.cnt-dot'); el.insertBefore(pe,dt||null); }
+        pe.textContent='· '+(pct>0?'+':pct<0?'−':'')+Math.abs(pct)+'%'; pe.classList.toggle('neg',pct<0); }
     });
     /* bolletje: per spiergroep de oefening die je het laatst deed */
     document.querySelectorAll('#s-d3 .exgrp').forEach(function(g){
