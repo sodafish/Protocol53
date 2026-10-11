@@ -2291,7 +2291,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
   window.__egMethod=function(){ return cur; };
   var box=document.querySelector('.eg-meth'); if(!box) return;
   function paint(){ box.querySelectorAll('button[data-m]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.m===cur?'true':'false'); }); }
-  box.querySelectorAll('button[data-m]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); cur=b.dataset.m; try{ localStorage.setItem(KEY,cur); }catch(x){} paint(); }); });
+  box.querySelectorAll('button[data-m]').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); cur=b.dataset.m; try{ localStorage.setItem(KEY,cur); }catch(x){} paint(); document.dispatchEvent(new CustomEvent('p53-egm',{detail:cur})); }); });
   paint(); })();
 </script>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
@@ -3603,8 +3603,19 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(!window.__progPts) return;
     inputs.forEach(function(inp){
       if(!inp.classList.contains('exr-in') || document.activeElement===inp) return;
-      var pts=window.__progPts(inp.dataset.note); if(!pts.length) return;
-      var last=pts[pts.length-1], key=keyOf(inp), at=(local[key]&&local[key].at)||0;
+      var note=inp.dataset.note, key=keyOf(inp), at=(local[key]&&local[key].at)||0;
+      if(/^eg-/.test(note)){ /* eGym: toon de laatste meting van de GEKOZEN methode, leeg als die methode nog niet gemeten is (op vraag van Tom, 11 okt) */
+        var all=window.__progPts(note), lastAll=all.length?all[all.length-1].t:0;
+        if(inp.value.trim() && at>lastAll) return; /* zelf getypt, nog niet afgevinkt: laten staan */
+        var row=inp.closest('.exr'), chk=row&&row.querySelector('.chk');
+        if(chk && chk.getAttribute('aria-pressed')==='true') return; /* afgevinkt in deze workout: niet aanraken */
+        var mp=window.__progPts(note+'#'+(window.__egMethod?window.__egMethod():'ecc'));
+        if(!mp.length){ if(inp.value!==''){ inp.value=''; if(!local[key]) local[key]={}; local[key].t=''; } return; }
+        var lm=mp[mp.length-1], cm=parseFloat(String(inp.value).replace(',','.')); if(cm===lm.v) return;
+        var vm=String(Math.round(lm.v*100)/100); inp.value=vm; if(!local[key]) local[key]={}; local[key].t=vm; return;
+      }
+      var pts=window.__progPts(note); if(!pts.length) return;
+      var last=pts[pts.length-1];
       if(inp.value.trim() && at>last.t) return;
       var cur=parseFloat(String(inp.value).replace(',','.')); if(cur===last.v) return; /* zelfde getal (bv. '12,5'): laten staan */
       var v=String(Math.round(last.v*100)/100);
@@ -3613,6 +3624,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     saveLocal(local);
   }
   document.addEventListener('p53-prog',syncFromChart);
+  document.addEventListener('p53-egm',syncFromChart); /* wissel Eccentric/Regular */
   setTimeout(syncFromChart,0);
 
 })();
