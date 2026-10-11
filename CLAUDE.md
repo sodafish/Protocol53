@@ -56,6 +56,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Invulveld aantikken: geen eigen scroll-code (een visualViewport-correctie liet de lijst flikkeren op iOS, teruggedraaid).
   Wel `html:has(input:focus,textarea:focus){scroll-behavior:auto}` zodat iOS het veld zonder 'smooth' in beeld schuift.
   De iOS-balk met pijltjes en vinkje boven het toetsenbord is van Safari en kan een web-app niet weghalen.
+- Donker thema = 'verzonken' (op vraag van Tom, 11 okt; gekozen uit varianten): papier `#221A16` (was `#1B1411`, ook `theme-color`), band/schakelaarspoor `--paper-soft` `#18120F` en pil/velden/kaarten/navbar-glas/bladen `--surface` `#110C0A` liggen ONDER het papier (vroeger allebei lichter). Zo klopt de hiërarchie met licht (band verzonken, pil apart) en ligt er geen grijze waas over het zwart. Inkt, muted, lijnen en accent ongewijzigd. Nieuwe vlakken in donker: dieper dan papier, niet lichter.
 - Bevestigen nooit met `confirm()`: gebruik `p53Confirm({title,msg,ok,danger})` (Promise<boolean>),
   een eigen venster in de app-stijl.
 - Interne sleutels bleven Nederlands (spiersleutels `borst`, `bil` …, `data-note`, collecties, ids zoals

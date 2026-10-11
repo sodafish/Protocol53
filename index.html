@@ -8,11 +8,11 @@
 <meta name="apple-mobile-web-app-title" content="Protocol">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#F7F2EA" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1B1411" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#221A16" media="(prefers-color-scheme: dark)">
 <script>/* thema per toestel: System (standaard) / Light / Dark, localStorage p53-theme (op vraag van Tom, 10 okt) */
 (function(){ var t=null; try{ t=localStorage.getItem('p53-theme'); }catch(e){}
   window.__p53theme=function(v){ var r=document.documentElement; if(v==='light'||v==='dark') r.setAttribute('data-theme',v); else r.removeAttribute('data-theme');
-    document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#1B1411':v==='light'?'#F7F2EA':(i?'#1B1411':'#F7F2EA')); }); };
+    document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='dark'?'#221A16':v==='light'?'#F7F2EA':(i?'#221A16':'#F7F2EA')); }); };
   if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t);
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
   try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ if(/^(full|egym|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
@@ -572,14 +572,14 @@ td .note{margin-top:0;max-width:9rem;}
 body[data-tab]{--accent:#9A4424;--accent-soft:#C4764F;}
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#F1E8DC; --paper:#1B1411; --paper-soft:#30251F; --paper-dark:#3A2E27; --surface:#241B17;
+    --ink:#F1E8DC; --paper:#221A16; --paper-soft:#18120F; --paper-dark:#3A2E27; --surface:#110C0A;
     --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
     --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
   }
   :root:not([data-theme="light"]) body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
 }
 :root[data-theme="dark"]{
-  --ink:#F1E8DC; --paper:#1B1411; --paper-soft:#30251F; --paper-dark:#3A2E27; --surface:#241B17;
+  --ink:#F1E8DC; --paper:#221A16; --paper-soft:#18120F; --paper-dark:#3A2E27; --surface:#110C0A;
   --muted:#C2B1A1; --muted-soft:#9A8878; --line:#43352C; --line-soft:#3A2E27; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
   --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; color-scheme:dark;
 }
