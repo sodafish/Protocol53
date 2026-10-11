@@ -3679,7 +3679,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     esh.querySelector('#et-t').textContent='Strength tests';
     var rows=pts.slice().reverse().map(function(e){ var x=new Date(e.t);
       return '<li class="cx"><div class="cx-row"><button type="button" class="cx-edit" tabindex="-1" data-id="'+e.id+'">Edit</button><span class="pe-d">'+DN[x.getDay()]+' '+F.d(e.t)+'</span><span class="pe-v">'+F.v(e.v)+' kg</span><button type="button" class="cx-del" tabindex="-1" data-id="'+e.id+'" aria-label="Delete test of '+F.d(e.t)+'">Delete</button></div></li>'; }).join('');
-    body.innerHTML='<p class="pe-sub">'+eName.replace(/[<>&]/g,'')+' · '+(pts.length?pts.length+(pts.length===1?' test':' tests')+'. Swipe right to edit, left to delete.':'No tests yet. Add the result the eGym app shows, with the date of the test.')+'</p>'+
+    body.innerHTML='<p class="pe-sub">'+eName.replace(/[<>&]/g,'')+' · '+(pts.length?pts.length+(pts.length===1?' test':' tests')+'. Swipe right to edit, left to delete.':'No tests yet.')+'</p>'+
       '<form class="pe-add"><input type="date" name="d" value="'+ymdT()+'" max="'+ymdT()+'" aria-label="Date"><input type="text" name="v" inputmode="decimal" placeholder="kg" aria-label="Result in kg"><button type="submit">Add</button></form>'+
       '<ul class="pe-list">'+(rows||'<li class="pe-empty">No tests yet.</li>')+'</ul>';
     body.querySelector('.pe-add').addEventListener('submit',function(e){ e.preventDefault(); var f=e.target, m=String(f.v.value).replace(',','.').match(/\d+(?:\.\d+)?/);
@@ -4359,7 +4359,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       (!last?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' kg</b> since '+F.d(first.t))+'</span></div>'+
       '<button type="button" class="prog-edit ip-edit ip-tedit" aria-label="Edit strength tests"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div>'+
       '<div class="ip-chart"></div>'+
-      (pts.length?'':'<p class="ip-note">Tap the edit button to add the result the eGym app shows after a strength test, also earlier tests with their date. This is how eGym progress counts in Strength.</p>');
+      '';
     /* grafiek zoals de andere progressiegrafieken, maar volle lijn vanaf de eerste test (die telt mee; op vraag van Tom, 11 okt) */
     var host=box.querySelector('.ip-chart');
     function draw(){
