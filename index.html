@@ -1482,11 +1482,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wd-blk-card{flex:none;width:calc((100% - 34px - (var(--ns, 2) - 1) * 2px) / (var(--ns, 2) + 1) + 10px);} /* alle tabs even breed, ook met 1 of 3 krachttabs: --ns = aantal krachttabs (34 = 14 tussenruimte + 2×(4 padding + 1 rand); 2 px gap per extra tab) */
 .wtabs[hidden],.wd-blk[hidden],.wd-pill button[hidden]{display:none;}
 .wd-tabs.solo .wd-band{display:none;} /* enkel krachttabs: geen 'Strength' erboven (op vraag van Tom, 11 okt) */
-.wd-tabs.solo .wd-blk .wd-pill{margin-top:0;}
+.wd-tabs.solo .wd-blk .wd-pill{margin-bottom:0;}
 .wd-tabs.solo .wd-blk{background:transparent;}
 .wd-card{width:100%;}
-.wd-band{display:block;height:30px;padding-top:7px;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
-.wd-blk .wd-pill{margin-top:-4px;} /* de pillen zelf op dezelfde hoogte als de tabs op Statistics; het label schuift erboven (op vraag van Tom, 10 okt) */
+.wd-band{display:block;order:2;height:30px;padding-top:11px;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.wd-blk .wd-pill{margin-bottom:-4px;position:relative;z-index:1;} /* label ONDER de pil (op vraag van Tom, 11 okt): de pil staat altijd even hoog als de tabs op Statistics; de pil valt 4 px over de bovenkant van de band */
+.wd-tabs{align-items:flex-start;}
 .wtabs .wd-card button{flex:1 1 0;padding:0 .3rem;}
 .wtabs.wdock,.wtabs.wdock.on{background:var(--paper);}
 .wd-go[hidden]{display:none;} /* geen startknop meer: de balk verschijnt pas bij het eerste vinkje (op vraag van Tom) */
