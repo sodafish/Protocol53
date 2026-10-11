@@ -1259,8 +1259,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pg-title{flex-basis:100%;margin:.45rem 0 0;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
 .glass{background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(26px) saturate(140%);backdrop-filter:blur(26px) saturate(140%);
   border:1px solid rgba(255,255,255,.65);box-shadow:0 14px 40px rgba(30,20,12,.18),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(0,0,0,.05);}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:#263241;border-color:rgba(255,255,255,.12);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.12);}}
-:root[data-theme="dark"] .glass{background:#263241;border-color:rgba(255,255,255,.12);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.12);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glass{background:rgba(38,50,65,.72);border-color:rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.16);}}
+:root[data-theme="dark"] .glass{background:rgba(38,50,65,.72);border-color:rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.16);}
+/* schakelaars in donker: actieve knop lichter dan het (verzonken) spoor, op vraag van Tom */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bal-seg button[aria-pressed="true"],:root:not([data-theme="light"]) .st-seg button[aria-pressed="true"],:root:not([data-theme="light"]) .pe-add .pe-meth button[aria-pressed="true"]{background:#263241;}}
+:root[data-theme="dark"] .bal-seg button[aria-pressed="true"],:root[data-theme="dark"] .st-seg button[aria-pressed="true"],:root[data-theme="dark"] .pe-add .pe-meth button[aria-pressed="true"]{background:#263241;}
 .note-jump{width:48px;height:48px;flex:none;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,background-color .15s ease;}
 .note-jump:active{background:var(--paper-soft);transform:scale(.95);}
 .note-jump[hidden]{display:none;}
