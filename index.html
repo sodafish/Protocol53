@@ -4315,11 +4315,30 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     box.innerHTML='<p class="ip-t">Strength test</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(last?F.v(last.v):'–')+'</span><span class="ph-u">kg</span><span class="ph-d">'+
       (!last?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' kg</b> since '+F.d(first.t))+'</span></div>'+
       '<button type="button" class="prog-edit ip-add" aria-label="Add strength test"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+      '<div class="ip-chart"></div>'+
       '<p class="ip-note">'+(pts.length?'This is how eGym progress counts in Strength. Swipe right to edit, left to delete.':'Enter the result the eGym app shows for this machine after a strength test. Add earlier tests with their date. This is how eGym progress counts in Strength.')+'</p>'+
       (rows?'<ul class="pe-list">'+rows+'</ul>':'');
     function td(){ var x=new Date(); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
     box.querySelector('.ip-add').addEventListener('click',function(){
       p53EditVals({title:'Strength test',msg:name,date:td(),fields:[{label:'Result',value:'',unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0]); }); });
+    /* grafiek zoals de andere progressiegrafieken, maar volle lijn vanaf de eerste test (die telt mee; op vraag van Tom, 11 okt) */
+    var host=box.querySelector('.ip-chart');
+    function draw(){
+      var W=Math.round(host.clientWidth)||Math.min(560,window.innerWidth)-40, H=110, L=6, R=6, T=10, B=20;
+      var TX='font-size="11" fill="var(--muted)" font-family="Work Sans,system-ui,sans-serif"', base='<line x1="0" x2="'+W+'" y1="'+(H-B)+'" y2="'+(H-B)+'" stroke="var(--line)"/>';
+      if(!pts.length){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="No strength tests yet">'+base+'<text x="'+(W/2)+'" y="'+((H-B)/2+4)+'" text-anchor="middle" '+TX.replace('11','13')+'>No strength tests yet</text></svg>'; return; }
+      if(pts.length===1){ host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Strength test chart">'+base+
+        '<circle cx="'+(W/2)+'" cy="'+((H-B)/2)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/><text x="'+(W/2)+'" y="'+(H-4)+'" text-anchor="middle" '+TX+'>'+F.d(last.t)+'</text></svg>'; return; }
+      var x0=first.t, x1=last.t; if(x1<=x0) x1=x0+1;
+      var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo-=pad; hi+=pad;
+      function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
+      var d=pts.map(function(e,i){ return (i?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
+      host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Strength test chart">'+base+
+        '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'+
+        pts.map(function(e){ return '<circle cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'; }).join('')+
+        '<text x="0" y="'+(H-4)+'" '+TX+'>'+F.d(x0)+'</text><text x="'+W+'" y="'+(H-4)+'" '+TX+' text-anchor="end">'+F.d(x1)+'</text></svg>';
+    }
+    requestAnimationFrame(function(){ requestAnimationFrame(draw); });
     var ul=box.querySelector('.pe-list');
     if(ul&&window.p53Swipe) window.p53Swipe(ul,function(b){ window.__etestDel(b.dataset.id); },function(b){
       var e=pts.filter(function(x){ return x.id===b.dataset.id; })[0]; if(!e) return;
