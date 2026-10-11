@@ -570,28 +570,28 @@ td .note{margin-top:0;max-width:9rem;}
   --line:#D9CBB8; --line-soft:#E6DCCB; --rood:#A3321F;--diet-mid:#6E8F4E;--diet-low:#8A5A36;
   --green:#4A6B3E; --gold:#8C6A2E; --blue:#2F6FA8;
 }
-body[data-tab]{--accent:#9A4424;--accent-soft:#C4764F;}
+body[data-tab]{--accent:#9A4424;--accent-soft:#C4764F;--neg:#A3302A;} /* --neg = iets roder oranje voor achteruitgang op Strength (op vraag van Tom, 11 okt) */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --ink:#F5EFE6; --paper:#251A15; --paper-soft:#1C120D; --paper-dark:#413129; --surface:#221711;
     --muted:#B9ADA2; --muted-soft:#8C7E73; --line:#493831; --line-soft:#413129; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
     --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; --glass-rgb:61,46,35; --knob:#3D2E23; --tabs-solid:#35281E; color-scheme:dark;
   }
-  :root:not([data-theme="light"]) body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
+  :root:not([data-theme="light"]) body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;--neg:#E46F5C;}
 }
 :root[data-theme="dark"]{
   --ink:#F5EFE6; --paper:#251A15; --paper-soft:#1C120D; --paper-dark:#413129; --surface:#221711;
   --muted:#B9ADA2; --muted-soft:#8C7E73; --line:#493831; --line-soft:#413129; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
   --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; --glass-rgb:61,46,35; --knob:#3D2E23; --tabs-solid:#35281E; color-scheme:dark;
 }
-:root[data-theme="dark"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
+:root[data-theme="dark"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;--neg:#E46F5C;}
 /* Blue: de blauwe skin als aparte keuze in Settings (op vraag van Tom, 11 okt) */
 :root[data-theme="blue"]{
   --ink:#F5EFE6; --paper:#161D26; --paper-soft:#0F151C; --paper-dark:#2A3542; --surface:#131A23;
   --muted:#A5B0BC; --muted-soft:#76828F; --line:#313D4A; --line-soft:#2A3542; --rood:#F08A74;--diet-mid:#C3DCA5;--diet-low:#CDA27C;
   --green:#8DBB84; --gold:#D6AE62; --blue:#7FA6C4; --glass-rgb:38,50,65; --knob:#263241; --tabs-solid:#212B38; color-scheme:dark;
 }
-:root[data-theme="blue"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;}
+:root[data-theme="blue"] body[data-tab]{--accent:#E08A62;--accent-soft:#E9A583;--neg:#E46F5C;}
 
 body{font-size:15px;line-height:1.5;font-feature-settings:normal;}
 .eyebrow{font-weight:600;font-size:12px;letter-spacing:.16em;}
@@ -1030,6 +1030,7 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 .bal-pct{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;fill:var(--ink);font-variant-numeric:tabular-nums;}
 .bal-pct.zero{fill:var(--muted-soft);}
 .bal-pct.has{fill:var(--accent);}
+.bal-pct.has.neg{fill:var(--neg,var(--accent));} /* achteruitgang: iets roder (op vraag van Tom, 11 okt) */
 .bal-hint{margin:.4rem 0 0;text-align:center;font-size:13.5px;color:var(--muted);}
 .bal-lab{font-family:'Work Sans',system-ui,sans-serif;font-weight:600;font-size:7px;letter-spacing:.12em;text-transform:uppercase;fill:var(--muted);}
 .stats-fig.bal .draw .bal-ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:balLn .7s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:var(--d);}
@@ -1524,7 +1525,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .pl-list .pl-sh b.up{color:var(--ink);}
 .pl-v b.up{color:var(--muted)!important;}
 
-.pl-list .pl-h b{color:var(--accent)!important;} /* groepspercentage altijd in accentkleur, ook 0% (op vraag van Tom) */
+.pl-list .pl-h b{color:var(--accent)!important;}
+.pl-list .pl-h b.down{color:var(--neg,var(--accent))!important;} /* negatief groeps-%: iets roder oranje (op vraag van Tom, 11 okt) */ /* groepspercentage altijd in accentkleur, ook 0% (op vraag van Tom) */
 
 .pl-list .pl-h span{color:var(--accent);} /* groepsnaam in dezelfde kleur als het percentage (op vraag van Tom) */
 
@@ -1622,6 +1624,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .pr-tot{display:flex;align-items:baseline;gap:.45rem;}
 .pr-tot span{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
 .pr-tot b{font:600 26px/1 'Fraunces',Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums;}
+.pr-tot b.down{color:var(--neg,var(--accent));}
 .pr-dt{font-size:13px;font-weight:500;color:var(--muted-soft);font-variant-numeric:tabular-nums;}
 .pr-edit{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:2px;}
 .pr-edit.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--accent);} /* eigen periode actief (ook op Progress) */
@@ -3124,7 +3127,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       p.style.fill=v>0&&bmax?'color-mix(in srgb,var(--accent) '+Math.round(18+82*v/bmax)+'%,var(--surface))':'';
     });
     if(pf) pf.querySelectorAll('.bal-pct').forEach(function(t){ var v=Math.round(bp[t.getAttribute('data-m')]||0);
-      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; var m=t.getAttribute('data-m'); t.setAttribute('class','bal-pct'+((m in bp)?' has':' zero'));
+      t.textContent=(v>0?'+':v<0?'−':'')+Math.abs(v)+'%'; var m=t.getAttribute('data-m'); t.setAttribute('class','bal-pct'+((m in bp)?' has':' zero')+(v<0?' neg':''));
       /* lijntje + % voor elke spier die hoofdspier is van een kg-oefening die AAN staat (ook zonder data: grijze 0%), of waar al data voor is
          (op vraag van Tom, 9 okt); andere spieren krijgen geen callout */
       var co=t.parentNode&&t.parentNode.parentNode; if(co) co.style.display=(m in bp||PRIM[m])?'':'none'; });
@@ -5055,7 +5058,7 @@ window.__congrats=function(o){
        groep met tussenkoppen (Back, Arms) = gemiddelde van die tussenkoppen; niets gemeten = 0% (op vraag van Tom) */
     function top2(r){ var v=r.slice().sort(function(a,b){ return b.n-a.n||b.t-a.t; }).slice(0,2); /* gelijk aantal: meest recent gedaan */
       return v.length?v.reduce(function(a,x){ return a+x.p; },0)/v.length:null; }
-    function pc(v){ v=Math.round(v||0); return '<b class="'+(v>0?'up':'')+'">'+(v<0?'−':v>0?'+':'')+Math.abs(v)+'%</b>'; }
+    function pc(v){ v=Math.round(v||0); return '<b class="'+(v>0?'up':v<0?'down':'')+'">'+(v<0?'−':v>0?'+':'')+Math.abs(v)+'%</b>'; }
     function rws(r){ return r.slice().sort(function(a,b){ return b.p-a.p; }).map(function(x){ return x.h; }).join(''); }
     /* tussenkop en groep zonder tussenkoppen = gemiddelde vooruitgang van hun oefeningen (chainPct) */
     function ch(notes){ var c=window.__chainPct?window.__chainPct(notes||[],R.from,R.to):null; return c?c.p:0; }
@@ -5070,7 +5073,7 @@ window.__congrats=function(o){
       TL.push(Math.log(1+avg/100));
       html+='<li class="pl-h" aria-hidden="true"><span>'+esc(g.t)+'</span>'+pc(avg)+'</li>'+body; });
     var tb=document.getElementById('prBody'); if(tb){ if(TL.length){ var tv=Math.round((Math.exp(TL.reduce(function(a,x){ return a+x; },0)/TL.length)-1)*100);
-      tb.innerHTML='<span>Whole body</span><b>'+(tv<0?'−':tv>0?'+':'')+Math.abs(tv)+'%</b>'; tb.setAttribute('aria-label','Whole body strength '+(tv<0?'minus ':'plus ')+Math.abs(tv)+' percent'); tb.hidden=false; } else tb.hidden=true; }
+      tb.innerHTML='<span>Whole body</span><b'+(tv<0?' class="down"':'')+'>'+(tv<0?'−':tv>0?'+':'')+Math.abs(tv)+'%</b>'; tb.setAttribute('aria-label','Whole body strength '+(tv<0?'minus ':'plus ')+Math.abs(tv)+' percent'); tb.hidden=false; } else tb.hidden=true; }
     list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
   }
   list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.chart(b.dataset.n,b); });
