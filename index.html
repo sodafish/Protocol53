@@ -1630,6 +1630,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 /* tabs bovenaan in donker: kleur van de navbar, ondoorzichtig (backdrop-filter op de plakkende tabs gaf op iOS een renderfout; zwevend glas getest en teruggedraaid op vraag van Tom, 11 okt) */
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wtabs:not(.wdock),:root:not([data-theme="light"]) .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}}
 :root[data-theme="dark"] .wtabs:not(.wdock),:root[data-theme="blue"] .wtabs:not(.wdock),:root[data-theme="dark"] .wd-pill,:root[data-theme="blue"] .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}
+.ip-test .ip-note{margin:.2rem 0 .7rem;font-size:13px;line-height:1.45;color:var(--muted);}
+.ip-test .pe-list{margin-top:.2rem;}
 </style>
 
 <header class="top">
@@ -2183,10 +2185,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     <p class="section-note"><strong style="font-weight:700;color:var(--text)">How much stronger you’ve become: weight, not sets.</strong></p>
     <div class="tip"><ul>
       <li><strong>Only exercises in kg count,</strong> and each one is compared only with itself: every measurement against the one before.</li>
-      <li><strong>Your very first measurement doesn’t count.</strong> The first session is mostly learning the movement, so an exercise appears from its third measurement.</li>
+      <li><strong>Your very first measurement doesn’t count.</strong> The first session is mostly learning the movement, so an exercise appears from its third measurement. eGym strength tests count from the first test.</li>
       <li><strong>Per exercise:</strong> the change from the last measurement before the period (or the first one in it) to the latest. A lower weight counts as a decline.</li>
       <li><strong>Per muscle and per group</strong> the steps are combined week by week: each week the average of the exercises you did, then the weeks are multiplied. Swapping exercises doesn’t distort the result.</li>
-      <li><strong>The figure</strong> uses only exercises where that muscle is the main muscle. eGym Eccentric and Regular are separate series; supersets don’t count.</li>
+      <li><strong>The figure</strong> uses only exercises where that muscle is the main muscle. For eGym the strength test results count, not the training weights; supersets don’t count.</li>
     </ul></div>
   </div>
 
@@ -2955,7 +2957,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function progRows(fn){ document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
       if(!/^g([1-7]|10)$/.test(li.dataset.grp||'')||li.dataset.sub==='Supersets') return;
       var ins=li.querySelectorAll('.exr-in[data-note]'); if(ins.length!==1||(ins[0].placeholder||'kg')!=='kg') return;
-      if(li.dataset.grp==='g10'){ fn(li,ins[0].dataset.note+'#ecc'); fn(li,ins[0].dataset.note+'#reg'); return; } /* eGym terug in Progress, elke methode als aparte reeks (op vraag van Tom, 10 okt) */
+      if(li.dataset.grp==='g10'){ fn(li,ins[0].dataset.note+'#test'); return; } /* eGym: vooruitgang = krachttest per toestel (op vraag van Tom, 11 okt; vroeger Eccentric/Regular als aparte reeksen) */ /* eGym terug in Progress, elke methode als aparte reeks (op vraag van Tom, 10 okt) */
       fn(li,ins[0].dataset.note); }); }
   /* KETTINGINDEX (op vraag van Tom, 9 okt): elke oefening wordt enkel met zichzelf vergeleken (meting → volgende meting),
      de eerste meting van een oefening (ooit) telt niet (leereffect; op vraag van Tom enkel de eerste). Per week (ma–zo): per oefening de som van haar
@@ -2963,7 +2965,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      Zo blijft het getal kloppen als je van oefening wisselt. notes = invulvelden (data-note). → {p: %, n: aantal stapjes} of null. */
   function weekKey(t){ var d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d.getTime(); }
   function chainPct(notes,from,to){ if(!window.__progPts) return null; var W={}, n=0;
-    notes.forEach(function(note){ var pts=window.__progPts(note).slice(1); /* eerste meting telt niet */
+    notes.forEach(function(note){ var pa=window.__progPts(note), pts=/#test$/.test(note)?pa:pa.slice(1); /* eerste meting telt niet (behalve bij de eGym-krachttest) */
       for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen: vooruitgang sinds de laatste meting vóór de periode) */
         var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue;
         var wk=weekKey(pts[i].t); W[wk]=W[wk]||{}; W[wk][note]=(W[wk][note]||0)+Math.log(b/a); n++; } });
@@ -3315,7 +3317,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function pidx(){ if(PIDX) return PIDX; var o={}; Object.keys(prog).forEach(function(id){ var e=prog[id]; if(e&&typeof e.v==='number') (o[e.k]=o[e.k]||[]).push(e); });
     Object.keys(o).forEach(function(k){ o[k].sort(function(a,b){ return a.t-b.t; }); }); return PIDX=o; }
   window.addEventListener('p53-prog',function(){ PIDX=null; },true);
-  window.__progPts=function(k){ var h=String(k).indexOf('#'); if(h>0){ var m=k.slice(h+1); return (pidx()[k.slice(0,h)]||[]).filter(function(e){ return (e.m||'ecc')===m; }); } return (pidx()[k]||[]).slice(); }; /* 'eg-…#ecc' / '#reg' = enkel die eGym-methode (op vraag van Tom, 10 okt) */
+  window.__progPts=function(k){ var h=String(k).indexOf('#'); if(h>0){ var m=k.slice(h+1); if(m==='test') return window.__etestPts?window.__etestPts(k.slice(0,h)):[]; /* eGym-krachttest (aparte collectie) */ return (pidx()[k.slice(0,h)]||[]).filter(function(e){ return (e.m||'ecc')===m; }); } return (pidx()[k]||[]).slice(); }; /* 'eg-…#ecc' / '#reg' = enkel die eGym-methode (op vraag van Tom, 10 okt) */
   window.__progFmt={d:dLabY,v:fmtV};
   function niceTicks(lo,hi){
     var span=hi-lo||1, step=Math.pow(10,Math.floor(Math.log10(span/3))), err=span/3/step;
@@ -3639,6 +3641,23 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   document.addEventListener('p53-checks',syncFromChart); /* vinkjes gewist (End workout): eGym-velden volgen weer de methode */
   setTimeout(syncFromChart,0);
 
+})();
+</script>
+<script>
+/* ---- eGym-krachttest per toestel (op vraag van Tom, 11 okt): collectie 'etest', id '<veld>@<jjjj-mm-dd>', {k,d,t,v}. Eigen reeks, los van de
+   methode; dit is de vooruitgang van eGym in Strength en in de figuur (de eerste test telt wél mee). Cache localStorage 'fitlog-etest'. ---- */
+(function(){
+  var KEY='fitlog-etest', T={}, col=null; try{ T=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){}
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(T)); }catch(e){} try{ document.dispatchEvent(new Event('p53-prog')); }catch(e){} }
+  window.__etestPts=function(k){ return Object.keys(T).map(function(id){ return Object.assign({id:id},T[id]); }).filter(function(e){ return e.k===k&&typeof e.v==='number'; }).sort(function(a,b){ return a.t-b.t; }); };
+  window.__etestPut=function(k,d,v,oldId){ var p=d.split('-'), id=k+'@'+d, e={k:k,d:d,t:new Date(+p[0],+p[1]-1,+p[2],12).getTime(),v:v};
+    if(oldId&&oldId!==id){ delete T[oldId]; if(col) col.doc(oldId).delete().catch(function(){}); }
+    T[id]=e; save(); if(col) col.doc(id).set(e).catch(function(){}); };
+  window.__etestDel=function(id){ delete T[id]; save(); if(col) col.doc(id).delete().catch(function(){}); };
+  if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('etest');
+    col.onSnapshot(function(snap){ var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
+      if(snap.metadata.fromCache) Object.keys(T).forEach(function(id){ if(!next[id]) next[id]=T[id]; });
+      T=next; save(); },function(){}); });
 })();
 </script>
 <script>
@@ -4240,6 +4259,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(/^eg-/.test(k)){ var EGN={ecc:'Eccentric',reg:'Regular'}, by={}; all.forEach(function(e){ var m=e.m||'ecc'; (by[m]=by[m]||[]).push(e); });
         var ms=['ecc','reg'].filter(function(m){ return by[m]; }); if(!ms.length) ms=[window.__egMethod?window.__egMethod():'ecc'];
         series=ms.map(function(m){ return {pts:by[m]||[],lab:EGN[m]}; }); }
+      if(/^eg-/.test(k)&&window.__etestPts) wrap.appendChild(testBlock(k,name)); /* krachttest eerst: dat is wat telt (op vraag van Tom, 11 okt) */
       series.forEach(function(S){
       var pts=S.pts, none=!pts.length;
       var unit=inp.placeholder||'kg', F=window.__progFmt, last=pts[pts.length-1], first=pts[0], b0=unit==='kg'&&pts.length>1?pts[1]:first, diff=pts.length>1?last.v-b0.v:null; /* kg: verschil vanaf de tweede meting (de eerste telt niet; op vraag van Tom) */
@@ -4284,6 +4304,27 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(host.clientWidth) draw(); else requestAnimationFrame(function(){ requestAnimationFrame(draw); });
       });
     });
+  }
+  /* eGym-krachttest: resultaat uit de eGym-app per toestel, met datum (op vraag van Tom, 11 okt) */
+  function testBlock(k,name){
+    var pts=window.__etestPts(k), F=window.__progFmt, last=pts[pts.length-1], first=pts[0], diff=pts.length>1?last.v-first.v:null;
+    var box=document.createElement('div'); box.className='ip-box ip-test';
+    var DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var rows=pts.slice().reverse().map(function(e){ var x=new Date(e.t);
+      return '<li class="cx"><div class="cx-row"><button type="button" class="cx-edit" tabindex="-1" data-id="'+e.id+'">Edit</button><span class="pe-d">'+DN[x.getDay()]+' '+F.d(e.t)+'</span><span class="pe-v">'+F.v(e.v)+' kg</span><button type="button" class="cx-del" tabindex="-1" data-id="'+e.id+'" aria-label="Delete test of '+F.d(e.t)+'">Delete</button></div></li>'; }).join('');
+    box.innerHTML='<p class="ip-t">Strength test</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(last?F.v(last.v):'–')+'</span><span class="ph-u">kg</span><span class="ph-d">'+
+      (!last?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' kg</b> since '+F.d(first.t))+'</span></div>'+
+      '<button type="button" class="prog-edit ip-add" aria-label="Add strength test"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>'+
+      '<p class="ip-note">'+(pts.length?'This is how eGym progress counts in Strength. Swipe right to edit, left to delete.':'Enter the result the eGym app shows for this machine after a strength test. Add earlier tests with their date. This is how eGym progress counts in Strength.')+'</p>'+
+      (rows?'<ul class="pe-list">'+rows+'</ul>':'');
+    function td(){ var x=new Date(); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
+    box.querySelector('.ip-add').addEventListener('click',function(){
+      p53EditVals({title:'Strength test',msg:name,date:td(),fields:[{label:'Result',value:'',unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0]); }); });
+    var ul=box.querySelector('.pe-list');
+    if(ul&&window.p53Swipe) window.p53Swipe(ul,function(b){ window.__etestDel(b.dataset.id); },function(b){
+      var e=pts.filter(function(x){ return x.id===b.dataset.id; })[0]; if(!e) return;
+      p53EditVals({title:'Strength test',msg:name,date:e.d,fields:[{label:'Result',value:e.v,unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null) window.__etestPut(k,v.date,v[0],e.id); }); });
+    return box;
   }
   document.addEventListener('p53-prog',function(){ if(!sh.hidden && curName) progBlock(curName); });
   var INFO_ICON='<svg class="ib-i" width="20" height="20" viewBox="0 -980 960 960" fill="currentColor" aria-hidden="true"><path d="M600.5-379.5Q650-429 650-500t-49.5-120.5Q551-670 480-670t-120.5 49.5Q310-571 310-500t49.5 120.5Q409-330 480-330t120.5-49.5Zm-200-41Q368-453 368-500t32.5-79.5Q433-612 480-612t79.5 32.5Q592-547 592-500t-32.5 79.5Q527-388 480-388t-79.5-32.5ZM216-283Q98-366 40-500q58-134 176-217t264-83q146 0 264 83t176 217q-58 134-176 217t-264 83q-146 0-264-83Zm264-217Zm222.5 174.5Q804-391 857-500q-53-109-154.5-174.5T480-740q-121 0-222.5 65.5T102-500q54 109 155.5 174.5T480-260q121 0 222.5-65.5Z"/></svg>'; window.__p53infoIcon=INFO_ICON;
@@ -4828,12 +4869,12 @@ window.__congrats=function(o){
       if(li.dataset.sub==='Supersets'||li.querySelectorAll('.exr-in[data-note]').length>1) return; /* geen supersets (op vraag van Tom) */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
       var ins=li.querySelectorAll('.exr-in[data-note]');
-      var SER=[]; [].forEach.call(ins,function(inp){ if(EGM){ SER.push({inp:inp,k:inp.dataset.note+'#ecc',nm:name+' · Eccentric'}); SER.push({inp:inp,k:inp.dataset.note+'#reg',nm:name+' · Regular'}); } else SER.push({inp:inp,k:inp.dataset.note,nm:name}); });
+      var SER=[]; [].forEach.call(ins,function(inp){ if(EGM){ SER.push({inp:inp,k:inp.dataset.note+'#test',nm:name+' · Strength test'}); } else SER.push({inp:inp,k:inp.dataset.note,nm:name}); });
       SER.forEach(function(S){ var inp=S.inp; if((inp.placeholder||'kg')!=='kg') return; /* alleen gewicht (kg), geen reps/sec */
         G.notes.push(S.k); var sk=sub; (G.sn[sk]=G.sn[sk]||[]).push(S.k); /* voor de kettingindex van groep/tussenkop */
         /* zelfde regels als de kettingindex: de allereerste meting telt nooit (leereffect); basis = laatste meting vóór de periode, anders de eerste erin;
            enkel tonen als er een echte stap is (dus vanaf de derde meting) */
-        var allx=window.__progPts(S.k).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
+        var allx=/#test$/.test(S.k)?window.__progPts(S.k):window.__progPts(S.k).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
         var before=allx.filter(function(x){ return x.t<R.from; }).pop(), first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
         var unit=inp.placeholder||'kg', d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;

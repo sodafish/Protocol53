@@ -173,7 +173,7 @@
   /* ---------- back-up en uitloggen ---------- */
   window.p53Backup=function(){
     var data={exported:new Date().toISOString()}, k;
-    ['log','checks','counts','hist','prog','cfg','sess'].forEach(function(c){ data[c]=merged(c); }); /* alles: ook statistieken, metingen en instellingen */
+    ['log','checks','counts','hist','prog','cfg','sess','etest'].forEach(function(c){ data[c]=merged(c); }); /* alles: ook statistieken, metingen en instellingen */
     var name='protocol53-backup-'+new Date().toISOString().slice(0,10)+'.json';
     var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
     try{
@@ -185,7 +185,7 @@
   /* alle trainingsgegevens wissen (opnieuw beginnen): vinkjes, tellers, statistieken, metingen, sessies en de waarden in de
      invulvelden (logIds). Notities en instellingen (cfg: oefeningkeuze, sets, profiel) blijven. Alleen online. */
   window.p53ResetData=function(logIds){
-    var COLLS=['checks','counts','hist','prog','sess'];
+    var COLLS=['checks','counts','hist','prog','sess','etest'];
     if(!user||!navigator.onLine) return Promise.reject(new Error('offline'));
     var ids=(logIds||[]).filter(Boolean);
     return sb.from('p53').delete().eq('user_id',user.id).in('coll',COLLS).then(function(r){
@@ -197,7 +197,7 @@
       if(cache.log) ids.forEach(function(id){ delete cache.log[id]; });
       queue=queue.filter(function(op){ return COLLS.indexOf(op.coll)<0 && !(op.coll==='log'&&ids.indexOf(op.id)>=0); });
       save(QKEY,queue); save(CKEY,cache);
-      try{ ['fitlog-checks','fitlog-counts','fitlog-hist','fitlog-prog','fitlog-sess','fitlog-undo','fitlog-wo-start'].forEach(function(k){ localStorage.removeItem(k); }); }catch(e){}
+      try{ ['fitlog-checks','fitlog-counts','fitlog-hist','fitlog-prog','fitlog-sess','fitlog-undo','fitlog-wo-start','fitlog-etest'].forEach(function(k){ localStorage.removeItem(k); }); }catch(e){}
     });
   };
   window.p53Logout=function(){
