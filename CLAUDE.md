@@ -16,7 +16,7 @@ vooral op zijn iPhone, als app op het beginscherm.
   toegepast, anders verdween een net gezet vinkje/meting uit de snapshot.
   `p53ResetData(logIds)`: wist op de server (alleen online) alle rijen van checks, counts, hist, prog, sess + de log-rijen van de
   invulvelden, plus cache/wachtrij/localStorage daarvan; knop 'Reset data' onder Settings › Your data (`#resetData`, `p53Confirm` danger), daarna
-  herladen. Notities, cfg (oefeningkeuze, sets, profiel) blijven.
+  herladen. Notities, cfg (oefeningkeuze, sets, profiel) blijven. De velden worden gewist via hun logboek-id `'note--'+veld` (QA 11 okt: de knop gaf eerst kale veldnamen door, waardoor de velden gevuld bleven).
 - `sw.js` — service worker (`const VERSION = 'p53-vN';`, let op de spaties bij zoeken/vervangen). Verhoog `VERSION` bij elke wijziging aan gecachte bestanden
   (icons, cloud.js, vendor) zodat de iPhone de nieuwe versie ophaalt.
   Pagina's/JS worden met `cache: 'no-cache'` opgehaald (anders houdt de HTTP-cache van GitHub Pages ze tot 10 min vast).

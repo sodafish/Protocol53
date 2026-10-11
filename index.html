@@ -5022,7 +5022,7 @@ window.__congrats=function(o){
   b.addEventListener('click',function(){
     p53Confirm({title:'Reset all data?',msg:'This deletes all workouts, ticks, counts, measurements, charts, calendar sessions and the values in the exercise fields, on all your devices. Your exercise choices, sets & reps, date of birth and notes stay. This can’t be undone — export a backup first if you want one.',ok:'Reset',danger:true}).then(function(y){
       if(!y) return;
-      var ids=[].map.call(document.querySelectorAll('#s-d3 .exr-in[data-note]'),function(x){ return x.dataset.note; });
+      var ids=[].map.call(document.querySelectorAll('#s-d3 .exr-in[data-note]'),function(x){ return 'note--'+x.dataset.note; }); /* logboek-id = 'note--'+veld (QA 11 okt: vroeger zonder voorvoegsel, dan bleven de velden gevuld) */
       (window.p53ResetData?window.p53ResetData(ids):Promise.reject()).then(function(){
         try{ var v=JSON.parse(localStorage.getItem('fitlog-v1')||'{}'); ids.forEach(function(k){ delete v[k]; }); localStorage.setItem('fitlog-v1',JSON.stringify(v)); }catch(e){}
         location.reload();
