@@ -251,8 +251,8 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   die rij) of met het potlood; typen in het veld meet alleen als de rij al afgevinkt is (dan wordt de meting van vandaag
   bijgewerkt). Uitvinken wist de meting(en) van vandaag van die rij (`__progDropToday`); de min-knop van de teller niet.
   End workout wist alleen de vinkjes, metingen en hist blijven. Coverage ververst bij `p53-prog`.
-- Het invulveld toont de laatste waarde uit de grafiek (`syncFromChart`, bij laden, na de log-snapshot en bij `p53-prog`),
-  tenzij je daarna zelf iets typte dat nog niet bevestigd is (`local[key].at` > tijd laatste meting). Typen wordt pas een
+- Het invulveld toont de laatste waarde uit de grafiek (`syncFromChart`, bij laden, na de log-snapshot, bij `p53-prog` en `p53-checks`),
+  tenzij je zelf iets typte dat nog niet bevestigd is. 'Bevestigd' = `local[key].c` (gezet door `progRecord` via `window.__fieldConfirm` en door `syncFromChart`); veld ≠ c = zelf getypt (`pendingTyped`). Zonder c (oude data) valt het terug op `at` > tijd laatste meting. (QA 11 okt: de oude tijdsregel blokkeerde het veld na wissen/bewerken van een meting, want het logboek kreeg vaak een latere tijd dan de meting.) Typen wordt pas een
   meting bij afvinken; aanpassen kan ook via het potlood.
 - Twee trainingen op één dag: een meting is er één per veld per dag (de laatste waarde telt). Afvinken bewaart eerst wat er die
   dag al stond (`window.__progSnap`, localStorage `fitlog-undo`); uitvinken zet precies dat terug (`__progDropToday(li,dag,k)`), zodat een

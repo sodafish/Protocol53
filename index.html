@@ -2466,6 +2466,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       /* tussenkoppen (Biceps, Triceps …) mee grijs */
       for(var h=g.nextElementSibling; h && !h.classList.contains('exgrp'); h=h.nextElementSibling) if(h.classList.contains('exsub')) h.classList.toggle('sub-off',anyDone);
     });
+    try{ document.dispatchEvent(new Event('p53-checks')); }catch(e){} /* bv. eGym-velden opnieuw volgens de methode na End workout */
   }
   function saveChecksLocal(){ try{ localStorage.setItem(CHKKEY,JSON.stringify(checks)); }catch(e){} }
   document.querySelectorAll('#s-d1 .chk,#s-d2 .chk,#s-d3 .chk').forEach(function(b){
@@ -3246,6 +3247,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var t=when||Date.now(), w=curW(), id=sessId(k,ymd(t),w);
     /* veld leeggemaakt: de meting van deze workout vervalt */
     if(v==null){ if(!when&&prog[id]){ delete prog[id]; saveProgLocal(); renderProg(); if(progCol) progCol.doc(id).delete().catch(function(){}); } return; }
+    if(window.__fieldConfirm) window.__fieldConfirm(inp); /* deze waarde is nu een meting: geen 'zelf getypt' meer (QA 11 okt) */
     var ev={k:k,d:ymd(t),t:(prog[id]&&prog[id].t)||t,v:v}; if(w) ev.w=w;
     if(/^eg-/.test(k)) ev.m=window.__egMethod?window.__egMethod():'ecc'; /* eGym: methode van deze sessie (op vraag van Tom, 10 okt) */
     var old=prog[id]; if(old&&old.v===v) return;
@@ -3499,6 +3501,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var inputs=[].slice.call(document.querySelectorAll('.note[data-note]'));
   var col=null, timers={};
   function keyOf(inp){ return 'note--'+inp.dataset.note; }
+  /* c = laatst bevestigde waarde (meting of overgenomen uit de grafiek). Veld ≠ c = zelf getypt en nog niet afgevinkt (QA 11 okt;
+     vroeger via de tijd van het logboek, maar die lag vaak ná de meting en dan volgde het veld de grafiek niet meer na wissen/bewerken) */
+  window.__fieldConfirm=function(inp){ var key=keyOf(inp); if(!local[key]) local[key]={}; local[key].c=inp.value; saveLocal(local); };
+  function pendingTyped(inp,key,lastT){ var L=local[key]; if(!inp.value.trim()) return false; if(L&&L.c!=null) return L.c!==inp.value; return ((L&&L.at)||0)>lastT; }
   inputs.forEach(function(inp){
     var key=keyOf(inp);
     if(local[key] && local[key].t) inp.value=local[key].t;
@@ -3606,25 +3612,26 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var note=inp.dataset.note, key=keyOf(inp), at=(local[key]&&local[key].at)||0;
       if(/^eg-/.test(note)){ /* eGym: toon de laatste meting van de GEKOZEN methode, leeg als die methode nog niet gemeten is (op vraag van Tom, 11 okt) */
         var all=window.__progPts(note), lastAll=all.length?all[all.length-1].t:0;
-        if(inp.value.trim() && at>lastAll) return; /* zelf getypt, nog niet afgevinkt: laten staan */
+        if(pendingTyped(inp,key,lastAll)) return; /* zelf getypt, nog niet afgevinkt: laten staan */
         var row=inp.closest('.exr'), chk=row&&row.querySelector('.chk');
         if(chk && chk.getAttribute('aria-pressed')==='true') return; /* afgevinkt in deze workout: niet aanraken */
         var mp=window.__progPts(note+'#'+(window.__egMethod?window.__egMethod():'ecc'));
-        if(!mp.length){ if(inp.value!==''){ inp.value=''; if(!local[key]) local[key]={}; local[key].t=''; } return; }
+        if(!mp.length){ if(inp.value!==''){ inp.value=''; if(!local[key]) local[key]={}; local[key].t=''; local[key].c=''; } return; }
         var lm=mp[mp.length-1], cm=parseFloat(String(inp.value).replace(',','.')); if(cm===lm.v) return;
-        var vm=String(Math.round(lm.v*100)/100); inp.value=vm; if(!local[key]) local[key]={}; local[key].t=vm; return;
+        var vm=String(Math.round(lm.v*100)/100); inp.value=vm; if(!local[key]) local[key]={}; local[key].t=vm; local[key].c=vm; return;
       }
       var pts=window.__progPts(note); if(!pts.length) return;
       var last=pts[pts.length-1];
-      if(inp.value.trim() && at>last.t) return;
-      var cur=parseFloat(String(inp.value).replace(',','.')); if(cur===last.v) return; /* zelfde getal (bv. '12,5'): laten staan */
+      if(pendingTyped(inp,key,last.t)) return;
+      var cur=parseFloat(String(inp.value).replace(',','.')); if(cur===last.v){ if(!local[key]) local[key]={}; if(local[key].c==null) local[key].c=inp.value; return; } /* zelfde getal (bv. '12,5'): laten staan */
       var v=String(Math.round(last.v*100)/100);
-      if(inp.value!==v){ inp.value=v; if(!local[key]) local[key]={}; local[key].t=v; }
+      if(inp.value!==v){ inp.value=v; if(!local[key]) local[key]={}; local[key].t=v; local[key].c=v; }
     });
     saveLocal(local);
   }
   document.addEventListener('p53-prog',syncFromChart);
   document.addEventListener('p53-egm',syncFromChart); /* wissel Eccentric/Regular */
+  document.addEventListener('p53-checks',syncFromChart); /* vinkjes gewist (End workout): eGym-velden volgen weer de methode */
   setTimeout(syncFromChart,0);
 
 })();
