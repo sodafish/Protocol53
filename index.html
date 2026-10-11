@@ -1085,7 +1085,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .stats>.sv>.stats-per .per-edit{margin-left:auto;flex:none;width:36px;height:36px;min-height:0;padding:0;border:1.5px solid var(--line);border-radius:50%;margin-bottom:2px;
   display:flex;align-items:center;justify-content:center;background:transparent;color:var(--muted);}
 /* potlood hoger: even ver boven de lijn als het lampje/Front-Back eronder (11 px, op vraag van Tom); 'translate' laat de druk-schaal (transform) vrij */
-.stats>.sv>.stats-per .per-edit,.pr-range .pr-edit{translate:0 -8.7px;}
+.stats>.sv>.stats-per .per-edit{translate:0 -8.7px;}
 .stats>.sv>.stats-per .per-edit.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--accent);} /* zelfde rand als het lampje (op vraag van Tom, 10 okt) */
 .stats>.sv>.stats-per .per-edit:disabled{opacity:.35;cursor:default;}
 @media (max-width:360px){.stats>.sv>.stats-per button[data-d]{font-size:12.5px;} .stats>.sv>.stats-per{gap:.45rem;}}
@@ -1181,8 +1181,35 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 #s-d3 .exl .exgrp[data-grp="g10"]{flex-wrap:wrap;}
 .eg-meth{order:3;flex-basis:100%;display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:.7rem 0 .2rem;}
 .eg-meth-l{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-.eg-meth .st-seg{flex:0 1 230px;}
+.eg-meth .st-seg{flex:0 1 200px;} /* even breed als 'Add results' eronder (11 okt; vroeger 230px) */
+.eg-meth-l{white-space:nowrap;}
 .eg-meth .st-seg button{min-height:36px;font-size:13.5px;}
+/* eGym-kop: krachttest invullen voor alle toestellen tegelijk (op vraag van Tom, 11 okt) */
+.eg-test{order:4;flex-basis:100%;display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:.5rem 0 .2rem;}
+.eg-tbtn{appearance:none;cursor:pointer;flex:0 1 200px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:0 1rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 13.5px 'Work Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;}
+.eg-tbtn svg{color:var(--accent);}
+.eg-tbtn:active{background:var(--paper-soft);transform:scale(.97);}
+.ebt-date{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:0 0 .4rem;}
+.ebt-date label{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.ebt-date input,.ebt-row input{min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 16px 'Work Sans',system-ui,sans-serif;padding:0 .7rem;min-width:0;-webkit-appearance:none;}
+.ebt-date input{flex:0 1 12rem;}
+.ebt-list{list-style:none;margin:.6rem 0 0;padding:0;border-top:1px solid var(--line);}
+.ebt-row{display:flex;align-items:center;gap:.8rem;min-height:60px;border-bottom:1px solid var(--line-soft);}
+.ebt-row label{flex:1;min-width:0;font-size:15px;color:var(--ink);}
+.ebt-row label small{display:block;font-size:12.5px;color:var(--muted-soft);font-variant-numeric:tabular-nums;margin-top:.1rem;}
+.ebt-row input{width:5.6rem;flex:none;text-align:right;font-variant-numeric:tabular-nums;}
+.ebt-row input:focus,.ebt-date input:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));}
+.ebt-row .u{flex:none;width:1.4rem;margin-left:-.4rem;font-size:13px;color:var(--muted);}
+.ebt-more{appearance:none;border:0;background:none;padding:.9rem 0;font:600 14px 'Work Sans',system-ui,sans-serif;color:var(--accent);cursor:pointer;}
+.ebt-save{appearance:none;cursor:pointer;width:100%;min-height:48px;margin:1.1rem 0 0;border-radius:999px;border:none;background:var(--ink);color:var(--paper);font:600 15px 'Work Sans',system-ui,sans-serif;}
+.ebt-save:active{transform:scale(.98);}
+.ebt-msg{min-height:1.4em;margin:.6rem 0 0;font-size:13.5px;color:var(--muted);text-align:center;}
+.ebt-msg.ok{color:var(--green);}
+.ebt-h{margin:2rem 0 .3rem;font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.ebt-hist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
+.ebt-hist button{appearance:none;width:100%;display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:48px;padding:0;border:0;border-bottom:1px solid var(--line-soft);background:none;font:500 15px 'Work Sans',system-ui,sans-serif;color:var(--ink);cursor:pointer;text-align:left;}
+.ebt-hist button span{color:var(--muted);font-size:13.5px;}
+.ebt-hist button[aria-current="true"]{color:var(--accent);}
 .st-body .app-tools{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;} /* knoppen samen over de volle breedte: Export bovenaan, Log out + Reset ernaast (op vraag van Tom, 10 okt) */
 .st-body .app-tools button{width:100%;padding-left:.6rem;padding-right:.6rem;}
 .st-body .app-tools button:first-child{grid-column:1 / -1;}
@@ -1579,9 +1606,17 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .cf-range .cf-in input,.cf-date .cf-in input{text-align:left;font-size:17px;min-height:48px;-webkit-appearance:none;appearance:none;}
 .cf-all{appearance:none;border:0;background:none;color:var(--accent);font:600 13.5px 'Work Sans',system-ui,sans-serif;padding:.5rem 0 .9rem;cursor:pointer;}
 /* periode bovenaan Progress (op vraag van Tom, 9 okt): datum van – tot + potlood */
-.pr-range{display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:40px;border-bottom:1px solid var(--line);margin:0 0 .7rem;} /* zelfde afstand als de regel eronder op Balance: Front/Back staat even hoog als het lampje */
-.pr-range p{margin:0;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
-.pr-range p small{font-size:13px;font-weight:500;color:var(--muted-soft);}
+/* Strength: periode-tabs zoals Balance; daaronder de toename van het hele lichaam (links) + de periode (rechts), boven de figuur (op vraag van Tom, 11 okt) */
+.stats>.sv>.stats-per button[data-r]{font-size:13.5px;}
+@media (max-width:360px){.stats>.sv>.stats-per button[data-r]{font-size:12.5px;}}
+.pr-fig{margin-top:1rem;}
+.pr-lab{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding:0 0 .9rem;border-bottom:1px solid var(--line-soft);}
+.pr-lab p{margin:0;}
+.pr-lab:has(#prBody[hidden]):has(#prRange:empty){display:none;} /* geen metingen: geen lege regel */
+.pr-tot{display:flex;align-items:baseline;gap:.45rem;}
+.pr-tot span{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.pr-tot b{font:600 26px/1 'Fraunces',Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums;}
+.pr-dt{font-size:13px;font-weight:500;color:var(--muted-soft);font-variant-numeric:tabular-nums;}
 .pr-edit{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:2px;}
 .pr-edit.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--accent);} /* eigen periode actief (ook op Progress) */
 .pr-edit:active{background:var(--paper-soft);transform:scale(.95);}
@@ -1822,7 +1857,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <li data-eq="c" class="exr ex-off" data-grp="g7" data-og="g9"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Overhead Extension + Biceps Curl</div><div class="exr-s">Superset · 2 rounds × 12 · mix: rope, then straight or EZ bar</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl" placeholder="kg" aria-label="Overhead Extension — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-overhead-curl-b" placeholder="kg" aria-label="Biceps Curl — kg"></div></li>
       <li data-eq="c" class="exr ex-off" data-grp="g7" data-og="g9"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Rope Pushdown + Hammer Curl</div><div class="exr-s">Superset · 2 rounds × 12 · rope only (high, then low pulley)</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope" placeholder="kg" aria-label="Rope Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="d3-ss-rope-b" placeholder="kg" aria-label="Hammer Curl — kg"></div></li>
       <li data-eq="c" class="exr ex-off" data-grp="g7" data-og="g9"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Bar Pushdown + Bar Curl</div><div class="exr-s">Superset · 2 rounds × 12 · bar only (straight or EZ, high then low)</div></div><div class="exr-in2"><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-ss-bar" placeholder="kg" aria-label="Bar Pushdown — kg"><input class="note exr-in" type="text" inputmode="decimal" data-note="x7-ss-bar-b" placeholder="kg" aria-label="Bar Curl — kg"></div></li>
-      <li class="exgrp" data-grp="g10"><span class="grp-n">2</span><span class="grp-t">eGym</span><div class="eg-meth" role="group" aria-label="eGym method"><span class="eg-meth-l">Method</span><div class="st-seg"><button type="button" data-m="ecc">Eccentric</button><button type="button" data-m="reg">Regular</button></div></div><button type="button" class="grp-edit" data-grp="g10" aria-label="Choose exercises for eGym"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></li>
+      <li class="exgrp" data-grp="g10"><span class="grp-n">2</span><span class="grp-t">eGym</span><div class="eg-meth" role="group" aria-label="eGym method"><span class="eg-meth-l">Method</span><div class="st-seg"><button type="button" data-m="ecc">Eccentric</button><button type="button" data-m="reg">Regular</button></div></div><div class="eg-test"><span class="eg-meth-l">Strength test</span><button type="button" class="eg-tbtn" id="egTestBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add results</button></div><button type="button" class="grp-edit" data-grp="g10" aria-label="Choose exercises for eGym"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></li>
       <li class="exr" data-grp="g10" data-key="eg-rotary-torso"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">eGym Rotary Torso</div><div class="exr-s">2 × 6</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="eg-rotary-torso" placeholder="kg" aria-label="eGym Rotary Torso — kg"></li>
       <li class="exr" data-grp="g10" data-key="eg-lat-pulldown"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">eGym Lat Pulldown</div><div class="exr-s">2 × 15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="eg-lat-pulldown" placeholder="kg" aria-label="eGym Lat Pulldown — kg"></li>
       <li class="exr" data-grp="g10" data-key="eg-leg-press"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">eGym Leg Press</div><div class="exr-s">2 × 15</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="eg-leg-press" placeholder="kg" aria-label="eGym Leg Press — kg"></li>
@@ -1887,7 +1922,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
         <div class="cal-grid" id="calGrid" role="grid"></div>
         <div class="cal-day" id="calDay" aria-live="polite"></div>
       </section>
-      <div class="sv" data-sv="prog"><div class="pr-range"><p id="prRange"></p><button type="button" class="pr-edit" id="prEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div><div class="stats-fig bal" id="progFig"></div><div class="pl-empty" id="plEmpty">
+      <div class="sv" data-sv="prog"><div class="stats-per str-per" role="group" aria-label="Strength period"><button type="button" data-r="3m">3 Months</button><button type="button" data-r="1y">1 Year</button><button type="button" data-r="all">All</button><button type="button" class="pr-edit per-edit" id="prEdit" aria-label="Choose dates" title="Choose dates"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div><div class="pr-fig"><div class="pr-lab"><p class="pr-tot" id="prBody" hidden></p><p class="pr-dt" id="prRange"></p></div><div class="stats-fig bal" id="progFig"></div></div><div class="pl-empty" id="plEmpty">
         <svg class="pe-art" width="148" height="104" viewBox="0 0 148 104" fill="none" aria-hidden="true">
           <rect x="1" y="1" width="146" height="102" rx="20" class="pe-card"/>
           <path d="M22 78H126" class="pe-axis"/>
@@ -2188,9 +2223,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     <div class="tip"><ul>
       <li><strong>Only exercises in kg count,</strong> and each one is compared only with itself: every measurement against the one before.</li>
       <li><strong>Your very first measurement doesn’t count.</strong> The first session is mostly learning the movement, so an exercise appears from its third measurement. eGym strength tests count from the first test.</li>
-      <li><strong>Per exercise:</strong> the change from the last measurement before the period (or the first one in it) to the latest. A lower weight counts as a decline.</li>
+      <li><strong>Period.</strong> 3 months, 1 year, all data or your own dates (calendar button).</li>
+      <li><strong>Per exercise:</strong> the change from the last measurement before the period (at most 120 days before it, otherwise the first one in it) to the latest. A lower weight counts as a decline.</li>
       <li><strong>Per muscle and per group:</strong> the average progress of its exercises. A group with subgroups (Back, Arms) is the average of those subgroups, so Arms is the average of biceps and triceps.</li>
-      <li><strong>The figure</strong> uses only exercises where that muscle is the main muscle. For eGym the strength test results count, not the training weights; supersets don’t count.</li>
+      <li><strong>Whole body</strong> is the average of the groups that have progress in the period, each group weighing the same. An indicator, not a measurement.</li>
+      <li><strong>The figure</strong> uses only exercises where that muscle is the main muscle. For eGym the strength test results count, not the training weights; supersets don’t count. Add test results via <em>Add results</em> in the eGym header, older tests too.</li>
     </ul></div>
   </div>
 
@@ -2203,6 +2240,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 <div class="sheet pe-sheet" id="pe-sheet" role="dialog" aria-modal="true" aria-labelledby="pe-t" hidden>
   <div class="sheet-grip" aria-hidden="true"></div>
   <div class="sheet-head"><h3 id="pe-t">Measurements</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="pe-body"></div>
+</div>
+<div class="sheet-bg" id="ebt-bg" hidden></div>
+<div class="sheet pe-sheet" id="ebt-sheet" role="dialog" aria-modal="true" aria-labelledby="ebt-t" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head"><h3 id="ebt-t">Strength test</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="pe-body"></div>
 </div>
 <div class="sheet-bg top" id="et-bg" hidden></div>
@@ -2976,9 +3019,11 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      vermenigvuldigde: biceps +16% en triceps +13% gaf +31%). Nu: per oefening haar eigen vooruitgang in de periode (stapjes meting → volgende
      meting, eerste meting ooit telt niet behalve bij de eGym-krachttest), daarna het (meetkundig) gemiddelde over de oefeningen met een stap.
      notes = invulvelden; → {p: %, n: aantal stapjes, k: aantal oefeningen} of null. */
+  var BASEGAP=120*864e5; window.__baseGap=BASEGAP;
   function chainPct(notes,from,to){ if(!window.__progPts) return null; var L=[], n=0;
     notes.forEach(function(note){ var pa=window.__progPts(note), pts=/#test$/.test(note)?pa:pa.slice(1), sum=0, c=0; /* eerste meting telt niet (behalve bij de eGym-krachttest) */
       for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen) */
+        if(pts[i-1].t<from-BASEGAP) continue; /* maar niet meer dan 120 dagen vóór de periode: anders telt bv. bij 3 Months een test van 2 jaar terug als vertrek (op vraag van Tom, 11 okt) */
         var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue; sum+=Math.log(b/a); c++; }
       if(c){ L.push(sum); n+=c; } });
     if(!L.length) return null;
@@ -2991,28 +3036,43 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     Object.keys(by).forEach(function(m){ var c=chainPct(by[m],from,to); if(c) out[m]=c.p; });
     return out;
   }
-  /* periode van Progress (op vraag van Tom, 9 okt): standaard alle data; zelf te kiezen binnen de eerste en laatste meting.
-     Bewaard in localStorage 'fitlog-prog-range' als {f,t}; f/t leeg = volgt de eerste/laatste meting (ook als er nieuwe bijkomen). */
+  /* periode van Strength (op vraag van Tom, 11 okt): tabs 3 Months · 1 Year · All + potlood voor een eigen periode ('range').
+     Keuze in localStorage 'fitlog-str-per' (standaard all); eigen periode in 'fitlog-prog-range' {f,t} (leeg = volgt eerste/laatste meting).
+     3M/1Y = vanaf vandaag min 3 maanden / 1 jaar tot de laatste meting; uitgegrijsd zolang de data niet verder teruggaat (zoals Balance). */
   var PRKEY='fitlog-prog-range', prR={}; try{ prR=JSON.parse(localStorage.getItem(PRKEY)||'{}')||{}; }catch(e){}
+  var SPKEY='fitlog-str-per', SPS=['3m','1y','all','range'], sper=null; try{ sper=localStorage.getItem(SPKEY); }catch(e){}
+  if(SPS.indexOf(sper)<0) sper=(prR.f||prR.t)?'range':'all'; /* oude eigen periode blijft staan */
   function ymdL(t){ var x=new Date(t); return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2); }
   function prBounds(){ var lo=Infinity, hi=-Infinity; if(!window.__progPts) return null;
     progRows(function(li,note){ window.__progPts(note).forEach(function(x){ if(x.t<lo) lo=x.t; if(x.t>hi) hi=x.t; }); });
-    return lo<=hi?{min:ymdL(lo),max:ymdL(hi)}:null; }
-  window.__progRange=function(){ var b=prBounds(); if(!b) return {from:-Infinity,to:Infinity,f:null,t:null,b:null};
-    var f=prR.f&&prR.f>b.min&&prR.f<=b.max?prR.f:b.min, t=prR.t&&prR.t<b.max&&prR.t>=f?prR.t:b.max;
-    return {from:new Date(f+'T00:00:00').getTime(),to:new Date(t+'T23:59:59.999').getTime(),f:f,t:t,b:b,all:f===b.min&&t===b.max}; };
-  function prLabel(){ var el=document.getElementById('prRange'), btn=document.getElementById('prEdit'); if(!el) return; var r=window.__progRange();
-    if(!r.b){ el.innerHTML='<small>No measurements yet</small>'; if(btn){ btn.hidden=true; btn.classList.remove('on'); } return; } if(btn){ btn.hidden=false; btn.classList.toggle('on',!r.all||!!prR.set); } /* oranje na elke keuze in het venster, ook 'all data' (op vraag van Tom, 10 okt) */
+    return lo<=hi?{min:ymdL(lo),max:ymdL(hi),lo:lo}:null; }
+  function presetFrom(p){ var x=new Date(); x.setHours(0,0,0,0); if(p==='3m') x.setMonth(x.getMonth()-3); else x.setFullYear(x.getFullYear()-1); return ymdL(x.getTime()); }
+  function strOK(b){ return {'3m':!!b,'1y':!!b&&b.min<presetFrom('3m'),'all':!!b&&b.min<presetFrom('1y')}; }
+  function strEff(b){ if(sper==='range') return 'range'; var ok=strOK(b); if(ok[sper]) return sper; var e='3m'; ['3m','1y','all'].forEach(function(p){ if(ok[p]) e=p; }); return e; }
+  window.__progRange=function(){ var b=prBounds(); if(!b) return {from:-Infinity,to:Infinity,f:null,t:null,b:null,per:sper};
+    var eff=strEff(b), f, t=b.max;
+    if(eff==='range'){ f=prR.f&&prR.f>b.min&&prR.f<=b.max?prR.f:b.min; t=prR.t&&prR.t<b.max&&prR.t>=f?prR.t:b.max; }
+    else if(eff==='all') f=b.min;
+    else { f=presetFrom(eff); if(f<b.min) f=b.min; }
+    return {from:new Date(f+'T00:00:00').getTime(),to:new Date(t+'T23:59:59.999').getTime(),f:f,t:t,b:b,all:f===b.min&&t===b.max,per:eff}; };
+  function prLabel(){ var el=document.getElementById('prRange'), btn=document.getElementById('prEdit'); if(!el) return; var r=window.__progRange(), ok=strOK(r.b);
+    document.querySelectorAll('.str-per button[data-r]').forEach(function(x){ x.setAttribute('aria-disabled',ok[x.dataset.r]?'false':'true'); x.setAttribute('aria-pressed',x.dataset.r===r.per?'true':'false'); });
+    if(!r.b){ el.textContent=''; if(btn){ btn.disabled=true; btn.classList.remove('on'); } return; } if(btn){ btn.disabled=false; btn.classList.toggle('on',r.per==='range'); }
     function lab(d,y){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+(y?' '+x.getFullYear():''); }
     var sameY=r.f.slice(0,4)===r.t.slice(0,4);
-    el.innerHTML=(r.f===r.t?lab(r.t,true):lab(r.f,!sameY)+' – '+lab(r.t,true))+(r.all?' <small>· all data</small>':''); }
+    el.textContent=r.f===r.t?lab(r.t,true):lab(r.f,!sameY)+' – '+lab(r.t,true); }
   function dLabel(d){ var x=new Date(d+'T12:00:00'); return x.getDate()+' '+MAANDEN[x.getMonth()].slice(0,3)+' '+x.getFullYear(); }
+  function strSet(p){ sper=p; try{ localStorage.setItem(SPKEY,p); }catch(e){}
+    renderStats(); try{ document.dispatchEvent(new Event('p53-prange')); }catch(e){} if(window.__balDraw) window.__balDraw(); }
+  document.querySelectorAll('.str-per button[data-r]').forEach(function(b){ b.addEventListener('click',function(){
+    if(b.getAttribute('aria-disabled')==='true'||b.dataset.r===sper) return; strSet(b.dataset.r); }); });
   (function(){ var btn=document.getElementById('prEdit'); if(!btn) return;
     btn.addEventListener('click',function(){ var r=window.__progRange(); if(!r.b) return;
-      p53EditRange({title:'Progress period',msg:'You have measurements from '+dLabel(r.b.min)+' to '+dLabel(r.b.max)+'.',min:r.b.min,max:r.b.max,from:r.f,to:r.t}).then(function(v){ if(!v) return;
-        prR=v==='all'?{set:1}:{f:v.from===r.b.min?null:v.from,t:v.to===r.b.max?null:v.to,set:1};
+      p53EditRange({title:'Strength period',msg:'You have measurements from '+dLabel(r.b.min)+' to '+dLabel(r.b.max)+'.',min:r.b.min,max:r.b.max,from:r.f,to:r.t}).then(function(v){ if(!v) return;
+        if(v==='all'){ prR={}; try{ localStorage.setItem(PRKEY,'{}'); }catch(e){} strSet('all'); return; }
+        prR={f:v.from===r.b.min?null:v.from,t:v.to===r.b.max?null:v.to};
         try{ localStorage.setItem(PRKEY,JSON.stringify(prR)); }catch(e){}
-        renderStats(); try{ document.dispatchEvent(new Event('p53-prange')); }catch(e){} if(window.__balDraw) window.__balDraw(); }); }); })();
+        strSet('range'); }); }); })();
   function renderStats(){ setTimeout(paintCounts,0); if(window.__renderCal) setTimeout(window.__renderCal,0);
     var fig=document.getElementById('statsFig'); if(!fig) return;
     var now=Date.now(), score={}, first=now, days={}, evs=events().filter(function(e){ return e.t; }), last=0;
@@ -3696,6 +3756,53 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
         var e=window.__etestPts(eKey).filter(function(x){ return x.id===b.dataset.id; })[0]; if(!e) return;
         p53EditVals({title:'Edit strength test',msg:eName,date:e.d,fields:[{label:'Result',value:e.v,unit:'kg'}]}).then(function(v){ if(v&&v[0]!=null){ window.__etestPut(eKey,v.date,v[0],e.id); render(); } }); }); }
     eKey=k; eName=name||''; eOpenSheet(); };
+  /* ---- krachttest voor alle toestellen tegelijk (op vraag van Tom, 11 okt): knop 'Add results' in de eGym-kop → blad #ebt-sheet.
+     Datum bovenaan (ook ver terug, voor oude testen); per toestel één veld. Datum wijzigen = velden tonen wat er op die dag al staat.
+     Save: ingevuld = bewaren/overschrijven, leeggemaakt veld dat een waarde had = wissen. Volgorde: actieve toestellen (circuit), dan uitgezette
+     met testen, de rest achter 'Show all machines'. Onderaan alle testdagen; tik = die dag laden. ---- */
+  var bsh=null, bbg=null, bOpen=false, bLast=null, bDate=null, bAll=false, bMsg='';
+  function machines(){ return [].slice.call(document.querySelectorAll('#s-d3 .exl > li.exr[data-grp="g10"]')).map(function(li){
+      var inp=li.querySelector('.exr-in[data-note]'), n=li.querySelector('.exr-n'); if(!inp||!n) return null;
+      return {k:inp.dataset.note,name:n.firstChild.textContent.trim().replace(/^eGym\s+/,''),on:!li.classList.contains('ex-off')}; }).filter(Boolean); }
+  function dLong(d){ var x=new Date(d+'T12:00:00'), DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return DN[x.getDay()]+' '+x.getDate()+' '+MN[x.getMonth()]+' '+x.getFullYear(); }
+  function onDay(d){ var o={}; Object.keys(T).forEach(function(id){ var e=T[id]; if(e&&e.d===d&&typeof e.v==='number') o[e.k]=e.v; }); return o; }
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function bRender(){ if(!bsh) return; var F=window.__progFmt, body=bsh.querySelector('.pe-body'), today=ymdT(); bDate=bDate||today;
+    var day=onDay(bDate), M=machines(), has={}; Object.keys(T).forEach(function(id){ has[T[id].k]=1; });
+    var vis=M.filter(function(m){ return m.on||has[m.k]||day[m.k]!=null; }), rest=M.filter(function(m){ return vis.indexOf(m)<0; });
+    if(bAll) vis=vis.concat(rest), rest=[];
+    function row(m){ var prev=window.__etestPts(m.k).filter(function(e){ return e.d<bDate; }).pop(), v=day[m.k];
+      return '<li class="ebt-row"><label for="ebt-'+esc(m.k)+'">'+esc(m.name)+(prev?'<small>Previous: '+F.v(prev.v)+' kg · '+F.d(prev.t)+'</small>':'')+'</label>'+
+        '<input id="ebt-'+esc(m.k)+'" data-k="'+esc(m.k)+'" type="text" inputmode="decimal" autocomplete="off" placeholder="–" value="'+(v!=null?F.v(v):'')+'" data-was="'+(v!=null?v:'')+'"><span class="u">kg</span></li>'; }
+    var dates={}; Object.keys(T).forEach(function(id){ var e=T[id]; if(e&&e.d) dates[e.d]=(dates[e.d]||0)+1; });
+    var dl=Object.keys(dates).sort().reverse();
+    body.innerHTML='<p class="pe-sub">Enter the results from the eGym app. Change the date to add older tests.</p>'+
+      '<div class="ebt-date"><label for="ebtD">Test date</label><input id="ebtD" type="date" value="'+bDate+'" max="'+today+'"></div>'+
+      '<ul class="ebt-list">'+vis.map(row).join('')+'</ul>'+
+      (rest.length?'<button type="button" class="ebt-more">Show all machines ('+rest.length+' more)</button>':'')+
+      '<button type="button" class="ebt-save">Save</button><p class="ebt-msg'+(bMsg?' ok':'')+'" aria-live="polite">'+bMsg+'</p>'+
+      (dl.length?'<p class="ebt-h">Saved tests</p><ul class="ebt-hist">'+dl.map(function(d){ return '<li><button type="button" data-d="'+d+'"'+(d===bDate?' aria-current="true"':'')+'>'+dLong(d)+'<span>'+dates[d]+(dates[d]===1?' machine':' machines')+'</span></button></li>'; }).join('')+'</ul>':'');
+    body.querySelector('#ebtD').addEventListener('change',function(e){ if(/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)){ bDate=e.target.value>today?today:e.target.value; bMsg=''; bRender(); } });
+    var more=body.querySelector('.ebt-more'); if(more) more.addEventListener('click',function(){ bAll=true; bRender(); });
+    body.querySelectorAll('.ebt-hist button').forEach(function(b){ b.addEventListener('click',function(){ bDate=b.dataset.d; bMsg=''; bRender(); bsh.scrollTop=0; }); });
+    body.querySelectorAll('.ebt-row input').forEach(function(i){ i.addEventListener('input',function(){ i.classList.remove('need'); if(bMsg){ bMsg=''; var m=body.querySelector('.ebt-msg'); m.textContent=''; m.classList.remove('ok'); } }); });
+    body.querySelector('.ebt-save').addEventListener('click',function(){ var put=0, del=0, bad=null;
+      body.querySelectorAll('.ebt-row input').forEach(function(i){ var raw=String(i.value).trim(), was=i.dataset.was;
+        if(!raw){ if(was!==''){ window.__etestDel(i.dataset.k+'@'+bDate); del++; } return; }
+        var m=raw.replace(',','.').match(/^\d+(?:\.\d+)?$/); if(!m||!(+m[0]>0)){ if(!bad) bad=i; i.classList.add('need'); return; }
+        if(was===''||+was!==+m[0]){ window.__etestPut(i.dataset.k,bDate,+m[0]); put++; } });
+      if(bad){ bad.focus(); var mm=body.querySelector('.ebt-msg'); mm.classList.remove('ok'); mm.textContent='Check the highlighted field.'; return; }
+      bMsg=put||del?'Saved for '+dLong(bDate)+'.':'Nothing changed.'; bRender(); });
+  }
+  function bClose(){ if(!bOpen) return; bOpen=false; bbg.classList.remove('on'); bsh.classList.remove('on');
+    setTimeout(function(){ if(!bOpen){ bbg.hidden=true; bsh.hidden=true; bsh.querySelector('.pe-body').innerHTML=''; } },320); if(bLast) bLast.focus({preventScroll:true}); }
+  window.__etestBulk=function(){ bsh=bsh||document.getElementById('ebt-sheet'); bbg=bbg||document.getElementById('ebt-bg'); if(!bsh) return;
+    if(!bsh.__init){ bsh.__init=1; bbg.addEventListener('click',bClose); bsh.querySelector('.sheet-x').addEventListener('click',bClose);
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&bOpen){ e.stopPropagation(); bClose(); } },true); }
+    bOpen=true; bLast=document.activeElement; bDate=ymdT(); bAll=false; bMsg=''; bRender(); bbg.hidden=false; bsh.hidden=false; bsh.scrollTop=0;
+    requestAnimationFrame(function(){ bbg.classList.add('on'); bsh.classList.add('on'); }); bsh.querySelector('.sheet-x').focus({preventScroll:true}); };
+  (function(){ var b=document.getElementById('egTestBtn'); if(b) b.addEventListener('click',function(e){ e.stopPropagation(); window.__etestBulk(); }); })();
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('etest');
     col.onSnapshot(function(snap){ var next={}; snap.docs.forEach(function(d){ if(d.exists) next[d.id]=d.data()||{}; });
       if(snap.metadata.fromCache) Object.keys(T).forEach(function(id){ if(!next[id]) next[id]=T[id]; });
@@ -4225,7 +4332,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   }
 
   /* ---------- venster ---------- */
-  var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#et-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#et-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
+  var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#et-bg):not(#ebt-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#et-sheet):not(#ebt-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
   var cur=null, lastFocus=null;
   function open(name,btn,over,chartOnly){
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
@@ -4370,8 +4477,12 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var x0=first.t, x1=last.t; if(x1<=x0) x1=x0+1;
       var vs=pts.map(function(e){ return e.v; }), lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs); if(hi-lo<2){ lo-=1; hi+=1; } var pad=(hi-lo)*.12; lo-=pad; hi+=pad;
       function X(t){ return L+(t-x0)/(x1-x0)*(W-L-R); } function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
-      var d=pts.map(function(e,i){ return (i?'L':'M')+X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1); }).join(' ');
+      /* lange pauze tussen twee testen (> 120 dagen) = stippellijn: niet gemeten, dus geen verloop suggereren (op vraag van Tom, 11 okt) */
+      var d='', dg='', GAP=120*864e5; pts.forEach(function(e,i){ var P=X(e.t).toFixed(1)+' '+Y(e.v).toFixed(1);
+        if(!i){ d='M'+P; return; } var q=pts[i-1], Q=X(q.t).toFixed(1)+' '+Y(q.v).toFixed(1);
+        if(e.t-q.t>GAP){ dg+='M'+Q+' L'+P+' '; d+=' M'+P; } else d+=' L'+P; });
       host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" aria-label="Strength test chart">'+base+
+        (dg?'<path d="'+dg+'" fill="none" stroke="var(--accent)" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="3 5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>':'')+
         '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'+
         pts.map(function(e){ return '<circle cx="'+X(e.t).toFixed(1)+'" cy="'+Y(e.v).toFixed(1)+'" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>'; }).join('')+
         '<text x="0" y="'+(H-4)+'" '+TX+'>'+F.d(x0)+'</text><text x="'+W+'" y="'+(H-4)+'" '+TX+' text-anchor="end">'+F.d(x1)+'</text></svg>';
@@ -4929,7 +5040,7 @@ window.__congrats=function(o){
         /* zelfde regels als de kettingindex: de allereerste meting telt nooit (leereffect); basis = laatste meting vóór de periode, anders de eerste erin;
            enkel tonen als er een echte stap is (dus vanaf de derde meting) */
         var allx=/#test$/.test(S.k)?window.__progPts(S.k):window.__progPts(S.k).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
-        var before=allx.filter(function(x){ return x.t<R.from; }).pop(), first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
+        var before=allx.filter(function(x){ return x.t<R.from&&x.t>=R.from-(window.__baseGap||0); }).pop(), /* vertrek vóór de periode: max. 120 dagen ervoor (zoals chainPct) */ first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
         var unit=inp.placeholder||'kg', d=last.v-first.v;
         var pct=first.v>0?d/first.v*100:0;
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
@@ -4944,6 +5055,7 @@ window.__congrats=function(o){
     function rws(r){ return r.slice().sort(function(a,b){ return b.p-a.p; }).map(function(x){ return x.h; }).join(''); }
     /* tussenkop en groep zonder tussenkoppen = gemiddelde vooruitgang van hun oefeningen (chainPct) */
     function ch(notes){ var c=window.__chainPct?window.__chainPct(notes||[],R.from,R.to):null; return c?c.p:0; }
+    var TL=[]; /* hele lichaam = meetkundig gemiddelde van de groeps-% (elke spiergroep weegt even zwaar; op vraag van Tom, 11 okt) */
     groups.forEach(function(g){ var body='', avg; if(!g.r.length) return; /* groep pas tonen als er iets onder staat */
       if(g.subs.length){
         var sl=[]; g.subs.forEach(function(k){ var r=g.r.filter(function(x){ return x.sub===k; }); if(!r.length) return; /* tussenkop pas tonen als er iets onder staat */
@@ -4951,7 +5063,10 @@ window.__congrats=function(o){
           body+='<li class="pl-sh" aria-hidden="true"><span>'+esc(k)+'</span>'+pc(sv)+'</li>'+rws(r); });
         avg=sl.length?(Math.exp(sl.reduce(function(a,x){ return a+x; },0)/sl.length)-1)*100:0; } /* groep = gemiddelde van haar tussenkoppen (Arms = gemiddelde van Biceps en Triceps; op vraag van Tom, 11 okt) */
       else { avg=ch(g.notes); body=rws(g.r); }
+      TL.push(Math.log(1+avg/100));
       html+='<li class="pl-h" aria-hidden="true"><span>'+esc(g.t)+'</span>'+pc(avg)+'</li>'+body; });
+    var tb=document.getElementById('prBody'); if(tb){ if(TL.length){ var tv=Math.round((Math.exp(TL.reduce(function(a,x){ return a+x; },0)/TL.length)-1)*100);
+      tb.innerHTML='<span>Whole body</span><b>'+(tv<0?'−':tv>0?'+':'')+Math.abs(tv)+'%</b>'; tb.setAttribute('aria-label','Whole body strength '+(tv<0?'minus ':'plus ')+Math.abs(tv)+' percent'); tb.hidden=false; } else tb.hidden=true; }
     list.innerHTML=html; sec.hidden=!n; var em=document.getElementById('plEmpty'); if(em) em.hidden=!!n;
   }
   list.addEventListener('click',function(e){ var b=e.target.closest('button[data-n]'); if(b&&window.__p53info) window.__p53info.chart(b.dataset.n,b); });
