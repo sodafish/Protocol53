@@ -14,6 +14,8 @@
   window.__p53theme=function(v){ var r=document.documentElement; if(v==='light'||v==='dark'||v==='blue') r.setAttribute('data-theme',v); else r.removeAttribute('data-theme');
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='blue'?'#161D26':v==='dark'?'#251A15':v==='light'?'#F7F2EA':(i?'#251A15':'#F7F2EA')); }); };
   if(t==='light'||t==='dark'||t==='blue') document.documentElement.setAttribute('data-theme',t);
+  /* warm-up tonen (Settings › Warm-up, op vraag van Tom, 12 okt): localStorage p53-warmup = 'off' verbergt groep g0; standaard aan */
+  try{ if(localStorage.getItem('p53-warmup')==='off') document.documentElement.classList.add('no-wu'); }catch(e){}
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
   /* zichtbare programma's (Settings › Programs, op vraag van Tom, 11 okt): localStorage p53-progs = JSON-lijst uit full/egym/home/cardio, standaard zonder Home */
   window.__p53progs=function(){ var A=['full','egym','home','cardio'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-progs')||'null'); }catch(e){}
@@ -1619,7 +1621,9 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #wdHalf button[aria-selected="true"]{background:var(--knob);}}
 :root[data-theme="dark"] #wdHalf button[aria-selected="true"],:root[data-theme="blue"] #wdHalf button[aria-selected="true"]{background:var(--knob);}
 /* na de warm-up (op vraag van Tom, 12 okt): scharnier in de lijst, zelfde ruimte erboven als tussen twee groepen; verborgen bij eGym/Cardio */
-#s-d3 .wd-half-li{list-style:none;padding:3.2rem 0 0;} /* iets meer lucht boven de keuze dan tussen twee groepen (op vraag van Tom, 12 okt; eerst 2.4rem) */
+#s-d3 .wd-half-li{list-style:none;padding:3.2rem 0 0;}
+html.no-wu #s-d3 .exl > [data-grp="g0"],html.no-wu #s-d3 .exl > .gx-empty[data-g="g0"]{display:none!important;} /* warm-up verborgen via Settings (op vraag van Tom, 12 okt) */
+html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;} /* iets meer lucht boven de keuze dan tussen twee groepen (op vraag van Tom, 12 okt; eerst 2.4rem) */
 #s-d3 .wd-half-li:has(#wdHalf[hidden]){display:none;}
 #s-d3 .exl .exgrp.g-empty .grp-edit{visibility:hidden;}
 .cx-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
@@ -2364,6 +2368,10 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       <p class="st-note">Choose which tabs Workout shows. Keep at least one. With one program the tabs are hidden.</p>
     </div>
     <div class="st-sec">
+      <p class="set-lab" id="stWuL">Warm-up</p>
+      <ul class="st-progs" id="stWu" role="group" aria-labelledby="stWuL"><li><button type="button" role="checkbox" aria-checked="true"><span>Show warm-up<small>At the top of Open Gym, eGym and Home</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
+    </div>
+    <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
       <select id="stStart" class="st-sel"><option value="full">Workout · Open Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option><option value="home">Workout · Home</option></select>
       <p class="st-note">Applies each time the app starts.</p>
@@ -2404,6 +2412,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     if(sv!=='last'&&pv.indexOf(sv)<0){ sv=pv[0]; try{ localStorage.setItem('p53-start',sv); }catch(e){} } ss.value=sv; }
   if(ss){ syncStart(); ss.addEventListener('change',function(){ try{ localStorage.setItem('p53-start',ss.value); }catch(e){} }); }
   /* Programs: minstens één aan; de laatste kan niet uit (op vraag van Tom, 11 okt) */
+  /* Settings › Warm-up: groep g0 tonen of verbergen (klasse no-wu op <html>, localStorage p53-warmup; op vraag van Tom, 12 okt) */
+  var wb=document.querySelector('#stWu button');
+  if(wb){ var wuOn=function(){ return !document.documentElement.classList.contains('no-wu'); };
+    wb.setAttribute('aria-checked',String(wuOn()));
+    wb.addEventListener('click',function(){ var on=!wuOn(); document.documentElement.classList.toggle('no-wu',!on); wb.setAttribute('aria-checked',String(on));
+      try{ if(on) localStorage.removeItem('p53-warmup'); else localStorage.setItem('p53-warmup','off'); }catch(e){} document.dispatchEvent(new Event('p53-groups')); }); }
   var pl=document.getElementById('stProgs');
   function paintProgs(){ if(!pl) return; var pv=window.__p53progs(); pl.querySelectorAll('button[data-prog]').forEach(function(b){ var on=pv.indexOf(b.dataset.prog)>=0, last=on&&pv.length===1;
     b.setAttribute('aria-checked',on?'true':'false'); if(last) b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); }); }
@@ -4731,7 +4745,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     Object.keys(DEF).forEach(function(g){ var act=on(g); rows(g).forEach(function(li){ li.classList.toggle('ex-off',act.indexOf(keyOf(li))<0); }); });
     /* lege groep: subtiele knop 'Add exercises' onder de kop, opent het keuzeblad (nieuwe gebruiker start leeg; op vraag van Tom) */
     Object.keys(DEF).forEach(function(g){ var h=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+g+'"]'); if(!h) return;
-      var empty=!on(g).length, ph=h.nextElementSibling&&h.nextElementSibling.classList.contains('gx-empty')?h.nextElementSibling:null;
+      var empty=rows(g).every(function(li){ return li.classList.contains('ex-off'); }) /* leeg = geen zichtbare rij; cfg kan nog sleutels van verwijderde oefeningen bevatten (bv. w0-torso-rotation) */, ph=h.nextElementSibling&&h.nextElementSibling.classList.contains('gx-empty')?h.nextElementSibling:null;
       h.classList.toggle('g-empty',empty);
       if(empty&&!ph){ ph=document.createElement('li'); ph.className='gx-empty'; ph.dataset.g=g;
         ph.innerHTML='<button type="button"><span class="gx-plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="gx-t"><b>Add exercises</b><small>Tap to choose from the list</small></span></button>';
