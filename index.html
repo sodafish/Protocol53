@@ -1360,12 +1360,12 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 #s-d3 .exgrp.unused-g8 .grp-t{font:600 11.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transform:translateY(-2px);}
  /* zelfde hoogte als Open Gym (groep 1), zodat het potlood op elke tab op dezelfde plaats staat */
 /* programma-tabs bovenaan Workout: pil, blijft plakken onder de statusbalk */
-.wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
+.wtabs{position:relative;top:auto;z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
 .wtabs.stuck{box-shadow:none;}
 /* plakkende tabs: strak, ondoorzichtig vlak in papierkleur van de bovenrand tot net onder de tabs, over de volle breedte; anders schijnt de inhoud (met de iOS-blur) erdoor (op vraag van Tom, 10 okt) */
 #tabShade{position:fixed;left:0;right:0;top:0;height:0;z-index:44;background:var(--paper);pointer-events:none;display:none;box-shadow:0 10px 18px -14px rgba(0,0,0,.35);}
-#tabShade.on{display:block;}
+#tabShade.on{display:none;} /* tabs plakken niet meer: scrollen mee met de pagina, tik op de navbar = naar boven (op vraag van Tom, 12 okt) */
 .wtabs button{appearance:none;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;flex:1 1 0;min-width:0;min-height:44px;padding:0 .3rem;border:0;border-radius:999px;
   background:transparent;color:var(--muted);font:500 14.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .12s ease;}
 .wtabs button[aria-selected="true"]{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));color:var(--paper);font-weight:600;} /* actieve tab bovenaan = stijl van de vroegere actieve navbar-knop (test Tom, 10 okt) */ /* zelfde pil als de actieve navbar-knop */
@@ -4951,7 +4951,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var y=Math.max(0,nat-st); if(window.scrollY<=y+1){ pane.style.minHeight=''; return; } /* tabs plakken nog niet: niets doen */
     pane.style.minHeight=''; var need=y+window.innerHeight-(pane.getBoundingClientRect().top+window.scrollY); if(pane.offsetHeight<need) pane.style.minHeight=need+'px';
     window.scrollTo({top:y,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); };
-  window.__wtabsH=function(){ return tabs&&tabs.offsetParent?tabs.offsetHeight+16:0; };
+  window.__wtabsH=function(){ return 0; }; /* tabs plakken niet meer (12 okt) */
   function toList(wasStuck){ /* na wisselen: de tabs blijven op exact dezelfde plek (geplakt), de nieuwe lijst begint er net onder */
     if(!tabs) return; var pane=tabs.parentElement, h=document.documentElement;
     if(!wasStuck){ pane.style.minHeight=''; return; }
