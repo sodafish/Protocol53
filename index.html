@@ -1362,13 +1362,6 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:45;display:flex;gap:2px;margin:0 0 .4rem;padding:4px;border-radius:999px;
   background:var(--surface);border:1px solid var(--line);box-shadow:0 0 0 8px var(--paper);transition:box-shadow .2s ease;} /* vlak erboven alleen als ze plakt, anders bedekt het de Start-knop */
 .wtabs.stuck{box-shadow:none;}
-/* labels Strength/Cardio enkel bovenaan: geplakt (bij scrollen) klappen ze weg; de marge groeit even veel mee, zodat de lijst niet verspringt (op vraag van Tom, 11 okt) */
-#wtabs .wd-band{transition:height .25s ease,padding-top .25s ease,opacity .18s ease;overflow:hidden;}
-#wtabs .wd-pill{transition:margin-bottom .25s ease;}
-#wtabs{transition:margin-bottom .25s ease;}
-#wtabs.stuck .wd-band{height:0;padding-top:0;opacity:0;}
-#wtabs.stuck .wd-blk .wd-pill{margin-bottom:0;}
-#wtabs.stuck:has(.wd-tabs:not(.solo)){margin-bottom:calc(.4rem + 26px);} /* afscherming gebeurt nu door #tabShade over de volle breedte */
 /* plakkende tabs: strak, ondoorzichtig vlak in papierkleur van de bovenrand tot net onder de tabs, over de volle breedte; anders schijnt de inhoud (met de iOS-blur) erdoor (op vraag van Tom, 10 okt) */
 #tabShade{position:fixed;left:0;right:0;top:0;height:0;z-index:44;background:var(--paper);pointer-events:none;display:none;box-shadow:0 10px 18px -14px rgba(0,0,0,.35);}
 #tabShade.on{display:block;}
@@ -1505,16 +1498,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wd-pill{display:flex;gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
 .wd-tabs{align-items:flex-end;}
 /* label boven elke pil: zachte beige band zonder rand, de pil valt over de onderkant (op vraag van Tom, 10 okt) */
-.wd-blk{display:flex;flex-direction:column;border-radius:26px;background:var(--paper-soft);}
+.wd-blk{display:flex;flex-direction:column;} /* geen labels Strength/Cardio meer: de groepering zit in de twee pillen (op vraag van Tom, 12 okt) */
 .wd-blk-str{flex:1 1 auto;min-width:0;}
 .wd-blk-card{flex:none;width:calc((100% - 34px - (var(--ns, 2) - 1) * 2px) / (var(--ns, 2) + 1) + 10px);} /* alle tabs even breed, ook met 1 of 3 krachttabs: --ns = aantal krachttabs (34 = 14 tussenruimte + 2×(4 padding + 1 rand); 2 px gap per extra tab) */
 .wtabs[hidden],.wd-blk[hidden],.wd-pill button[hidden]{display:none;}
-.wd-tabs.solo .wd-band{display:none;} /* enkel krachttabs: geen 'Strength' erboven (op vraag van Tom, 11 okt) */
-.wd-tabs.solo .wd-blk .wd-pill{margin-bottom:0;}
-.wd-tabs.solo .wd-blk{background:transparent;}
 .wd-card{width:100%;}
-.wd-band{display:block;order:2;height:30px;padding-top:11px;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
-.wd-blk .wd-pill{margin-bottom:-4px;position:relative;z-index:1;} /* label ONDER de pil (op vraag van Tom, 11 okt): de pil staat altijd even hoog als de tabs op Statistics; de pil valt 4 px over de bovenkant van de band */
 .wd-tabs{align-items:flex-start;}
 .wtabs .wd-card button{flex:1 1 0;padding:0 .3rem;}
 .wtabs.wdock,.wtabs.wdock.on{background:var(--paper);}
@@ -1758,7 +1746,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
       </div>
     </div>
     <div class="wtabs wdock" id="wtabs">
-      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><span class="wd-band" aria-hidden="true">Strength</span><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home" hidden>Home</button></div></div><div class="wd-blk wd-blk-card"><span class="wd-band" aria-hidden="true">Cardio</span><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div></div>
+      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home" hidden>Home</button></div></div><div class="wd-blk wd-blk-card"><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
@@ -4902,13 +4890,13 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio',home:'Home'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* Home: zichtbaar via Settings › Programs (op vraag van Tom, 11 okt) */ /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
   var tabs=document.getElementById('wtabs');
-  /* tabbalk volgens Settings › Programs: 1 programma = geen tabs; Cardio + kracht = twee pillen met label; enkel kracht = één pil zonder label */
+  /* tabbalk volgens Settings › Programs: 1 programma = geen tabs; Cardio + kracht = twee pillen (zonder label, 12 okt); enkel kracht = één pil */
   function layout(){ if(!tabs) return; var pv=window.__p53progs?window.__p53progs():['full','egym','cardio'], STR=['full','egym','home'];
     tabs.querySelectorAll('[data-split]').forEach(function(b){ b.hidden=pv.indexOf(b.dataset.split)<0; });
     var ns=pv.filter(function(x){ return STR.indexOf(x)>=0; }).length, card=pv.indexOf('cardio')>=0, row=tabs.querySelector('.wd-tabs');
     tabs.hidden=pv.length<2;
     var bs=tabs.querySelector('.wd-blk-str'), bc=tabs.querySelector('.wd-blk-card'); if(bs) bs.hidden=!ns; if(bc) bc.hidden=!card;
-    if(row){ row.classList.toggle('solo',!(ns&&card)); row.style.setProperty('--ns',ns||1); }
+    if(row) row.style.setProperty('--ns',ns||1);
     if(pv.indexOf(cur)<0) cur=pv[0]; }
   document.addEventListener('p53-progs',function(){ var was=cur; layout(); if(cur!==was) set(cur); else apply(); });
   function apply(){
