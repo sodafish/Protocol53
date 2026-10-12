@@ -547,6 +547,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   seated cable row, one-arm DB row (hand op de bank).
 - `sortRows` (`cat`): Back = eerst rows (`data-og` g4), dan verticaal/bovenrug (g6); Arms = curls, triceps (g9), supersets (twee invulvelden),
   onderarmen (wrist/reverse) als laatste; daarbinnen laag + `POP`. Calisthenics-filter is weer verwijderd (op vraag van Tom).
+- WARM-UP ZONDER TUSSENKOP 'CARDIO' (op vraag van Tom, 12 okt): de cardio-opwarmers staan bovenaan zonder kop, daarna enkel 'Mobility & activation'; in de workoutlijst (`sortRows`) én het keuzeblad (`gs-sub-h`). `data-sub='Cardio'` blijft op de rijen (af-logica van de warm-up).
 - Tussenkoppen (`li.exsub`, door `sortRows` ingevoegd volgens `SUBS`): Warm-up = Cardio (bike, rowing, incline walk, cross trainer,
   SkiErg (`w0-skierg`, standaard uit, uitleg + tip over de rug), jump rope, stair climber) / Mobility & activation (de rest); Back = Rows / Vertical pull & upper back; Arms = Biceps /
   Triceps / Supersets / Forearms (onderarmen als laatste, op vraag van Tom, 9 okt; `cat` 0–3). Verborgen als er geen zichtbare oefening onder staat (in `apply`). Het keuzeblad toont dezelfde
