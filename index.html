@@ -2668,7 +2668,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var woEnd=document.getElementById('woEnd'), woStop=document.getElementById('woStop');
   if(woStop&&woEnd) woStop.addEventListener('click',function(){ woEnd.click(); });
   if(woEnd) woEnd.addEventListener('click',function(){
-    if(!woActive()){ woRun(true); paintWoBtns(); return; } /* Start workout: timer loopt, knop wordt End workout */
+    if(!woActive()){ woRun(true); paintWoBtns(); window.scrollTo({top:0,behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}); return; } /* Start workout: timer loopt, knop wordt End workout, pagina zacht naar boven (op vraag van Tom, 12 okt; geen sprong naar een groep) */
     var dur=woStart?Math.max(1,Math.round((Date.now()-woStart)/60000)):null;
     /* niets afgevinkt: gewoon stoppen, zonder vraag en zonder vuurwerk */
     var any=false; woPane.querySelectorAll('.exr').forEach(function(li){ var k=chkKey(li); if(k&&checks[k]) any=true; });
