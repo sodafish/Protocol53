@@ -824,7 +824,8 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exgrp:has(.grp-n),.exgrp:has(.grp-edit){display:flex;align-items:baseline;gap:.6rem;}
 .grp-n{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:34px;line-height:.9;letter-spacing:0;text-transform:none;color:var(--accent);min-width:1.1ch;}
 .exgrp.grp-done .grp-n{color:var(--muted-soft);}
-.exgrp[data-grp="g8"] .grp-t{position:relative;top:14px;} /* Cardio zonder nummer: titel op dezelfde hoogte als 'Warm-up' op de andere tabs */
+.exgrp[data-grp="g8"] .grp-t{position:relative;top:14px;}
+.exgrp[data-grp="g0"] .grp-n{display:none;} .exgrp[data-grp="g0"] .grp-t{position:relative;top:14px;} /* warm-up zonder nummer, titel even hoog als Cardio (op vraag van Tom, 12 okt) */ /* Cardio zonder nummer: titel op dezelfde hoogte als 'Warm-up' op de andere tabs */
 .grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
 .exgrp.grp-done .grp-opt{text-decoration:none;}
 .exsec{list-style:none;display:flex;align-items:center;gap:.8rem;margin-top:2.6rem;padding:.4rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
@@ -4925,8 +4926,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(hseg){ hseg.hidden=!(cur==='full'||cur==='home'); hseg.querySelectorAll('[data-half]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.half===hv?'true':'false'); }); }
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
-    /* nummering loopt door over de zichtbare groepen (op vraag van Tom, 12 okt): Upper = 1 Warm-up, 2 Chest, 3 Back …; Lower = 1 Warm-up, 2 Quads, 3 Hamstrings … */
-    var gnr=0; document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var n=h.querySelector('.grp-n'); if(n&&!h.classList.contains('split-off')) n.textContent=++gnr; });
+    /* nummering loopt door over de zichtbare groepen (op vraag van Tom, 12 okt): Upper = 1 Chest, 2 Back …; Lower = 1 Quads, 2 Hamstrings …; warm-up zonder nummer */
+    var gnr=0; document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var n=h.querySelector('.grp-n'); if(n&&h.dataset.grp!=='g0'&&!h.classList.contains('split-off')) n.textContent=++gnr; }); /* warm-up zonder nummer: 1 = eerste groep onder de keuze (op vraag van Tom, 12 okt) */
     document.body.classList.toggle('split-cardio',cur==='cardio');
     document.body.classList.toggle('split-home',cur==='home');
     var was=window.__split; window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
