@@ -1371,7 +1371,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .wtabs.stuck{box-shadow:none;}
 /* plakkende tabs: strak, ondoorzichtig vlak in papierkleur van de bovenrand tot net onder de tabs, over de volle breedte; anders schijnt de inhoud (met de iOS-blur) erdoor (op vraag van Tom, 10 okt) */
 #tabShade{position:fixed;left:0;right:0;top:0;height:0;z-index:44;background:var(--paper);pointer-events:none;display:none;box-shadow:0 10px 18px -14px rgba(0,0,0,.35);}
-#tabShade.on{display:none;} /* tabs plakken niet meer: scrollen mee met de pagina, tik op de navbar = naar boven (op vraag van Tom, 12 okt) */
+#tabShade.on{display:block;} /* enkel nog achter de tabs van Statistics: die plakken weer (op vraag van Tom, 12 okt); Workout-tabs scrollen mee */
+#stabs.wtabs{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 8px);}
 .wtabs button{appearance:none;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;flex:1 1 0;min-width:0;min-height:44px;padding:0 .3rem;border:0;border-radius:999px;
   background:transparent;color:var(--muted);font:500 14.5px 'Work Sans',system-ui,sans-serif;white-space:nowrap;cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .12s ease;}
 .wtabs button[aria-selected="true"]{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));color:var(--paper);font-weight:600;} /* actieve tab bovenaan = stijl van de vroegere actieve navbar-knop (test Tom, 10 okt) */ /* zelfde pil als de actieve navbar-knop */
@@ -5511,7 +5512,7 @@ window.__congrats=function(o){
 (function(){
   var sh=document.getElementById('tabShade'), raf=0;
   function upd(){ raf=0; var hit=null;
-    document.querySelectorAll('.wtabs').forEach(function(t){ if(hit||!t.offsetParent) return; var r=t.getBoundingClientRect(), st=parseFloat(getComputedStyle(t).top)||0;
+    document.querySelectorAll('.wtabs').forEach(function(t){ if(hit||!t.offsetParent) return; var cs=getComputedStyle(t); if(cs.position!=='sticky') return; /* enkel plakkende tabs (Statistics) */ var r=t.getBoundingClientRect(), st=parseFloat(cs.top)||0;
       if(window.scrollY>0&&r.top<=st+.5) hit=r; });
     if(hit){ sh.style.height=Math.ceil(hit.bottom+8)+'px'; sh.classList.add('on'); } else sh.classList.remove('on'); }
   function q(){ if(!raf) raf=requestAnimationFrame(upd); }
