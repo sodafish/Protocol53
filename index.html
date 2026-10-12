@@ -4904,8 +4904,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio',home:'Home'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* Home: zichtbaar via Settings › Programs (op vraag van Tom, 11 okt) */ /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
   var tabs=document.getElementById('wtabs');
-  /* Full · Upper · Lower binnen Open Gym en Home (op vraag van Tom, 12 okt): per programma onthouden in localStorage fitlog-half {full,home}; Core (g6) staat in beide helften */
-  var HKEY='fitlog-half', HALF={upper:['g0','g2','g4','g5','g6','g7'],lower:['g0','g1','g3','g6']}, half={}, hseg=document.getElementById('wdHalf');
+  /* Full · Upper · Lower binnen Open Gym en Home (op vraag van Tom, 12 okt): per programma onthouden in localStorage fitlog-half {full,home}; Core (g6) enkel bij Lower (op vraag van Tom, 12 okt: 4 tegenover 3 groepen) */
+  var HKEY='fitlog-half', HALF={upper:['g0','g2','g4','g5','g7'],lower:['g0','g1','g3','g6']}, half={}, hseg=document.getElementById('wdHalf');
   try{ half=JSON.parse(localStorage.getItem(HKEY)||'{}')||{}; }catch(e){ half={}; }
   function hcur(){ return (cur==='full'||cur==='home')&&HALF[half[cur]]?half[cur]:'all'; }
   if(hseg) hseg.querySelectorAll('[data-half]').forEach(function(b){ b.addEventListener('click',function(){
