@@ -1444,8 +1444,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .grp-edit:active{background:var(--paper-soft);transform:scale(.95);}
 .exgrp.grp-done .grp-edit{text-decoration:none;}
 /* keuzeblad: titel + kruisje blijven staan, de lijst schuift eronder door */
-#grp-sheet .sheet-head{position:sticky;top:-.6rem;z-index:3;background:var(--surface);margin:0 -1.25rem .9rem;padding:.6rem 1.25rem .5rem;transition:box-shadow .2s ease;}
-#grp-sheet.stuck .sheet-head{box-shadow:0 1px 0 var(--line);}
+#grp-sheet .sheet-head,#st-sheet .sheet-head{position:sticky;top:-.6rem;z-index:3;background:var(--surface);margin:0 -1.25rem .9rem;padding:.6rem 1.25rem .5rem;transition:box-shadow .2s ease;}
+#grp-sheet.stuck .sheet-head,#st-sheet.stuck .sheet-head{box-shadow:0 1px 0 var(--line);} /* Settings ook (op vraag van Tom, 12 okt) */
 .gs-sub{margin:-.5rem 0 1rem;font-size:13.5px;color:var(--muted);line-height:1.45;}
 .gs-set{flex:none;appearance:none;cursor:pointer;width:36px;height:36px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--muted-soft);
   display:inline-flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
@@ -2413,6 +2413,8 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;} /* iets meer lucht boven de keu
   if(ss){ syncStart(); ss.addEventListener('change',function(){ try{ localStorage.setItem('p53-start',ss.value); }catch(e){} }); }
   /* Programs: minstens één aan; de laatste kan niet uit (op vraag van Tom, 11 okt) */
   /* Settings › Warm-up: groep g0 tonen of verbergen (klasse no-wu op <html>, localStorage p53-warmup; op vraag van Tom, 12 okt) */
+  /* Settings: titel + kruisje blijven staan bij scrollen, lijntje eronder zodra er iets onder schuift (zoals het keuzeblad) */
+  var stSh=document.getElementById('st-sheet'); if(stSh){ stSh.addEventListener('scroll',function(){ stSh.classList.toggle('stuck',stSh.scrollTop>20); },{passive:true}); }
   var wb=document.querySelector('#stWu button');
   if(wb){ var wuOn=function(){ return !document.documentElement.classList.contains('no-wu'); };
     wb.setAttribute('aria-checked',String(wuOn()));
