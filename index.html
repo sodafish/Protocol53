@@ -1605,11 +1605,11 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .exgrp.split-off + .gx-empty{display:none;}
 /* subtab Full · Upper · Lower onder de pillen, enkel bij Open Gym en Home (op vraag van Tom, 12 okt; variant B): stijl = de Front/Back-schakelaar op Strength (.bal-seg),
    maar over de volle breedte: band --paper-soft zonder rand, actief --surface + accentkleur (donker/blauw --knob). Staat in de lijst, na de warm-up (li.wd-half-li vóór de g1-kop): plakt niet */
-#wdHalf{display:flex;gap:2px;height:36px;margin:0;padding:3px;border-radius:999px;background:var(--paper-soft);}
+#wdHalf{display:flex;gap:2px;margin:0;padding:3px;border-radius:999px;background:var(--paper-soft);}
 #wdHalf[hidden]{display:none;}
 #wdHalf button{appearance:none;-webkit-appearance:none;cursor:pointer;flex:1 1 0;min-width:0;padding:0 .3rem;border:0;border-radius:999px;background:transparent;
-  font:500 13.5px 'Work Sans',system-ui,sans-serif;color:var(--muted);white-space:nowrap;}
-#wdHalf button[aria-selected="true"]{background:var(--surface);color:var(--accent);font-weight:600;}
+  font:500 14px 'Work Sans',system-ui,sans-serif;color:var(--muted);white-space:nowrap;min-height:40px;} /* zelfde maat als Settings › Appearance (.st-seg): 46 px totaal (op vraag van Tom, 12 okt) */
+#wdHalf button[aria-selected="true"]{background:var(--surface);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);}
 #wdHalf button:focus-visible{outline:2.5px solid var(--accent);outline-offset:-2px;}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #wdHalf button[aria-selected="true"]{background:var(--knob);}}
 :root[data-theme="dark"] #wdHalf button[aria-selected="true"],:root[data-theme="blue"] #wdHalf button[aria-selected="true"]{background:var(--knob);}
