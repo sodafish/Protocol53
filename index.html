@@ -2787,7 +2787,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     'd3-assisted-pull-ups':{lats:1,bi:.5,midrug:.25,oa:.25},
     'd1-plank':{buik:1,schuin:.25},
     'x7-side-plank':{schuin:1,buik:.5},
-    'x7-plank-combo':{buik:1,schuin:1},
+    'x7-plank-combo':{buik:1.5,schuin:1.25}, /* = Plank + Side Plank samen (op vraag van Tom, 12 okt); hoofdspier = gewicht ≥ 1 */
     'x1-jump-squat':{quad:1,bil:1,kuit:.25},
     'x1-pistol-squat':{quad:1,bil:1,buik:.25},
     'x1-split-squat':{quad:1,bil:1,ham:.25},
@@ -3111,7 +3111,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function balPct(from,to){
     var by={}, out={};
     progRows(function(li,note){ var mm=musclesFor(chkKey(li),li)||{};
-      Object.keys(mm).forEach(function(m){ if(mm[m]===1) (by[m]=by[m]||[]).push(note); }); });
+      Object.keys(mm).forEach(function(m){ if(mm[m]>=1) (by[m]=by[m]||[]).push(note); }); });
     Object.keys(by).forEach(function(m){ var c=chainPct(by[m],from,to); if(c) out[m]=c.p; });
     return out;
   }
@@ -3190,7 +3190,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       p.style.fill=v?'color-mix(in srgb,var(--accent) '+Math.round(18+82*i)+'%,var(--surface))':'';
     });
     /* Progress-figuur (variant C): krachttoename per spier, eerste → laatste meting, zoals de lijst eronder (op vraag van Tom, 9 okt) */
-    var PRIM={}; progRows(function(li){ if(li.classList.contains('ex-off')) return; /* enkel oefeningen die aan staan (op vraag van Tom) */ var mm=musclesFor(chkKey(li),li)||{}; Object.keys(mm).forEach(function(m){ if(mm[m]===1) PRIM[m]=1; }); });
+    var PRIM={}; progRows(function(li){ if(li.classList.contains('ex-off')) return; /* enkel oefeningen die aan staan (op vraag van Tom) */ var mm=musclesFor(chkKey(li),li)||{}; Object.keys(mm).forEach(function(m){ if(mm[m]>=1) PRIM[m]=1; }); });
     var pf=document.getElementById('progFig'), PR=window.__progRange(), bp=balPct(PR.from,PR.to), bmax=0; prLabel(); Object.keys(bp).forEach(function(m){ if(bp[m]>bmax) bmax=bp[m]; });
     if(pf) pf.querySelectorAll('.m').forEach(function(p){ if(p.closest('.o')) return;
       var v=bp[p.getAttribute('data-m')]||0;
@@ -3234,7 +3234,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function sugData(){ var B=window.__balState; if(!B){ renderStats(); B=window.__balState; } return B||{sc:{},n:0,spanW:1,perWeek:true}; }
   function exFor(m){ var act=[], off=[];
     document.querySelectorAll('#s-d3 .exr[data-grp]').forEach(function(li){ var g=li.dataset.grp; if(!/^g([1-7]|10)$/.test(g)) return;
-      var k=chkKey(li), mm=musclesFor(k,li)||{}; if(mm[m]!==1) return; var n=li.querySelector('.exr-n'); n=n?n.firstChild.textContent.trim():''; if(!n) return;
+      var k=chkKey(li), mm=musclesFor(k,li)||{}; if(!(mm[m]>=1)) return; var n=li.querySelector('.exr-n'); n=n?n.firstChild.textContent.trim():''; if(!n) return;
       (li.classList.contains('ex-off')?off:act).push({n:n,c:window.__exStat?window.__exStat(k).n:0}); });
     act.sort(function(a,b){ return b.c-a.c; });
     return act.length?{list:act.slice(0,2).map(function(x){ return x.n; }),add:false}:{list:off.slice(0,2).map(function(x){ return x.n; }),add:true}; }
@@ -5154,7 +5154,7 @@ window.__congrats=function(o){
     document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){
       /* eGym-oefeningen staan onder hun spiergroep (hoofdspier), niet als eigen groep (op vraag van Tom, 9 okt) */
       var gk=li.dataset.grp, sub=li.dataset.sub||'';
-      var EGM=null; if(gk==='g10'){ var mm=window.__musclesFor?window.__musclesFor(li.dataset.key,li)||{}:{}, pm=Object.keys(mm).filter(function(m){ return mm[m]===1; })[0], to=EGMAP[pm]; if(!to) return; gk=to[0]; sub=to[1]||''; EGM=1; } /* eGym onder de spiergroep van de hoofdspier, per methode een rij */
+      var EGM=null; if(gk==='g10'){ var mm=window.__musclesFor?window.__musclesFor(li.dataset.key,li)||{}:{}, pm=Object.keys(mm).filter(function(m){ return mm[m]>=1; })[0], to=EGMAP[pm]; if(!to) return; gk=to[0]; sub=to[1]||''; EGM=1; } /* eGym onder de spiergroep van de hoofdspier, per methode een rij */
       var G=byG[gk]; if(!G) return; /* geen warm-up en cardio */
       if(li.dataset.sub==='Supersets'||li.querySelectorAll('.exr-in[data-note]').length>1) return; /* geen supersets (op vraag van Tom) */
       var name=(li.querySelector('.exr-n')||{}).firstChild; name=name?name.textContent.trim():''; if(!name) return;
