@@ -1020,7 +1020,7 @@ html:has(input:focus,textarea:focus){scroll-behavior:auto;}
 #progFig{margin:0 auto 2.6rem;} /* meer ruimte onder de figuur (op vraag van Tom) */
 .bal-seg{display:flex;width:max-content;position:absolute;top:0;right:0;z-index:2;margin:0;background:var(--paper-soft);border-radius:999px;padding:3px;}
 .bal-seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 13.5px 'Work Sans',system-ui,sans-serif;padding:.4rem 1.1rem;border-radius:999px;cursor:pointer;}
-.bal-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;}
+.bal-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);} /* zelfde zachte schaduw als .st-seg en #wdHalf (op vraag van Tom, 12 okt) */
 .bal-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
 /* Front/Back gecentreerd achter het hoofd: Front links, Back rechts (op vraag van Tom, 11 okt; variant B: gat 100 px, knoppen 84 px; vroeger rechtsboven).
    De figuur ligt erboven en laat aanrakingen door, zodat de knoppen klikbaar blijven. */
