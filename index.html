@@ -1712,6 +1712,15 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .ip-test .pe-list{margin-top:.2rem;}
 
 /* krachttest-knop bij eGym-oefeningen (op vraag van Tom, 11 okt): rond zoals het oog, links ervan */
+
+/* EENHEID ZICHTBAAR IN INGEVULDE VELDEN (op vraag van Tom, 12 okt): niet in focus en ingevuld = de tekst van het veld is onzichtbaar,
+   een laag erover (.exr-u, zelfde rastercel) toont 'waarde + eenheid' samen gecentreerd; in focus = gewoon veld, laag weg; leeg = placeholder */
+.exr > .exr-u{pointer-events:none;align-self:center;justify-self:stretch;height:44px;display:none;align-items:center;justify-content:center;gap:3px;
+  font-family:'Work Sans',system-ui,sans-serif;font-size:16px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;z-index:1;}
+.exr > .exr-u small{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.01em;}
+.exr > .exr-in.has-u:not(:focus):not(:placeholder-shown){color:transparent;-webkit-text-fill-color:transparent;}
+.exr > .exr-in.has-u:not(:focus):not(:placeholder-shown) + .exr-u{display:flex;}
+.exr > .exr-in[hidden] + .exr-u{display:none!important;}
 </style>
 
 <header class="top">
@@ -5496,6 +5505,35 @@ window.__congrats=function(o){
   var until=0; function follow(){ upd(); if(Date.now()<until) requestAnimationFrame(follow); }
   var wt=document.getElementById('wtabs'); if(wt) new MutationObserver(function(){ var go=Date.now()>=until; until=Date.now()+320; if(go) requestAnimationFrame(follow); }).observe(wt,{attributes:true,attributeFilter:['class']});
   q();
+})();
+</script>
+<script>
+/* eenheid zichtbaar in ingevulde velden (zie CSS 'EENHEID ZICHTBAAR'); de app vult velden ook via JS (.value = …), daarom de setter per veld omwikkeld */
+(function(){
+  var D=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value'); if(!D||!D.set) return;
+  function sync(inp){ var u=inp.__u; if(!u) return; u.firstChild.textContent=D.get.call(inp); }
+  /* zelfde rastercel als het veld; zonder vaste plaats staat het veld in de laatste kolom van rij 1 */
+  function place(inp){ var u=inp.__u; if(!u) return; var cs=getComputedStyle(inp); if(cs.display==='none') return;
+    var c=cs.gridColumnStart, r=cs.gridRowStart;
+    u.style.gridColumn=(c&&c!=='auto')?c+' / '+cs.gridColumnEnd:'-2 / -1'; u.style.gridRow=(r&&r!=='auto')?r+' / '+cs.gridRowEnd:'1'; }
+  function setup(inp){
+    if(inp.__u) return; var li=inp.parentNode; if(!li||!li.classList||!li.classList.contains('exr')) return;
+    var unit=(inp.getAttribute('placeholder')||'').trim(); if(!/^[a-z]{1,5}$/i.test(unit)) return;
+    var u=document.createElement('span'); u.className='exr-u'; u.setAttribute('aria-hidden','true');
+    u.appendChild(document.createElement('span')); var s=document.createElement('small'); s.textContent=unit; u.appendChild(s);
+    inp.insertAdjacentElement('afterend',u); inp.__u=u; inp.classList.add('has-u');
+    place(inp);
+    Object.defineProperty(inp,'value',{configurable:true,get:function(){ return D.get.call(this); },set:function(v){ D.set.call(this,v); sync(this); }});
+    inp.addEventListener('input',function(){ sync(inp); }); inp.addEventListener('change',function(){ sync(inp); });
+    sync(inp);
+  }
+  function all(){ document.querySelectorAll('.exr > input.note.exr-in').forEach(setup); }
+  all();
+  /* rastercel opnieuw overnemen als de rij later een i-knop krijgt (has-info verandert de kolom) */
+  function regrid(){ document.querySelectorAll('.exr > input.exr-in.has-u').forEach(place); }
+  window.addEventListener('load',function(){ all(); regrid(); setTimeout(regrid,600); });
+  document.addEventListener('p53-groups',function(){ all(); regrid(); });
+  window.__p53units=function(){ all(); regrid(); };
 })();
 </script>
 </body>

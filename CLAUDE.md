@@ -52,6 +52,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   `.note-erase`, `.gs-set` en de i-knop. Nieuwe icoonknop: zelfde maat en cirkel.
   Bewerk-icoon (groepspotlood `.grp-edit`, `#progEdit`, `.ip-edit`): Material Symbols 'edit_note' (lijntjes + potlood) als inline SVG,
   20 px (viewBox 0 -960 960 960, `fill=currentColor`), zodat het optisch even groot is als de andere iconen.
+- Eenheid in ingevulde velden (op vraag van Tom, 12 okt): elk `input.note.exr-in` dat rechtstreeks in een `.exr` staat en als placeholder een eenheid heeft (kg, reps, sec, min) krijgt erna een laag `.exr-u` (zelfde rastercel, `place()`), die buiten focus en ingevuld 'waarde + eenheid' samen gecentreerd toont (eenheid 11.5 px 500 `--muted`); de tekst van het veld zelf is dan transparant. In focus: gewoon veld. Leeg: placeholder. De app vult velden ook via JS, daarom is de `value`-setter per veld omwikkeld (`sync`). Script vlak voor `</body>`, CSS-blok 'EENHEID ZICHTBAAR'.
 - Focus op invulvelden en notities: geen dikke rand, enkel een dunne rand die zacht oplicht (40% inktkleur: in donker lichter/witter, in licht iets donkerder).
 - Invulveld aantikken: geen eigen scroll-code (een visualViewport-correctie liet de lijst flikkeren op iOS, teruggedraaid).
   Wel `html:has(input:focus,textarea:focus){scroll-behavior:auto}` zodat iOS het veld zonder 'smooth' in beeld schuift.
