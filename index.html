@@ -1603,6 +1603,18 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .gx-t b{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:16px;}
 .gx-t small{font-size:12.5px;color:var(--muted);}
 .exgrp.split-off + .gx-empty{display:none;}
+/* subtab Full · Upper · Lower onder de pillen, enkel bij Open Gym en Home (op vraag van Tom, 12 okt; variant B): tekst-tabs met accent-onderlijn zoals de periodes op Statistics.
+   Geplakt (bij scrollen) klapt hij weg; de marge van #wtabs groeit even veel mee, zodat de lijst niet verspringt (zelfde mechaniek als de vroegere labels Strength/Cardio) */
+#wtabs .wd-half{display:flex;gap:1.3rem;height:44px;margin-top:6px;border-bottom:1px solid var(--line);overflow:hidden;
+  transition:height .25s ease,margin-top .25s ease,opacity .18s ease;}
+#wtabs .wd-half[hidden]{display:none;}
+#wtabs .wd-half button{appearance:none;-webkit-appearance:none;cursor:pointer;flex:none;padding:0 .1rem;margin-bottom:-1px;border:0;border-bottom:2px solid transparent;border-radius:0;background:none;
+  font:600 14px 'Work Sans',system-ui,sans-serif;color:var(--muted);}
+#wtabs .wd-half button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);}
+#wtabs .wd-half button:focus-visible{outline:2px solid var(--accent);outline-offset:-3px;}
+#wtabs{transition:margin-bottom .25s ease;}
+#wtabs.stuck .wd-half{height:0;margin-top:0;opacity:0;border-bottom-width:0;pointer-events:none;}
+#wtabs.stuck:has(.wd-half:not([hidden])){margin-bottom:calc(.4rem + 50px);}
 #s-d3 .exl .exgrp.g-empty .grp-edit{visibility:hidden;}
 .cx-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
 .cx-hint{font-size:12px;color:var(--muted-soft);} /* subtiele hint (op vraag van Tom) */
@@ -1747,6 +1759,7 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
     </div>
     <div class="wtabs wdock" id="wtabs">
       <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home" hidden>Home</button></div></div><div class="wd-blk wd-blk-card"><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div></div>
+      <div class="wd-half" id="wdHalf" role="tablist" aria-label="Body part" hidden><button type="button" role="tab" data-half="all">Full Body</button><button type="button" role="tab" data-half="upper">Upper Body</button><button type="button" role="tab" data-half="lower">Lower Body</button></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
         <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
@@ -4890,6 +4903,12 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var NAME={warmup:'Warm-up',full:'Open Gym',upper:'Upper body',lower:'Lower body',egym:'eGym',cardio:'Cardio',home:'Home'};
   var cur='full'; try{ cur=localStorage.getItem(KEY)||'full'; }catch(e){} if(!SPLIT[cur]||cur==='upper'||cur==='lower') cur='full'; /* Home: zichtbaar via Settings › Programs (op vraag van Tom, 11 okt) */ /* ook een bewaarde 'warmup' → Open Gym */ /* Upper/Lower niet meer te kiezen */
   var tabs=document.getElementById('wtabs');
+  /* Full · Upper · Lower binnen Open Gym en Home (op vraag van Tom, 12 okt): per programma onthouden in localStorage fitlog-half {full,home}; Core (g6) staat in beide helften */
+  var HKEY='fitlog-half', HALF={upper:['g0','g2','g4','g5','g6','g7'],lower:['g0','g1','g3','g6']}, half={}, hseg=document.getElementById('wdHalf');
+  try{ half=JSON.parse(localStorage.getItem(HKEY)||'{}')||{}; }catch(e){ half={}; }
+  function hcur(){ return (cur==='full'||cur==='home')&&HALF[half[cur]]?half[cur]:'all'; }
+  if(hseg) hseg.querySelectorAll('[data-half]').forEach(function(b){ b.addEventListener('click',function(){
+    if(cur!=='full'&&cur!=='home') return; half[cur]=b.dataset.half; try{ localStorage.setItem(HKEY,JSON.stringify(half)); }catch(e){} apply(); }); });
   /* tabbalk volgens Settings › Programs: 1 programma = geen tabs; Cardio + kracht = twee pillen (zonder label, 12 okt); enkel kracht = één pil */
   function layout(){ if(!tabs) return; var pv=window.__p53progs?window.__p53progs():['full','egym','cardio'], STR=['full','egym','home'];
     tabs.querySelectorAll('[data-split]').forEach(function(b){ b.hidden=pv.indexOf(b.dataset.split)<0; });
@@ -4901,7 +4920,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   document.addEventListener('p53-progs',function(){ var was=cur; layout(); if(cur!==was) set(cur); else apply(); });
   function apply(){
     layout();
-    var keep=SPLIT[cur];
+    var hv=hcur(), keep=hv!=='all'?HALF[hv]:SPLIT[cur];
+    if(hseg){ hseg.hidden=!(cur==='full'||cur==='home'); hseg.querySelectorAll('[data-half]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.half===hv?'true':'false'); }); }
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
     document.body.classList.toggle('split-cardio',cur==='cardio');
