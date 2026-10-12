@@ -523,6 +523,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   Nieuwe gevaarlijke oefening: sleutel + tip toevoegen aan `RISK`. Volgorde in het keuzeblad én in de workout (`sortRows` herschikt de rijen bij het laden): eerst oefeningen zonder aandachtspunt, dan met label (Back! …),
   dan gevaarlijke; binnen elke laag op populariteit volgens `POP` (per groep een lijst sleutels, meest gedaan eerst).
   Nieuwe oefening: ook haar sleutel op de juiste plek in `POP` zetten.
+- Single-Leg Calf Raise (op vraag van Tom, 12 okt): nieuwe sleutel `x3-sl-calf-raise` (g3, standaard uit, reps, '3 × 15 per leg', lichaamsgewicht op een trede, handen tegen de muur; halter erbij vanaf 20 makkelijke reps), EX `calfraise` (via NAMES; uitleg herschreven), video van Tom `img/vid/calfraise.mp4` + poster (Gym visual 'Single Leg Calf Raise Off Step'), in VID, POP.g3 na `x3-db-calf-raise`, MUSCLES `{kuit:1}`, ook in `HOME`. De oude rij 'Single-Leg Dumbbell Calf Raise' (`d3-single-leg-calf-raise`, kg) blijft weg; de NAMES-sleutel ervan staat er nog.
 - Glute Kickback Machine (`x3-kickback-machine`, g3, standaard uit, kg): geen foto in de Free Exercise DB. Beeld = Gym visual-video (staand toestel)
   `img/vid/kickbackmachine.mp4`.
 - Groep 3 heeft ook adductie (Hip Adduction Machine, Cable/Band Hip Adduction) en Leg Press Calf Raise (in `RISK`).
