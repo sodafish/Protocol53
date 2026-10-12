@@ -1624,7 +1624,8 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 /* na de warm-up (op vraag van Tom, 12 okt): scharnier in de lijst, zelfde ruimte erboven als tussen twee groepen; verborgen bij eGym/Cardio */
 #s-d3 .wd-half-li{list-style:none;padding:3.2rem 0 0;}
 html.no-wu #s-d3 .exl > [data-grp="g0"],html.no-wu #s-d3 .exl > .gx-empty[data-g="g0"]{display:none!important;} /* warm-up verborgen via Settings (op vraag van Tom, 12 okt) */
-html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;} /* iets meer lucht boven de keuze dan tussen twee groepen (op vraag van Tom, 12 okt; eerst 2.4rem) */
+html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
+#s-d3 .exl > li.list-top{padding-top:0!important;} /* zonder tabs bovenaan (1 programma): eerste zichtbare kop zonder lucht erboven, begint waar de tabs zouden staan (op vraag van Tom, 12 okt) */ /* iets meer lucht boven de keuze dan tussen twee groepen (op vraag van Tom, 12 okt; eerst 2.4rem) */
 #s-d3 .wd-half-li:has(#wdHalf[hidden]){display:none;}
 #s-d3 .exl .exgrp.g-empty .grp-edit{visibility:hidden;}
 .cx-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
@@ -4965,7 +4966,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
     /* nummering loopt door over de zichtbare groepen (op vraag van Tom, 12 okt): Upper = 1 Chest, 2 Back …; Lower = 1 Quads, 2 Hamstrings …; warm-up zonder nummer */
-    var gnr=0; document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var n=h.querySelector('.grp-n'); if(n&&h.dataset.grp!=='g0'&&!h.classList.contains('split-off')) n.textContent=++gnr; }); /* warm-up zonder nummer: 1 = eerste groep onder de keuze (op vraag van Tom, 12 okt) */
+    var gnr=0; document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var n=h.querySelector('.grp-n'); if(n&&h.dataset.grp!=='g0'&&!h.classList.contains('split-off')) n.textContent=++gnr; }); /* warm-up zonder nummer: 1 = eerste groep onder de keuze (op vraag van Tom, 12 okt) */ if(window.__p53listTop) window.__p53listTop();
     document.body.classList.toggle('split-cardio',cur==='cardio');
     document.body.classList.toggle('split-home',cur==='home');
     var was=window.__split; window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
@@ -5551,6 +5552,17 @@ window.__congrats=function(o){
   window.addEventListener('load',function(){ all(); regrid(); setTimeout(regrid,600); });
   document.addEventListener('p53-groups',function(){ all(); regrid(); });
   window.__p53units=function(){ all(); regrid(); };
+})();
+</script>
+<script>
+/* zonder tabs bovenaan Workout (1 programma in Settings): eerste zichtbare rij van de lijst (warm-up-kop, Full/Upper/Lower-keuze of groepskop) krijgt .list-top = geen padding erboven */
+(function(){ var raf=0;
+  function run(){ raf=0; var tabs=document.getElementById('wtabs'), none=!tabs||tabs.hidden||getComputedStyle(tabs).display==='none';
+    var first=null; document.querySelectorAll('#s-d3 .exl > li').forEach(function(li){ li.classList.remove('list-top'); if(!first&&none&&li.offsetParent&&li.offsetHeight>0) first=li; });
+    if(first) first.classList.add('list-top'); }
+  window.__p53listTop=function(){ if(!raf) raf=requestAnimationFrame(run); };
+  ['p53-groups','p53-progs','p53-split'].forEach(function(e){ document.addEventListener(e,window.__p53listTop); });
+  window.addEventListener('load',window.__p53listTop); window.__p53listTop();
 })();
 </script>
 </body>
