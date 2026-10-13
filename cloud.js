@@ -119,11 +119,11 @@
     document.documentElement.classList.add('p53-out');
     var o=document.getElementById('p53-login'); if(o){ o.hidden=false; if(msg) o.querySelector('.lg-msg').textContent=msg; return; }
     o=document.createElement('div'); o.id='p53-login';
-    o.innerHTML='<form class="lg-card" novalidate>'+
+    o.innerHTML='<form class="lg-card" id="p53-login-form" method="post" action="#" autocomplete="on" novalidate>'+
       '<h1>Protocol</h1>'+
       '<p class="lg-sub">Log in to save your data across all your devices.</p>'+
-      '<label>Email<input type="email" name="email" autocomplete="username" required></label>'+
-      '<label>Password<input type="password" name="pw" autocomplete="current-password" required minlength="6"></label>'+
+      '<label for="lg-email">Email<input type="email" id="lg-email" name="username" autocomplete="username" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>'+
+      '<label for="lg-pw">Password<input type="password" id="lg-pw" name="password" autocomplete="current-password" required minlength="6"></label>'+
       '<label class="lg-dob" hidden>Date of birth<input type="date" name="dob"></label>'+
       '<p class="lg-msg" role="status"></p>'+
       '<button type="submit" class="lg-main">Log in</button>'+
@@ -136,13 +136,13 @@
       signup=!signup;
       o.querySelector('.lg-main').textContent=signup?'Create account':'Log in';
       this.textContent=signup?'Already have an account? Log in':'No account yet? Create account';
-      f.pw.setAttribute('autocomplete',signup?'new-password':'current-password');
+      f.password.setAttribute('autocomplete',signup?'new-password':'current-password');
       o.querySelector('.lg-dob').hidden=!signup;
       m.textContent='';
     });
     f.addEventListener('submit',function(e){
       e.preventDefault();
-      var email=f.email.value.trim(), pw=f.pw.value;
+      var email=f.username.value.trim(), pw=f.password.value;
       if(!email||pw.length<6){ m.textContent='Enter your email and a password of at least 6 characters.'; return; }
       var dob=f.dob.value;
       if(signup && !/^\d{4}-\d{2}-\d{2}$/.test(dob)){ m.textContent='Enter your date of birth.'; return; }
