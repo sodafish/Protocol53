@@ -960,6 +960,7 @@ html.p53-out body>*:not(#p53-login){visibility:hidden!important;}
 #p53-login h1 em{color:var(--accent);font-weight:500;}
 #p53-login .lg-sub{margin:0 0 .6rem;color:var(--muted);font-size:14.5px;line-height:1.45;}
 #p53-login label{display:flex;flex-direction:column;gap:.35rem;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+#p53-login label[hidden]{display:none;} /* anders toont display:flex het geboortedatumveld ook bij Log in (bug, 13 okt) */
 #p53-login input{font:400 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.8rem .9rem;min-height:48px;}
 #p53-login input:focus{outline:none;border-color:var(--accent);}
 #p53-login .lg-msg{min-height:1.2em;margin:0;font-size:13.5px;color:var(--accent);}

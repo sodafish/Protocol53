@@ -82,6 +82,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   het `<head>`-script zet bij elke start `fitlog-where`={v:'workout',y:0} en `fitlog-split` vóór de andere scripts ze lezen; op vraag van Tom, 10 okt),
   dan 'Your data' (`.st-sec`) met 'Signed in as e-mail' (`#stUser`, uit `__p53user`), Export backup (volle breedte), daaronder Log out + Reset data naast elkaar (`#resetData`; grid in `.st-body .app-tools`, op vraag van Tom, 10 okt).
   Tik op het getal (`button#ageBtn`) of het tandwiel → `window.__p53profileOpen` (vult het datumveld) → `__p53settings()`.
+- Inlogscherm: het veld 'Date of birth' (`.lg-dob`) staat er enkel bij 'Create account'. `#p53-login label{display:flex}` overschreef het `hidden`-attribuut, waardoor het ook bij 'Log in' zichtbaar was; daarom `#p53-login label[hidden]{display:none}` (13 okt).
 - Opslag: collectie `cfg`, doc `profile` (`{dob:'jjjj-mm-dd'}`), cache localStorage `fitlog-dob`. Bij 'Create account' is de
   geboortedatum verplicht (`cloud.js`, `user_metadata.dob` via `signUp`). `cloud.js` zet `window.__p53user` en stuurt event `p53-user`.
   Leeftijd herberekend bij laden en bij terugkeren naar de app.
