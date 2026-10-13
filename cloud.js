@@ -109,11 +109,14 @@
     var prev=load('p53-uid',null);
     if(prev && prev!==u.id){ wipeLocal(); save('p53-uid',u.id); location.reload(); return; }
     save('p53-uid',u.id);
-    user=u; window.__p53user=u; resolveDb(db);
+    user=u; window.__p53user=u; showApp(); resolveDb(db);
     try{ document.dispatchEvent(new CustomEvent('p53-user',{detail:u})); }catch(e){}
     flush().then(pull);
   }
+  /* klasse p53-out (gezet in <head> zonder sessie) verbergt de app tot hier beslist is: geen flits van de lijst vóór het inlogscherm */
+  function showApp(){ document.documentElement.classList.remove('p53-out'); }
   function showLogin(msg){
+    document.documentElement.classList.add('p53-out');
     var o=document.getElementById('p53-login'); if(o){ o.hidden=false; if(msg) o.querySelector('.lg-msg').textContent=msg; return; }
     o=document.createElement('div'); o.id='p53-login';
     o.innerHTML='<form class="lg-card" novalidate>'+
@@ -158,7 +161,7 @@
       var s=r&&r.data&&r.data.session;
       if(s){ start(s.user); return; }
       /* geen sessie: offline toch verder met wat er lokaal staat */
-      if(!navigator.onLine && Object.keys(cache).length){ resolveDb(db); return; }
+      if(!navigator.onLine && Object.keys(cache).length){ showApp(); resolveDb(db); return; }
       showLogin();
     },function(){ showLogin(); });
   }

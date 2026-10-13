@@ -14,6 +14,7 @@ vooral op zijn iPhone, als app op het beginscherm.
   Bootst de oude db-API na (`collection().doc().set()/delete()`, `onSnapshot`).
   Race pull/flush opgelost: wat tijdens een lopende pull naar de server ging (lijst `recent`, 2 min) wordt na het pull-antwoord opnieuw
   toegepast, anders verdween een net gezet vinkje/meting uit de snapshot.
+  Geen flits van de app vóór het inlogscherm (13 okt): `<head>`-script zet klasse `p53-out` op `<html>` als localStorage `p53-auth` ontbreekt (CSS verbergt alles behalve `#p53-login`); `showLogin` zet ze ook, `showApp()` in `start()` en bij offline-zonder-sessie haalt ze weg.
   `p53ResetData(logIds)`: wist op de server (alleen online) alle rijen van checks, counts, hist, prog, sess + de log-rijen van de
   invulvelden, plus cache/wachtrij/localStorage daarvan; knop 'Reset data' onder Settings › Your data (`#resetData`, `p53Confirm` danger), daarna
   herladen. Notities, cfg (oefeningkeuze, sets, profiel) blijven. De velden worden gewist via hun logboek-id `'note--'+veld` (QA 11 okt: de knop gaf eerst kale veldnamen door, waardoor de velden gevuld bleven).
@@ -103,6 +104,9 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   (`.to-top`, `.wo-end`) mee naar de rand van de kolom.
 - De vroegere `@media(max-width:640px)`/`(max-width:520px)`-blokken zijn `@media all{…}` geworden: de gsm-regels gelden altijd.
   Kleine fijnregels voor smalle toestellen (≤ 380/360/350 px) blijven media queries. Geen nieuwe breakpoints voor brede schermen toevoegen.
+
+## Cardio
+- Indoor heeft ook 'HIIT Session' (`c-hiit`, info `chiit`, enkel tekst, minuten; op vraag van Tom, 13 okt); migratie `cfg.hi` zet hem aan bij bestaande cardiokeuzes.
 
 ## Navigatie
 - Navbar-hoogte (op vraag van Tom, 10 okt): `bottom: var(--nav-b)` = max(10 px, veilige zone − 12 px) → op een iPhone met streep ±22 px van de onderrand i.p.v. ±44 px; de End workout-pil volgt mee.
