@@ -14,13 +14,17 @@
   window.__p53theme=function(v){ var r=document.documentElement; if(v==='light'||v==='dark'||v==='blue') r.setAttribute('data-theme',v); else r.removeAttribute('data-theme');
     document.querySelectorAll('meta[name=theme-color]').forEach(function(m,i){ m.setAttribute('content',v==='blue'?'#161D26':v==='dark'?'#251A15':v==='light'?'#F7F2EA':(i?'#251A15':'#F7F2EA')); }); };
   if(t==='light'||t==='dark'||t==='blue') document.documentElement.setAttribute('data-theme',t);
-  /* warm-up tonen (Settings › Warm-up, op vraag van Tom, 12 okt): localStorage p53-warmup = 'off' verbergt groep g0; standaard aan */
-  try{ if(localStorage.getItem('p53-warmup')==='off') document.documentElement.classList.add('no-wu'); }catch(e){}
   /* startscherm (op vraag van Tom, 10 okt): p53-start = '' (waar je stopte) of warmup/full/egym/cardio → Workout bovenaan op die tab */
   /* zichtbare programma's (Settings › Programs, op vraag van Tom, 11 okt): localStorage p53-progs = JSON-lijst uit full/egym/home/cardio, standaard zonder Home */
   window.__p53progs=function(){ var A=['full','egym','home','cardio'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-progs')||'null'); }catch(e){}
     v=Array.isArray(v)?A.filter(function(x){ return v.indexOf(x)>=0; }):[]; return v.length?v:['full','egym','cardio']; };
   try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ var pv=window.__p53progs(); if(/^(full|egym|home|cardio)$/.test(st)&&pv.indexOf(st)<0) st=pv[0]; if(/^(full|egym|home|cardio)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
+  /* warm-up per programma (Settings › Warm-up, op vraag van Tom, 13 okt; 12 okt nog één schakelaar voor alles): localStorage p53-warmup = JSON-lijst
+     van programma's ZONDER warm-up (full/egym/home); oude waarde 'off' = alle drie uit. Klasse no-wu op <html> volgt de huidige tab. */
+  window.__p53wuOff=function(){ var v=null; try{ v=localStorage.getItem('p53-warmup'); }catch(e){} if(v==='off') return ['full','egym','home']; try{ v=JSON.parse(v||'[]'); }catch(e){ v=[]; } return Array.isArray(v)?v:[]; };
+  window.__p53wuApply=function(sp){ if(!sp){ try{ sp=window.__split||localStorage.getItem('fitlog-split')||'full'; }catch(e){ sp='full'; } }
+    document.documentElement.classList.toggle('no-wu',window.__p53wuOff().indexOf(sp)>=0); if(window.__p53listTop) window.__p53listTop(); };
+  window.__p53wuApply();
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -1195,6 +1199,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* Settings › Programs: welke tabs Workout toont (op vraag van Tom, 11 okt) */
 .st-progs{list-style:none;margin:0;padding:0;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;}
 .st-progs li + li{border-top:1px solid var(--line);}
+.st-progs li[hidden],.st-sec[hidden]{display:none;}
+#stWu li{border-top:0;} #stWu li:not([hidden]) ~ li:not([hidden]){border-top:1px solid var(--line);} /* lijntje enkel tussen zichtbare rijen */
 .st-progs button{appearance:none;width:100%;display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:48px;padding:0 .9rem;border:0;background:transparent;color:var(--ink);font:500 15px 'Work Sans',system-ui,sans-serif;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .st-progs button small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:1px;}
 .st-progs .sp-ck{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);color:transparent;display:flex;align-items:center;justify-content:center;transition:background-color .2s ease,border-color .2s ease;}
@@ -2371,7 +2377,8 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
     </div>
     <div class="st-sec">
       <p class="set-lab" id="stWuL">Warm-up</p>
-      <ul class="st-progs" id="stWu" role="group" aria-labelledby="stWuL"><li><button type="button" role="checkbox" aria-checked="true"><span>Show warm-up<small>At the top of Open Gym, eGym and Home</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
+      <ul class="st-progs" id="stWu" role="group" aria-labelledby="stWuL"><li data-wu="full"><button type="button" role="checkbox" aria-checked="true" data-wu="full"><span>Open Gym</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li data-wu="egym"><button type="button" role="checkbox" aria-checked="true" data-wu="egym"><span>eGym</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li data-wu="home"><button type="button" role="checkbox" aria-checked="true" data-wu="home"><span>Home</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
+      <p class="st-note">Show the warm-up at the top of these programs.</p>
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
@@ -2417,11 +2424,14 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
   /* Settings › Warm-up: groep g0 tonen of verbergen (klasse no-wu op <html>, localStorage p53-warmup; op vraag van Tom, 12 okt) */
   /* Settings: titel + kruisje blijven staan bij scrollen, lijntje eronder zodra er iets onder schuift (zoals het keuzeblad) */
   var stSh=document.getElementById('st-sheet'); if(stSh){ stSh.addEventListener('scroll',function(){ stSh.classList.toggle('stuck',stSh.scrollTop>20); },{passive:true}); }
-  var wb=document.querySelector('#stWu button');
-  if(wb){ var wuOn=function(){ return !document.documentElement.classList.contains('no-wu'); };
-    wb.setAttribute('aria-checked',String(wuOn()));
-    wb.addEventListener('click',function(){ var on=!wuOn(); document.documentElement.classList.toggle('no-wu',!on); wb.setAttribute('aria-checked',String(on));
-      try{ if(on) localStorage.removeItem('p53-warmup'); else localStorage.setItem('p53-warmup','off'); }catch(e){} document.dispatchEvent(new Event('p53-groups')); }); }
+  var wl=document.getElementById('stWu');
+  function paintWu(){ if(!wl) return; var off=window.__p53wuOff(), pv=window.__p53progs();
+    wl.querySelectorAll('li[data-wu]').forEach(function(li){ li.hidden=pv.indexOf(li.dataset.wu)<0; li.querySelector('button').setAttribute('aria-checked',String(off.indexOf(li.dataset.wu)<0)); });
+    var sec=wl.closest('.st-sec'); if(sec) sec.hidden=!wl.querySelector('li[data-wu]:not([hidden])'); } /* enkel de zichtbare krachtprogramma's; enkel Cardio = sectie weg */
+  if(wl){ paintWu(); document.addEventListener('p53-progs',paintWu);
+    wl.querySelectorAll('button[data-wu]').forEach(function(b){ b.addEventListener('click',function(){ var off=window.__p53wuOff(), k=b.dataset.wu, i=off.indexOf(k);
+      if(i>=0) off.splice(i,1); else off.push(k); try{ if(off.length) localStorage.setItem('p53-warmup',JSON.stringify(off)); else localStorage.removeItem('p53-warmup'); }catch(e){}
+      paintWu(); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }); }); }
   var pl=document.getElementById('stProgs');
   function paintProgs(){ if(!pl) return; var pv=window.__p53progs(); pl.querySelectorAll('button[data-prog]').forEach(function(b){ var on=pv.indexOf(b.dataset.prog)>=0, last=on&&pv.length===1;
     b.setAttribute('aria-checked',on?'true':'false'); if(last) b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); }); }
@@ -4969,7 +4979,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var gnr=0; document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var n=h.querySelector('.grp-n'); if(n&&h.dataset.grp!=='g0'&&!h.classList.contains('split-off')) n.textContent=++gnr; }); /* warm-up zonder nummer: 1 = eerste groep onder de keuze (op vraag van Tom, 12 okt) */ if(window.__p53listTop) window.__p53listTop();
     document.body.classList.toggle('split-cardio',cur==='cardio');
     document.body.classList.toggle('split-home',cur==='home');
-    var was=window.__split; window.__split=cur; /* nextGroup scrolt alleen door bij Full body */
+    var was=window.__split; window.__split=cur; if(window.__p53wuApply) window.__p53wuApply(cur); /* nextGroup scrolt alleen door bij Full body */
     if(was!==cur) document.dispatchEvent(new Event('p53-split')); /* groepskeuze: Home heeft een eigen selectie */
     lbl.textContent=NAME[cur];
     pop.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.split===cur?'true':'false'); });
