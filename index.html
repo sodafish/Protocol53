@@ -5582,5 +5582,18 @@ window.__congrats=function(o){
   window.addEventListener('load',window.__p53listTop); window.__p53listTop();
 })();
 </script>
+<script>
+/* iOS: na het sluiten van het toetsenbord blijft de webview soms denken dat het toetsenbord er nog is (layout-viewport te kort), waardoor de
+   vaste navbar meescrolt en halverwege het scherm blijft hangen (video Tom, 13 okt). Na blur zonder ander veld in focus: één onzichtbare
+   scroll-nudge (1 px heen en terug) zodat iOS de viewport herberekent. Geen eigen scroll-correctie bij focus (zie notities: flikkerde). */
+(function(){ var T=0;
+  function typing(){ var a=document.activeElement; return !!(a&&(a.tagName==='TEXTAREA'||a.tagName==='SELECT'||(a.tagName==='INPUT'&&!/^(button|checkbox|radio|range|submit|reset|hidden)$/i.test(a.type)))); }
+  function nudge(){ if(typing()) return; var y=window.scrollY, x=window.scrollX; window.scrollTo(x,y+1); window.scrollTo(x,y); }
+  document.addEventListener('focusout',function(e){ var t=e.target; if(!t||!/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+    clearTimeout(T); T=setTimeout(function(){ nudge(); setTimeout(nudge,350); },60); },true);
+  var vv=window.visualViewport; if(vv) vv.addEventListener('resize',function(){ if(!typing()&&vv.height>=window.innerHeight-1) nudge(); });
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(nudge,250); });
+})();
+</script>
 </body>
 </html>
