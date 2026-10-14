@@ -1178,7 +1178,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
 .mon-nav button[disabled]{opacity:.35;cursor:default;}
 /* Day · Month · Year boven de grafieken (op vraag van Tom, 14 okt): tekst-tabs zoals de periode op Strength */
-.stats>.sv>.hist-per{margin:0 0 1.6rem;}
+.stats>.sv>.hist-per{margin:0 0 1.6rem;} .hist-per[hidden]{display:none!important;} /* enkel Year: tabs weg; display:flex van .stats-per overschreef hidden */
 .stats>.sv>.hist-per button[data-hv]{font-size:13.5px;}
 .mon-n .mon-mo button{font-size:10.5px;} /* Year (12) en Day (28–31): kleinere as */
 .mon-c.off{cursor:default;} .mon-mo button[disabled]{cursor:default;} .mon-mo button:not(.sel){opacity:.5;} /* alle aslabels even licht, ook die met data; enkel de gekozen in accent (op vraag van Tom, 14 okt) */ /* toekomst / vóór de eerste training */
