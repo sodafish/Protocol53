@@ -1181,7 +1181,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .stats>.sv>.hist-per{margin:0 0 1.6rem;}
 .stats>.sv>.hist-per button[data-hv]{font-size:13.5px;}
 .mon-n .mon-mo button{font-size:10.5px;} /* Year (12) en Day (28–31): kleinere as */
-.mon-c.off{cursor:default;} .mon-mo button[disabled]{cursor:default;opacity:.5;} /* toekomst / vóór de eerste training */
+.mon-c.off{cursor:default;} .mon-mo button[disabled]{cursor:default;} .mon-mo button:not(.sel){opacity:.5;} /* alle aslabels even licht, ook die met data; enkel de gekozen in accent (op vraag van Tom, 14 okt) */ /* toekomst / vóór de eerste training */
 .mon-n .mon-c span{font-size:10px;letter-spacing:-.02em;white-space:nowrap;}
 /* alle staven in de accentkleur (op vraag van Tom, 14 okt; vroeger inkt 20% en enkel de gekozen accent): de keuze toont zich in de waarde en de as */
 /* kolommen minmax(0,1fr): verborgen waarden (bv. '1h 20m') maakten kolommen breder, waardoor Sets en Cardio in Day niet gelijk liepen (op vraag van Tom, 14 okt) */
