@@ -1172,7 +1172,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-mo{padding-top:.7rem;} /* .4 → .7rem: ruimte voor het bolletje (6 px) van vandaag/deze maand */
 .mon-mo button{appearance:none;border:0;background:transparent;padding:0;font:inherit;font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;cursor:pointer;}
 .mon-mo button{position:relative;}
-.mon-mo button.now::before{content:'';position:absolute;left:50%;top:calc(4px - .7rem);width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--accent);} /* bolletje onder de lijn = vandaag / deze maand (op vraag van Tom, 14 okt) */
+.mon-mo button.now::before{display:none;content:'';position:absolute;left:50%;top:calc(4px - .7rem);width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--accent);} /* bolletje onder de lijn = vandaag / deze maand (op vraag van Tom, 14 okt); UIT (op vraag van Tom, 14 okt, later: de gekozen maand kleurt al accent) */
 .mon-mo button.sel{color:var(--accent);font-weight:600;}
 .mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-1.4rem 0 0;font-size:12.5px;color:var(--muted-soft);}
 .mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
