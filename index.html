@@ -1531,8 +1531,13 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wd-tabs{align-items:flex-end;}
 /* label boven elke pil: zachte beige band zonder rand, de pil valt over de onderkant (op vraag van Tom, 10 okt) */
 .wd-blk{display:flex;flex-direction:column;} /* geen labels Strength/Cardio meer: de groepering zit in de twee pillen (op vraag van Tom, 12 okt) */
-.wd-blk-str{flex:1 1 auto;min-width:0;}
-.wd-blk-card{flex:none;width:calc((100% - 34px - (var(--ns, 2) + var(--nc, 1) - 2) * 2px) / (var(--ns, 2) + var(--nc, 1)) * var(--nc, 1) + (var(--nc, 1) - 1) * 2px + 10px);} /* --nc = aantal tabs in de rechtse pil (Cardio, Group; 14 okt) */ /* alle tabs even breed, ook met 1 of 3 krachttabs: --ns = aantal krachttabs (34 = 14 tussenruimte + 2×(4 padding + 1 rand); 2 px gap per extra tab) */
+/* DRIE PILLEN MET LABEL (op vraag van Tom, 14 okt): Strength (Gym · eGym · Home) · Cardio · Group, elk met de beige band van 10–11 okt eronder.
+   Breedte: vaste rand (10 px + 2 px per extra tab) + rest naar rato van het aantal tabs (--n), dus alle tabs even breed. */
+.wd-blk{flex:var(--n,1) 1 calc(10px + (var(--n,1) - 1) * 2px);min-width:0;border-radius:26px;background:var(--paper-soft);}
+.wd-band{display:block;order:2;height:30px;padding-top:11px;box-sizing:border-box;text-align:center;font:600 10.5px 'Work Sans',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;}
+.wd-blk .wd-pill{margin-bottom:-4px;position:relative;z-index:1;}
+.wd-tabs.solo .wd-band{display:none;} .wd-tabs.solo .wd-blk{background:transparent;} .wd-tabs.solo .wd-blk .wd-pill{margin-bottom:0;} /* één pil zichtbaar: geen label */
+/* (vervallen 14 okt, nu flex met --n) */ .wd-blk-card-old{flex:none;width:calc((100% - 34px - (var(--ns, 2) + var(--nc, 1) - 2) * 2px) / (var(--ns, 2) + var(--nc, 1)) * var(--nc, 1) + (var(--nc, 1) - 1) * 2px + 10px);} /* --nc = aantal tabs in de rechtse pil (Cardio, Group; 14 okt) */ /* alle tabs even breed, ook met 1 of 3 krachttabs: --ns = aantal krachttabs (34 = 14 tussenruimte + 2×(4 padding + 1 rand); 2 px gap per extra tab) */
 .wtabs[hidden],.wd-blk[hidden],.wd-pill button[hidden]{display:none;}
 .wd-card{width:100%;}
 .wd-tabs{align-items:flex-start;}
@@ -1751,6 +1756,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
 .exr > .exr-in.has-u:not(:focus):not(:placeholder-shown){color:transparent;-webkit-text-fill-color:transparent;}
 .exr > .exr-in.has-u:not(:focus):not(:placeholder-shown) + .exr-u{display:flex;}
 .exr > .exr-in[hidden] + .exr-u{display:none!important;}
+.exr > input[type=hidden] + .exr-u{display:none!important;}
 </style>
 
 <header class="top">
@@ -1803,7 +1809,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       </div>
     </div>
     <div class="wtabs wdock" id="wtabs">
-      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home" hidden>Home</button></div></div><div class="wd-blk wd-blk-card"><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button><button type="button" role="tab" data-split="group">Group</button></div></div></div>
+      <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str" style="--n:2"><span class="wd-band" aria-hidden="true">Strength</span><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home" hidden>Home</button></div></div><div class="wd-blk wd-blk-card" style="--n:1"><span class="wd-band" aria-hidden="true">Cardio</span><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div><div class="wd-blk wd-blk-grp" style="--n:1"><span class="wd-band" aria-hidden="true">Group</span><div class="wd-pill wd-card wd-grp"><button type="button" role="tab" data-split="group">Group</button></div></div></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
       </div>
@@ -5003,7 +5009,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     tabs.querySelectorAll('[data-split]').forEach(function(b){ b.hidden=pv.indexOf(b.dataset.split)<0; });
     var ns=pv.filter(function(x){ return STR.indexOf(x)>=0; }).length, nc=pv.filter(function(x){ return x==='cardio'||x==='group'; }).length, card=nc>0, row=tabs.querySelector('.wd-tabs');
     tabs.hidden=pv.length<2;
-    var bs=tabs.querySelector('.wd-blk-str'), bc=tabs.querySelector('.wd-blk-card'); if(bs) bs.hidden=!ns; if(bc) bc.hidden=!card;
+    var bs=tabs.querySelector('.wd-blk-str'), bc=tabs.querySelector('.wd-blk-card'), bg=tabs.querySelector('.wd-blk-grp'); if(bs){ bs.hidden=!ns; bs.style.setProperty('--n',ns||1); } if(bc) bc.hidden=pv.indexOf('cardio')<0; if(bg) bg.hidden=pv.indexOf('group')<0;
+    if(row) row.classList.toggle('solo',[bs,bc,bg].filter(function(x){ return x&&!x.hidden; }).length<2); /* labels enkel als er meer dan één pil staat */
     if(row){ row.style.setProperty('--ns',ns||1); row.style.setProperty('--nc',nc||1); }
     if(pv.indexOf(cur)<0) cur=pv[0]; }
   document.addEventListener('p53-progs',function(){ var was=cur; layout(); if(cur!==was) set(cur); else apply(); });
@@ -5586,7 +5593,7 @@ window.__congrats=function(o){
     var c=cs.gridColumnStart, r=cs.gridRowStart;
     u.style.gridColumn=(c&&c!=='auto')?c+' / '+cs.gridColumnEnd:'-2 / -1'; u.style.gridRow=(r&&r!=='auto')?r+' / '+cs.gridRowEnd:'1'; }
   function setup(inp){
-    if(inp.__u) return; var li=inp.parentNode; if(!li||!li.classList||!li.classList.contains('exr')) return;
+    if(inp.__u||inp.type==='hidden') return; /* eGym: verborgen gewichtsveld krijgt geen eenheid (stond als 'kg' onder het vinkje; 14 okt) */ var li=inp.parentNode; if(!li||!li.classList||!li.classList.contains('exr')) return;
     var unit=(inp.getAttribute('placeholder')||'').trim(); if(!/^[a-z]{1,5}$/i.test(unit)) return;
     var u=document.createElement('span'); u.className='exr-u'; u.setAttribute('aria-hidden','true');
     u.appendChild(document.createElement('span')); var s=document.createElement('small'); s.textContent=unit; u.appendChild(s);
