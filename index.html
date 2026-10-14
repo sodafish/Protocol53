@@ -5943,6 +5943,8 @@ window.__congrats=function(o){
   function save(v,h){ try{ if(h) localStorage.setItem(key(v),h); else localStorage.removeItem(key(v)); }catch(e){}
     var at=Date.now(); try{ localStorage.setItem('fitlog-pg-at',String(at)); }catch(e){}
     if(col){ var d={at:at}; PAGES.forEach(function(p){ d[p]=stored(p)||null; }); col.doc('pages').set(d).catch(function(){}); } }
+  /* andere pagina in de navbar = bewerkmodus verlaten; wijzigingen worden bewaard zoals bij Done (op vraag van Tom, 14 okt) */
+  PAGES.forEach(function(v){ var s=sec(v); if(!s) return; new MutationObserver(function(){ if(s.hidden&&s.classList.contains('pg-editing')) stop(v); }).observe(s,{attributes:true,attributeFilter:['hidden']}); });
   /* plakken = enkel platte tekst (geen opmaak van elders) */
   document.addEventListener('paste',function(e){ var t=e.target.closest&&e.target.closest('.pg-editing [contenteditable="true"]'); if(!t) return; e.preventDefault();
     var txt=(e.clipboardData||window.clipboardData).getData('text/plain'); document.execCommand('insertText',false,txt); });
