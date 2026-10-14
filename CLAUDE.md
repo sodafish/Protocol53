@@ -109,7 +109,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   Kleine fijnregels voor smalle toestellen (≤ 380/360/350 px) blijven media queries. Geen nieuwe breakpoints voor brede schermen toevoegen.
 
 ## Cardio
-- Indoor heeft ook 'HIIT Session' (`c-hiit`, info `chiit`, enkel tekst, minuten; op vraag van Tom, 13 okt); migratie `cfg.hi` zet hem aan bij bestaande cardiokeuzes.
+- Derde tussenkop in Cardio (g8): **Group Sessions** (op vraag van Tom, 14 okt; `SUBS.g8[2]`, `cat()` = 2 voor `c-hiit|c-core`), na Outdoor en Indoor. Daarin 'HIIT Session' (`c-hiit`, info `chiit`, enkel tekst, minuten; 13 okt eerst onder Indoor; migratie `cfg.hi`) en 'Core Session' (`c-core`, info `ccore`, 'Core & abs · 30–45 min', enkel tekst, minuten, standaard aan; migratie `cfg.cs` zet hem aan bij bestaande cardiokeuzes).
 
 ## Navigatie
 - Navbar-hoogte (op vraag van Tom, 10 okt): `bottom: var(--nav-b)` = max(10 px, veilige zone − 12 px) → op een iPhone met streep ±22 px van de onderrand i.p.v. ±44 px; de End workout-pil volgt mee.
