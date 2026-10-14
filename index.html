@@ -5490,12 +5490,12 @@ window.__congrats=function(o){
      Month = zoals hierboven. Day = elke dag van de kalendermaand (dunne staven, enkel de gekozen dag toont zijn waarde), groot getal = gekozen kalenderdag
      ('24 sets on Tue 13 Oct'; geen dag gekozen = maandtotaal); Training days valt weg (de kalenderbolletjes doen dat al). Year = jan–dec van het jaar
      van de kalendermaand, groot getal = jaartotaal, gekozen maand accent. Keuze per toestel in localStorage 'fitlog-hist-view' (d/m/y). */
-  var HVKEY='fitlog-hist-view', hv='y'; try{ hv=localStorage.getItem(HVKEY)||'y'; }catch(e){} if(hv!=='d') hv='y'; /* 'y' = Month (12 maanden; op vraag van Tom, 14 okt vervangt het de 6-maandenweergave), oude 'm' → 'y' */
+  var HVKEY='fitlog-hist-view', hv='y'; /* ENKEL YEAR (op vraag van Tom, 14 okt): tab Month en de tekst-tabs zijn weg; de d-code blijft maar is onbereikbaar */ /* 'y' = Month (12 maanden; op vraag van Tom, 14 okt vervangt het de 6-maandenweergave), oude 'm' → 'y' */
   var WS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   function nf(n){ return n>=1000?n.toLocaleString('en-GB'):n; }
   function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'), per=document.getElementById('histPer'); if(!box||!sc) return;
     var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; if(per) per.hidden=true; return; } box.hidden=false;
-    if(per){ per.hidden=false; per.querySelectorAll('button[data-hv]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.hv===hv?'true':'false'); }); }
+    if(per){ per.hidden=true; per.querySelectorAll('button[data-hv]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.hv===hv?'true':'false'); }); }
     var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), f=keys[0].split('-'); monFirst=mi(+f[0],+f[1]-1);
     var selI=mi(ym.y,ym.m), today=ymd(Date.now());
     var Z={d:0,s:0,c:0,ed:0,es:0,gm:0};
