@@ -109,7 +109,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   Kleine fijnregels voor smalle toestellen (≤ 380/360/350 px) blijven media queries. Geen nieuwe breakpoints voor brede schermen toevoegen.
 
 ## Cardio en Group
-- Tab bovenaan Workout heet 'Gym' (op vraag van Tom, 14 okt; intern `full`). Elders (Settings, History) blijft 'Open Gym'.
+- 'Open Gym' heet op het scherm OVERAL 'Gym' (op vraag van Tom, 14 okt): tab, Settings › Programs/Warm-up/'Open the app on', History-kopjes ('Gym · Upper Body', 'eGym + Gym'). Intern blijft het `full`; waar deze notities 'Open Gym' zeggen, is dat dit programma.
 - GROUP = vijfde programma (op vraag van Tom, 14 okt; variant A uit een voorbeeld: rechtse pil Cardio · Group naast de krachtpil). Groep `g11` 'Group' (kop zoals Cardio: zonder nummer, `.grp-t` 14 px lager, `body.split-group` = padding-top 1.8rem), `SPLIT.group=['g11']`, tab `data-split="group"` in `.wd-card`, Settings › Programs-rij 'Group · Classes', 'Open the app on' kent `group`. Rijen: 'HIIT Session' (`c-hiit`, info `chiit`) en 'Core Session' (`c-core`, info `ccore`), minuten; sleutels ongewijzigd, dus de metingen bleven. POP.g11. Cardio (g8) heeft weer enkel Outdoor/Indoor.
 - Migratie `cfg.gr` (ook in `fresh()`, samen met `hi`/`cs`): c-hiit/c-core uit `cfg.g8` en `cfg.order.g8` → `cfg.g11` (wat aan stond; niets = beide). Programma's: standaard full/egym/cardio/group (Home uit); bestaande `p53-progs` krijgen eenmalig `group` erbij (vlag `p53-progs-gr`, in het `<head>`-script).
 - Tabbreedte: `.wd-blk-card` rekent met `--ns` (krachttabs) én `--nc` (tabs in de rechtse pil, gezet in `layout()`), dus alle zichtbare tabs zijn even breed en de rij blijft volle breedte als er programma's uit staan.
