@@ -1149,8 +1149,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-hd{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;margin:0 0 .7rem;}
 .mon-hd .mon-l{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
 .mon-hd b{font-family:'Fraunces',Georgia,serif;font-size:20px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
-.mon-hd b small{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:500;color:var(--muted);margin-left:0;} /* geen ruimte tussen waarde en tekst: '14days' (op vraag van Tom, 14 okt) */
-.mon-hd b small.sp{margin-left:.3rem;} /* Cardio/Group (geen eenheidswoord): wel ruimte na '45m' (op vraag van Tom, 14 okt) */
+.mon-hd b small{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:500;color:var(--muted);margin-left:.3rem;}
 .mon-hd b small.u{font-size:13px;margin:0 .1rem 0 .05rem;}
 .mon-hd b small .mon-w{font-style:normal;font-weight:400;} /* 'so far in' lichter dan de maand/het jaar (op vraag van Tom, 14 okt) */
 .mon-hd b small .mon-m{font-style:normal;font-family:'Fraunces',Georgia,serif;font-size:20px;font-weight:600;color:var(--ink);} /* maand/jaar zoals het grote getal (op vraag van Tom, 14 okt) */
@@ -5526,7 +5525,7 @@ window.__congrats=function(o){
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
       var H=46;
-      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?(cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>')):nf(cs[k]))+'<small'+(t[2]?'':' class="sp"')+'>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?(cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>')):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
         L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.edge||'')+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(H*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+(r.run?' now':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
