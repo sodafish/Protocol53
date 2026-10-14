@@ -5913,13 +5913,22 @@ window.__congrats=function(o){
   }
   function bar(v){ var s=sec(v), b=s.querySelector(':scope > .pg-ed'); if(!b){ b=document.createElement('div'); b.className='pg-ed'; s.appendChild(b); }
     var on=s.classList.contains('pg-editing');
-    b.innerHTML=on?'<p class="pg-hint">Tap a text to change it. Use × to delete and + to add.</p><div class="pg-row pg-ed-row"><button type="button" class="cx-add pg-addsec">'+PLUS+'Add section</button><button type="button" class="cx-add pg-done">Done</button></div>'+((stored(v)||html(v)!==DEF[v])?'<button type="button" class="pg-reset">Reset to default</button>':'')
+    b.innerHTML=on?'<p class="pg-hint">Tap a text to change it. Use × to delete and + to add.</p><div class="pg-row pg-ed-row">'+(s.querySelector('table.stack')?'<button type="button" class="cx-add pg-addgrp">'+PLUS+'Add food group</button>':'')+'<button type="button" class="cx-add pg-addsec">'+PLUS+'Add section</button><button type="button" class="cx-add pg-done">Done</button></div>'+((stored(v)||html(v)!==DEF[v])?'<button type="button" class="pg-reset">Reset to default</button>':'')
                :'<button type="button" class="cx-add pg-edit">'+PEN+'Edit page</button>';
     var e=b.querySelector('.pg-edit'); if(e) e.addEventListener('click',function(){ start(v); });
     var d=b.querySelector('.pg-done'); if(d) d.addEventListener('click',function(){ stop(v); });
     var a=b.querySelector('.pg-addsec'); if(a) a.addEventListener('click',function(){ var n=document.createElement('div'); n.className='section';
       n.innerHTML='<div class="section-title">New section</div><div class="tip"><ul><li>New point</li></ul></div>';
       var anchor=[].filter.call(s.childNodes,keep)[0]; s.insertBefore(n,anchor); editable(s); adders(n); var f=n.querySelector('.section-title'); f.focus(); selAll(f); });
+    /* volledige voedingsgroep (titel + tabel met één rij), na de laatste groep met een tabel (op vraag van Tom, 14 okt) */
+    var g=b.querySelector('.pg-addgrp'); if(g) g.addEventListener('click',function(){ var all=[].filter.call(s.querySelectorAll(':scope > .section'),function(x){ return x.querySelector('table.stack'); }), last=all[all.length-1]; if(!last) return;
+      var n=clean(last.cloneNode(true)); n.querySelectorAll('.ed-add').forEach(function(x){ x.remove(); });
+      var t=n.querySelector('.section-title'); if(t) t.textContent='New group';
+      n.querySelectorAll(':scope > :not(.section-title):not(.scroll)').forEach(function(x){ x.remove(); });
+      var tb=n.querySelector('tbody'); [].slice.call(tb.rows,1).forEach(function(r){ r.remove(); }); var r0=tb.rows[0];
+      if(r0){ r0.className='row-groen'; [].forEach.call(r0.cells,function(td,i){ var bd=td.querySelector('.badge'); if(bd){ bd.className='badge b-groen'; bd.textContent='Often'; } else td.textContent=i===0?'New food':''; }); }
+      var nx=last.nextSibling; while(nx&&nx.nodeType===1&&nx.classList.contains('ed-add')) nx=nx.nextSibling;
+      last.parentNode.insertBefore(n,nx); editable(s); adders(n); if(t){ t.focus(); selAll(t); n.scrollIntoView({block:'center'}); } });
     var r=b.querySelector('.pg-reset'); if(r) r.addEventListener('click',function(){ var go=window.p53Confirm?window.p53Confirm({title:'Reset this page?',msg:'Your changes to this page are removed and the original text comes back.',ok:'Reset',danger:true}):Promise.resolve(confirm('Reset?'));
       go.then(function(ok){ if(!ok) return; s.classList.remove('pg-editing'); put(v,DEF[v]); save(v,null); bar(v); }); });
   }
