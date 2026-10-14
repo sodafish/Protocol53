@@ -1179,8 +1179,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-row,.mon-mo{grid-template-columns:repeat(var(--mon-n,6),minmax(0,1fr));} .mon-c{min-width:0;}
 .mon-blk.dense .mon-c i{width:100%;border-radius:2px 2px 0 0;}
 .mon-blk.dense .mon-c span{max-width:none;white-space:nowrap;}
-.mon-blk.dense .mon-c span{visibility:hidden;} .mon-blk.dense .mon-c.sel span{visibility:visible;font-size:10.5px;letter-spacing:0;} /* Month (dagen): enkel de gekozen/aangetikte staaf toont haar waarde, voluit ('1h 20m') en zo groot als de as (op vraag van Tom, 14 okt; vervangt waarde op elke staaf en de twee rijen) */
-.mon-blk.dense .mon-c.el span{align-self:flex-start;} .mon-blk.dense .mon-c.er span{align-self:flex-end;} /* eerste/laatste dagen: label naar binnen, niet over de rand */
+.mon-blk.one .mon-c span{visibility:hidden;} .mon-blk.one .mon-c.sel span{visibility:visible;font-size:10.5px;letter-spacing:0;white-space:nowrap;max-width:none;} /* Month (dagen) én Year (maanden; op vraag van Tom, 14 okt): enkel de gekozen/aangetikte staaf toont haar waarde, voluit ('1h 20m') en zo groot als de as (op vraag van Tom, 14 okt; vervangt waarde op elke staaf en de twee rijen) */
+.mon-blk.one .mon-c.el span{align-self:flex-start;} .mon-blk.one .mon-c.er span{align-self:flex-end;} /* eerste/laatste dagen: label naar binnen, niet over de rand */
 .mon-blk.dense .mon-c.sel span{position:relative;z-index:1;}
 /* gekozen staaf (= de dag/maand waarvan de lijst onderaan de oefeningen toont) in vol accent, de andere iets lichter (accent 72% op papier), zodat de keuze opvalt (op vraag van Tom, 14 okt; zwart geprobeerd en teruggedraaid) */
 .mon-c i{background-color:color-mix(in srgb,var(--accent) 72%,var(--paper));} .mon-c.sel i{background-color:var(--accent);}
@@ -5414,9 +5414,8 @@ window.__congrats=function(o){
     var L=[], cs, when, rng, prevOff, nextOff, dense=false, hrS=hr;
     if(hv==='y'){ /* Y2: 12 maanden van het jaar */
       var y=ym.y, run=y===cur.getFullYear(), yl=[];
-      for(var m=0;m<12;m++){ var i=mi(y,m), a=A[y+'-'+('0'+(m+1)).slice(-2)]||Z; yl.push(a); L.push(row(a,{i:i,y:y,m:m,lab:MS[m].charAt(0),sel:i===selI,run:i===nowI,off:i>nowI||i<monFirst,aria:MON[m]+' '+y})); }
+      for(var m=0;m<12;m++){ var i=mi(y,m), a=A[y+'-'+('0'+(m+1)).slice(-2)]||Z; yl.push(a); L.push(row(a,{i:i,y:y,m:m,edge:m===0?' el':m===11?' er':'',lab:MS[m].charAt(0),sel:i===selI,run:i===nowI,off:i>nowI||i<monFirst,aria:MON[m]+' '+y})); }
       cs=row(sum(yl),{}); when=run?'so far in '+y:'in '+y; rng=String(y); prevOff=y<=Math.floor(monFirst/12); nextOff=y>=cur.getFullYear();
-      hrS=function(min){ min=Math.round(min); return min>=60?Math.round(min/60)+'h':min+'m'; }; /* smalle staven: '12h', '40m' */
     }else if(hv==='d'){ /* D3: elke dag van de kalendermaand */
       var y2=ym.y, m2=ym.m, n=new Date(y2,m2+1,0).getDate(), mk=y2+'-'+('0'+(m2+1)).slice(-2), sd=sel&&sel.slice(0,7)===mk?sel:null; dense=true;
       for(var d=1;d<=n;d++){ var k=mk+'-'+('0'+d).slice(-2), o=days[k], a2=o?{d:1,s:o.sets,c:o.min,es:o.egs||0,gm:o.gmin||0,ed:Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })?1:0}:Z;
@@ -5434,7 +5433,7 @@ window.__congrats=function(o){
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
       var H=46;
-      return '<div class="mon-blk'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
         L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.edge||'')+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(H*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+(r.run?' now':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
