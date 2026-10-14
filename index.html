@@ -1146,7 +1146,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-hd b small{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:500;color:var(--muted);margin-left:.3rem;}
 .mon-hd b small.u{font-size:13px;margin:0 .1rem 0 .05rem;}
 .mon-c span{text-align:center;letter-spacing:-.01em;line-height:1.15;max-width:100%;} /* lange cardiotijd breekt netjes op de spatie (12h / 45min) */
-.mon-row,.mon-mo{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.mon-row,.mon-mo{display:grid;grid-template-columns:repeat(var(--mon-n,6),1fr);gap:var(--mon-g,8px);}
 .mon-row{height:62px;align-items:end;border-bottom:1px solid var(--line);}
 .mon-c{appearance:none;border:0;background:transparent;padding:0;margin:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
@@ -1166,6 +1166,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-1.4rem 0 0;font-size:12.5px;color:var(--muted-soft);}
 .mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
 .mon-nav button[disabled]{opacity:.35;cursor:default;}
+/* Day · Month · Year boven de grafieken (op vraag van Tom, 14 okt): tekst-tabs zoals de periode op Strength */
+.stats>.sv>.hist-per{margin:0 0 1.6rem;}
+.stats>.sv>.hist-per button[data-hv]{font-size:13.5px;}
+.mon-n .mon-mo button{font-size:10.5px;} /* Year (12) en Day (28–31): kleinere as */
+.mon-c.off{cursor:default;} .mon-mo button[disabled]{cursor:default;opacity:.5;} /* toekomst / vóór de eerste training */
+.mon-n .mon-c span{font-size:10px;letter-spacing:-.02em;white-space:nowrap;}
+.mon-blk.dense .mon-c i{width:100%;border-radius:2px 2px 0 0;}
+.mon-blk.dense .mon-c span{visibility:hidden;} .mon-blk.dense .mon-c.sel span{visibility:visible;} /* Day: enkel de gekozen dag toont zijn waarde */
+.mon-blk.dense .mon-c.sel span{position:relative;z-index:1;}
 .cal-none{margin:1.2rem 0 0;font-size:14px;color:var(--muted-soft);}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
 .cal-title{flex:1;text-align:center;display:flex;flex-direction:column;gap:.1rem;}
@@ -2012,6 +2021,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       </div>
       <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">History</h2>
+        <div class="stats-per hist-per" id="histPer" role="group" aria-label="History view" hidden><button type="button" data-hv="d" aria-pressed="false">Day</button><button type="button" data-hv="m" aria-pressed="true">Month</button><button type="button" data-hv="y" aria-pressed="false">Year</button></div>
         <div class="mon" id="calMon" hidden><div id="calMonS"></div>
           <div class="mon-nav"><button type="button" id="monPrev">‹ Earlier</button><span id="monRange"></span><button type="button" id="monNext">Later ›</button></div>
         </div>
@@ -5373,35 +5383,70 @@ window.__congrats=function(o){
   function mi(y,m){ return y*12+m; }
   /* cardio in uren en minuten (op vraag van Tom, 10 okt): '40m', '1h 20m', '7h 35m', '2h' */
   function hr(min){ min=Math.round(min); var h=Math.floor(min/60), m=min%60; return h?(h+'h'+(m?' '+m+'m':'')):m+'m'; }
-  function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'); if(!box||!sc) return;
-    var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; return; } box.hidden=false;
+  /* weergave Day · Month · Year (op vraag van Tom, 14 okt; gekozen uit voorstellen: Day = D3 'hele maand per dag', Year = Y2 '12 maanden van het jaar').
+     Month = zoals hierboven. Day = elke dag van de kalendermaand (dunne staven, enkel de gekozen dag toont zijn waarde), groot getal = gekozen kalenderdag
+     ('24 sets on Tue 13 Oct'; geen dag gekozen = maandtotaal); Training days valt weg (de kalenderbolletjes doen dat al). Year = jan–dec van het jaar
+     van de kalendermaand, groot getal = jaartotaal, gekozen maand accent. Keuze per toestel in localStorage 'fitlog-hist-view' (d/m/y). */
+  var HVKEY='fitlog-hist-view', hv='m'; try{ hv=localStorage.getItem(HVKEY)||'m'; }catch(e){} if(!/^[dmy]$/.test(hv)) hv='m';
+  var WS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  function nf(n){ return n>=1000?n.toLocaleString('en-GB'):n; }
+  function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'), per=document.getElementById('histPer'); if(!box||!sc) return;
+    var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; if(per) per.hidden=true; return; } box.hidden=false;
+    if(per){ per.hidden=false; per.querySelectorAll('button[data-hv]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.hv===hv?'true':'false'); }); }
     var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), f=keys[0].split('-'); monFirst=mi(+f[0],+f[1]-1);
-    var selI=mi(ym.y,ym.m), minEnd=Math.min(nowI,monFirst+5);
-    if(winEnd==null) winEnd=nowI;
-    if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
-    winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
+    var selI=mi(ym.y,ym.m), minEnd=Math.min(nowI,monFirst+5), today=ymd(Date.now());
     var Z={d:0,s:0,c:0,ed:0,es:0,gm:0};
     var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0,ed:0,es:0,gm:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; a.es+=o.egs||0; a.gm+=o.gmin||0; /* Group-minuten (14 okt) */
       if(Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })) a.ed++; }); /* eGym-dagen en -sets (op vraag van Tom: enkel zichtbaar als er eGym was) */
-    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||Z; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c),h:hr(a.c),ed:a.ed,es:a.es,gm:Math.round(a.gm),gh:hr(a.gm)}); }
-    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||Z; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c),ed:a0.ed,es:a0.es,gm:Math.round(a0.gm)}; } sel.h=hr(sel.c); sel.gh=hr(sel.gm);
-    var run=selI===nowI, when=run?'so far in '+MON[sel.m]:'in '+MON[sel.m]+(sel.y!==cur.getFullYear()?' '+sel.y:'');
-    function lab(r,j){ return MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); }
-    var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||sel.ed>0;
+    function row(a,x){ x.d=a.d; x.s=a.s; x.c=Math.round(a.c); x.h=hr(a.c); x.ed=a.ed; x.es=a.es; x.gm=Math.round(a.gm); x.gh=hr(a.gm); return x; }
+    function sum(list){ var t={d:0,s:0,c:0,ed:0,es:0,gm:0}; list.forEach(function(a){ t.d+=a.d; t.s+=a.s; t.c+=a.c; t.ed+=a.ed; t.es+=a.es; t.gm+=a.gm; }); return t; }
+    var L=[], cs, when, rng, prevOff, nextOff, dense=false, hrS=hr;
+    if(hv==='y'){ /* Y2: 12 maanden van het jaar */
+      var y=ym.y, run=y===cur.getFullYear(), yl=[];
+      for(var m=0;m<12;m++){ var i=mi(y,m), a=A[y+'-'+('0'+(m+1)).slice(-2)]||Z; yl.push(a); L.push(row(a,{i:i,y:y,m:m,lab:MS[m].charAt(0),sel:i===selI,run:i===nowI,off:i>nowI||i<monFirst,aria:MON[m]+' '+y})); }
+      cs=row(sum(yl),{}); when=run?'so far in '+y:'in '+y; rng=String(y); prevOff=y<=Math.floor(monFirst/12); nextOff=y>=cur.getFullYear();
+      hrS=function(min){ min=Math.round(min); return min>=60?Math.round(min/60)+'h':min+'m'; }; /* smalle staven: '12h', '40m' */
+    }else if(hv==='d'){ /* D3: elke dag van de kalendermaand */
+      var y2=ym.y, m2=ym.m, n=new Date(y2,m2+1,0).getDate(), mk=y2+'-'+('0'+(m2+1)).slice(-2), sd=sel&&sel.slice(0,7)===mk?sel:null; dense=true;
+      for(var d=1;d<=n;d++){ var k=mk+'-'+('0'+d).slice(-2), o=days[k], a2=o?{d:1,s:o.sets,c:o.min,es:o.egs||0,gm:o.gmin||0,ed:Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })?1:0}:Z;
+        L.push(row(a2,{k:k,lab:(d===1||(d%7===1&&d<29))?d:'',sel:k===sd,run:k===today,off:k>today,aria:d+' '+MON[m2]})); }
+      if(sd){ var p=sd.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]); cs=L[+p[2]-1]; when='on '+WS[dt.getDay()]+' '+dt.getDate()+' '+MS[dt.getMonth()]; }
+      else{ cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]; }
+      rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI;
+    }else{ /* Month: 6 maanden */
+      if(winEnd==null) winEnd=nowI;
+      if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
+      winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
+      for(var j=winEnd-5;j<=winEnd;j++){ var y3=Math.floor(j/12), m3=j%12; L.push(row(A[y3+'-'+('0'+(m3+1)).slice(-2)]||Z,{i:j,y:y3,m:m3,sel:j===selI,run:j===nowI,aria:MON[m3]+' '+y3})); }
+      L.forEach(function(r,j){ r.lab=MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); });
+      cs=null; L.forEach(function(r){ if(r.sel) cs=r; }); if(!cs) cs=row(A[ym.y+'-'+('0'+(ym.m+1)).slice(-2)]||Z,{y:ym.y,m:ym.m});
+      when=selI===nowI?'so far in '+MON[cs.m]:'in '+MON[cs.m]+(cs.y!==cur.getFullYear()?' '+cs.y:'');
+      var a0=L[0], z0=L[5]; rng=MS[a0.m]+(a0.y!==z0.y?' '+a0.y:'')+' – '+MS[z0.m]+' '+z0.y; prevOff=winEnd<=minEnd; nextOff=winEnd>=nowI;
+    }
+    var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
-    var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets']]; if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
+    var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
+    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
+    var gs='--mon-n:'+L.length+(hv==='m'?'':';--mon-g:'+(dense?'2px':'3px'));
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
-      L.forEach(function(r){ mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
-      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?sel[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):sel[k])+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+sel[EGK[k]]+' '+(k==='d'?(sel[EGK[k]]===1?'day':'days'):(sel[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row">'+
-        L.map(function(r){ var v=r[k], vl=v; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(r[MK[k]||k]?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+vl+'</span><i style="height:'+(r[MK[k]||k]?Math.max(3,Math.round(46*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
-        '</div><div class="mon-mo" aria-hidden="true">'+L.map(function(r,j){ return '<button type="button" tabindex="-1" class="'+(r.i===selI?'sel':'')+'" data-i="'+r.i+'">'+lab(r,j)+'</button>'; }).join('')+'</div></div>'; }).join('');
-    sc.querySelectorAll('[data-i]').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
-    var a=L[0], z=L[5]; document.getElementById('monRange').textContent=MS[a.m]+(a.y!==z.y?' '+a.y:'')+' – '+MS[z.m]+' '+z.y;
-    document.getElementById('monPrev').disabled=winEnd<=minEnd; document.getElementById('monNext').disabled=winEnd>=nowI;
+      L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
+      return '<div class="mon-blk'+(dense?' dense':'')+(hv==='m'?'':' mon-n')+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+        L.map(function(r){ var v=r[k], vl=MK[k]?(hv==='m'?v:hrS(r[MK[k]])):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
+          return '<button type="button" class="mon-c'+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(46*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
+        '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
+    sc.querySelectorAll('[data-i]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
+    sc.querySelectorAll('[data-day]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ sel=pick=b.dataset.day; stay=null; render(); }); });
+    document.getElementById('monRange').textContent=rng;
+    document.getElementById('monPrev').disabled=prevOff; document.getElementById('monNext').disabled=nextOff;
   }
-  /* 6 maanden verder of terug; de kalender springt naar de laatste maand van het nieuwe venster */
-  function monPage(dir){ var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), minEnd=Math.min(nowI,(monFirst==null?nowI:monFirst+5));
+  /* Earlier/Later en vegen: Month = 6 maanden (kalender springt naar de laatste maand van het nieuwe venster), Day = 1 maand, Year = 1 jaar
+     (kalender springt naar december, of naar deze maand in het lopende jaar); nooit vóór de eerste trainingsmaand of voorbij deze maand */
+  function monPage(dir){ var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), fst=(monFirst==null?nowI:monFirst), minEnd=Math.min(nowI,fst+5);
+    if(hv==='d'){ var t=Math.max(fst,Math.min(nowI,mi(ym.y,ym.m)+dir)); if(t===mi(ym.y,ym.m)) return; ym={y:Math.floor(t/12),m:t%12}; render(); return; }
+    if(hv==='y'){ var y=ym.y+dir; if(y<Math.floor(fst/12)||y>cur.getFullYear()) return; var t2=Math.max(fst,Math.min(nowI,mi(y,11))); ym={y:Math.floor(t2/12),m:t2%12}; render(); return; }
     var ne=Math.max(minEnd,Math.min(nowI,winEnd+6*dir)); if(ne===winEnd) return; winEnd=ne; ym={y:Math.floor(ne/12),m:ne%12}; render(); }
+  (function(){ var per=document.getElementById('histPer'); if(!per) return;
+    per.querySelectorAll('button[data-hv]').forEach(function(b){ b.addEventListener('click',function(){ if(hv===b.dataset.hv) return; hv=b.dataset.hv; try{ localStorage.setItem(HVKEY,hv); }catch(e){} render(); }); }); })();
   (function(){ var p=document.getElementById('monPrev'), n=document.getElementById('monNext'), box=document.getElementById('calMon'); if(!p) return;
     p.addEventListener('click',function(){ monPage(-1); }); n.addEventListener('click',function(){ monPage(1); });
     var x0=null, y0=0; box.addEventListener('touchstart',function(e){ var t=e.touches[0]; x0=t.clientX; y0=t.clientY; },{passive:true});
@@ -5410,7 +5455,7 @@ window.__congrats=function(o){
   function render(){
     var days=data(), dk=Object.keys(days).sort(), c0=new Date(), fk=dk.length?dk[0].split('-'):null, fy=fk?+fk[0]:c0.getFullYear(), fm=fk?+fk[1]-1:c0.getMonth();
     if(ym.y*12+ym.m<fy*12+fm) ym={y:fy,m:fm}; /* niet terug vóór de eerste maand met data (op vraag van Tom, 10 okt) */
-    renderMon(days); var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
+    var y=ym.y, m=ym.m, first=new Date(y,m,1), lead=(first.getDay()+6)%7, n=new Date(y,m+1,0).getDate(), today=ymd(Date.now());
     document.getElementById('calMonth').textContent=MON[m]+(y!==now.getFullYear()?' '+y:'');
     var cnt=0, msets=0, mmin=0, lastOn=null, html='', key='';
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(function(w){ html+='<span class="cal-wd" aria-hidden="true">'+w.charAt(0)+'</span>'; });
@@ -5426,6 +5471,7 @@ window.__congrats=function(o){
     document.querySelector('.cal-nav[data-m="-1"]').disabled=(y*12+m<=fy*12+fm);
     if(stay&&stay===sel&&sel.slice(0,7)===key.slice(0,7)){ /* na een edit: op deze dag blijven, ook als ze nu leeg is */ }
     else{ stay=null; if(!sel||sel.slice(0,7)!==key.slice(0,7)||(!days[sel]&&sel!==pick)) sel=lastOn; }
+    renderMon(days); /* na de keuze van de dag: Day-view (op vraag van Tom, 14 okt) toont die dag */
     /* ook lege dagen (niet in de toekomst) zijn aantikbaar, om er achteraf een eGym-sessie op te zetten (op vraag van Tom, 11 okt) */
     grid.querySelectorAll('.cal-d:not(.fut)').forEach(function(b){ b.classList.toggle('sel',b.dataset.d===sel);
       b.addEventListener('click',function(){ sel=pick=b.dataset.d; render(); }); });
