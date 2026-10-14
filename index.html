@@ -1806,6 +1806,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
 .exr > .exr-in.has-u:not(:focus):not(:placeholder-shown) + .exr-u{display:flex;}
 .exr > .exr-in[hidden] + .exr-u{display:none!important;}
 .exr > input[type=hidden] + .exr-u{display:none!important;}
+.mon-nav[hidden]{display:none!important;}
 </style>
 
 <header class="top">
@@ -5535,7 +5536,7 @@ window.__congrats=function(o){
     sc.querySelectorAll('[data-i]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
     sc.querySelectorAll('[data-day]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ sel=pick=b.dataset.day; stay=null; render(); }); });
     document.getElementById('monRange').textContent=rng;
-    document.getElementById('monPrev').disabled=prevOff; document.getElementById('monNext').disabled=nextOff;
+    document.getElementById('monPrev').disabled=prevOff; document.getElementById('monNext').disabled=nextOff; var mnv=document.querySelector('.mon-nav'); if(mnv) mnv.hidden=prevOff&&nextOff; /* Earlier/Later enkel als er minstens twee jaar te zien zijn (op vraag van Tom, 14 okt) */
   }
   /* Earlier/Later en vegen: Month = 6 maanden (kalender springt naar de laatste maand van het nieuwe venster), Day = 1 maand, Year = 1 jaar
      (kalender springt naar december, of naar deze maand in het lopende jaar); nooit vóór de eerste trainingsmaand of voorbij deze maand */
