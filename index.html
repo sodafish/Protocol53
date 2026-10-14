@@ -5574,7 +5574,8 @@ window.__congrats=function(o){
     var o=days[sel]||{ex:{},sets:0,ws:{},min:0,items:{}}, p=sel.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
     /* datum, dan per regel: kracht ('Open Gym + eGym · 25 sets') en cardio ('Cardio · 40 min') */
     var pg=progs(o), lines=[]; if(o.sets||pg) lines.push((pg||'Strength')+' · '+o.sets+(o.sets===1?' set':' sets')); if(o.min) lines.push('Cardio · '+Math.round(o.min)+' min');
-    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()], exl=exList(o,WU[sel]); box.innerHTML='<div class="cx-top"><b>'+dl+'</b>'+(exl?'<span class="cx-hint">Swipe to edit or delete</span>':'')+'</div>'+(exl||'<p class="cal-none">Nothing logged on this day.</p>')+addBtn(o); box.dataset.dl=dl;
+    var dl=WD[dt.getDay()]+' '+dt.getDate()+' '+MON[dt.getMonth()], exl=exList(o,WU[sel]); var tot=amount(o.sets,o.min).replace(/(\d+) min cardio/,function(x,n){ return hr(+n)+' cardio'; }); /* kop = totaal van de dag i.p.v. de datum (die staat al in het grid); geen 'Swipe to edit or delete' meer (Edit session doet het ook) (op vraag van Tom, 14 okt) */
+    box.innerHTML=(tot?'<div class="cx-top"><b>'+tot+'</b></div>':'')+(exl||'<p class="cal-none">Nothing logged on this day.</p>')+addBtn(o); box.dataset.dl=dl;
     var ab=box.querySelector('.cx-add'); if(ab) ab.addEventListener('click',function(){ egsOpen(sel); });
   }
   /* oefeningen van die dag, gegroepeerd per programma (Open Gym, eGym, Cardio) in workoutvolgorde, met gemeten waarde + sets/reps;
