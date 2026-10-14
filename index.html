@@ -26,6 +26,8 @@
   window.__p53wuApply=function(sp){ if(!sp){ try{ sp=window.__split||localStorage.getItem('fitlog-split')||'full'; }catch(e){ sp='full'; } }
     document.documentElement.classList.toggle('no-wu',window.__p53wuOff().indexOf(sp)>=0); if(window.__p53listTop) window.__p53listTop(); };
   window.__p53wuApply();
+  /* Full · Upper · Lower aan/uit (Settings › Body split, op vraag van Tom, 14 okt): localStorage p53-half-on = '0' als uit; standaard aan */
+  window.__p53halfOn=function(){ try{ return localStorage.getItem('p53-half-on')!=='0'; }catch(e){ return true; } };
   /* niet ingelogd (geen p53-auth): app verbergen tot cloud.js beslist, anders flitst de lijst vóór het inlogscherm (13 okt) */
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
@@ -2407,6 +2409,11 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       <ul class="st-progs" id="stWu" role="group" aria-labelledby="stWuL"><li data-wu="full"><button type="button" role="checkbox" aria-checked="true" data-wu="full"><span>Gym</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li data-wu="egym"><button type="button" role="checkbox" aria-checked="true" data-wu="egym"><span>eGym</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li data-wu="home"><button type="button" role="checkbox" aria-checked="true" data-wu="home"><span>Home</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
       <p class="st-note">Show the warm-up at the top of these programs.</p>
     </div>
+    <div class="st-sec" id="stHalfSec">
+      <p class="set-lab" id="stHalfL">Body split</p>
+      <ul class="st-progs" id="stHalf" role="group" aria-labelledby="stHalfL"><li><button type="button" role="checkbox" aria-checked="true" id="stHalfBtn"><span>Full · Upper · Lower</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
+      <p class="st-note">Choose Full Body, Upper Body or Lower Body in Gym and Home.</p>
+    </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
       <select id="stStart" class="st-sel"><option value="full">Workout · Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option><option value="home">Workout · Home</option><option value="group">Workout · Group</option></select>
@@ -2459,6 +2466,12 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
     wl.querySelectorAll('button[data-wu]').forEach(function(b){ b.addEventListener('click',function(){ var off=window.__p53wuOff(), k=b.dataset.wu, i=off.indexOf(k);
       if(i>=0) off.splice(i,1); else off.push(k); try{ if(off.length) localStorage.setItem('p53-warmup',JSON.stringify(off)); else localStorage.removeItem('p53-warmup'); }catch(e){}
       paintWu(); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }); }); }
+  /* Settings › Body split: Full · Upper · Lower aan/uit (14 okt); sectie enkel als Gym of Home aan staat */
+  var hb=document.getElementById('stHalfBtn'), hsec=document.getElementById('stHalfSec');
+  function paintHalf(){ if(!hb) return; hb.setAttribute('aria-checked',String(window.__p53halfOn())); var pv=window.__p53progs(); if(hsec) hsec.hidden=pv.indexOf('full')<0&&pv.indexOf('home')<0; }
+  if(hb){ paintHalf(); document.addEventListener('p53-progs',paintHalf);
+    hb.addEventListener('click',function(){ var on=!window.__p53halfOn(); try{ if(on) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }catch(e){}
+      paintHalf(); document.dispatchEvent(new Event('p53-progs')); prefsPush(); }); }
   var pl=document.getElementById('stProgs');
   function paintProgs(){ if(!pl) return; var pv=window.__p53progs(); pl.querySelectorAll('button[data-prog]').forEach(function(b){ var on=pv.indexOf(b.dataset.prog)>=0, last=on&&pv.length===1;
     b.setAttribute('aria-checked',on?'true':'false'); if(last) b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); }); }
@@ -2469,13 +2482,14 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
      Pas bij een wijziging gaat de keuze naar de server; een serverversie wint als haar tijd (at) nieuwer is dan de laatste lokale wijziging (localStorage p53-prefs-at). */
   var pCol=null;
   function prefsPush(){ var s=null; try{ s=localStorage.getItem('p53-start'); }catch(e){}
-    var p={progs:window.__p53progs(),wu:window.__p53wuOff(),start:s||'full',at:Date.now()};
+    var p={progs:window.__p53progs(),wu:window.__p53wuOff(),start:s||'full',half:window.__p53halfOn(),at:Date.now()};
     try{ localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){} if(pCol) pCol.doc('prefs').set(p).catch(function(){}); }
   function prefsApply(p){ var la=0; try{ la=+localStorage.getItem('p53-prefs-at')||0; }catch(e){} if(!p||!(p.at>la)) return;
     var A=['full','egym','home','cardio','group'];
     try{ if(Array.isArray(p.progs)){ var pv=A.filter(function(x){ return p.progs.indexOf(x)>=0; }); if(pv.length) localStorage.setItem('p53-progs',JSON.stringify(pv)); }
       if(Array.isArray(p.wu)){ if(p.wu.length) localStorage.setItem('p53-warmup',JSON.stringify(p.wu)); else localStorage.removeItem('p53-warmup'); }
       if(typeof p.start==='string'&&/^(full|egym|home|cardio|group|last)$/.test(p.start)) localStorage.setItem('p53-start',p.start);
+      if(typeof p.half==='boolean'){ if(p.half) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }
       localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){}
     paintProgs(); paintWu(); syncStart(); document.dispatchEvent(new Event('p53-progs')); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }
   if(wl) wl.querySelectorAll('button[data-wu]').forEach(function(b){ b.addEventListener('click',prefsPush); });
@@ -5020,7 +5034,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   /* Full · Upper · Lower binnen Open Gym en Home (op vraag van Tom, 12 okt): per programma onthouden in localStorage fitlog-half {full,home}; Core (g6) enkel bij Lower (op vraag van Tom, 12 okt: 4 tegenover 3 groepen) */
   var HKEY='fitlog-half', HALF={upper:['g0','g2','g4','g5','g7'],lower:['g0','g1','g3','g6']}, half={}, hseg=document.getElementById('wdHalf');
   try{ half=JSON.parse(localStorage.getItem(HKEY)||'{}')||{}; }catch(e){ half={}; }
-  function hcur(){ return (cur==='full'||cur==='home')&&HALF[half[cur]]?half[cur]:'all'; }
+  function hon(){ return !window.__p53halfOn||window.__p53halfOn(); }
+  function hcur(){ return hon()&&(cur==='full'||cur==='home')&&HALF[half[cur]]?half[cur]:'all'; }
   if(hseg) hseg.querySelectorAll('[data-half]').forEach(function(b){ b.addEventListener('click',function(){
     if(cur!=='full'&&cur!=='home') return; half[cur]=b.dataset.half; try{ localStorage.setItem(HKEY,JSON.stringify(half)); }catch(e){} apply(); }); });
   /* tabbalk volgens Settings › Programs: 1 programma = geen tabs; Cardio + kracht = twee pillen (zonder label, 12 okt); enkel kracht = één pil */
@@ -5036,7 +5051,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function apply(){
     layout();
     var hv=hcur(), keep=hv!=='all'?HALF[hv]:SPLIT[cur];
-    if(hseg){ hseg.hidden=!(cur==='full'||cur==='home'); hseg.querySelectorAll('[data-half]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.half===hv?'true':'false'); }); }
+    if(hseg){ hseg.hidden=!hon()||!(cur==='full'||cur==='home'); hseg.querySelectorAll('[data-half]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.half===hv?'true':'false'); }); }
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
     /* nummering loopt door over de zichtbare groepen (op vraag van Tom, 12 okt): Upper = 1 Chest, 2 Back …; Lower = 1 Quads, 2 Hamstrings …; warm-up zonder nummer */
