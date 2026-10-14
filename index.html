@@ -19,7 +19,8 @@
   /* Group (14 okt): eenmalig aanzetten voor wie al een eigen keuze had (vlag p53-progs-gr) */ try{ var g0_=JSON.parse(localStorage.getItem('p53-progs')||'null'); if(Array.isArray(g0_)&&!localStorage.getItem('p53-progs-gr')){ if(g0_.indexOf('group')<0) g0_.push('group'); localStorage.setItem('p53-progs',JSON.stringify(g0_)); } localStorage.setItem('p53-progs-gr','1'); }catch(e){}
   window.__p53progs=function(){ var A=['full','egym','home','cardio','group'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-progs')||'null'); }catch(e){}
     v=Array.isArray(v)?A.filter(function(x){ return v.indexOf(x)>=0; }):[]; return v.length?v:['full','egym','cardio','group']; };
-  try{ var st=localStorage.getItem('p53-start')||'full'; /* standaard Open Gym (op vraag van Tom, 10 okt); 'last' = waar je stopte */ var pv=window.__p53progs(); if(/^(full|egym|home|cardio|group)$/.test(st)&&pv.indexOf(st)<0) st=pv[0]; if(/^(full|egym|home|cardio|group)$/.test(st)){ localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',st); } }catch(e){}
+  /* start altijd op Workout, eerste zichtbare tab (op vraag van Tom, 14 okt; Settings › 'Open the app on' is weg) */
+  try{ localStorage.removeItem('p53-start'); localStorage.setItem('fitlog-where',JSON.stringify({v:'workout',y:0})); localStorage.setItem('fitlog-split',window.__p53progs()[0]); }catch(e){}
   /* warm-up per programma (Settings › Warm-up, op vraag van Tom, 13 okt; 12 okt nog één schakelaar voor alles): localStorage p53-warmup = JSON-lijst
      van programma's ZONDER warm-up (full/egym/home); oude waarde 'off' = alle drie uit. Klasse no-wu op <html> volgt de huidige tab. */
   window.__p53wuOff=function(){ var v=null; try{ v=localStorage.getItem('p53-warmup'); }catch(e){} if(v==='off') return ['full','egym','home']; try{ v=JSON.parse(v||'[]'); }catch(e){ v=[]; } return Array.isArray(v)?v:[]; };
@@ -2467,11 +2468,6 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       <button type="button" class="st-reset" id="stOrderReset" hidden>Reset to default order</button>
     </div>
     <div class="st-sec">
-      <label class="set-lab pf-f" for="stStart">Open the app on</label>
-      <select id="stStart" class="st-sel"><option value="full">Workout · Gym</option><option value="last">Where I left off</option><option value="cardio">Workout · Cardio</option><option value="egym">Workout · eGym</option><option value="home">Workout · Home</option><option value="group">Workout · Group</option></select>
-      <p class="st-note">Applies each time the app starts.</p>
-    </div>
-    <div class="st-sec">
       <form class="pf-form" id="pfForm" novalidate>
       <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
       <p class="st-note">Your age shows after Protocol.</p>
@@ -2501,11 +2497,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
     if(window.__p53theme) window.__p53theme(v); paint(); }); });
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
   function hide(){ if(!open) return; open=false; var a=document.activeElement; if(a&&sh.contains(a)&&a.blur) a.blur(); bg.classList.remove('on'); sh.classList.remove('on'); setTimeout(function(){ if(!open){ bg.hidden=true; sh.hidden=true; } },320); (last&&last.focus?last:btn).focus({preventScroll:true}); }
-  var ss=document.getElementById('stStart');
-  function syncStart(){ if(!ss) return; var pv=window.__p53progs(); [].forEach.call(ss.options,function(o){ var hide=o.value!=='last'&&pv.indexOf(o.value)<0; o.hidden=hide; o.disabled=hide; });
-    var sv='full'; try{ sv=localStorage.getItem('p53-start')||'full'; }catch(e){} if(!/^(full|egym|home|cardio|group|last)$/.test(sv)) sv='full';
-    if(sv!=='last'&&pv.indexOf(sv)<0){ sv=pv[0]; try{ localStorage.setItem('p53-start',sv); }catch(e){} } ss.value=sv; }
-  if(ss){ syncStart(); ss.addEventListener('change',function(){ try{ localStorage.setItem('p53-start',ss.value); }catch(e){} }); }
+  var ss=null; function syncStart(){} /* 'Open the app on' weg (14 okt): app start altijd op Workout, eerste tab */
   /* Programs: minstens één aan; de laatste kan niet uit (op vraag van Tom, 11 okt) */
   /* Settings › Warm-up: groep g0 tonen of verbergen (klasse no-wu op <html>, localStorage p53-warmup; op vraag van Tom, 12 okt) */
   /* Settings: titel + kruisje blijven staan bij scrollen, lijntje eronder zodra er iets onder schuift (zoals het keuzeblad) */
@@ -2577,13 +2569,12 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
      Pas bij een wijziging gaat de keuze naar de server; een serverversie wint als haar tijd (at) nieuwer is dan de laatste lokale wijziging (localStorage p53-prefs-at). */
   var pCol=null;
   function prefsPush(){ var s=null; try{ s=localStorage.getItem('p53-start'); }catch(e){}
-    var p={progs:window.__p53progs(),wu:window.__p53wuOff(),start:s||'full',half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),at:Date.now()};
+    var p={progs:window.__p53progs(),wu:window.__p53wuOff(),half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),at:Date.now()};
     try{ localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){} if(pCol) pCol.doc('prefs').set(p).catch(function(){}); }
   function prefsApply(p){ var la=0; try{ la=+localStorage.getItem('p53-prefs-at')||0; }catch(e){} if(!p||!(p.at>la)) return;
     var A=['full','egym','home','cardio','group'];
     try{ if(Array.isArray(p.progs)){ var pv=A.filter(function(x){ return p.progs.indexOf(x)>=0; }); if(pv.length) localStorage.setItem('p53-progs',JSON.stringify(pv)); }
       if(Array.isArray(p.wu)){ if(p.wu.length) localStorage.setItem('p53-warmup',JSON.stringify(p.wu)); else localStorage.removeItem('p53-warmup'); }
-      if(typeof p.start==='string'&&/^(full|egym|home|cardio|group|last)$/.test(p.start)) localStorage.setItem('p53-start',p.start);
       if(typeof p.half==='boolean'){ if(p.half) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }
       if(p.tabs==='bar') localStorage.setItem('p53-tabs','bar'); else if(p.tabs==='grouped') localStorage.removeItem('p53-tabs');
       if(Array.isArray(p.gorder)){ if(p.gorder.join()==='g1,g2,g3,g4,g5,g6,g7') localStorage.removeItem('p53-gorder'); else localStorage.setItem('p53-gorder',JSON.stringify(p.gorder)); }

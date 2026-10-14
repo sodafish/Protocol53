@@ -78,6 +78,8 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
   `t-kracht`, `t-voeding`): niet vertalen. Schermnamen van oefeningen moeten gelijk zijn aan de sleutels
   in `NAMES` (bv. 'Dead Hang', 'One-Arm Dumbbell Row', 'Bodyweight Squats').
 
+- 'OPEN THE APP ON' IS WEG (op vraag van Tom, 14 okt): de app opent ALTIJD op Workout, bovenaan, op de eerste zichtbare tab (`__p53progs()[0]`, volgorde Gym · eGym · Home · Cardio · Group). Het `<head>`-script wist `p53-start` en zet bij elke start `fitlog-where`={v:'workout',y:0} en `fitlog-split`. `cfg/prefs` bevat geen `start` meer (oude waarde wordt genegeerd). Waar hieronder 'Open the app on', `#stStart`, `p53-start` of 'Where I left off' staat: vervallen.
+
 ## Profiel (leeftijd in de titel)
 - Alleen in de kop van de app: `Protocol <em id="ageNum">` + leeftijd; zonder geboortedatum 53. App-naam, `<title>` en
   icoon blijven generiek ('Protocol'). Het inlogscherm toont gewoon 'Protocol'.
