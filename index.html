@@ -5422,18 +5422,18 @@ window.__congrats=function(o){
         L.push(row(a2,{k:k,edge:d<=2?' el':d>=n-1?' er':'',lab:(d%2?d:''),sel:k===sd,run:k===today,off:k>today,aria:d+' '+MON[m2]})); }
       /* kop = maandtotaal, zoals Year het jaartotaal toont ('29 sets so far in October'; op vraag van Tom, 14 okt; vroeger de gekozen dag); de gekozen dag toont zijn waarde boven de staaf */
       cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]+(y2!==cur.getFullYear()?' '+y2:'');
-      rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI; /* enkel de gekozen staaf toont haar waarde, dus voluit: '1h 20m' (hrS = hr) */
+      rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI; hrS=function(min){ return Math.round(min); }; /* Month: cardio in minuten, kop '289 min so far in October', boven de gekozen staaf '30' (op vraag van Tom, 14 okt) */
     }
     /* geen eGym-onderscheid meer in History (op vraag van Tom, 14 okt: eerst bij Sets, daarna ook bij Training days weg); EGK leeg = geen lichter deel, geen '■ eGym'-regel */
     var EGK={}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
     var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
-    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
+    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h',hv==='d'?'min':'']); if(anyGr) ROWS.push(['Group','gh',hv==='d'?'min':'']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
     var gs='--mon-n:'+L.length+';--mon-g:'+(dense?'2px':'3px');
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
       var H=46;
-      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?(hv==='d'?nf(cs[MK[k]]):cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>')):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
         L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.edge||'')+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(H*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+(r.run?' now':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
