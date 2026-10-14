@@ -1159,9 +1159,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-key{margin:-.35rem 0 .7rem;font-size:12px;color:var(--muted);text-align:right;} /* enkel als er eGym in beeld is (op vraag van Tom) */
 .mon-key i{display:inline-block;width:8px;height:8px;border-radius:2px;background:color-mix(in srgb,var(--accent) 45%,var(--paper));box-shadow:inset 0 0 0 1px var(--line);margin-right:.3rem;vertical-align:0;}
 .mon-c.sel span{color:var(--accent);font-weight:600;}
-.mon-c.run i{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* lopende maand: gearceerd */
-.mon-mo{padding-top:.4rem;}
+.mon-c i,.mon-c i b{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* alle staven gearceerd (op vraag van Tom, 14 okt; vroeger enkel de lopende maand); de lopende dag/maand krijgt een bolletje onder de lijn (.mon-mo .now) */
+.mon-mo{padding-top:.55rem;} /* .4 → .55rem: ruimte voor het bolletje van vandaag/deze maand */
 .mon-mo button{appearance:none;border:0;background:transparent;padding:0;font:inherit;font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;cursor:pointer;}
+.mon-mo button{position:relative;}
+.mon-mo button.now::before{content:'';position:absolute;left:50%;top:calc(2px - .55rem);width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent);} /* bolletje onder de lijn = vandaag / deze maand (op vraag van Tom, 14 okt) */
 .mon-mo button.sel{color:var(--accent);font-weight:600;}
 .mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-1.4rem 0 0;font-size:12.5px;color:var(--muted-soft);}
 .mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
@@ -5418,8 +5420,8 @@ window.__congrats=function(o){
       else{ cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]; }
       rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI;
     }
-    /* eGym-deel van de staaf + regel '■ eGym' enkel nog bij Training days, niet meer bij Sets (op vraag van Tom, 14 okt) */
-    var EGK={d:'ed'}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
+    /* geen eGym-onderscheid meer in History (op vraag van Tom, 14 okt: eerst bij Sets, daarna ook bij Training days weg); EGK leeg = geen lichter deel, geen '■ eGym'-regel */
+    var EGK={}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
     var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
     if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
@@ -5429,7 +5431,7 @@ window.__congrats=function(o){
       return '<div class="mon-blk'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
         L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(46*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
-        '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
+        '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+(r.run?' now':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
     sc.querySelectorAll('[data-i]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
     sc.querySelectorAll('[data-day]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ sel=pick=b.dataset.day; stay=null; render(); }); });
     document.getElementById('monRange').textContent=rng;
