@@ -108,8 +108,12 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - De vroegere `@media(max-width:640px)`/`(max-width:520px)`-blokken zijn `@media all{…}` geworden: de gsm-regels gelden altijd.
   Kleine fijnregels voor smalle toestellen (≤ 380/360/350 px) blijven media queries. Geen nieuwe breakpoints voor brede schermen toevoegen.
 
-## Cardio
-- Derde tussenkop in Cardio (g8): **Group Sessions** (op vraag van Tom, 14 okt; `SUBS.g8[2]`, `cat()` = 2 voor `c-hiit|c-core`), na Outdoor en Indoor. Daarin 'HIIT Session' (`c-hiit`, info `chiit`, enkel tekst, minuten; 13 okt eerst onder Indoor; migratie `cfg.hi`) en 'Core Session' (`c-core`, info `ccore`, 'Core & abs · 30–45 min', enkel tekst, minuten, standaard aan; migratie `cfg.cs` zet hem aan bij bestaande cardiokeuzes).
+## Cardio en Group
+- GROUP = vijfde programma (op vraag van Tom, 14 okt; variant A uit een voorbeeld: rechtse pil Cardio · Group naast de krachtpil). Groep `g11` 'Group' (kop zoals Cardio: zonder nummer, `.grp-t` 14 px lager, `body.split-group` = padding-top 1.8rem), `SPLIT.group=['g11']`, tab `data-split="group"` in `.wd-card`, Settings › Programs-rij 'Group · Classes', 'Open the app on' kent `group`. Rijen: 'HIIT Session' (`c-hiit`, info `chiit`) en 'Core Session' (`c-core`, info `ccore`), minuten; sleutels ongewijzigd, dus de metingen bleven. POP.g11. Cardio (g8) heeft weer enkel Outdoor/Indoor.
+- Migratie `cfg.gr` (ook in `fresh()`, samen met `hi`/`cs`): c-hiit/c-core uit `cfg.g8` en `cfg.order.g8` → `cfg.g11` (wat aan stond; niets = beide). Programma's: standaard full/egym/cardio/group (Home uit); bestaande `p53-progs` krijgen eenmalig `group` erbij (vlag `p53-progs-gr`, in het `<head>`-script).
+- Tabbreedte: `.wd-blk-card` rekent met `--ns` (krachttabs) én `--nc` (tabs in de rechtse pil, gezet in `layout()`), dus alle zichtbare tabs zijn even breed en de rij blijft volle breedte als er programma's uit staan.
+- Tellen: HIIT = cardiominuten (maandoverzicht Cardio, maandtotaal); Core Session telt NIET als cardio maar in Balance als core-oefening: `MUSCLES['c-core']={buik:1,schuin:.5,onderrug:.5}`, 3 sets (uitzondering op de `c-`-regel in `events()`). Kalender: blok 'Group · N min' (`o.gmin`), programma 'Group'; geen sets in de kalender.
+- `setsFor` leest enkel de eerste tekst van `.exr-s` (14 okt): de teller '· 1×' erachter telde anders als 1 set bij rijen zonder 'N ×' (enkel HIIT/Core).
 
 ## Navigatie
 - Navbar-hoogte (op vraag van Tom, 10 okt): `bottom: var(--nav-b)` = max(10 px, veilige zone − 12 px) → op een iPhone met streep ±22 px van de onderrand i.p.v. ±44 px; de End workout-pil volgt mee.
