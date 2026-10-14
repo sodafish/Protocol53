@@ -344,6 +344,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   (waarde kan uit de database komen zonder input-event).
 - Notitie enkel nog onderaan Workout (`#sessNote`; op vraag van Tom, 14 okt): de Diet-notitie (`#dietNote` + kop) staat `hidden`
   (inhoud `dieet-notitie` blijft bewaard). `.note-head[hidden]`/`textarea.sess-note[hidden]` nodig, anders overschrijft `display` het attribuut.
+- Notitieknop `#noteJump.note-float` (zwevend naast de Start/End-pil) volgt de kleuren van die pil (op vraag van Tom, 14 okt): vóór de workout terracotta-verloop met icoon `--paper` (`body:has(#woEnd.is-start)`), tijdens de workout `--ink` met icoon in accent; geen `.glass` meer, geen rand, zelfde schaduw.
 - START/END WORKOUT (op vraag van Tom, 10 okt): de zwevende pil rechtsonder (`#woEnd`) is er altijd. Vóór de workout = 'Start workout' (klasse `.is-start`,
   play-icoon, terracotta-verloop zoals de actieve navbar-knop, enkel zichtbaar op Workout); tik = timer start (`woRun(true)`) en de pagina scrolt zacht naar boven (op vraag van Tom, 12 okt; geen sprong naar een groep, geen tabwissel).
   Tijdens de workout = 'End workout' + tijd (donker, op elke pagina), zelfde End-logica als vroeger; End zonder vinkjes → terug naar Start.
