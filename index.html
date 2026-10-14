@@ -1829,6 +1829,12 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 .ed-x svg{display:block;}
 .ed-add{appearance:none;display:flex;align-items:center;justify-content:center;gap:.35rem;width:100%;margin:.7rem 0 0;min-height:38px;border:1.5px dashed var(--line);border-radius:12px;background:transparent;color:var(--muted);font:600 13px 'Work Sans',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .ed-add svg{color:var(--accent);}
+
+/* STRENGTH: percentages in inkt (wit in donker) i.p.v. accent; negatief blijft --neg (op vraag van Tom, 14 okt) */
+.bal-pct.has{fill:var(--ink);} .bal-pct.has.neg{fill:var(--neg,var(--accent));}
+.pl-list .pl-h b{color:var(--ink)!important;} .pl-list .pl-h b.down{color:var(--neg,var(--accent))!important;}
+.pl-list .pl-h b.up,.pl-list .pl-sh b.up{color:var(--ink);}
+.pr-tot b{color:var(--ink);} .pr-tot b.down{color:var(--neg,var(--accent));}
 </style>
 
 <header class="top">
