@@ -5428,7 +5428,7 @@ window.__congrats=function(o){
     var EGK={}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
     var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
-    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
+    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Strength sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
     var gs='--mon-n:'+L.length+';--mon-g:'+(dense?'2px':'3px');
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
