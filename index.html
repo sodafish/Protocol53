@@ -1402,6 +1402,13 @@ body:not([data-view="workout"]) .wo-end.is-start{display:none;} /* Start enkel o
 .wo-end svg{color:var(--accent);}
 .wo-end-t{font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:500;opacity:.85;}
 .wo-end-t:empty{display:none;}
+/* notitieknop rechts van Start/End workout (op vraag van Tom, 14 okt): enkel op Workout en enkel als de notitie onderaan iets bevat; de pil schuift dan 58 px op */
+.note-jump.note-float{position:fixed;z-index:61;right:calc(var(--app-gut) + 16px);bottom:calc(var(--nav-b) + 64px + 12px);border-width:1px;}
+body:not([data-view="workout"]) .note-jump.note-float{display:none;}
+body[data-view="workout"].has-note .wo-end{right:calc(var(--app-gut) + 16px + 48px + 10px);}
+@media (max-width:350px){ body[data-view="workout"].has-note .wo-end{right:calc(var(--app-gut) + 16px + 42px + 8px);} }
+/* Diet: geen notitie meer (op vraag van Tom, 14 okt; inhoud blijft bewaard) */
+.note-head[hidden],textarea.sess-note[hidden]{display:none;}
 #s-d3 .reset-chk.reset-top[aria-disabled="true"]{opacity:.35;pointer-events:none;}
 body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 :root{--nav-b:max(10px,calc(env(safe-area-inset-bottom,0px) - 12px));} /* navbar lager: zakt in de veilige zone, net boven de iPhone-streep (op vraag van Tom, 10 okt; vroeger 10 px + volle veilige zone) */
@@ -1792,7 +1799,6 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       <div class="wd-tabs" role="tablist" aria-label="Workout type"><div class="wd-blk wd-blk-str"><div class="wd-pill wd-str"><button type="button" role="tab" data-split="full">Open Gym</button><button type="button" role="tab" data-split="egym">eGym</button><button type="button" role="tab" data-split="home" hidden>Home</button></div></div><div class="wd-blk wd-blk-card"><div class="wd-pill wd-card"><button type="button" role="tab" data-split="cardio">Cardio</button></div></div></div>
       <div class="wd-go" id="wdGo" hidden>
         <button type="button" class="wd-btn wd-stop" id="woStop" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span>End workout</span><span class="wd-t" id="woStopT"></span></button>
-        <button type="button" class="note-jump wd-note" id="noteJump" hidden aria-label="Go to your notes"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
       </div>
     </div>
     <ol class="exl">
@@ -2151,8 +2157,8 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
     </table></div>
   </div>
 
-  <div class="note-head"><label class="sess-note-l" for="dietNote">Notes</label><button type="button" class="note-erase" data-for="dietNote" aria-label="Erase note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></div>
-  <textarea id="dietNote" class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
+  <div class="note-head" hidden><label class="sess-note-l" for="dietNote">Notes</label><button type="button" class="note-erase" data-for="dietNote" aria-label="Erase note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></div>
+  <textarea id="dietNote" hidden class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
 
 
   <div class="section">
@@ -2459,6 +2465,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
   paint(); })();
 </script>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
+<button type="button" class="note-jump note-float glass" id="noteJump" hidden aria-label="Go to your notes"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
 <script>
 /* ---- veeg naar links om te verwijderen (kalender + edit-blad van de grafiek): rij .cx-row schuift, rode .cx-del eronder; tik = wissen ---- */
 window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* links vegen = Delete (rechts), rechts vegen = Edit (links); knop 10 px naast de rij (op vraag van Tom) */
@@ -5484,10 +5491,10 @@ window.__congrats=function(o){
   });
 })();
 
-/* ---- notitie-knop naast Start workout: alleen zichtbaar als er iets in de notitie onderaan staat; tik = naar de notitie scrollen ---- */
+/* ---- notitie-knop rechts van de zwevende Start/End workout-pil (enkel op Workout, via CSS): alleen zichtbaar als er iets in de notitie onderaan staat; tik = naar de notitie scrollen ---- */
 (function(){
   var b=document.getElementById('noteJump'), ta=document.getElementById('sessNote'); if(!b||!ta) return;
-  function paint(){ b.hidden=!ta.value.trim(); }
+  function paint(){ var on=!!ta.value.trim(); b.hidden=!on; document.body.classList.toggle('has-note',on); }
   ['input','change'].forEach(function(ev){ ta.addEventListener(ev,paint); });
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
   var last=null; setInterval(function(){ if(ta.value!==last){ last=ta.value; paint(); } },700);

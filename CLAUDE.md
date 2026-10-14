@@ -337,10 +337,13 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   bovenaan staat; blad + achtergrond volgen de vinger, los na > 30% hoogte (max 140 px) of snelle veeg = klik op `.sheet-x`, anders terugveren.
 
 ## Warm-up / Open Gym / EGYM / Cardio (tabs bovenaan Workout)
-- Bovenaan Workout (`.tools-row`): links 'Start' (`.wo-btn`, play-icoon; label kort 'Start' zodat alles op één lijn past), meteen rechts
-  daarvan, alleen als de notitie onderaan (`#sessNote`) iets bevat, een ronde notitieknop `#noteJump`; helemaal rechts (`.split-sel`, margin-left:auto)
-  de keuzeknop `#splitBtn`. De notitieknop (48 px, cirkel 1.5px `--line`, Material Symbols 'sticky_note_2' in accentkleur; ≤ 350 px: 42 px). Tik = zacht
-  naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s (waarde kan uit de database komen zonder input-event).
+- Notitieknop `#noteJump` (op vraag van Tom, 14 okt; vervangt de knop in `.tools-row`/`#wdGo`, die er niet meer in staat): zwevende ronde knop
+  (`.note-jump.note-float.glass`, 48 px, ≤ 350 px 42 px, glas zoals de navbar, Material Symbols 'sticky_note_2' 24 px in accent) RECHTS van de
+  Start/End workout-pil `#woEnd`, zelfde hoogte; enkel op Workout (`body[data-view="workout"]`) en enkel als `#sessNote` iets bevat. Dan krijgt body
+  `has-note` en schuift de pil 58 px naar links. Tik = zacht naar de notitie scrollen. Zichtbaarheid volgt input/change + elke 0,7 s
+  (waarde kan uit de database komen zonder input-event).
+- Notitie enkel nog onderaan Workout (`#sessNote`; op vraag van Tom, 14 okt): de Diet-notitie (`#dietNote` + kop) staat `hidden`
+  (inhoud `dieet-notitie` blijft bewaard). `.note-head[hidden]`/`textarea.sess-note[hidden]` nodig, anders overschrijft `display` het attribuut.
 - START/END WORKOUT (op vraag van Tom, 10 okt): de zwevende pil rechtsonder (`#woEnd`) is er altijd. Vóór de workout = 'Start workout' (klasse `.is-start`,
   play-icoon, terracotta-verloop zoals de actieve navbar-knop, enkel zichtbaar op Workout); tik = timer start (`woRun(true)`) en de pagina scrolt zacht naar boven (op vraag van Tom, 12 okt; geen sprong naar een groep, geen tabwissel).
   Tijdens de workout = 'End workout' + tijd (donker, op elke pagina), zelfde End-logica als vroeger; End zonder vinkjes → terug naar Start.
