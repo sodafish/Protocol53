@@ -5418,7 +5418,8 @@ window.__congrats=function(o){
       else{ cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]; }
       rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI;
     }
-    var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
+    /* eGym-deel van de staaf + regel '■ eGym' enkel nog bij Training days, niet meer bij Sets (op vraag van Tom, 14 okt) */
+    var EGK={d:'ed'}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
     var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
     if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'training day':'training days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','cardio']); if(anyGr) ROWS.push(['Group','gh','group']); /* kop = één zin links: '14 training days so far in 2026', '6h 20m cardio …' (op vraag van Tom, 14 okt) */ /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
