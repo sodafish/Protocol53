@@ -1183,7 +1183,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-blk.dense .mon-c.sel span{position:relative;z-index:1;}
 /* gekozen staaf (= de dag/maand waarvan de lijst onderaan de oefeningen toont) in vol accent, de andere iets lichter (accent 72% op papier), zodat de keuze opvalt (op vraag van Tom, 14 okt; zwart geprobeerd en teruggedraaid) */
 .mon-c i{background-color:color-mix(in srgb,var(--accent) 72%,var(--paper));} .mon-c.sel i{background-color:var(--accent);}
-/* Month (dagen): om de twee dagen een nummer (oneven dagen) in dezelfde grootte als Year (op vraag van Tom, 14 okt); een gekozen even dag krijgt zijn nummer en zijn twee buren niet */
+/* Month (dagen): om de twee dagen een nummer (oneven dagen) in dezelfde grootte als Year (op vraag van Tom, 14 okt); vaste as, ook als de gekozen dag even is (de kop toont de datum al) */
 .mon-blk.dense .mon-mo button{font-variant-numeric:tabular-nums;white-space:nowrap;overflow:visible;}
 .cal-none{margin:1.2rem 0 0;font-size:14px;color:var(--muted-soft);}
 .cal-head{display:flex;align-items:center;gap:.6rem;margin:0 0 .8rem;}
@@ -5417,9 +5417,9 @@ window.__congrats=function(o){
       cs=row(sum(yl),{}); when=run?'so far in '+y:'in '+y; rng=String(y); prevOff=y<=Math.floor(monFirst/12); nextOff=y>=cur.getFullYear();
       hrS=function(min){ min=Math.round(min); return min>=60?Math.round(min/60)+'h':min+'m'; }; /* smalle staven: '12h', '40m' */
     }else if(hv==='d'){ /* D3: elke dag van de kalendermaand */
-      var y2=ym.y, m2=ym.m, n=new Date(y2,m2+1,0).getDate(), mk=y2+'-'+('0'+(m2+1)).slice(-2), sd=sel&&sel.slice(0,7)===mk?sel:null, sdD=sd?+sd.slice(8):0; dense=true;
+      var y2=ym.y, m2=ym.m, n=new Date(y2,m2+1,0).getDate(), mk=y2+'-'+('0'+(m2+1)).slice(-2), sd=sel&&sel.slice(0,7)===mk?sel:null; dense=true;
       for(var d=1;d<=n;d++){ var k=mk+'-'+('0'+d).slice(-2), o=days[k], a2=o?{d:1,s:o.sets,c:o.min,es:o.egs||0,gm:o.gmin||0,ed:Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })?1:0}:Z;
-        L.push(row(a2,{k:k,lab:(d%2?(sdD&&sdD%2===0&&Math.abs(d-sdD)===1?'':d):(d===sdD?d:'')),sel:k===sd,run:k===today,off:k>today,aria:d+' '+MON[m2]})); }
+        L.push(row(a2,{k:k,lab:(d%2?d:''),sel:k===sd,run:k===today,off:k>today,aria:d+' '+MON[m2]})); }
       if(sd){ var p=sd.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]); cs=L[+p[2]-1]; when='on '+WS[dt.getDay()]+' '+dt.getDate()+' '+MS[dt.getMonth()]; }
       else{ cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]; }
       rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI; hrS=function(min){ return Math.round(min); }; /* smalle staven: cardio als getal in minuten boven de staaf ('40'), de kop toont '1h 20m' */
