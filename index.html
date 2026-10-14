@@ -5339,18 +5339,20 @@ window.__congrats=function(o){
     if(winEnd==null) winEnd=nowI;
     if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
     winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
-    var Z={d:0,s:0,c:0,ed:0,es:0};
-    var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0,ed:0,es:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; a.es+=o.egs||0;
+    var Z={d:0,s:0,c:0,ed:0,es:0,gm:0};
+    var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0,ed:0,es:0,gm:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; a.es+=o.egs||0; a.gm+=o.gmin||0; /* Group-minuten (14 okt) */
       if(Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })) a.ed++; }); /* eGym-dagen en -sets (op vraag van Tom: enkel zichtbaar als er eGym was) */
-    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||Z; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c),h:hr(a.c),ed:a.ed,es:a.es}); }
-    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||Z; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c),ed:a0.ed,es:a0.es}; } sel.h=hr(sel.c);
+    var L=[]; for(var i=winEnd-5;i<=winEnd;i++){ var y=Math.floor(i/12), m=i%12, k=y+'-'+('0'+(m+1)).slice(-2), a=A[k]||Z; L.push({i:i,y:y,m:m,d:a.d,s:a.s,c:Math.round(a.c),h:hr(a.c),ed:a.ed,es:a.es,gm:Math.round(a.gm),gh:hr(a.gm)}); }
+    var sel=null; L.forEach(function(r){ if(r.i===selI) sel=r; }); if(!sel){ var y0=ym.y, k0=y0+'-'+('0'+(ym.m+1)).slice(-2), a0=A[k0]||Z; sel={i:selI,y:y0,m:ym.m,d:a0.d,s:a0.s,c:Math.round(a0.c),ed:a0.ed,es:a0.es,gm:Math.round(a0.gm)}; } sel.h=hr(sel.c); sel.gh=hr(sel.gm);
     var run=selI===nowI, when=run?'so far in '+MON[sel.m]:'in '+MON[sel.m]+(sel.y!==cur.getFullYear()?' '+sel.y:'');
     function lab(r,j){ return MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); }
     var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||sel.ed>0;
-    sc.innerHTML=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets'],['Cardio','h','']].map(function(t){ var k=t[1], mx=1;
-      L.forEach(function(r){ mx=Math.max(mx,k==='h'?r.c/60:r[k]); });
-      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(k==='h'?sel.h.replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):sel[k])+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+sel[EGK[k]]+' '+(k==='d'?(sel[EGK[k]]===1?'day':'days'):(sel[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row">'+
-        L.map(function(r){ var v=r[k], vl=v; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(r[k==='h'?'c':k]?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+(k==='h'?r.c+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+vl+'</span><i style="height:'+(r[k==='h'?'c':k]?Math.max(3,Math.round(46*(k==='h'?r.c/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
+    /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
+    var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), ROWS=[['Training days','d',sel.d===1?'day':'days'],['Sets','s',sel.s===1?'set':'sets'],['Cardio','h','']]; if(anyGr) ROWS.push(['Group','gh','']);
+    sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
+      L.forEach(function(r){ mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
+      return '<div class="mon-blk"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?sel[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):sel[k])+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+sel[EGK[k]]+' '+(k==='d'?(sel[EGK[k]]===1?'day':'days'):(sel[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row">'+
+        L.map(function(r){ var v=r[k], vl=v; return '<button type="button" class="mon-c'+(r.i===selI?' sel':'')+(r.i===nowI?' run':'')+(r[MK[k]||k]?'':' z')+'" data-i="'+r.i+'" aria-label="'+MON[r.m]+' '+r.y+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+vl+'</span><i style="height:'+(r[MK[k]||k]?Math.max(3,Math.round(46*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true">'+L.map(function(r,j){ return '<button type="button" tabindex="-1" class="'+(r.i===selI?'sel':'')+'" data-i="'+r.i+'">'+lab(r,j)+'</button>'; }).join('')+'</div></div>'; }).join('');
     sc.querySelectorAll('[data-i]').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
     var a=L[0], z=L[5]; document.getElementById('monRange').textContent=MS[a.m]+(a.y!==z.y?' '+a.y:'')+' – '+MS[z.m]+' '+z.y;
