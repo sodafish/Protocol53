@@ -28,6 +28,11 @@
   window.__p53wuApply();
   /* Full · Upper · Lower aan/uit (Settings › Body split, op vraag van Tom, 14 okt): localStorage p53-half-on = '0' als uit; standaard aan */
   window.__p53halfOn=function(){ try{ return localStorage.getItem('p53-half-on')!=='0'; }catch(e){ return true; } };
+  /* Settings › Workout tabs (14 okt): localStorage p53-tabs = 'bar' → één doorlopende tabbalk zonder labels; standaard gegroepeerd (pillen + labels) */
+  window.__p53tabsBar=function(){ try{ return localStorage.getItem('p53-tabs')==='bar'; }catch(e){ return false; } };
+  /* Settings › Muscle group order (14 okt): localStorage p53-gorder = JSON-lijst g1–g7; standaard g1…g7 */
+  window.__p53gorder=function(){ var D=['g1','g2','g3','g4','g5','g6','g7'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-gorder')||'null'); }catch(e){}
+    if(!Array.isArray(v)) return D; v=v.filter(function(g,i){ return D.indexOf(g)>=0&&v.indexOf(g)===i; }); D.forEach(function(g){ if(v.indexOf(g)<0) v.push(g); }); return v; };
   /* niet ingelogd (geen p53-auth): app verbergen tot cloud.js beslist, anders flitst de lijst vóór het inlogscherm (13 okt) */
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
@@ -1236,6 +1241,15 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .st-progs button[aria-disabled="true"] .sp-ck{opacity:.55;}
 .st-progs button:active:not([aria-disabled="true"]){background:var(--paper-soft);}
 .st-progs button:focus-visible{outline:2.5px solid var(--accent);outline-offset:-2.5px;border-radius:12px;}
+/* Settings › Muscle group order (14 okt): sorteerlijst, greep links zoals het keuzeblad (.gs-drag), nummer zoals de groepskoppen */
+.st-order li{position:relative;display:flex;align-items:center;gap:.7rem;min-height:48px;padding:0 .9rem 0 .5rem;background:var(--surface);font:500 15px 'Work Sans',system-ui,sans-serif;color:var(--ink);}
+.st-order .so-n{flex:none;min-width:1.1rem;font:italic 500 20px/1 'Fraunces',Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums;}
+.st-order .gs-drag{flex:none;display:flex;align-items:center;justify-content:center;width:32px;height:44px;color:var(--muted-soft);cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.st-order li.dragging{z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.14);border-radius:12px;cursor:grabbing;}
+.st-order li.dragging .gs-drag{color:var(--accent);}
+.st-order:has(li.dragging){overflow:visible;}
+.st-reset{align-self:flex-start;appearance:none;border:0;background:none;padding:.2rem 0;color:var(--accent);font:500 13.5px 'Work Sans',system-ui,sans-serif;cursor:pointer;}
+.st-reset[hidden]{display:none;}
 .st-seg button{flex:1 1 0;appearance:none;border:0;background:transparent;color:var(--muted);font:500 14px 'Work Sans',system-ui,sans-serif;min-height:40px;border-radius:999px;cursor:pointer;}
 .st-seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);}
 .st-seg button:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
@@ -1561,6 +1575,12 @@ body.wo-on{padding-bottom:calc(180px + env(safe-area-inset-bottom));}
 .wd-tabs.solo .wd-band{display:none;} .wd-tabs.solo .wd-blk{background:transparent;} .wd-tabs.solo .wd-blk .wd-pill{margin-bottom:0;} /* één pil zichtbaar: geen label */
 /* (vervallen 14 okt, nu flex met --n) */ .wd-blk-card-old{flex:none;width:calc((100% - 34px - (var(--ns, 2) + var(--nc, 1) - 2) * 2px) / (var(--ns, 2) + var(--nc, 1)) * var(--nc, 1) + (var(--nc, 1) - 1) * 2px + 10px);} /* --nc = aantal tabs in de rechtse pil (Cardio, Group; 14 okt) */ /* alle tabs even breed, ook met 1 of 3 krachttabs: --ns = aantal krachttabs (34 = 14 tussenruimte + 2×(4 padding + 1 rand); 2 px gap per extra tab) */
 .wtabs[hidden],.wd-blk[hidden],.wd-pill button[hidden]{display:none;}
+/* SINGLE BAR (Settings › Workout tabs, 14 okt): .wd-tabs.flat = één pil over de volle breedte, geen labels/banden; blokken en pillen display:contents,
+   zodat alle knoppen even breed in één rij staan; één schuivende pil op .wd-tabs zelf (script 'schuivende pil') */
+.wd-tabs.flat{gap:2px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:26px;}
+.wd-tabs.flat .wd-blk,.wd-tabs.flat .wd-pill{display:contents;}
+.wd-tabs.flat .wd-blk[hidden],.wd-tabs.flat .wd-band{display:none;}
+.wd-tabs.flat .wd-pill>.pill-ind{display:none;}
 .wd-card{width:100%;}
 .wd-tabs{align-items:flex-start;}
 .wtabs .wd-card button{flex:1 1 0;padding:0 .3rem;}
@@ -1763,8 +1783,8 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
 :root[data-theme="dark"] .sheet,:root[data-theme="blue"] .sheet,:root[data-theme="dark"] .cf-card,:root[data-theme="blue"] .cf-card{background:rgba(var(--glass-rgb),.84);-webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.15);backdrop-filter:blur(18px) saturate(180%) brightness(1.15);box-shadow:0 -14px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.16);}:root[data-theme="dark"] #grp-sheet .sheet-head,:root[data-theme="blue"] #grp-sheet .sheet-head{background:transparent;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);}:root[data-theme="dark"] .gs-list li[data-k],:root[data-theme="blue"] .gs-list li[data-k],:root[data-theme="dark"] .pe-list .cx-row,:root[data-theme="blue"] .pe-list .cx-row{background:transparent;}:root[data-theme="dark"] .gs-list li.dragging,:root[data-theme="blue"] .gs-list li.dragging{background:var(--knob);}
 
 /* tabs bovenaan in donker: kleur van de navbar, ondoorzichtig (backdrop-filter op de plakkende tabs gaf op iOS een renderfout; zwevend glas getest en teruggedraaid op vraag van Tom, 11 okt) */
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wtabs:not(.wdock),:root:not([data-theme="light"]) .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}}
-:root[data-theme="dark"] .wtabs:not(.wdock),:root[data-theme="blue"] .wtabs:not(.wdock),:root[data-theme="dark"] .wd-pill,:root[data-theme="blue"] .wd-pill{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wtabs:not(.wdock),:root:not([data-theme="light"]) .wd-pill,:root:not([data-theme="light"]) .wd-tabs.flat{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}}
+:root[data-theme="dark"] .wtabs:not(.wdock),:root[data-theme="blue"] .wtabs:not(.wdock),:root[data-theme="dark"] .wd-pill,:root[data-theme="blue"] .wd-pill,:root[data-theme="dark"] .wd-tabs.flat,:root[data-theme="blue"] .wd-tabs.flat{background:var(--tabs-solid);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.16);}
 .ip-test .ip-note{margin:.2rem 0 .7rem;font-size:13px;line-height:1.45;color:var(--muted);}
 .ip-test .pe-list{margin-top:.2rem;}
 
@@ -2425,6 +2445,11 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       <ul class="st-progs" id="stProgs" role="group" aria-labelledby="stProgL"><li><button type="button" role="checkbox" data-prog="full"><span>Gym<small>Strength</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li><button type="button" role="checkbox" data-prog="egym"><span>eGym<small>Strength</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li><button type="button" role="checkbox" data-prog="home"><span>Home<small>Strength</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li><button type="button" role="checkbox" data-prog="cardio"><span>Cardio<small>Cardio</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li><button type="button" role="checkbox" data-prog="group"><span>Group<small>Classes</small></span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
       <p class="st-note">Choose which tabs Workout shows. Keep at least one. With one program the tabs are hidden.</p>
     </div>
+    <div class="st-sec" id="stTabsSec">
+      <p class="set-lab">Workout tabs</p>
+      <div class="st-seg" role="group" aria-label="Workout tabs"><button type="button" data-tabs="grouped">Grouped</button><button type="button" data-tabs="bar">Single bar</button></div>
+      <p class="st-note">Grouped shows Strength, Cardio and Group as separate pills with labels. Single bar puts all tabs in one full-width bar.</p>
+    </div>
     <div class="st-sec">
       <p class="set-lab" id="stWuL">Warm-up</p>
       <ul class="st-progs" id="stWu" role="group" aria-labelledby="stWuL"><li data-wu="full"><button type="button" role="checkbox" aria-checked="true" data-wu="full"><span>Gym</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li data-wu="egym"><button type="button" role="checkbox" aria-checked="true" data-wu="egym"><span>eGym</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li><li data-wu="home"><button type="button" role="checkbox" aria-checked="true" data-wu="home"><span>Home</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
@@ -2434,6 +2459,12 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       <p class="set-lab" id="stHalfL">Body split</p>
       <ul class="st-progs" id="stHalf" role="group" aria-labelledby="stHalfL"><li><button type="button" role="checkbox" aria-checked="true" id="stHalfBtn"><span>Full · Upper · Lower</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
       <p class="st-note">Choose Full Body, Upper Body or Lower Body in Gym and Home.</p>
+    </div>
+    <div class="st-sec" id="stOrderSec">
+      <p class="set-lab" id="stOrderL">Muscle group order</p>
+      <ul class="st-progs st-order" id="stOrder" aria-labelledby="stOrderL"></ul>
+      <p class="st-note">Drag to set the order of the muscle groups in Gym and Home.</p>
+      <button type="button" class="st-reset" id="stOrderReset" hidden>Reset to default order</button>
     </div>
     <div class="st-sec">
       <label class="set-lab pf-f" for="stStart">Open the app on</label>
@@ -2463,9 +2494,9 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
 /* ---- instellingen-blad (tandwiel rechtsboven): thema, geboortedatum, je gegevens (op vraag van Tom, 10 okt) ---- */
 (function(){ var btn=document.getElementById('setBtn'), bg=document.getElementById('st-bg'), sh=document.getElementById('st-sheet'); if(!btn||!sh) return; var open=false, last=null;
   function cur(){ var t=null; try{ t=localStorage.getItem('p53-theme'); }catch(e){} return t==='light'||t==='dark'||t==='blue'?t:'system'; }
-  function paint(){ var c=cur(); sh.querySelectorAll('.st-seg button').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.th===c?'true':'false'); });
+  function paint(){ var c=cur(); sh.querySelectorAll('button[data-th]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.th===c?'true':'false'); });
     var u=window.__p53user, el=document.getElementById('stUser'); if(el){ if(u&&u.email){ el.innerHTML='Signed in as <b></b>'; el.querySelector('b').textContent=u.email; } else el.textContent=''; } }
-  sh.querySelectorAll('.st-seg button').forEach(function(b){ b.addEventListener('click',function(){ var v=b.dataset.th;
+  sh.querySelectorAll('button[data-th]').forEach(function(b){ b.addEventListener('click',function(){ var v=b.dataset.th;
     try{ if(v==='system') localStorage.removeItem('p53-theme'); else localStorage.setItem('p53-theme',v); }catch(e){}
     if(window.__p53theme) window.__p53theme(v); paint(); }); });
   function show(){ if(open) return; open=true; last=document.activeElement; paint(); bg.hidden=false; sh.hidden=false; requestAnimationFrame(function(){ bg.classList.add('on'); sh.classList.add('on'); }); sh.querySelector('.sheet-x').focus({preventScroll:true}); }
@@ -2493,6 +2524,49 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
   if(hb){ paintHalf(); document.addEventListener('p53-progs',paintHalf);
     hb.addEventListener('click',function(){ var on=!window.__p53halfOn(); try{ if(on) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }catch(e){}
       paintHalf(); document.dispatchEvent(new Event('p53-progs')); prefsPush(); }); }
+  /* Settings › Workout tabs (14 okt): Grouped (pillen + labels) · Single bar (één doorlopende balk); sectie enkel als er minstens twee pillen zouden staan */
+  var tSec=document.getElementById('stTabsSec');
+  function paintTabs(){ if(!tSec) return; var bar=window.__p53tabsBar(), pv=window.__p53progs();
+    tSec.querySelectorAll('button[data-tabs]').forEach(function(b){ b.setAttribute('aria-pressed',String((b.dataset.tabs==='bar')===bar)); });
+    var nb=(pv.some(function(x){ return x==='full'||x==='egym'||x==='home'; })?1:0)+(pv.indexOf('cardio')>=0?1:0)+(pv.indexOf('group')>=0?1:0); tSec.hidden=nb<2; }
+  if(tSec){ paintTabs(); document.addEventListener('p53-progs',paintTabs);
+    tSec.querySelectorAll('button[data-tabs]').forEach(function(b){ b.addEventListener('click',function(){
+      try{ if(b.dataset.tabs==='bar') localStorage.setItem('p53-tabs','bar'); else localStorage.removeItem('p53-tabs'); }catch(e){}
+      paintTabs(); document.dispatchEvent(new Event('p53-progs')); prefsPush(); }); }); }
+  /* Settings › Muscle group order (14 okt): slepen aan de greep (zoals het keuzeblad); volgorde in localStorage p53-gorder, event p53-gorder herschikt de workout */
+  var ol=document.getElementById('stOrder'), oSec=document.getElementById('stOrderSec'), oRst=document.getElementById('stOrderReset');
+  var ODRAG='<span class="gs-drag" aria-hidden="true"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor"><path d="M360-160q-33 0-56.5-23.5T280-240q0-33 23.5-56.5T360-320q33 0 56.5 23.5T440-240q0 33-23.5 56.5T360-160Zm240 0q-33 0-56.5-23.5T520-240q0-33 23.5-56.5T600-320q33 0 56.5 23.5T680-240q0 33-23.5 56.5T600-160ZM360-400q-33 0-56.5-23.5T280-480q0-33 23.5-56.5T360-560q33 0 56.5 23.5T440-480q0 33-23.5 56.5T360-400Zm240 0q-33 0-56.5-23.5T520-480q0-33 23.5-56.5T600-560q33 0 56.5 23.5T680-480q0 33-23.5 56.5T600-400ZM360-640q-33 0-56.5-23.5T280-720q0-33 23.5-56.5T360-800q33 0 56.5 23.5T440-720q0 33-23.5 56.5T360-640Zm240 0q-33 0-56.5-23.5T520-720q0-33 23.5-56.5T600-800q33 0 56.5 23.5T680-720q0 33-23.5 56.5T600-640Z"/></svg></span>';
+  function gName(g){ var t=document.querySelector('#s-d3 .exgrp[data-grp="'+g+'"] .grp-t'); return t?t.textContent.trim():g; }
+  function renumber(){ if(ol) ol.querySelectorAll('li').forEach(function(li,i){ li.querySelector('.so-n').textContent=i+1; }); }
+  function paintOrder(){ if(!ol) return; var go=window.__p53gorder();
+    var dom=[].map.call(ol.querySelectorAll('li[data-g]'),function(x){ return x.dataset.g; }).join();
+    if(!ol.querySelector('li.dragging')&&dom!==go.join()) ol.innerHTML=go.map(function(g){ var n=gName(g).replace(/&/g,'&amp;').replace(/</g,'&lt;'); return '<li data-g="'+g+'">'+ODRAG+'<span class="so-n"></span><span class="so-t">'+n+'</span></li>'; }).join('');
+    renumber(); if(oRst) oRst.hidden=go.join()==='g1,g2,g3,g4,g5,g6,g7';
+    var pv=window.__p53progs(); if(oSec) oSec.hidden=pv.indexOf('full')<0&&pv.indexOf('home')<0; }
+  function setOrder(go){ try{ if(go&&go.join()!=='g1,g2,g3,g4,g5,g6,g7') localStorage.setItem('p53-gorder',JSON.stringify(go)); else localStorage.removeItem('p53-gorder'); }catch(e){}
+    paintOrder(); document.dispatchEvent(new Event('p53-gorder')); prefsPush(); }
+  if(ol){ paintOrder(); document.addEventListener('p53-progs',paintOrder);
+    if(oRst) oRst.addEventListener('click',function(){ setOrder(null); });
+    (function(){ var it=null, y0=0, st0=0, raf=0, lastY=0, pid=null, moved=false;
+      function flip(el,dy){ el.style.transition='none'; el.style.transform='translateY('+dy+'px)'; void el.offsetWidth; el.style.transition='transform .16s ease'; el.style.transform=''; }
+      function step(){ if(!it) return;
+        var r=sh.getBoundingClientRect(), edge=70, v=0;
+        if(lastY<r.top+edge) v=-Math.ceil((r.top+edge-lastY)/6); else if(lastY>r.bottom-edge) v=Math.ceil((lastY-(r.bottom-edge))/6);
+        if(v) sh.scrollTop+=v;
+        var dy=lastY-y0+(sh.scrollTop-st0), n;
+        while(dy>0&&(n=it.nextElementSibling)&&dy>n.offsetHeight/2){ var h=n.offsetHeight; n.after(it); y0+=h; dy-=h; flip(n,h); moved=true; renumber(); }
+        while(dy<0&&(n=it.previousElementSibling)&&-dy>n.offsetHeight/2){ var h2=n.offsetHeight; n.before(it); y0-=h2; dy+=h2; flip(n,-h2); moved=true; renumber(); }
+        it.style.transform='translateY('+dy+'px)';
+        raf=requestAnimationFrame(step); }
+      ol.addEventListener('pointerdown',function(e){ var g=e.target.closest('.gs-drag'); if(!g||it) return;
+        e.preventDefault(); it=g.closest('li'); pid=e.pointerId; y0=lastY=e.clientY; st0=sh.scrollTop; moved=false;
+        try{ g.setPointerCapture(pid); }catch(x){} it.classList.add('dragging'); raf=requestAnimationFrame(step); });
+      ol.addEventListener('pointermove',function(e){ if(it&&e.pointerId===pid){ e.preventDefault(); lastY=e.clientY; } });
+      function drop(e){ if(!it||(e&&e.pointerId!==pid)) return; cancelAnimationFrame(raf);
+        var el=it; it=null; el.classList.remove('dragging'); el.style.transition='transform .16s ease'; el.style.transform='';
+        setTimeout(function(){ el.style.transition=''; },180);
+        if(moved) setOrder([].map.call(ol.querySelectorAll('li[data-g]'),function(x){ return x.dataset.g; })); }
+      ol.addEventListener('pointerup',drop); ol.addEventListener('pointercancel',drop); })(); }
   var pl=document.getElementById('stProgs');
   function paintProgs(){ if(!pl) return; var pv=window.__p53progs(); pl.querySelectorAll('button[data-prog]').forEach(function(b){ var on=pv.indexOf(b.dataset.prog)>=0, last=on&&pv.length===1;
     b.setAttribute('aria-checked',on?'true':'false'); if(last) b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); }); }
@@ -2503,7 +2577,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
      Pas bij een wijziging gaat de keuze naar de server; een serverversie wint als haar tijd (at) nieuwer is dan de laatste lokale wijziging (localStorage p53-prefs-at). */
   var pCol=null;
   function prefsPush(){ var s=null; try{ s=localStorage.getItem('p53-start'); }catch(e){}
-    var p={progs:window.__p53progs(),wu:window.__p53wuOff(),start:s||'full',half:window.__p53halfOn(),at:Date.now()};
+    var p={progs:window.__p53progs(),wu:window.__p53wuOff(),start:s||'full',half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),at:Date.now()};
     try{ localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){} if(pCol) pCol.doc('prefs').set(p).catch(function(){}); }
   function prefsApply(p){ var la=0; try{ la=+localStorage.getItem('p53-prefs-at')||0; }catch(e){} if(!p||!(p.at>la)) return;
     var A=['full','egym','home','cardio','group'];
@@ -2511,8 +2585,10 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       if(Array.isArray(p.wu)){ if(p.wu.length) localStorage.setItem('p53-warmup',JSON.stringify(p.wu)); else localStorage.removeItem('p53-warmup'); }
       if(typeof p.start==='string'&&/^(full|egym|home|cardio|group|last)$/.test(p.start)) localStorage.setItem('p53-start',p.start);
       if(typeof p.half==='boolean'){ if(p.half) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }
+      if(p.tabs==='bar') localStorage.setItem('p53-tabs','bar'); else if(p.tabs==='grouped') localStorage.removeItem('p53-tabs');
+      if(Array.isArray(p.gorder)){ if(p.gorder.join()==='g1,g2,g3,g4,g5,g6,g7') localStorage.removeItem('p53-gorder'); else localStorage.setItem('p53-gorder',JSON.stringify(p.gorder)); }
       localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){}
-    paintProgs(); paintWu(); syncStart(); document.dispatchEvent(new Event('p53-progs')); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }
+    paintProgs(); paintWu(); syncStart(); document.dispatchEvent(new Event('p53-gorder')); document.dispatchEvent(new Event('p53-progs')); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }
   if(wl) wl.querySelectorAll('button[data-wu]').forEach(function(b){ b.addEventListener('click',prefsPush); });
   if(ss) ss.addEventListener('change',prefsPush);
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; pCol=db.collection('cfg');
@@ -5066,6 +5142,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     tabs.hidden=pv.length<2;
     var bs=tabs.querySelector('.wd-blk-str'), bc=tabs.querySelector('.wd-blk-card'), bg=tabs.querySelector('.wd-blk-grp'); if(bs){ bs.hidden=!ns; bs.style.setProperty('--n',ns||1); } if(bc) bc.hidden=pv.indexOf('cardio')<0; if(bg) bg.hidden=pv.indexOf('group')<0;
     if(row) row.classList.toggle('solo',[bs,bc,bg].filter(function(x){ return x&&!x.hidden; }).length<2); /* labels enkel als er meer dan één pil staat */
+    if(row) row.classList.toggle('flat',!!(window.__p53tabsBar&&window.__p53tabsBar())&&!row.classList.contains('solo')); /* Settings › Workout tabs = Single bar (14 okt) */
     if(row){ row.style.setProperty('--ns',ns||1); row.style.setProperty('--nc',nc||1); }
     if(pv.indexOf(cur)<0) cur=pv[0]; }
   document.addEventListener('p53-progs',function(){ var was=cur; layout(); if(cur!==was) set(cur); else apply(); });
@@ -5123,6 +5200,17 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') hide(); });
   window.addEventListener('scroll',function(){ if(open) hide(); },{passive:true});
   apply();
+})();
+</script>
+<script>
+/* ---- Settings › Muscle group order (14 okt): de blokken g1–g7 (kop, tussenkoppen, rijen, lege-groepknop) in de gekozen volgorde na de Full/Upper/Lower-keuze.
+   Sleutels en de volgorde van de rijen binnen een groep blijven; nummering en Upper/Lower volgen de DOM-volgorde (apply() van het split-script via p53-progs) ---- */
+(function(){
+  function reorder(){ var list=document.querySelector('#s-d3 .exl'), anchor=list&&list.querySelector(':scope>.wd-half-li'); if(!anchor||!window.__p53gorder) return;
+    window.__p53gorder().forEach(function(g){
+      list.querySelectorAll(':scope>li[data-grp="'+g+'"],:scope>li.gx-empty[data-g="'+g+'"]').forEach(function(li){ if(anchor.nextElementSibling!==li) anchor.after(li); anchor=li; }); }); }
+  reorder(); document.dispatchEvent(new Event('p53-progs'));
+  document.addEventListener('p53-gorder',function(){ reorder(); document.dispatchEvent(new Event('p53-progs')); });
 })();
 </script>
 <script>
@@ -5633,18 +5721,24 @@ window.__congrats=function(o){
 <script>
 /* ---- schuivende pil onder de actieve knop (tabs Workout/Results + navbar) ---- */
 (function(){
-  function setup(box){ if(!box) return; box.classList.add('has-ind');
+  /* sel = welke knop de actieve is; on() = of deze pil nu getoond wordt (Single bar: de pil van .wd-tabs i.p.v. die per groep; 14 okt) */
+  function setup(box,sel,on){ if(!box) return; box.classList.add('has-ind'); sel=sel||':scope>button[aria-selected="true"]';
     var ind=document.createElement('span'); ind.className='pill-ind no-anim'; ind.setAttribute('aria-hidden','true'); box.insertBefore(ind,box.firstChild);
     var first=true;
-    function place(anim){ var b=box.querySelector(':scope>button[aria-selected="true"]');
-      if(!b||!box.offsetWidth){ ind.style.opacity='0'; return; } ind.style.opacity='';
+    function place(anim){ var b=box.querySelector(sel);
+      if(!b||!b.offsetWidth||(on&&!on())){ ind.style.opacity='0'; return; } ind.style.opacity='';
       if(!anim) ind.classList.add('no-anim');
       ind.style.width=b.offsetWidth+'px'; ind.style.height=b.offsetHeight+'px'; ind.style.transform='translate('+b.offsetLeft+'px,'+b.offsetTop+'px)';
       if(!anim){ void ind.offsetWidth; requestAnimationFrame(function(){ ind.classList.remove('no-anim'); }); } }
-    new MutationObserver(function(){ place(!first); }).observe(box,{subtree:true,attributes:true,attributeFilter:['aria-selected']});
-    if(window.ResizeObserver) new ResizeObserver(function(){ place(false); }).observe(box);
+    var root=box.closest('.wd-tabs')||box;
+    new MutationObserver(function(ms){ var sw=false, lay=false; ms.forEach(function(m){ if(m.target.classList&&m.target.classList.contains('pill-ind')) return; if(m.attributeName==='aria-selected') sw=true; else lay=true; });
+      if(lay) place(false); else if(sw) place(!first); }).observe(root,{subtree:true,attributes:true,attributeFilter:['aria-selected','class','hidden']});
+    if(window.ResizeObserver) new ResizeObserver(function(){ place(false); }).observe(root);
     place(false); setTimeout(function(){ first=false; place(false); },0); }
-  document.querySelectorAll('#wtabs .wd-pill').forEach(setup); setup(document.getElementById('stabs')); setup(document.querySelector('.gnav-pill'));
+  var row=document.querySelector('#wtabs .wd-tabs');
+  document.querySelectorAll('#wtabs .wd-pill').forEach(function(p){ setup(p,null,function(){ return !row||!row.classList.contains('flat'); }); });
+  setup(row,'.wd-pill>button[aria-selected="true"]',function(){ return row.classList.contains('flat'); });
+  setup(document.getElementById('stabs')); setup(document.querySelector('.gnav-pill'));
 })();
 </script>
 <div id="tabShade" aria-hidden="true"></div>
