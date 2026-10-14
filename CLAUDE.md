@@ -35,6 +35,13 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 `counts` (`{n,last,prev}`), `hist` (statistieken) en `prog` (progressie), zie hieronder. Sleutels van oefeningen
 (`data-note` / `data-key`) nooit hernoemen, anders raakt Tom zijn historiek kwijt.
 
+- SYNC VAN INSTELLINGEN (QA Tom, 14 okt: op de iPhone ontbraken de oefeningkeuze en de tabs die hij 's ochtends in de browser instelde):
+  1) `cfg/groups`: de snapshot uit de cache (verouderd toestel) liet `migrate()` nieuwe vlaggen zetten en schreef die OUDE keuze terug naar de server,
+     vóór de pull. Nu schrijft het groepsscript een migratie enkel terug na een serversnapshot (`!fromCache`). Regel: nooit naar de server schrijven vanuit een cache-snapshot.
+  2) Programs (`p53-progs`), Warm-up (`p53-warmup`) en 'Open the app on' (`p53-start`) gaan nu ook via `cfg/doc prefs` `{progs,wu,start,at}` (settings-script, `prefsPush`/`prefsApply`):
+     pas bij een wijziging naar de server; serverversie wint als `at` nieuwer is dan localStorage `p53-prefs-at` (gewist door `wipeLocal`). De localStorage-sleutels blijven de werkkopie.
+     Thema (`p53-theme`) en Full/Upper/Lower (`fitlog-half`) blijven bewust per toestel. Waar elders 'per toestel' staat bij Programs/Warm-up/Open the app on: vervangen door dit.
+
 ## Werkwijze
 - Kleine, gerichte aanpassingen; stijl en tokens van de bestaande app aanhouden
   (Fraunces + Work Sans, terracotta-accent, licht en donker).
