@@ -97,7 +97,7 @@
 
   /* alle lokale gegevens van de app (fitlog-*, p53-queue, p53-cache) wissen, bv. bij een andere gebruiker */
   function wipeLocal(){
-    try{ Object.keys(localStorage).forEach(function(k){ if(/^fitlog-/.test(k)||k===QKEY||k===CKEY||k==='p53-seeded') localStorage.removeItem(k); }); }catch(e){}
+    try{ Object.keys(localStorage).forEach(function(k){ if(/^fitlog-/.test(k)||k===QKEY||k===CKEY||k==='p53-seeded'||k==='p53-prefs-at') localStorage.removeItem(k); }); }catch(e){}
   }
 
   /* ---------- inloggen ---------- */
