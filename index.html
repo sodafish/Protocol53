@@ -1158,13 +1158,13 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-c.sel i b{background:color-mix(in srgb,var(--accent) 45%,var(--paper));}
 .mon-key{margin:-.35rem 0 .7rem;font-size:12px;color:var(--muted);text-align:right;} /* enkel als er eGym in beeld is (op vraag van Tom) */
 .mon-key i{display:inline-block;width:8px;height:8px;border-radius:2px;background:color-mix(in srgb,var(--accent) 45%,var(--paper));box-shadow:inset 0 0 0 1px var(--line);margin-right:.3rem;vertical-align:0;}
-.mon-c.sel span{color:var(--ink);font-weight:600;}
+.mon-c.sel span{color:var(--accent);font-weight:600;}
 .mon-c i,.mon-c i b{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* alle staven gearceerd (op vraag van Tom, 14 okt; vroeger enkel de lopende maand); de lopende dag/maand krijgt een bolletje onder de lijn (.mon-mo .now) */
 .mon-mo{padding-top:.55rem;} /* .4 → .55rem: ruimte voor het bolletje van vandaag/deze maand */
 .mon-mo button{appearance:none;border:0;background:transparent;padding:0;font:inherit;font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;cursor:pointer;}
 .mon-mo button{position:relative;}
 .mon-mo button.now::before{content:'';position:absolute;left:50%;top:calc(2px - .55rem);width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent);} /* bolletje onder de lijn = vandaag / deze maand (op vraag van Tom, 14 okt) */
-.mon-mo button.sel{color:var(--ink);font-weight:600;}
+.mon-mo button.sel{color:var(--accent);font-weight:600;}
 .mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-1.4rem 0 0;font-size:12.5px;color:var(--muted-soft);}
 .mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
 .mon-nav button[disabled]{opacity:.35;cursor:default;}
@@ -1181,8 +1181,8 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-blk.dense .mon-c span{max-width:none;white-space:nowrap;}
 .mon-blk.dense .mon-c span{visibility:hidden;} .mon-blk.dense .mon-c.sel span{visibility:visible;} /* Day: enkel de gekozen dag toont zijn waarde */
 .mon-blk.dense .mon-c.sel span{position:relative;z-index:1;}
-/* gekozen staaf (= de dag/maand waarvan de lijst onderaan de oefeningen toont) in inkt, gearceerd; waarde en aslabel in inkt (op vraag van Tom, 14 okt) */
-.mon-c.sel i{background-color:var(--ink);}
+/* gekozen staaf (= de dag/maand waarvan de lijst onderaan de oefeningen toont) in vol accent, de andere iets lichter (accent 72% op papier), zodat de keuze opvalt (op vraag van Tom, 14 okt; zwart geprobeerd en teruggedraaid) */
+.mon-c i{background-color:color-mix(in srgb,var(--accent) 72%,var(--paper));} .mon-c.sel i{background-color:var(--accent);}
 /* Month (dagen): alle dagnummers onder de grafiek (op vraag van Tom, 14 okt; vroeger enkel 1/8/15/22/29) */
 .mon-blk.dense .mon-mo button{font-size:8.5px;letter-spacing:-.07em;font-variant-numeric:tabular-nums;overflow:visible;}
 .cal-none{margin:1.2rem 0 0;font-size:14px;color:var(--muted-soft);}
