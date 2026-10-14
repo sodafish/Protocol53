@@ -1140,7 +1140,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 /* maandoverzicht bovenaan History (op vraag van Tom, 10 okt; variant B: drie kleine grafieken, elk eigen schaal) */
 .mon{margin:0 0 2.4rem;touch-action:pan-y;}
 .mon-blk{margin:0 0 2.6rem;} /* ruimte tussen de grafieken groter dan kop → grafiek, zodat de kop duidelijk bij zijn grafiek hoort (op vraag van Tom) */
-.mon-hd{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;margin:0 0 .7rem;}
+.mon-hd{display:flex;justify-content:flex-start;align-items:baseline;gap:.6rem;margin:0 0 .7rem;}
 .mon-hd .mon-l{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
 .mon-hd b{font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
 .mon-hd b small{font-family:'Work Sans',system-ui,sans-serif;font-size:12px;font-weight:500;color:var(--muted);margin-left:.3rem;}
@@ -1156,7 +1156,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-c i{position:relative;overflow:hidden;}
 .mon-c i b{position:absolute;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--accent) 45%,var(--paper));border-top:1px solid var(--paper);} /* eGym-deel van de staaf: lichtere tint + 1px lijn (variant G, op vraag van Tom) */
 .mon-c.sel i b{background:color-mix(in srgb,var(--accent) 45%,var(--paper));}
-.mon-key{margin:-.35rem 0 .7rem;font-size:12px;color:var(--muted);text-align:right;} /* enkel als er eGym in beeld is (op vraag van Tom) */
+.mon-key{margin:-.35rem 0 .7rem;font-size:12px;color:var(--muted);text-align:left;} /* enkel als er eGym in beeld is (op vraag van Tom) */
 .mon-key i{display:inline-block;width:8px;height:8px;border-radius:2px;background:color-mix(in srgb,var(--accent) 45%,var(--paper));box-shadow:inset 0 0 0 1px var(--line);margin-right:.3rem;vertical-align:0;}
 .mon-c.sel span{color:var(--accent);font-weight:600;}
 .mon-c.run i{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* lopende maand: gearceerd */
@@ -5421,11 +5421,11 @@ window.__congrats=function(o){
     var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
     var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
-    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
+    if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'training day':'training days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','cardio']); if(anyGr) ROWS.push(['Group','gh','group']); /* kop = één zin links: '14 training days so far in 2026', '6h 20m cardio …' (op vraag van Tom, 14 okt) */ /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
     var gs='--mon-n:'+L.length+';--mon-g:'+(dense?'2px':'3px');
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
-      return '<div class="mon-blk'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+      return '<div class="mon-blk'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
         L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(46*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
