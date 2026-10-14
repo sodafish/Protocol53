@@ -1179,7 +1179,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-row,.mon-mo{grid-template-columns:repeat(var(--mon-n,6),minmax(0,1fr));} .mon-c{min-width:0;}
 .mon-blk.dense .mon-c i{width:100%;border-radius:2px 2px 0 0;}
 .mon-blk.dense .mon-c span{max-width:none;white-space:nowrap;}
-.mon-blk.dense .mon-c span{visibility:hidden;} .mon-blk.dense .mon-c.sel span{visibility:visible;} /* Day: enkel de gekozen dag toont zijn waarde */
+.mon-blk.dense .mon-c span{font-size:9px;letter-spacing:-.05em;} .mon-blk.dense .mon-c.z span{visibility:hidden;} /* Month (dagen): waarde boven elke staaf (op vraag van Tom, 14 okt; vroeger enkel de gekozen), lege dagen zonder '0' */
 .mon-blk.dense .mon-c.sel span{position:relative;z-index:1;}
 /* gekozen staaf (= de dag/maand waarvan de lijst onderaan de oefeningen toont) in vol accent, de andere iets lichter (accent 72% op papier), zodat de keuze opvalt (op vraag van Tom, 14 okt; zwart geprobeerd en teruggedraaid) */
 .mon-c i{background-color:color-mix(in srgb,var(--accent) 72%,var(--paper));} .mon-c.sel i{background-color:var(--accent);}
@@ -5422,7 +5422,7 @@ window.__congrats=function(o){
         L.push(row(a2,{k:k,lab:(d%2?(sdD&&sdD%2===0&&Math.abs(d-sdD)===1?'':d):(d===sdD?d:'')),sel:k===sd,run:k===today,off:k>today,aria:d+' '+MON[m2]})); }
       if(sd){ var p=sd.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]); cs=L[+p[2]-1]; when='on '+WS[dt.getDay()]+' '+dt.getDate()+' '+MS[dt.getMonth()]; }
       else{ cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]; }
-      rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI;
+      rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI; hrS=function(min){ return Math.round(min); }; /* smalle staven: cardio als getal in minuten boven de staaf ('40'), de kop toont '1h 20m' */
     }
     /* geen eGym-onderscheid meer in History (op vraag van Tom, 14 okt: eerst bij Sets, daarna ook bij Training days weg); EGK leeg = geen lichter deel, geen '■ eGym'-regel */
     var EGK={}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
