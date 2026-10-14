@@ -1151,14 +1151,14 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-c{appearance:none;border:0;background:transparent;padding:0;margin:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
 .mon-c span{font-size:10.5px;color:var(--muted);margin-bottom:3px;font-variant-numeric:tabular-nums;line-height:1;}
-.mon-c i{display:block;width:70%;border-radius:4px 4px 0 0;background:color-mix(in srgb,var(--ink) 20%,var(--paper));transition:height .25s ease;}
+.mon-c i{display:block;width:70%;border-radius:4px 4px 0 0;background:var(--accent);transition:height .25s ease;}
 .mon-c.z span{opacity:.45;}
 .mon-c i{position:relative;overflow:hidden;}
-.mon-c i b{position:absolute;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--ink) 9%,var(--paper));border-top:1px solid var(--paper);} /* eGym-deel van de staaf: lichtere tint + 1px lijn (variant G, op vraag van Tom) */
+.mon-c i b{position:absolute;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--accent) 45%,var(--paper));border-top:1px solid var(--paper);} /* eGym-deel van de staaf: lichtere tint + 1px lijn (variant G, op vraag van Tom) */
 .mon-c.sel i b{background:color-mix(in srgb,var(--accent) 45%,var(--paper));}
 .mon-key{margin:-.35rem 0 .7rem;font-size:12px;color:var(--muted);text-align:right;} /* enkel als er eGym in beeld is (op vraag van Tom) */
-.mon-key i{display:inline-block;width:8px;height:8px;border-radius:2px;background:color-mix(in srgb,var(--ink) 9%,var(--paper));box-shadow:inset 0 0 0 1px var(--line);margin-right:.3rem;vertical-align:0;}
-.mon-c.sel i{background:var(--accent);} .mon-c.sel span{color:var(--accent);font-weight:600;}
+.mon-key i{display:inline-block;width:8px;height:8px;border-radius:2px;background:color-mix(in srgb,var(--accent) 45%,var(--paper));box-shadow:inset 0 0 0 1px var(--line);margin-right:.3rem;vertical-align:0;}
+.mon-c.sel span{color:var(--accent);font-weight:600;}
 .mon-c.run i{background-image:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--paper) 35%,transparent) 3px 5px);} /* lopende maand: gearceerd */
 .mon-mo{padding-top:.4rem;}
 .mon-mo button{appearance:none;border:0;background:transparent;padding:0;font:inherit;font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;cursor:pointer;}
@@ -1172,7 +1172,11 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-n .mon-mo button{font-size:10.5px;} /* Year (12) en Day (28–31): kleinere as */
 .mon-c.off{cursor:default;} .mon-mo button[disabled]{cursor:default;opacity:.5;} /* toekomst / vóór de eerste training */
 .mon-n .mon-c span{font-size:10px;letter-spacing:-.02em;white-space:nowrap;}
+/* alle staven in de accentkleur (op vraag van Tom, 14 okt; vroeger inkt 20% en enkel de gekozen accent): de keuze toont zich in de waarde en de as */
+/* kolommen minmax(0,1fr): verborgen waarden (bv. '1h 20m') maakten kolommen breder, waardoor Sets en Cardio in Day niet gelijk liepen (op vraag van Tom, 14 okt) */
+.mon-row,.mon-mo{grid-template-columns:repeat(var(--mon-n,6),minmax(0,1fr));} .mon-c{min-width:0;}
 .mon-blk.dense .mon-c i{width:100%;border-radius:2px 2px 0 0;}
+.mon-blk.dense .mon-c span{max-width:none;white-space:nowrap;}
 .mon-blk.dense .mon-c span{visibility:hidden;} .mon-blk.dense .mon-c.sel span{visibility:visible;} /* Day: enkel de gekozen dag toont zijn waarde */
 .mon-blk.dense .mon-c.sel span{position:relative;z-index:1;}
 .cal-none{margin:1.2rem 0 0;font-size:14px;color:var(--muted-soft);}
@@ -2021,7 +2025,7 @@ html.no-wu #s-d3 .wd-half-li{padding-top:.8rem;}
       </div>
       <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">History</h2>
-        <div class="stats-per hist-per" id="histPer" role="group" aria-label="History view" hidden><button type="button" data-hv="d" aria-pressed="false">Day</button><button type="button" data-hv="m" aria-pressed="true">Month</button><button type="button" data-hv="y" aria-pressed="false">Year</button></div>
+        <div class="stats-per hist-per" id="histPer" role="group" aria-label="History view" hidden><button type="button" data-hv="d" aria-pressed="false">Day</button><button type="button" data-hv="y" aria-pressed="true">Month</button></div>
         <div class="mon" id="calMon" hidden><div id="calMonS"></div>
           <div class="mon-nav"><button type="button" id="monPrev">‹ Earlier</button><span id="monRange"></span><button type="button" id="monNext">Later ›</button></div>
         </div>
@@ -5379,7 +5383,7 @@ window.__congrats=function(o){
   /* maandoverzicht (op vraag van Tom, 10 okt; variant B): drie kleine grafieken (trainingsdagen, sets, cardiominuten), elk met eigen schaal,
      6 maanden; groot getal = de gekozen maand van de kalender. Venster schuift mee als de gekozen maand erbuiten valt (pijltjes kalender),
      'Earlier'/'Later' of vegen = 6 maanden verder; tik op een maand = kalender springt erheen. Lopende maand gearceerd ('so far'). */
-  var MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], winEnd=null, monFirst=null;
+  var MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], monFirst=null;
   function mi(y,m){ return y*12+m; }
   /* cardio in uren en minuten (op vraag van Tom, 10 okt): '40m', '1h 20m', '7h 35m', '2h' */
   function hr(min){ min=Math.round(min); var h=Math.floor(min/60), m=min%60; return h?(h+'h'+(m?' '+m+'m':'')):m+'m'; }
@@ -5387,14 +5391,14 @@ window.__congrats=function(o){
      Month = zoals hierboven. Day = elke dag van de kalendermaand (dunne staven, enkel de gekozen dag toont zijn waarde), groot getal = gekozen kalenderdag
      ('24 sets on Tue 13 Oct'; geen dag gekozen = maandtotaal); Training days valt weg (de kalenderbolletjes doen dat al). Year = jan–dec van het jaar
      van de kalendermaand, groot getal = jaartotaal, gekozen maand accent. Keuze per toestel in localStorage 'fitlog-hist-view' (d/m/y). */
-  var HVKEY='fitlog-hist-view', hv='m'; try{ hv=localStorage.getItem(HVKEY)||'m'; }catch(e){} if(!/^[dmy]$/.test(hv)) hv='m';
+  var HVKEY='fitlog-hist-view', hv='y'; try{ hv=localStorage.getItem(HVKEY)||'y'; }catch(e){} if(hv!=='d') hv='y'; /* 'y' = Month (12 maanden; op vraag van Tom, 14 okt vervangt het de 6-maandenweergave), oude 'm' → 'y' */
   var WS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   function nf(n){ return n>=1000?n.toLocaleString('en-GB'):n; }
   function renderMon(days){ var box=document.getElementById('calMon'), sc=document.getElementById('calMonS'), per=document.getElementById('histPer'); if(!box||!sc) return;
     var keys=Object.keys(days).sort(); if(!keys.length){ box.hidden=true; if(per) per.hidden=true; return; } box.hidden=false;
     if(per){ per.hidden=false; per.querySelectorAll('button[data-hv]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.hv===hv?'true':'false'); }); }
     var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), f=keys[0].split('-'); monFirst=mi(+f[0],+f[1]-1);
-    var selI=mi(ym.y,ym.m), minEnd=Math.min(nowI,monFirst+5), today=ymd(Date.now());
+    var selI=mi(ym.y,ym.m), today=ymd(Date.now());
     var Z={d:0,s:0,c:0,ed:0,es:0,gm:0};
     var A={}; keys.forEach(function(d){ var k=d.slice(0,7), a=A[k]=A[k]||{d:0,s:0,c:0,ed:0,es:0,gm:0}, o=days[d]; a.d++; a.s+=o.sets; a.c+=o.min; a.es+=o.egs||0; a.gm+=o.gmin||0; /* Group-minuten (14 okt) */
       if(Object.keys(o.ws).some(function(w){ return o.ws[w].g10; })) a.ed++; }); /* eGym-dagen en -sets (op vraag van Tom: enkel zichtbaar als er eGym was) */
@@ -5413,25 +5417,16 @@ window.__congrats=function(o){
       if(sd){ var p=sd.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]); cs=L[+p[2]-1]; when='on '+WS[dt.getDay()]+' '+dt.getDate()+' '+MS[dt.getMonth()]; }
       else{ cs=row(A[mk]||Z,{}); when=(selI===nowI?'so far in ':'in ')+MON[m2]; }
       rng=MON[m2]+' '+y2; prevOff=selI<=monFirst; nextOff=selI>=nowI;
-    }else{ /* Month: 6 maanden */
-      if(winEnd==null) winEnd=nowI;
-      if(selI>winEnd) winEnd=selI; else if(selI<=winEnd-6) winEnd=selI+5;
-      winEnd=Math.max(minEnd,Math.min(nowI,winEnd));
-      for(var j=winEnd-5;j<=winEnd;j++){ var y3=Math.floor(j/12), m3=j%12; L.push(row(A[y3+'-'+('0'+(m3+1)).slice(-2)]||Z,{i:j,y:y3,m:m3,sel:j===selI,run:j===nowI,aria:MON[m3]+' '+y3})); }
-      L.forEach(function(r,j){ r.lab=MS[r.m]+((r.m===0||j===0)&&r.y!==cur.getFullYear()?' ’'+String(r.y).slice(2):''); });
-      cs=null; L.forEach(function(r){ if(r.sel) cs=r; }); if(!cs) cs=row(A[ym.y+'-'+('0'+(ym.m+1)).slice(-2)]||Z,{y:ym.y,m:ym.m});
-      when=selI===nowI?'so far in '+MON[cs.m]:'in '+MON[cs.m]+(cs.y!==cur.getFullYear()?' '+cs.y:'');
-      var a0=L[0], z0=L[5]; rng=MS[a0.m]+(a0.y!==z0.y?' '+a0.y:'')+' – '+MS[z0.m]+' '+z0.y; prevOff=winEnd<=minEnd; nextOff=winEnd>=nowI;
     }
     var EGK={d:'ed',s:'es'}, anyEg=L.some(function(r){ return r.ed>0; })||cs.ed>0;
     /* vierde grafiek 'Group' (op vraag van Tom, 14 okt): enkel als er ooit een Group-sessie geregistreerd is */
     var MK={h:'c',gh:'gm'}, anyGr=keys.some(function(d){ return (days[d].gmin||0)>0; }), anyCa=keys.some(function(d){ return (days[d].min||0)>0; }), ROWS=[];
     if(hv!=='d') ROWS.push(['Training days','d',cs.d===1?'day':'days']); ROWS.push(['Sets','s',cs.s===1?'set':'sets']); if(anyCa) ROWS.push(['Cardio','h','']); if(anyGr) ROWS.push(['Group','gh','']); /* Cardio ook enkel met minstens één cardiosessie (HIIT telt mee; op vraag van Tom, 14 okt) */
-    var gs='--mon-n:'+L.length+(hv==='m'?'':';--mon-g:'+(dense?'2px':'3px'));
+    var gs='--mon-n:'+L.length+';--mon-g:'+(dense?'2px':'3px');
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
-      return '<div class="mon-blk'+(dense?' dense':'')+(hv==='m'?'':' mon-n')+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
-        L.map(function(r){ var v=r[k], vl=MK[k]?(hv==='m'?v:hrS(r[MK[k]])):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
+      return '<div class="mon-blk'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>'):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+        L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(46*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
     sc.querySelectorAll('[data-i]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
@@ -5441,10 +5436,9 @@ window.__congrats=function(o){
   }
   /* Earlier/Later en vegen: Month = 6 maanden (kalender springt naar de laatste maand van het nieuwe venster), Day = 1 maand, Year = 1 jaar
      (kalender springt naar december, of naar deze maand in het lopende jaar); nooit vóór de eerste trainingsmaand of voorbij deze maand */
-  function monPage(dir){ var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), fst=(monFirst==null?nowI:monFirst), minEnd=Math.min(nowI,fst+5);
+  function monPage(dir){ var cur=new Date(), nowI=mi(cur.getFullYear(),cur.getMonth()), fst=(monFirst==null?nowI:monFirst);
     if(hv==='d'){ var t=Math.max(fst,Math.min(nowI,mi(ym.y,ym.m)+dir)); if(t===mi(ym.y,ym.m)) return; ym={y:Math.floor(t/12),m:t%12}; render(); return; }
-    if(hv==='y'){ var y=ym.y+dir; if(y<Math.floor(fst/12)||y>cur.getFullYear()) return; var t2=Math.max(fst,Math.min(nowI,mi(y,11))); ym={y:Math.floor(t2/12),m:t2%12}; render(); return; }
-    var ne=Math.max(minEnd,Math.min(nowI,winEnd+6*dir)); if(ne===winEnd) return; winEnd=ne; ym={y:Math.floor(ne/12),m:ne%12}; render(); }
+    var y=ym.y+dir; if(y<Math.floor(fst/12)||y>cur.getFullYear()) return; var t2=Math.max(fst,Math.min(nowI,mi(y,11))); ym={y:Math.floor(t2/12),m:t2%12}; render(); }
   (function(){ var per=document.getElementById('histPer'); if(!per) return;
     per.querySelectorAll('button[data-hv]').forEach(function(b){ b.addEventListener('click',function(){ if(hv===b.dataset.hv) return; hv=b.dataset.hv; try{ localStorage.setItem(HVKEY,hv); }catch(e){} render(); }); }); })();
   (function(){ var p=document.getElementById('monPrev'), n=document.getElementById('monNext'), box=document.getElementById('calMon'); if(!p) return;
