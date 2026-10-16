@@ -1835,6 +1835,9 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 .pl-list .pl-h b{color:var(--ink)!important;} .pl-list .pl-h b.down{color:var(--neg,var(--accent))!important;}
 .pl-list .pl-h b.up,.pl-list .pl-sh b.up{color:var(--ink);}
 .pr-tot b{color:var(--ink);} .pr-tot b.down{color:var(--neg,var(--accent));}
+
+/* iOS-toetsenbord vangnet (16 okt): zie script 'vaste navbar meescrolt' */
+.gnav,.wo-end,.note-jump.note-float{translate:0 var(--kb-fix,0px);}
 </style>
 
 <header class="top">
@@ -5864,6 +5867,21 @@ window.__congrats=function(o){
     clearTimeout(T); T=setTimeout(function(){ nudge(); setTimeout(nudge,350); },60); },true);
   var vv=window.visualViewport; if(vv) vv.addEventListener('resize',function(){ if(!typing()&&vv.height>=window.innerHeight-1) nudge(); });
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(nudge,250); });
+  /* Vangnet (16 okt, screenshot Tom: navbar hing weer halverwege tijdens een workout): meet met een onzichtbare vaste probe (bottom:0)
+     waar iOS de onderkant van de layout-viewport denkt te hebben, vergelijk met de echte zichtbare onderkant (visualViewport) en schuif
+     de vaste onderelementen het verschil omlaag via --kb-fix (CSS `translate`, botst niet met transform bij :active). Niet tijdens typen. */
+  if(!vv) return;
+  var pr=document.createElement('div'); pr.setAttribute('aria-hidden','true');
+  pr.style.cssText='position:fixed;left:0;bottom:0;width:1px;height:0;pointer-events:none;visibility:hidden;';
+  document.body.appendChild(pr);
+  var R=0, cur=0;
+  function fix(){ R=0; var d=0;
+    if(!typing()){ d=Math.round(vv.offsetTop+vv.height-pr.getBoundingClientRect().bottom); if(d<2||d>600) d=0; }
+    if(d!==cur){ cur=d; document.documentElement.style.setProperty('--kb-fix',d+'px'); } }
+  function q(){ if(!R) R=requestAnimationFrame(fix); }
+  vv.addEventListener('resize',q); vv.addEventListener('scroll',q); window.addEventListener('scroll',q,{passive:true});
+  window.addEventListener('resize',q); document.addEventListener('focusin',q,true); document.addEventListener('focusout',function(){ setTimeout(q,80); setTimeout(q,400); },true);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(q,300); });
 })();
 </script>
 <script>
