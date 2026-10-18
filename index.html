@@ -966,6 +966,7 @@ body.split-cardio #s-d3 .exl .exgrp[data-grp="g8"],body.split-group #s-d3 .exl .
 .note-erase:active{background:var(--paper-soft);transform:scale(.94);}
 .note-erase:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 #p-voeding .sess-note{margin-bottom:2rem;}
+.exl{counter-reset:egsub;} .exsub[data-grp="g10"]:not([hidden]){counter-increment:egsub;} .exsub[data-grp="g10"]::before{content:counter(egsub) ' · ';} /* eGym-tussenkoppen genummerd zoals de chips in de End-balk (18 okt) */
 .exsub{list-style:none;padding:1.3rem 0 .45rem;border-bottom:1px solid var(--line);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
 
 #p53-login{position:fixed;inset:0;z-index:200;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px));}
@@ -5111,7 +5112,12 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var POP={g10:'eg-rotary-torso eg-lat-pulldown eg-leg-press eg-abdominal-crunch eg-seated-row eg-leg-extension eg-triceps-press eg-back-extension eg-chest-press eg-leg-curl eg-shoulder-press eg-butterfly eg-butterfly-reverse eg-biceps-curl eg-hip-abduction eg-hip-adduction eg-glute eg-squat eg-hip-thrust eg-calf'.split(' '),g8:'c-walk c-walkjog c-jog c-bike c-padel c-treadjog c-treadwalk c-row c-elliptical c-xbike c-airbike c-skierg c-stairs c-recumbent'.split(' '),g11:'c-hiit c-spin c-core c-yoga c-pilates c-box c-mobility'.split(' '),g0:'w0-bike w0-rowing w0-incline-walk w0-cross-trainer w0-skierg w0-bodyweight-squats w0-glute-bridge w0-dead-hang w0-stretching w0-pull-aparts w0-jump-rope w0-stair-climber'.split(' '),g1:'x1-back-squat x1-leg-press d1-goblet-squat x1-leg-extension d3-bulgarian-split-squat x1-walking-lunge x1-smith-squat d2-dumbbell-reverse-lunges x1-db-step-up x1-db-split-squat x1-db-squat x1-db-forward-lunge x1-bw-walking-lunge x1-jump-squat'.split(' '),g2:'x2-bench-press x2-db-bench d3-push-ups x2-incline-bench d2-chest-press-machine x2-cable-crossover d3-chest-fly-machine d1-dumbbell-chest-press x2-smith-bench x2-db-fly x2-dips x2-assisted-dip x2-incline-chest-machine x2-smith-incline x2-incline-pushup x2-decline-pushup'.split(' '),g3:'x3-hip-thrust x3-hip-thrust-machine x3-barbell-rdl x3-smith-rdl d1-dumbbell-romanian-deadlift x3-lying-leg-curl x3-seated-leg-curl x3-standing-calf x3-sl-calf-machine x3-legpress-calf x3-kickback-machine x3-standing-kickback x3-kb-swing x3-db-calf-raise x3-sl-calf-raise x3-single-leg-rdl x3-pull-through x3-donkey-kick'.split(' '),g4:'x4-barbell-row d2-seated-cable-row d3-eenarmige-dumbbell-row x4-row-machine d3-chest-supported-row x4-inverted-row d1-lat-pulldown x6-pull-ups x6-weighted-pull-ups d3-assisted-pull-ups x6-wide-pulldown x6-straight-arm-pulldown x6-vbar-pulldown d1-dead-hang'.split(' '),g5:'d2-dumbbell-lateral-raise d2-face-pull d1-seated-dumbbell-shoulder-press d3-shoulder-press-machine x5-reverse-fly-machine d3-cable-lateral-raise x5-front-raise x5-db-shrug'.split(' '),g6:'d1-plank x7-side-plank x7-plank-combo x7-crunches x7-decline-crunch x7-hanging-leg-raise x7-cable-crunch x7-russian-twist x7-bicycle-crunch d3-crunch-machine x7-back-extension x7-dead-bug d3-bird-dog d1-farmers-carry x7-knee-raise x7-woodchop x7-reverse-woodchop x7-pallof-press x7-superman'.split(' '),g7:'d3-dumbbell-biceps-curl x8-barbell-curl x8-hammer-curl x8-preacher-curl x8-preacher-machine x8-spider-curl x8-cable-curl x7-rope-hammer-curl x8-concentration-curl d3-curl-machine x8-wrist-curl x8-wrist-roller d2-triceps-rope-pushdown x8-bar-pushdown d3-overhead-cable-triceps-extension x8-kickback x8-bench-dips x8-triceps-dips x8-diamond-pushup x8-dip-machine x8-assisted-tri-dip d3-ss-rope x7-ss-bar d3-ss-overhead-curl'.split(' ')};
   /* de workout toont de oefeningen in dezelfde volgorde als het keuzeblad (laag, dan populariteit) */
   function tierOf(li){ return li.classList.contains('exr-danger')?2:li.querySelector('.exr-s .exr-warn')?1:0; }
+  /* eGym-toestellen per Gym-spiergroep (hoofdspier, zoals EGMAP in Strength; op vraag van Tom, 18 okt): tussenkoppen in de volgorde van Settings › Muscle groups, binnen een groep de circuitvolgorde */
+  var EGPRIM={'eg-leg-press':'g1','eg-leg-extension':'g1','eg-squat':'g1','eg-chest-press':'g2','eg-butterfly':'g2','eg-leg-curl':'g3','eg-hip-abduction':'g3','eg-hip-adduction':'g3','eg-glute':'g3','eg-hip-thrust':'g3','eg-calf':'g3',
+    'eg-lat-pulldown':'g4','eg-seated-row':'g4','eg-shoulder-press':'g5','eg-butterfly-reverse':'g5','eg-rotary-torso':'g6','eg-abdominal-crunch':'g6','eg-back-extension':'g6','eg-triceps-press':'g7','eg-biceps-curl':'g7'};
+  function egOrd(){ return window.__p53gorder?window.__p53gorder():['g1','g2','g3','g4','g5','g6','g7']; }
   function sortRows(g){ var pop=POP[g]||[], rs=rows(g); if(!rs.length) return rs;
+    if(g==='g10'){ SUBS.g10=egOrd().map(function(x){ var t=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+x+'"] .grp-t'); return t?t.textContent.trim():x; }).concat(['Other']); }
     document.querySelectorAll('#s-d3 .exsub[data-grp="'+g+'"]').forEach(function(h){ h.remove(); }); /* opnieuw sorteren: oude tussenkoppen weg */
     var ord=cfg.order&&cfg.order[g]; /* eigen volgorde (slepen in het keuzeblad) */
     function rank(li){ var i=pop.indexOf(keyOf(li)); i=i<0?999:i;
@@ -5121,6 +5127,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     function cat(li){ var og=li.dataset.og;
       if(g==='g0') return /^w0-(bike|rowing|incline-walk|cross-trainer|skierg|jump-rope|stair-climber)$/.test(keyOf(li))?0:1; /* Warm-up: eerst cardio, dan mobiliteit/activatie */
       if(g==='g8') return /^c-(walk|walkjog|jog|bike|padel)$/.test(keyOf(li))?0:1; /* Cardio: Outdoor / Indoor (op vraag van Tom, 10 okt; HIIT en Core staan sinds 14 okt in Group) */
+      if(g==='g10'){ var eo=egOrd().indexOf(EGPRIM[keyOf(li)]); return eo<0?7:eo; } /* eGym: per spiergroep */
       if(g==='g4') return og==='g6'?1:0; /* Back: eerst rows (horizontaal), dan pulldowns/pull-ups en bovenrug */
       if(g!=='g7') return 0;
       if(/wrist|reverse/i.test(li.querySelector('.exr-n').textContent)&&li.querySelectorAll('.exr-in').length<2) return 3; /* Arms: onderarmen als laatste (op vraag van Tom) */
@@ -5137,6 +5144,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   var SUBS={g8:['Outdoor','Indoor'],g0:['Cardio','Mobility & activation'],g4:['Rows','Vertical pull & upper back'],g7:['Biceps','Triceps','Supersets','Forearms']};
   Object.keys(POP).forEach(sortRows);
   apply(); /* tussenkoppen zonder zichtbare oefening verbergen */
+  document.addEventListener('p53-gorder',function(){ sortRows('g10'); apply(); }); /* eGym-tussenkoppen volgen de spiergroepvolgorde */
   /* onderblad */
   var bg=document.getElementById('grp-bg'), sh=document.getElementById('grp-sheet'), list=sh.querySelector('.gs-list'), msg=sh.querySelector('.gs-msg'), cur=null, open=false, last=null;
   function render(){
@@ -5810,15 +5818,10 @@ window.__congrats=function(o){
   function paint(){ var hs=heads(), nx=false;
     var raw=[]; TGT={};
     hs.forEach(function(h){ if(h.dataset.grp!=='g10'){ raw.push({g:h.dataset.grp,l:lab(h),n:name(h),c:done(h)}); return; }
-      /* eGym (op vraag van Tom, 18 okt): de toestellen in de balk verdeeld over de spiergroepen van Gym (hoofdspier, zoals Strength), genummerd in de volgorde van Settings › Muscle groups; de lijst zelf blijft in circuitvolgorde */
-      var by={}, li=h.nextElementSibling;
-      while(li&&!li.classList.contains('exgrp')){ if(li.classList.contains('exr')&&!li.classList.contains('ex-off')){
-          var mm=window.__musclesFor?window.__musclesFor(li.dataset.key,li)||{}:{}, pm=Object.keys(mm).filter(function(m){ return mm[m]>=1; })[0], g=EGG[pm]||'gx';
-          (by[g]=by[g]||{n:0,el:li}); if(li.classList.contains('done')) by[g].n++; }
-        li=li.nextElementSibling; }
-      var ord=(window.__p53gorder?window.__p53gorder():['g1','g2','g3','g4','g5','g6','g7']).concat(['gx']), k=0;
-      ord.forEach(function(g){ if(!by[g]) return; var key='eg-'+g; TGT[key]=by[g].el; var hd=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+g+'"] .grp-t');
-        raw.push({g:key,l:g==='gx'?'E':String(++k),n:'eGym · '+(g==='gx'?'Other':(hd?hd.textContent.trim():g)),c:by[g].n}); }); });
+      /* eGym: één chip per zichtbare tussenkop (spiergroep) van g10, genummerd zoals de tussenkoppen (CSS-teller) */
+      var k=0; [].forEach.call(document.querySelectorAll('#s-d3 .exl > li.exsub[data-grp="g10"]'),function(sh){ if(sh.hidden) return;
+        var n=0, li=sh.nextElementSibling; while(li&&li.classList.contains('exr')){ if(!li.classList.contains('ex-off')&&li.classList.contains('done')) n++; li=li.nextElementSibling; }
+        var key='eg-'+(++k); TGT[key]=sh; raw.push({g:key,l:String(k),n:'eGym · '+sh.textContent.trim(),c:n}); }); });
     var items=raw.map(function(r){ var d=r.c>0, x=!d&&!nx; if(x) nx=true; return {g:r.g,l:r.l,n:r.n,d:d,x:x,c:Math.min(4,r.c)}; });
     /* alle groepen minstens één oefening afgevinkt → stopicoon wordt een vinkje (op vraag van Tom, 18 okt) */
     var fe=document.getElementById('woEnd'), ic=fe&&fe.querySelector('svg'), all=items.length>0&&items.every(function(i){ return i.d; });
