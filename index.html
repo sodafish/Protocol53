@@ -1843,7 +1843,25 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 .pr-tot b{color:var(--ink);} .pr-tot b.down{color:var(--neg,var(--accent));}
 
 /* iOS-toetsenbord vangnet (16 okt): zie script 'vaste navbar meescrolt' */
-.gnav,.wo-end,.note-jump.note-float{translate:0 var(--kb-fix,0px);}
+.gnav,.wo-end,.note-jump.note-float,.wo-grp{translate:0 var(--kb-fix,0px);}
+/* ── END-BALK MET GROEPEN (op vraag van Tom, 18 okt; variant A + onderlijning van C): tijdens de workout volle breedte, rechts W 1 2 3 … ── */
+:root{--ink-acc:#E08A62;} /* accent op de --ink-pil: licht thema = lichte terracotta (donkere pil), donker/blauw = gewone accent (lichte pil) */
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--ink-acc:#9A4424;} }
+:root[data-theme="dark"],:root[data-theme="blue"]{--ink-acc:#9A4424;}
+.wo-end:not(.is-start){left:calc(var(--app-gut) + 16px);right:calc(var(--app-gut) + 16px);justify-content:flex-start;padding:0 1rem;}
+.wo-end:not(.is-start):active{transform:none;}
+.wo-end:not(.is-start) svg{color:var(--ink-acc);}
+.wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
+.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 8px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:2px;padding-left:6px;}
+.wo-grp[hidden]{display:none;}
+body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
+.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:22px;height:40px;padding:0;color:var(--paper);font:italic 500 18px/1 'Fraunces',Georgia,serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.wo-grp button:active{opacity:.6;}
+.wo-grp button.d{color:color-mix(in srgb,var(--paper) 38%,transparent);}
+.wo-grp button.d::after{content:"";position:absolute;left:3px;right:3px;top:50%;height:1.5px;background:var(--ink-acc);transform:rotate(-28deg);}
+.wo-grp button.nx{color:var(--ink-acc);}
+.wo-grp button.nx::before{content:"";position:absolute;left:6px;right:6px;bottom:5px;height:2px;border-radius:2px;background:var(--ink-acc);}
+@media (max-width:350px){ .wo-grp button{width:19px;font-size:16px;} .wo-grp{gap:1px;} }
 </style>
 
 <header class="top">
@@ -2674,6 +2692,7 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
   paint(); })();
 </script>
 <button type="button" class="wo-end" id="woEnd" hidden aria-label="End workout"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg><span class="wo-end-l">End workout</span><span class="wo-end-t" id="woEndT"></span></button>
+<div class="wo-grp" id="woGrp" hidden role="group" aria-label="Muscle groups in this workout"></div>
 <button type="button" class="note-jump note-float" id="noteJump" hidden aria-label="Go to your notes"><svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M200-200h360v-200h200v-360H200v560Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v400L600-120H200Zm80-280v-80h200v80H280Zm0-160v-80h400v80H280Zm-80 360v-560 560Z"/></svg></button>
 <script>
 /* ---- veeg naar links om te verwijderen (kalender + edit-blad van de grafiek): rij .cx-row schuift, rode .cx-del eronder; tik = wissen ---- */
@@ -2899,9 +2918,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var wg=document.getElementById('wdGo'); if(wg) wg.hidden=true; /* End workout enkel rechtsonder (op vraag van Tom) */
     /* zwevende knop rechtsonder: vóór de workout 'Start workout' (enkel op Workout), tijdens de workout 'End workout' + tijd (op vraag van Tom, 10 okt) */
     if(fl){ fl.hidden=false; fl.classList.toggle('is-start',!on); fl.setAttribute('aria-label',on?'End workout':'Start workout');
-      var lb=fl.querySelector('.wo-end-l'); if(lb) lb.textContent=on?'End workout':'Start workout';
+      var lb=fl.querySelector('.wo-end-l'); if(lb) lb.textContent=on?'End':'Start workout';
       var ic=fl.querySelector('svg'); if(ic) ic.innerHTML=on?'<rect x="5" y="5" width="14" height="14" rx="2.5"/>':'<path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.2-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/>'; }
     document.body.classList.add('wo-on');
+    if(window.__woGrpPaint) window.__woGrpPaint();
   }
   window.__paintWoBtns=paintWoBtns;
   setTimeout(function(){ woRun(!!woStart); paintWoBtns(); },0);
@@ -5766,10 +5786,34 @@ window.__congrats=function(o){
   });
 })();
 
+/* ---- END-BALK MET GROEPEN (op vraag van Tom, 18 okt): de zichtbare groepen van de huidige tab als W 1 2 3 …; doorstreept zodra er in die groep minstens één oefening afgevinkt is, de eerste open groep onderlijnd in accent; tik = naar die groep ---- */
+(function(){
+  var box=document.getElementById('woGrp'); if(!box) return;
+  function heads(){ var nw=document.documentElement.classList.contains('no-wu');
+    return [].filter.call(document.querySelectorAll('#s-d3 .exl > li.exgrp'),function(h){ return !h.classList.contains('split-off')&&!h.classList.contains('g-empty')&&!(nw&&h.dataset.grp==='g0'); }); }
+  function done(h){ var li=h.nextElementSibling; while(li&&!li.classList.contains('exgrp')){ if(li.classList.contains('exr')&&!li.classList.contains('ex-off')&&li.classList.contains('done')) return true; li=li.nextElementSibling; } return false; }
+  function lab(h){ if(h.dataset.grp==='g0') return 'W'; var n=h.querySelector('.grp-n'), t=n?n.textContent.trim():''; if(t) return t; var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim().charAt(0).toUpperCase():'·'; }
+  function name(h){ var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim():''; }
+  var sig='';
+  function paint(){ var hs=heads(), nx=false;
+    var items=hs.map(function(h){ var d=done(h), x=!d&&!nx; if(x) nx=true; return {g:h.dataset.grp,l:lab(h),n:name(h),d:d,x:x}; });
+    var s=JSON.stringify(items); if(s===sig) return; sig=s;
+    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', done':'')+'">'+i.l+'</button>'; }).join('');
+    box.hidden=!items.length; }
+  window.__woGrpPaint=paint;
+  ['p53-checks','p53-progs','p53-split','p53-groups','p53-gorder'].forEach(function(ev){ document.addEventListener(ev,function(){ setTimeout(paint,0); }); });
+  document.addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('#s-d3 .chk')) setTimeout(paint,60); },true);
+  box.addEventListener('click',function(e){ var b=e.target.closest('button[data-g]'); if(!b) return;
+    var go=function(){ var h=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+b.dataset.g+'"]'); if(!h) return;
+      var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+      window.scrollTo({top:Math.max(0,h.getBoundingClientRect().top+window.scrollY-12),behavior:smooth}); };
+    if(document.body.dataset.view!=='workout'){ var w=document.querySelector('.gnav-i[data-view="workout"]'); if(w) w.click(); setTimeout(go,480); } else go(); });
+  setTimeout(paint,0);
+})();
 /* ---- notitie-knop rechts van de zwevende Start/End workout-pil (enkel op Workout, via CSS): alleen zichtbaar als er iets in de notitie onderaan staat; tik = naar de notitie scrollen ---- */
 (function(){
   var b=document.getElementById('noteJump'), ta=document.getElementById('sessNote'); if(!b||!ta) return;
-  function paint(){ var on=!!ta.value.trim(); b.hidden=!on; document.body.classList.toggle('has-note',on); }
+  function paint(){ var on=false; /* voorlopig weg (op vraag van Tom, 18 okt: de End-balk is nu volle breedte); was !!ta.value.trim() */ b.hidden=!on; document.body.classList.toggle('has-note',on); }
   ['input','change'].forEach(function(ev){ ta.addEventListener(ev,paint); });
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
   var last=null; setInterval(function(){ if(ta.value!==last){ last=ta.value; paint(); } },700);
