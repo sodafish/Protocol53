@@ -651,3 +651,4 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - RECHTERMARGE (op vraag van Tom, 18 okt): laatste chip 10 px van de rechterrand van de pil (was 12) = gelijk aan de marge erboven (48 − 28)/2.
 - QA 18 okt: wissel Full/Upper/Lower veranderde de End-balk niet (geen event bij gelijke tab). Nu roept `apply()` van het split-script altijd `__woGrpPaint` aan.
 - ALLES AF = VINKJE (op vraag van Tom, 18 okt): zodra elke zichtbare groep in de End-balk afgewerkt is, wordt het stopicoon een vinkje (`svg[data-ic=ck]`, klasse `.all-done` op `#woEnd`), gezet in de paint van het groepsscript; `paintWoBtns` zet het icoon eerst terug.
+- QA 18 okt: play-icoon van Start workout was onzichtbaar (oude regel `.wo-end svg{color:var(--accent)}` overschreef --paper); regel weg.

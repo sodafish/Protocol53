@@ -1451,7 +1451,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .wo-end{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .wo-end svg,.wo-end:not(.is-start) svg{color:var(--paper);} /* Start én End workout: zelfde terracotta-verloop (op vraag van Tom, 18 okt; End was --ink) */ /* Start workout: zelfde verloop als de actieve navbar-knop */
 body:not([data-view="workout"]) .wo-end.is-start{display:none;} /* Start enkel op Workout; End op elke pagina */
 .wo-end:active{transform:scale(.96);}
-.wo-end svg{color:var(--accent);}
+/* (oude regel .wo-end svg accent weg: gaf het play-icoon dezelfde kleur als het terracotta-verloop, QA Tom 18 okt) */
 .wo-end-t{font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:500;opacity:.85;}
 .wo-end-t:empty{display:none;}
 /* notitieknop rechts van Start/End workout (op vraag van Tom, 14 okt): enkel op Workout en enkel als de notitie onderaan iets bevat; de pil schuift dan 58 px op */
