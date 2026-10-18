@@ -1861,6 +1861,7 @@ body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
 .wo-grp button.d{color:color-mix(in srgb,var(--paper) 45%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = geen rondje, enkel het gedempte cijfer (op vraag van Tom, 18 okt) */
+.wo-grp button.d span::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:1.5px;margin-top:-.75px;background:currentColor;border-radius:1px;} /* doorgestreept in de kleur van het cijfer (op vraag van Tom, 18 okt) */
 /* geen aparte markering meer voor de volgende groep (klasse .nx wordt nog gezet, zonder stijl) */
 
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
