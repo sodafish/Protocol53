@@ -680,4 +680,4 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - GEEN PLUSJE + MARGE (op vraag van Tom, 18 okt): max. 4 bolletjes, meer oefeningen = gewoon 4 (geen plusje meer; aria-label geeft nog het echte aantal); balk-padding rechts 16 px (was 8), dus zelfde marge als links.
 - Cijfers in de balk 18 px (op vraag van Tom, 18 okt; was 16).
 - Tussen de cijfers 6 px (op vraag van Tom, 18 okt; was 2; `fit()` rekent mee). Gemeten met 8 groepen: 375 px = chips 25,5 px, vanaf 393 px 26 px.
-- Bolletjes terug in `--ink` (op vraag van Tom, 18 okt; wit in donker, zwart in licht), niet meer accent.
+- Bolletjes: even `--ink` geprobeerd, op vraag van Tom terug naar `--accent` (18 okt).
