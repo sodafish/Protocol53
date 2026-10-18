@@ -1848,26 +1848,28 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 :root{--ink-acc:#E08A62;} /* accent op de --ink-pil: licht thema = lichte terracotta (donkere pil), donker/blauw = gewone accent (lichte pil) */
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--ink-acc:#9A4424;} }
 :root[data-theme="dark"],:root[data-theme="blue"]{--ink-acc:#9A4424;}
-.wo-end:not(.is-start){padding-right:calc(var(--wo-grp-w,0px) + 20px + var(--wo-gap,16px));} /* rechts uitgelijnd, groeit naar links met de groepen; vaste afstand tijd → W (op vraag van Tom, 18 okt; volle breedte teruggedraaid) */
+.wo-end:not(.is-start){padding-right:calc(var(--wo-grp-w,0px) + 8px + var(--wo-gap,12px));} /* rechts uitgelijnd, groeit naar links met de chips; vaste afstand tijd → W (op vraag van Tom, 18 okt) */
 .wo-end:not(.is-start):active{transform:none;}
 .wo-end:not(.is-start) svg,.note-jump.note-float svg{color:var(--ink-acc);} /* notitie-icoon = kleur van het stopicoon (op vraag van Tom, 18 okt) */
 body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
-.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 20px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:1px;padding-left:4px;} /* geen scheidingslijn, 20 px rechts (op vraag van Tom, 18 okt) */
+.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 8px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:3px;} /* CHIPS (variant B, op vraag van Tom, 18 okt): 8 px van de rand van de pil */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
-.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:20px;height:40px;padding:0;color:var(--paper);font:italic 500 18px/1 'Fraunces',Georgia,serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.wo-grp button:active{opacity:.6;}
-.wo-grp button.d{color:color-mix(in srgb,var(--paper) 24%,transparent);} /* afgewerkt: enkel sterker gedempt, geen streep (op vraag van Tom, 18 okt) */
-.wo-grp button.nx{color:var(--ink-acc);}
-.wo-grp button.nx::before{content:"";position:absolute;left:6px;right:6px;bottom:5px;height:2px;border-radius:2px;background:var(--ink-acc);}
+.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:28px;height:44px;padding:0;color:var(--paper);font:italic 500 15px/1 'Fraunces',Georgia,serif;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px */
+.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:8px;height:28px;border-radius:50%;border:1px solid color-mix(in srgb,var(--paper) 28%,transparent);box-sizing:border-box;}
+.wo-grp button span{position:relative;z-index:1;}
+.wo-grp button:active{transform:scale(.92);}
+.wo-grp button.d{color:var(--ink);} .wo-grp button.d::after{background:var(--ink-acc);border-color:var(--ink-acc);} /* afgewerkt = gevuld rondje in accent, geen streep */
+.wo-grp button.nx{color:var(--ink-acc);} .wo-grp button.nx::after{border:1.5px solid var(--ink-acc);} /* volgende open groep = accentring */
+
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
 /* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
-body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 20px);}
-html.wo-fit1 .wo-grp{gap:0;} html.wo-fit1 .wo-grp button{width:17px;font-size:16.5px;}
-html.wo-fit2{--wo-gap:10px;} html.wo-fit2 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
+body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 8px);}
+html.wo-fit1 .wo-end:not(.is-start) .wo-end-l{display:none;} /* past niet: eerst 'End' weg (stopicoon + tijd blijven) */
+html.wo-fit2{--wo-gap:8px;} html.wo-fit2 .wo-grp{gap:2px;} html.wo-fit2 .wo-grp button{width:25px;} html.wo-fit2 .wo-grp button::after{top:9.5px;height:25px;} html.wo-fit2 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
 html.wo-fit3 .wo-end:not(.is-start) .wo-end-t{display:none;}
-@media (max-width:350px){ body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 20px);} }
+@media (max-width:350px){ body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 8px);} }
 </style>
 
 <header class="top">
@@ -5804,7 +5806,7 @@ window.__congrats=function(o){
   function paint(){ var hs=heads(), nx=false;
     var items=hs.map(function(h){ var d=done(h), x=!d&&!nx; if(x) nx=true; return {g:h.dataset.grp,l:lab(h),n:name(h),d:d,x:x}; });
     var s=JSON.stringify(items); if(s===sig) return; sig=s;
-    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', done':'')+'">'+i.l+'</button>'; }).join('');
+    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', done':'')+'"><span>'+i.l+'</span></button>'; }).join('');
     box.hidden=!items.length; fit(); }
   /* pil past niet links in de kolom → stap voor stap compacter (wo-fit1..3) */
   var H=document.documentElement, fl=document.getElementById('woEnd');
@@ -5831,7 +5833,7 @@ window.__congrats=function(o){
 /* ---- notitie-knop rechts van de zwevende Start/End workout-pil (enkel op Workout, via CSS): alleen zichtbaar als er iets in de notitie onderaan staat; tik = naar de notitie scrollen ---- */
 (function(){
   var b=document.getElementById('noteJump'), ta=document.getElementById('sessNote'); if(!b||!ta) return;
-  function paint(){ var on=!!ta.value.trim(); b.hidden=!on; document.body.classList.toggle('has-note',on); }
+  function paint(){ var on=false; /* voorlopig weg (op vraag van Tom, 18 okt, bij de chips); was !!ta.value.trim() */ b.hidden=!on; document.body.classList.toggle('has-note',on); }
   ['input','change'].forEach(function(ev){ ta.addEventListener(ev,paint); });
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
   var last=null; setInterval(function(){ if(ta.value!==last){ last=ta.value; paint(); } },700);
