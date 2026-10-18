@@ -1860,7 +1860,7 @@ body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;
 .wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((44px - var(--chip,28px)) / 2);height:var(--chip,28px);border-radius:50%;background:var(--paper);box-sizing:border-box;} /* cijfer in accent op het terracotta-verloop (18 okt); open groep = vol rondje in --paper, vroeger cijfer --ink: zwart/wit zoals de navbar (op vraag van Tom, 18 okt; eerst accent) */
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
-.wo-grp button.d{color:color-mix(in srgb,var(--paper) 62%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = geen rondje, enkel het gedempte cijfer (op vraag van Tom, 18 okt) */
+.wo-grp button.d{color:color-mix(in srgb,var(--paper) 62%,transparent);} .wo-grp button.d span{transform:translateY(-3px);} .wo-grp button b{position:absolute;left:0;right:0;top:calc(50% + 6px);display:flex;justify-content:center;gap:2px;pointer-events:none;} .wo-grp button b u{width:3px;height:3px;border-radius:50%;background:color-mix(in srgb,var(--paper) 80%,transparent);} /* bolletje per afgevinkte oefening, max 4; cijfer 3 px omhoog (variant B, op vraag van Tom, 18 okt) */ .wo-grp button.d::after{background:transparent;} /* afgewerkt = geen rondje, enkel het gedempte cijfer (op vraag van Tom, 18 okt) */
 .wo-grp button.d span::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:1.5px;margin-top:-.75px;background:currentColor;border-radius:1px;} /* doorgestreept in de kleur van het cijfer (op vraag van Tom, 18 okt) */
 /* geen aparte markering meer voor de volgende groep (klasse .nx wordt nog gezet, zonder stijl) */
 
@@ -5802,19 +5802,19 @@ window.__congrats=function(o){
   var box=document.getElementById('woGrp'); if(!box) return;
   function heads(){ var nw=document.documentElement.classList.contains('no-wu');
     return [].filter.call(document.querySelectorAll('#s-d3 .exl > li.exgrp'),function(h){ return !h.classList.contains('split-off')&&!h.classList.contains('g-empty')&&!(nw&&h.dataset.grp==='g0'); }); }
-  function done(h){ var li=h.nextElementSibling; while(li&&!li.classList.contains('exgrp')){ if(li.classList.contains('exr')&&!li.classList.contains('ex-off')&&li.classList.contains('done')) return true; li=li.nextElementSibling; } return false; }
+  function done(h){ var li=h.nextElementSibling, n=0; while(li&&!li.classList.contains('exgrp')){ if(li.classList.contains('exr')&&!li.classList.contains('ex-off')&&li.classList.contains('done')) n++; li=li.nextElementSibling; } return n; } /* aantal afgevinkte oefeningen in de groep */
   function lab(h){ if(h.dataset.grp==='g0') return 'W'; var n=h.querySelector('.grp-n'), t=n?n.textContent.trim():''; if(t) return t; var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim().charAt(0).toUpperCase():'·'; }
   function name(h){ var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim():''; }
   var sig='';
   function paint(){ var hs=heads(), nx=false;
-    var items=hs.map(function(h){ var d=done(h), x=!d&&!nx; if(x) nx=true; return {g:h.dataset.grp,l:lab(h),n:name(h),d:d,x:x}; });
+    var items=hs.map(function(h){ var c=done(h), d=c>0, x=!d&&!nx; if(x) nx=true; return {g:h.dataset.grp,l:lab(h),n:name(h),d:d,x:x,c:Math.min(4,c)}; });
     /* alle groepen minstens één oefening afgevinkt → stopicoon wordt een vinkje (op vraag van Tom, 18 okt) */
     var fe=document.getElementById('woEnd'), ic=fe&&fe.querySelector('svg'), all=items.length>0&&items.every(function(i){ return i.d; });
     if(ic&&fe&&!fe.classList.contains('is-start')){ var want=all?'ck':'stop'; if(ic.dataset.ic!==want){ ic.dataset.ic=want;
       ic.innerHTML=all?'<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>':'<rect x="5" y="5" width="14" height="14" rx="2.5"/>'; }
       fe.classList.toggle('all-done',all); }
     var s=JSON.stringify(items); if(s===sig) return; sig=s;
-    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', done':'')+'"><span>'+i.l+'</span></button>'; }).join('');
+    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', '+i.c+(i.c>1?' exercises':' exercise')+' done':'')+'"><span>'+i.l+'</span>'+(i.c?'<b>'+new Array(i.c+1).join('<u></u>')+'</b>':'')+'</button>'; }).join('');
     box.hidden=!items.length; fit(); }
   /* pil past niet links in de kolom → stap voor stap compacter (wo-fit1..3) */
   var H=document.documentElement, fl=document.getElementById('woEnd');
