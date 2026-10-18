@@ -2316,13 +2316,19 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
     </div>
   </div>
 
-  <div class="section" data-sec="fuel">
+  <div class="section" data-sec="fuel" data-v="2">
     <div class="section-title">Around your workout</div>
     <div class="tip">
       <b class="h">30–45 minutes before</b>
-      <p>A banana: 25–30 g of fast carbohydrates, light on the stomach, no added sugar. Hungry, or lunch more than four hours ago? Add half a shake with water (±15 g protein) or 150 g skyr.</p>
+      <ul>
+        <li><strong>A banana.</strong> 25–30 g of fast carbohydrates, light on the stomach, no added sugar.</li>
+        <li><strong>Hungry, or lunch more than four hours ago?</strong> Add a shake with water (25–30 g protein) or 150 g skyr.</li>
+      </ul>
       <b class="h">After</b>
-      <p>A normal meal with protein: chicken or salmon with vegetables, plus a fist-sized portion of potatoes, rice or wholegrain pasta to refill. No meal within a couple of hours? Then a shake.</p>
+      <ul>
+        <li><strong>A normal meal with protein.</strong> Chicken or salmon with vegetables, plus a fist-sized portion of potatoes, rice or wholegrain pasta to refill.</li>
+        <li><strong>No meal within a couple of hours?</strong> Then a shake.</li>
+      </ul>
       <b class="h">Good to know</b>
       <ul>
         <li><strong>Timing barely matters.</strong> Your daily total of protein counts; protein before works as well as after.</li>
@@ -2332,6 +2338,7 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
         <li><strong>Fit it into your day.</strong> The snack comes out of your daily calories, it's not on top.</li>
       </ul>
     </div>
+  </div>
   </div>
 
   <div class="section">
@@ -6038,12 +6045,13 @@ window.__congrats=function(o){
   function stored(v){ try{ return localStorage.getItem(key(v)); }catch(e){ return null; } }
   /* 'Around your workout' (18 okt): eenmalig toevoegen aan een bewaarde (bewerkte) Diet-versie, na 'Protein is the exception'.
      Vlag fitlog-pg-fuel (lokaal) + fuel:1 in cfg/pages, zodat een sectie die Tom zelf wist niet terugkomt. */
-  var FIX='fitlog-pg-fuel', pend=false;
-  function fixed(){ try{ return localStorage.getItem(FIX)==='1'; }catch(e){ return false; } }
-  function setFixed(){ try{ localStorage.setItem(FIX,'1'); }catch(e){} }
-  function withFuel(h){ if(!h||h.indexOf('data-sec="fuel"')>-1) return h;
+  var FIX='fitlog-pg-fuel', FV=2, pend=false;
+  function fixed(){ try{ return (+localStorage.getItem(FIX)||0)>=FV; }catch(e){ return false; } }
+  function setFixed(){ try{ localStorage.setItem(FIX,String(FV)); }catch(e){} }
+  function withFuel(h){ if(!h||h.indexOf('data-sec="fuel" data-v="'+FV+'"')>-1) return h;
     var src=document.createElement('template'); src.innerHTML=DEF.voeding||''; var f=src.content.querySelector('[data-sec="fuel"]'); if(!f) return h;
-    var t=document.createElement('template'); t.innerHTML=h; var ref=null;
+    var t=document.createElement('template'); t.innerHTML=h; var ref=null, old=t.content.querySelector('[data-sec="fuel"]');
+    if(old){ old.parentNode.replaceChild(f,old); var o=document.createElement('div'); o.appendChild(t.content); return o.innerHTML.trim(); }
     t.content.querySelectorAll('.section-title').forEach(function(x){ if(/protein is the exception/i.test(x.textContent)) ref=x.closest('.section'); });
     if(ref) ref.parentNode.insertBefore(f,ref.nextSibling); else t.content.appendChild(f);
     var d=document.createElement('div'); d.appendChild(t.content); return d.innerHTML.trim(); }
@@ -6106,7 +6114,7 @@ window.__congrats=function(o){
     var h=html(v); save(v,h===DEF[v]?null:h); bar(v); }
   function save(v,h){ try{ if(h) localStorage.setItem(key(v),h); else localStorage.removeItem(key(v)); }catch(e){}
     var at=Date.now(); try{ localStorage.setItem('fitlog-pg-at',String(at)); }catch(e){}
-    if(col){ var d={at:at,fuel:1}; PAGES.forEach(function(p){ d[p]=stored(p)||null; }); col.doc('pages').set(d).catch(function(){}); } }
+    if(col){ var d={at:at,fuel:FV}; PAGES.forEach(function(p){ d[p]=stored(p)||null; }); col.doc('pages').set(d).catch(function(){}); } }
   /* andere pagina in de navbar = bewerkmodus verlaten; wijzigingen worden bewaard zoals bij Done (op vraag van Tom, 14 okt) */
   PAGES.forEach(function(v){ var s=sec(v); if(!s) return; new MutationObserver(function(){ if(s.hidden&&s.classList.contains('pg-editing')) stop(v); }).observe(s,{attributes:true,attributeFilter:['hidden']}); });
   /* plakken = enkel platte tekst (geen opmaak van elders) */
@@ -6114,11 +6122,11 @@ window.__congrats=function(o){
     var txt=(e.clipboardData||window.clipboardData).getData('text/plain'); document.execCommand('insertText',false,txt); });
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; col=db.collection('cfg');
     col.onSnapshot(function(snap){ if(snap.metadata&&snap.metadata.fromCache) return; var d=null; snap.docs.forEach(function(x){ if(x.id==='pages') d=x.data(); });
-      if(d&&d.fuel) setFixed();
+      if(d&&d.fuel>=FV) setFixed();
       var la=0; try{ la=+localStorage.getItem('fitlog-pg-at')||0; }catch(e){}
       if(!d||!(d.at>la)){ if(pend){ pend=false; save('voeding',stored('voeding')); } return; }
       try{ localStorage.setItem('fitlog-pg-at',String(d.at)); }catch(e){}
-      var fx=false; if(!d.fuel&&d.voeding){ var hv=withFuel(d.voeding); if(hv!==d.voeding){ d.voeding=hv; fx=true; } } pend=false;
+      var fx=false; if(!(d.fuel>=FV)&&d.voeding){ var hv=withFuel(d.voeding); if(hv!==d.voeding){ d.voeding=hv; fx=true; } } pend=false;
       PAGES.forEach(function(v){ if(!sec(v)||sec(v).classList.contains('pg-editing')) return; var h=d[v]||null;
         try{ if(h) localStorage.setItem(key(v),h); else localStorage.removeItem(key(v)); }catch(e){} put(v,h||DEF[v]); bar(v); });
       if(fx) save('voeding',stored('voeding')); },function(){}); });
