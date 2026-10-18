@@ -2316,18 +2316,18 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
     </div>
   </div>
 
-  <div class="section" data-sec="fuel" data-v="2">
+  <div class="section" data-sec="fuel" data-v="3">
     <div class="section-title">Around your workout</div>
     <div class="tip">
       <b class="h">30–45 minutes before</b>
       <ul>
         <li><strong>A banana.</strong> 25–30 g of fast carbohydrates, light on the stomach, no added sugar.</li>
-        <li><strong>Hungry, or lunch more than four hours ago?</strong> Add a shake with water (25–30 g protein) or 150 g skyr.</li>
+        <li><strong>A shake with water.</strong> 25–30 g of protein, available during and after training, and light on the stomach. 150 g skyr works too.</li>
       </ul>
       <b class="h">After</b>
       <ul>
         <li><strong>A normal meal with protein.</strong> Chicken or salmon with vegetables, plus a fist-sized portion of potatoes, rice or wholegrain pasta to refill.</li>
-        <li><strong>No meal within a couple of hours?</strong> Then a shake.</li>
+        <li><strong>No meal within a couple of hours?</strong> Then a second shake.</li>
       </ul>
       <b class="h">Good to know</b>
       <ul>
@@ -6045,7 +6045,7 @@ window.__congrats=function(o){
   function stored(v){ try{ return localStorage.getItem(key(v)); }catch(e){ return null; } }
   /* 'Around your workout' (18 okt): eenmalig toevoegen aan een bewaarde (bewerkte) Diet-versie, na 'Protein is the exception'.
      Vlag fitlog-pg-fuel (lokaal) + fuel:1 in cfg/pages, zodat een sectie die Tom zelf wist niet terugkomt. */
-  var FIX='fitlog-pg-fuel', FV=2, pend=false;
+  var FIX='fitlog-pg-fuel', FV=3, pend=false;
   function fixed(){ try{ return (+localStorage.getItem(FIX)||0)>=FV; }catch(e){ return false; } }
   function setFixed(){ try{ localStorage.setItem(FIX,String(FV)); }catch(e){} }
   function withFuel(h){ if(!h||h.indexOf('data-sec="fuel" data-v="'+FV+'"')>-1) return h;
