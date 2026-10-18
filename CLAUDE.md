@@ -648,3 +648,4 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - AFSTANDEN (op vraag van Tom, 18 okt, later): tussen de chips 4 px (`--chip-gap`; wo-fit1 3 px), tijd → W 18 px (`--wo-gap`; wo-fit1 14 px).
 - CHIPS ZWART/WIT (op vraag van Tom, 18 okt): open groep = rondje `--paper` met cijfer `--ink` (omgekeerd t.o.v. de `--ink`-pil, dus zwart/wit zoals de navbar), niet meer `--ink-acc`. Het stopicoon blijft `--ink-acc`.
 - END = TERRACOTTA (op vraag van Tom, 18 okt): de End-pil heeft nu hetzelfde verloop als Start workout (`.wo-end` altijd, niet meer `--ink`); tekst en stopicoon `--paper`. Chips: rondje `--paper` met cijfer `--accent`; afgewerkt = cijfer `--paper` 62% doorgestreept. Notitieknop altijd terracotta. `--ink-acc` wordt niet meer gebruikt in de balk.
+- RECHTERMARGE (op vraag van Tom, 18 okt): laatste chip 10 px van de rechterrand van de pil (was 12) = gelijk aan de marge erboven (48 − 28)/2.
