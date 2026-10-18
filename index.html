@@ -5805,9 +5805,21 @@ window.__congrats=function(o){
   function done(h){ var li=h.nextElementSibling, n=0; while(li&&!li.classList.contains('exgrp')){ if(li.classList.contains('exr')&&!li.classList.contains('ex-off')&&li.classList.contains('done')) n++; li=li.nextElementSibling; } return n; } /* aantal afgevinkte oefeningen in de groep */
   function lab(h){ if(h.dataset.grp==='g0') return 'W'; var n=h.querySelector('.grp-n'), t=n?n.textContent.trim():''; if(t) return t; var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim().charAt(0).toUpperCase():'·'; }
   function name(h){ var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim():''; }
-  var sig='';
+  var sig='', TGT={};
+  var EGG={quad:'g1',borst:'g2',ham:'g3',bil:'g3',kuit:'g3',add:'g3',lats:'g4',trap:'g4',midrug:'g4',sz:'g5',sv:'g5',sa:'g5',buik:'g6',schuin:'g6',onderrug:'g6',bi:'g7',tri:'g7',oa:'g7'}; /* hoofdspier → Gym-groep, zoals EGMAP in Strength */
   function paint(){ var hs=heads(), nx=false;
-    var items=hs.map(function(h){ var c=done(h), d=c>0, x=!d&&!nx; if(x) nx=true; return {g:h.dataset.grp,l:lab(h),n:name(h),d:d,x:x,c:Math.min(4,c)}; });
+    var raw=[]; TGT={};
+    hs.forEach(function(h){ if(h.dataset.grp!=='g10'){ raw.push({g:h.dataset.grp,l:lab(h),n:name(h),c:done(h)}); return; }
+      /* eGym (op vraag van Tom, 18 okt): de toestellen in de balk verdeeld over de spiergroepen van Gym (hoofdspier, zoals Strength), genummerd in de volgorde van Settings › Muscle groups; de lijst zelf blijft in circuitvolgorde */
+      var by={}, li=h.nextElementSibling;
+      while(li&&!li.classList.contains('exgrp')){ if(li.classList.contains('exr')&&!li.classList.contains('ex-off')){
+          var mm=window.__musclesFor?window.__musclesFor(li.dataset.key,li)||{}:{}, pm=Object.keys(mm).filter(function(m){ return mm[m]>=1; })[0], g=EGG[pm]||'gx';
+          (by[g]=by[g]||{n:0,el:li}); if(li.classList.contains('done')) by[g].n++; }
+        li=li.nextElementSibling; }
+      var ord=(window.__p53gorder?window.__p53gorder():['g1','g2','g3','g4','g5','g6','g7']).concat(['gx']), k=0;
+      ord.forEach(function(g){ if(!by[g]) return; var key='eg-'+g; TGT[key]=by[g].el; var hd=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+g+'"] .grp-t');
+        raw.push({g:key,l:g==='gx'?'E':String(++k),n:'eGym · '+(g==='gx'?'Other':(hd?hd.textContent.trim():g)),c:by[g].n}); }); });
+    var items=raw.map(function(r){ var d=r.c>0, x=!d&&!nx; if(x) nx=true; return {g:r.g,l:r.l,n:r.n,d:d,x:x,c:Math.min(4,r.c)}; });
     /* alle groepen minstens één oefening afgevinkt → stopicoon wordt een vinkje (op vraag van Tom, 18 okt) */
     var fe=document.getElementById('woEnd'), ic=fe&&fe.querySelector('svg'), all=items.length>0&&items.every(function(i){ return i.d; });
     if(ic&&fe&&!fe.classList.contains('is-start')){ var want=all?'ck':'stop'; if(ic.dataset.ic!==want){ ic.dataset.ic=want;
@@ -5838,7 +5850,7 @@ window.__congrats=function(o){
   ['p53-checks','p53-progs','p53-split','p53-groups','p53-gorder'].forEach(function(ev){ document.addEventListener(ev,function(){ setTimeout(paint,0); }); });
   document.addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('#s-d3 .chk')) setTimeout(paint,60); },true);
   box.addEventListener('click',function(e){ var b=e.target.closest('button[data-g]'); if(!b) return;
-    var go=function(){ var h=document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+b.dataset.g+'"]'); if(!h) return;
+    var go=function(){ var h=TGT[b.dataset.g]||document.querySelector('#s-d3 .exl > li.exgrp[data-grp="'+b.dataset.g+'"]'); if(!h) return;
       var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
       window.scrollTo({top:Math.max(0,h.getBoundingClientRect().top+window.scrollY-12),behavior:smooth}); };
     if(document.body.dataset.view!=='workout'){ var w=document.querySelector('.gnav-i[data-view="workout"]'); if(w) w.click(); setTimeout(go,480); } else go(); });
