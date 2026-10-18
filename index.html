@@ -737,7 +737,9 @@ td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
   color:transparent;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;
   transition:background-color .2s ease,border-color .2s ease,color .2s ease;}
 .chk:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
-.chk[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#FFFFFF;}
+.chk[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#000;} /* zwart vinkje (op vraag van Tom, 18 okt; was wit): 3,2:1 op terracotta */
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .chk[aria-pressed="true"]{color:var(--paper);} }
+:root[data-theme="dark"] .chk[aria-pressed="true"],:root[data-theme="blue"] .chk[aria-pressed="true"]{color:var(--paper);} /* donker/blauw: donker vinkje op lichte terracotta, ±6:1 */
 .exr.done .exr-n,.exr.done .exr-s{color:var(--muted-soft);}
 .exr.done .exr-n{text-decoration:line-through;text-decoration-thickness:1.5px;}
 .reset-chk{margin-top:1.1rem;border:1.5px solid var(--line);border-radius:999px;padding:.7rem 1.1rem;min-height:44px;
