@@ -5258,6 +5258,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     document.body.classList.toggle('split-home',cur==='home');
     var was=window.__split; window.__split=cur; if(window.__p53wuApply) window.__p53wuApply(cur); /* nextGroup scrolt alleen door bij Full body */
     if(was!==cur) document.dispatchEvent(new Event('p53-split')); /* groepskeuze: Home heeft een eigen selectie */
+    if(window.__woGrpPaint) setTimeout(window.__woGrpPaint,0); /* End-balk volgt Full/Upper/Lower en elke andere wissel (QA Tom, 18 okt: bleef op Full staan) */
     lbl.textContent=NAME[cur];
     pop.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-checked',b.dataset.split===cur?'true':'false'); });
     if(tabs) tabs.querySelectorAll('[data-split]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.split===cur?'true':'false'); });
