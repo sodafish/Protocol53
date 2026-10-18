@@ -1867,7 +1867,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp{margin-left:auto;display:flex;align-items:center;gap:2px;min-width:0;}
 .wo-grp[hidden]{display:none;}
 .wo-grp button{appearance:none;position:relative;flex:none;border:0;background:transparent;width:var(--chip,30px);height:54px;padding:0;color:var(--ink);font:600 max(12px,calc(var(--chip,30px) * .5))/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;}
-.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((54px - var(--chip,30px)) / 2);height:var(--chip,30px);border-radius:50%;background:color-mix(in srgb,var(--ink) 20%,transparent);} /* open groep = duidelijk rondje (--ink 20%; eerst 7, dan 13%), cijfer --ink (op vraag van Tom, 18 okt; was 7%) */
+.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((54px - var(--chip,30px)) / 2);height:var(--chip,30px);border-radius:50%;background:transparent;} /* GEEN rondjes meer (op vraag van Tom, 18 okt): open groep = enkel het cijfer in --ink (wit in donker, zwart in licht) */
 /* geen aparte stijl voor de actieve/volgende groep (op vraag van Tom, 18 okt); klasse .nx blijft gezet, zonder stijl */
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
