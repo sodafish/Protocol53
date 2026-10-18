@@ -1860,7 +1860,7 @@ body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;
 .wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((44px - var(--chip,28px)) / 2);height:var(--chip,28px);border-radius:50%;background:var(--ink-acc);box-sizing:border-box;} /* open groep = vol rondje in accent (variant A, op vraag van Tom, 18 okt) */
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
-.wo-grp button.d{color:color-mix(in srgb,var(--paper) 45%,transparent);} .wo-grp button.d::after{background:color-mix(in srgb,var(--paper) 16%,transparent);} /* afgewerkt = zelfde rondje, neutraal grijs */
+.wo-grp button.d{color:color-mix(in srgb,var(--paper) 45%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = geen rondje, enkel het gedempte cijfer (op vraag van Tom, 18 okt) */
 /* geen aparte markering meer voor de volgende groep (klasse .nx wordt nog gezet, zonder stijl) */
 
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
