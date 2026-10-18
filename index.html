@@ -1850,10 +1850,10 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 :root[data-theme="dark"],:root[data-theme="blue"]{--ink-acc:#9A4424;}
 .wo-end:not(.is-start){left:calc(var(--app-gut) + 16px);right:calc(var(--app-gut) + 16px);justify-content:flex-start;padding:0 1rem;}
 .wo-end:not(.is-start):active{transform:none;}
-.wo-end:not(.is-start) svg{color:var(--ink-acc);}
+.wo-end:not(.is-start) svg,.note-jump.note-float svg{color:var(--ink-acc);} /* notitie-icoon = kleur van het stopicoon (op vraag van Tom, 18 okt) */
+body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
-.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 8px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:2px;padding-left:12px;}
-.wo-grp::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:1px;background:color-mix(in srgb,var(--paper) 18%,transparent);} /* scheidingslijn tussen End en de groepen (variant C) */
+.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 14px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:2px;padding-left:4px;} /* geen scheidingslijn, 14 px rechts (op vraag van Tom, 18 okt) */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
 .wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:22px;height:40px;padding:0;color:var(--paper);font:italic 500 18px/1 'Fraunces',Georgia,serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -1863,10 +1863,10 @@ body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;
 .wo-grp button.nx::before{content:"";position:absolute;left:6px;right:6px;bottom:5px;height:2px;border-radius:2px;background:var(--ink-acc);}
 @media (max-width:350px){ .wo-grp button{width:19px;font-size:16px;} .wo-grp{gap:1px;} }
 /* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
-body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 8px);gap:1px;padding-left:10px;}
-body[data-view="workout"].has-note .wo-grp button{width:20px;font-size:17px;}
-body[data-view="workout"].has-note .wo-end:not(.is-start) .wo-end-l{display:none;}
-@media (max-width:350px){ .wo-end:not(.is-start) .wo-end-l{display:none;} body[data-view="workout"].has-note .wo-end:not(.is-start) .wo-end-t{display:none;} body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 6px);} body[data-view="workout"].has-note .wo-grp button{width:18px;font-size:15px;} }
+body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 12px);gap:0;}
+body[data-view="workout"].has-note .wo-grp button{width:18px;font-size:16.5px;}
+body[data-view="workout"].has-note .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
+@media (max-width:350px){ .wo-end:not(.is-start) .wo-end-t{display:none;} body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 10px);} body[data-view="workout"].has-note .wo-grp button{width:18px;font-size:15px;} }
 </style>
 
 <header class="top">
