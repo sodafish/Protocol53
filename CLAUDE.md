@@ -681,3 +681,4 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Cijfers in de balk 18 px (op vraag van Tom, 18 okt; was 16).
 - Tussen de cijfers 6 px (op vraag van Tom, 18 okt; was 2; `fit()` rekent mee). Gemeten met 8 groepen: 375 px = chips 25,5 px, vanaf 393 px 26 px.
 - Bolletjes: even `--ink` geprobeerd, op vraag van Tom terug naar `--accent` (18 okt).
+- END ALTIJD WIT (op vraag van Tom, 18 okt): de witte pil (tekst + stop-/vinkje-icoon `--ink`; donker/blauw crème met `--paper`) geldt nu voor elke End workout (`.wo-end:not(.is-start)`), niet enkel bij `.all-done`. Start workout blijft terracotta. Bij alles af wisselt enkel het icoon (stop → vinkje).
