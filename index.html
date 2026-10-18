@@ -2203,7 +2203,7 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
       <div class="rule"><span class="num">1</span><span class="txt">No sugars</span></div>
       <div class="rule"><span class="num">2</span><span class="txt">Protein &amp; Green</span></div>
       <div class="rule"><span class="num">3</span><span class="txt">RAW Food</span></div>
-      <div class="rule"><span class="num">4</span><span class="txt">150 g protein</span></div>
+      <div class="rule"><span class="num">4</span><span class="txt">140+ g protein</span></div>
     </div>
   </div>
 
@@ -2224,7 +2224,7 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
       <tbody>
         <tr class="row-groen"><td>Low-fat quark, skyr<span class="nut">55–65 kcal · 10–12 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">150–200 g</td><td><strong>The strongest protein source in this plan.</strong> Almost fat- and sugar-free, packed with protein, low in calories and filling for a long time — exactly what you want in a deficit. Plain, with berries mixed in.</td></tr>
         <tr class="row-groen"><td>Eggs<span class="nut">70–80 kcal · 6–7 g protein <i>/ egg</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">2–3 per day</td><td>Protein and healthy fats in one. Boiled, poached or scrambled in olive oil.</td></tr>
-        <tr class="row-groen"><td>Protein shake<span class="nut">110–120 kcal · 22–25 g protein <i>/ scoop (±30 g)</i></span></td><td data-label="Frequency"><span class="badge b-groen">1–2× per day</span></td><td data-label="Portion">1 sachet or scoop (±25 g protein)</td><td><strong>Handy for reaching your daily total of 150 g.</strong> Timing hardly matters — your total protein per day counts most. Regular food first, because it fills you up better; the shake fills the gap that's left. Choose whey isolate without added sugars.</td></tr>
+        <tr class="row-groen"><td>Protein shake<span class="nut">110–120 kcal · 22–25 g protein <i>/ scoop (±30 g)</i></span></td><td data-label="Frequency"><span class="badge b-groen">1–2× per day</span></td><td data-label="Portion">1 sachet or scoop (±25 g protein)</td><td><strong>Handy for reaching your daily minimum of 140 g.</strong> Timing hardly matters — your total protein per day counts most. Regular food first, because it fills you up better; the shake fills the gap that's left. Choose whey isolate without added sugars.</td></tr>
         <tr class="row-groen"><td>Chicken, turkey<span class="nut">105–120 kcal · 22–24 g protein <i>/ 100 g raw</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">120–150 g</td><td>Skinless. Lean and protein-rich.</td></tr>
         <tr class="row-groen"><td>Oily fish<span class="nut">160–210 kcal · 18–25 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">2–3× per week</td><td>Salmon, mackerel, sardines, herring. Canned in its own juice is fine.</td></tr>
         <tr class="row-amber"><td>Greek yoghurt<span class="nut">95–130 kcal · 4–9 g protein <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">150–200 g</td><td>Plain, no added sugar. Check the label: only milk and cultures, no thickener. Fattier than low-fat quark or skyr, so a few more calories.</td></tr>
@@ -2311,8 +2311,8 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
     <div class="section-title">Protein is the exception</div>
     <div class="tip">
       <p>If you lose weight without enough protein, you lose muscle along with it. Over fifty that happens faster than before, and it's exactly what your strength training is trying to protect.</p>
-      <p><strong>For you: 150 grams per day.</strong> Calculate it on your target weight, not your current weight — fat tissue needs no protein. That comes to about 1.7 grams per kilo: deliberately a bit above the usual 1.2–1.6, because you're in a deficit, training hard and over fifty.</p>
-      <p>In practice you get there without powder: three eggs is 18 grams, 200 g skyr or quark is 22, 150 g chicken or fish is 35, a tin of tuna is 25. That already makes a hundred — you get the last fifty with one or two extra portions, for example a shake.</p>
+      <p><strong>For you: at least 140 grams per day.</strong> Calculate it on your target weight, not your current weight — fat tissue needs no protein. That comes to about 1.6 grams per kilo: the top of the usual 1.2–1.6, because you're in a deficit, training hard and over fifty. More is fine; 150 is an easy day.</p>
+      <p>In practice you get there without powder: three eggs is 18 grams, 200 g skyr or quark is 22, 150 g chicken or fish is 35, a tin of tuna is 25. That already makes a hundred — you get the last forty with one or two extra portions, for example a shake.</p>
       <p>Your check: if your lean mass stays around 73 kg while your weight drops, you're on track. If it drops too, protein is the first thing to increase.</p>
     </div>
   </div>
@@ -6046,11 +6046,14 @@ window.__congrats=function(o){
   function stored(v){ try{ return localStorage.getItem(key(v)); }catch(e){ return null; } }
   /* 'Around your workout' (18 okt): eenmalig toevoegen aan een bewaarde (bewerkte) Diet-versie, na 'Protein is the exception'.
      Vlag fitlog-pg-fuel (lokaal) + fuel:1 in cfg/pages, zodat een sectie die Tom zelf wist niet terugkomt. */
-  var FIX='fitlog-pg-fuel', FV=5, FUELV=3, pend=false;
+  var FIX='fitlog-pg-fuel', FV=6, FUELV=3, pend=false;
   function fixed(){ try{ return (+localStorage.getItem(FIX)||0)>=FV; }catch(e){ return false; } }
   function setFixed(){ try{ localStorage.setItem(FIX,String(FV)); }catch(e){} }
   /* Upgrade van een bewaarde Diet-versie naar niveau FV: sectie 'Around your workout' (data-v FUELV), rij Banana (18 okt),
      macrokaarten ±30/±30/±40% (18 okt; enkel als de oude standaardtekst er nog staat, eigen tekst blijft). */
+  /* niveau 6 (18 okt): eiwitdoel 150 g → '140+ g' (minimum); enkel exacte oude standaardzinnen worden vervangen */
+  var PRO=[["<span class=\"txt\">150 g protein</span>", "<span class=\"txt\">140+ g protein</span>"], ["daily total of 150 g", "daily minimum of 140 g"], ["For you: 150 grams per day.", "For you: at least 140 grams per day."], ["1.7 grams per kilo: deliberately a bit above the usual 1.2–1.6, because you're in a deficit, training hard and over fifty.", "1.6 grams per kilo: the top of the usual 1.2–1.6, because you're in a deficit, training hard and over fifty. More is fine; 150 is an easy day."], ["last fifty", "last forty"]];
+  function eiwit(h){ PRO.forEach(function(r){ h=h.split(r[0]).join(r[1]); }); return h; }
   function withFuel(h){ if(!h) return h;
     var src=document.createElement('template'); src.innerHTML=DEF.voeding||'';
     var t=document.createElement('template'); t.innerHTML=h; var c=t.content, ch=false;
@@ -6069,7 +6072,7 @@ window.__congrats=function(o){
     c.querySelectorAll('tbody tr').forEach(function(tr){ var td=tr.cells[0], bd=tr.querySelector('.badge'), po=tr.cells[2];
       if(td&&bd&&po&&/^\s*Berries/.test(td.textContent)&&bd.classList.contains('b-amber')&&po.textContent.trim()==='100–150 g'){
         tr.classList.remove('row-amber'); tr.classList.add('row-groen'); bd.className='badge b-groen'; bd.textContent='Often'; po.textContent='100–250 g'; ch=true; } });
-    if(!ch) return h; var d=document.createElement('div'); d.appendChild(c); return d.innerHTML.trim(); }
+    if(!ch) return eiwit(h); var d=document.createElement('div'); d.appendChild(c); h=d.innerHTML.trim(); return eiwit(h); }
   PAGES.forEach(function(v){ if(!sec(v)) return; DEF[v]=html(v); var h=stored(v);
     if(v==='voeding'&&!fixed()){ setFixed(); var h2=withFuel(h); if(h2!==h){ h=h2; try{ localStorage.setItem(key(v),h); localStorage.setItem('fitlog-pg-at',String(Date.now())); }catch(e){} pend=true; } }
     if(h) put(v,h); bar(v); });
