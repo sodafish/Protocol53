@@ -1860,7 +1860,7 @@ body.wo-live .gnav{display:none;}
 :root[data-theme="dark"] .wo-end.all-done:not(.is-start),:root[data-theme="blue"] .wo-end.all-done:not(.is-start){background:var(--ink);color:var(--paper);} :root[data-theme="dark"] .wo-end.all-done:not(.is-start) svg,:root[data-theme="blue"] .wo-end.all-done:not(.is-start) svg{color:var(--paper);}
 .wo-bar{position:fixed;z-index:60;left:0;right:0;bottom:var(--nav-b);display:flex;justify-content:center;padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;translate:0 var(--kb-fix,0px);}
 .wo-bar[hidden]{display:none;}
-.wo-bar-pill{pointer-events:auto;flex:1;min-width:0;max-width:440px;height:64px;box-sizing:border-box;border-radius:32px;padding:0 8px 0 16px;display:flex;align-items:center;gap:12px;}
+.wo-bar-pill{pointer-events:auto;flex:1;min-width:0;max-width:440px;height:64px;box-sizing:border-box;border-radius:32px;padding:0 16px;display:flex;align-items:center;gap:12px;} /* rechts 16 px marge na het laatste cijfer (op vraag van Tom, 18 okt; was 8) */
 .wo-bar-t{flex:none;display:flex;align-items:center;gap:7px;font:600 17px/1 'Work Sans',system-ui,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;}
 .wo-bar-t i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);}
 html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel veel groepen op een smal scherm) */
@@ -5862,7 +5862,7 @@ window.__congrats=function(o){
       ic.innerHTML=all?'<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>':'<rect x="5" y="5" width="14" height="14" rx="2.5"/>'; }
       fe.classList.toggle('all-done',all); }
     var s=JSON.stringify(items); if(s===sig) return; sig=s;
-    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', '+i.t+(i.t>1?' exercises':' exercise')+' done':'')+'"><span>'+i.l+'</span>'+(i.c?'<b>'+(i.c>4?'<u></u><u></u><u></u><u class="pl"></u>':new Array(i.c+1).join('<u></u>'))+'</b>':'')+'</button>'; }).join('');
+    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', '+i.t+(i.t>1?' exercises':' exercise')+' done':'')+'"><span>'+i.l+'</span>'+(i.c?'<b>'+new Array(Math.min(4,i.c)+1).join('<u></u>')+'</b>':'')+'</button>'; }).join('');
     box.hidden=!items.length; fit(); }
   /* chips passen in de workout-balk: traploos 30 → 22 px; past het niet, dan valt de tijd weg (wo-fit5) en mogen ze tot 20 px */
   var H=document.documentElement, bar=document.getElementById('woBar');
