@@ -1873,6 +1873,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp button.d{color:color-mix(in srgb,var(--ink) 42%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = gedempt cijfer, doorgestreept, op dezelfde hoogte als de open cijfers (niet meer omhoog, op vraag van Tom, 18 okt); bolletjes eronder */
 .wo-grp button.d span::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:1.5px;margin-top:-.75px;background:currentColor;border-radius:1px;}
 .wo-grp button b{position:absolute;left:0;right:0;top:calc(50% + 13px);color:var(--accent);display:flex;justify-content:center;gap:2px;pointer-events:none;}
+.wo-grp button b:has(u:nth-child(5)){gap:1.5px;} /* 5 tekens = max ±30 px, past binnen een chip van 30 px */
 .wo-grp button b u{width:4px;height:4px;border-radius:50%;background:currentColor;} /* bolletjes 4 px (op vraag van Tom, 18 okt; was 3) */
 .wo-grp button b u.pl{width:8px;height:8px;margin-top:-2px;border-radius:0;background:linear-gradient(currentColor,currentColor) center/8px 1.8px no-repeat,linear-gradient(currentColor,currentColor) center/1.8px 8px no-repeat;} /* plusje 8 px (op vraag van Tom, 18 okt) */
 .note-jump.note-float{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .note-jump.note-float svg{color:var(--paper);} /* notitieknop volgt de pil: altijd terracotta (18 okt) */
@@ -5860,7 +5861,7 @@ window.__congrats=function(o){
       ic.innerHTML=all?'<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>':'<rect x="5" y="5" width="14" height="14" rx="2.5"/>'; }
       fe.classList.toggle('all-done',all); }
     var s=JSON.stringify(items); if(s===sig) return; sig=s;
-    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', '+i.t+(i.t>1?' exercises':' exercise')+' done':'')+'"><span>'+i.l+'</span>'+(i.c?'<b>'+(i.c>4?'<u></u><u></u><u></u><u class="pl"></u>':new Array(i.c+1).join('<u></u>'))+'</b>':'')+'</button>'; }).join('');
+    box.innerHTML=items.map(function(i){ return '<button type="button" data-g="'+i.g+'" class="'+(i.d?'d':'')+(i.x?' nx':'')+'" aria-label="'+i.n.replace(/"/g,'&quot;')+(i.d?', '+i.t+(i.t>1?' exercises':' exercise')+' done':'')+'"><span>'+i.l+'</span>'+(i.c?'<b>'+(i.c>5?'<u></u><u></u><u></u><u></u><u class="pl"></u>':new Array(i.c+1).join('<u></u>'))+'</b>':'')+'</button>'; }).join('');
     box.hidden=!items.length; fit(); }
   /* chips passen in de workout-balk: traploos 30 → 22 px; past het niet, dan valt de tijd weg (wo-fit5) en mogen ze tot 20 px */
   var H=document.documentElement, bar=document.getElementById('woBar');
