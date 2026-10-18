@@ -1853,11 +1853,11 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 .wo-end:not(.is-start) svg,.note-jump.note-float svg{color:var(--ink-acc);} /* notitie-icoon = kleur van het stopicoon (op vraag van Tom, 18 okt) */
 body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
-.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 12px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:6px;} /* CHIPS (variant B, op vraag van Tom, 18 okt): 12 px van de rand van de pil, 6 px tussen de chips */
+.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 12px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:var(--chip-gap,6px);} /* CHIPS (variant B, op vraag van Tom, 18 okt): 12 px van de rand van de pil, 6 px tussen de chips */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
-.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:28px;height:44px;padding:0;color:var(--ink);font:600 13px/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
-.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:8px;height:28px;border-radius:50%;background:var(--ink-acc);box-sizing:border-box;} /* open groep = vol rondje in accent (variant A, op vraag van Tom, 18 okt) */
+.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:var(--chip,28px);height:44px;padding:0;color:var(--ink);font:600 max(12px,calc(var(--chip,28px) * .465))/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
+.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((44px - var(--chip,28px)) / 2);height:var(--chip,28px);border-radius:50%;background:var(--ink-acc);box-sizing:border-box;} /* open groep = vol rondje in accent (variant A, op vraag van Tom, 18 okt) */
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
 .wo-grp button.d{color:color-mix(in srgb,var(--paper) 45%,transparent);} .wo-grp button.d::after{background:color-mix(in srgb,var(--paper) 16%,transparent);} /* afgewerkt = zelfde rondje, neutraal grijs */
@@ -1866,10 +1866,8 @@ body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
 /* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
 body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 12px);}
-/* passen, 'End' blijft zo lang mogelijk (op vraag van Tom, 18 okt): fit1 = chips 26 px, fit2 = 24 px, fit3 = 22 px, fit4 = 'End' weg, fit5 = tijd weg */
-html.wo-fit1{--wo-gap:8px;} html.wo-fit1 .wo-grp{gap:5px;} html.wo-fit1 .wo-grp button{width:26px;} html.wo-fit1 .wo-grp button::after{top:9px;height:26px;} html.wo-fit1 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
-html.wo-fit2 .wo-grp{gap:4px;} html.wo-fit2 .wo-grp button{width:24px;font-size:12.5px;} html.wo-fit2 .wo-grp button::after{top:10px;height:24px;}
-html.wo-fit3 .wo-grp button{width:22px;font-size:12px;} html.wo-fit3 .wo-grp button::after{top:11px;height:22px;}
+/* passen (fit(), op vraag van Tom, 18 okt): chips traploos tussen 28 en 22 px zodat de pil de kolom vult; wo-fit1 = afstanden kleiner, wo-fit4 = 'End' weg, wo-fit5 = tijd weg */
+html.wo-fit1{--wo-gap:8px;--chip-gap:5px;} html.wo-fit1 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
 html.wo-fit4 .wo-end:not(.is-start) .wo-end-l{display:none;}
 html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
 @media (max-width:350px){ body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 12px);} }
@@ -5814,10 +5812,16 @@ window.__congrats=function(o){
   /* pil past niet links in de kolom → stap voor stap compacter (wo-fit1..3) */
   var H=document.documentElement, fl=document.getElementById('woEnd');
   function fit(){ if(!fl||fl.hidden||fl.classList.contains('is-start')||box.hidden){ H.style.setProperty('--wo-grp-w','0px'); return; }
-    var lvl=0; H.classList.remove('wo-fit1','wo-fit2','wo-fit3','wo-fit4','wo-fit5');
-    var gut=Math.max(0,(window.innerWidth-Math.min(window.innerWidth,430))/2)+16;
-    while(true){ H.style.setProperty('--wo-grp-w',box.offsetWidth+'px');
-      if(fl.getBoundingClientRect().left>=gut-0.5||lvl>=5) break; lvl++; H.classList.add('wo-fit'+lvl); } }
+    var gut=Math.max(0,(window.innerWidth-Math.min(window.innerWidth,430))/2)+16, n=box.children.length||1;
+    function setChip(c){ H.style.setProperty('--chip',c+'px'); H.style.setProperty('--wo-grp-w',box.offsetWidth+'px'); return gut-fl.getBoundingClientRect().left; } /* > 0 = pil loopt te ver naar links */
+    H.classList.remove('wo-fit1','wo-fit4','wo-fit5');
+    if(setChip(28)<=0.5) return;
+    H.classList.add('wo-fit1');
+    var steps=[null,'wo-fit4','wo-fit5'];
+    for(var i=0;i<steps.length;i++){ if(steps[i]) H.classList.add(steps[i]);
+      var over=setChip(28); if(over<=0.5) return;
+      var c=Math.floor((28-over/n)*2)/2; if(c>=22){ setChip(c); return; } }
+    setChip(22); }
   window.__woGrpFit=fit;
   window.addEventListener('resize',fit);
   if(window.ResizeObserver){ var tt=document.getElementById('woEndT'); if(tt) new ResizeObserver(function(){ fit(); }).observe(tt); }
