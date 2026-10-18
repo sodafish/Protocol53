@@ -1856,12 +1856,12 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 12px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:6px;} /* CHIPS (variant B, op vraag van Tom, 18 okt): 12 px van de rand van de pil, 6 px tussen de chips */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
-.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:28px;height:44px;padding:0;color:var(--paper);font:600 13px/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
-.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:8px;height:28px;border-radius:50%;border:1px solid color-mix(in srgb,var(--paper) 28%,transparent);box-sizing:border-box;}
+.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:28px;height:44px;padding:0;color:var(--ink);font:600 13px/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
+.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:8px;height:28px;border-radius:50%;background:var(--ink-acc);box-sizing:border-box;} /* open groep = vol rondje in accent (variant A, op vraag van Tom, 18 okt) */
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
-.wo-grp button.d{color:var(--ink);} .wo-grp button.d::after{background:var(--ink-acc);border-color:var(--ink-acc);} /* afgewerkt = gevuld rondje in accent, geen streep */
-.wo-grp button.nx{color:var(--ink-acc);} .wo-grp button.nx::after{border:1.5px solid var(--ink-acc);} /* volgende open groep = accentring */
+.wo-grp button.d{color:color-mix(in srgb,var(--paper) 45%,transparent);} .wo-grp button.d::after{background:color-mix(in srgb,var(--paper) 16%,transparent);} /* afgewerkt = zelfde rondje, neutraal grijs */
+/* geen aparte markering meer voor de volgende groep (klasse .nx wordt nog gezet, zonder stijl) */
 
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
 /* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
