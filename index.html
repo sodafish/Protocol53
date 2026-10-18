@@ -34,6 +34,9 @@
   /* Settings › Muscle group order (14 okt): localStorage p53-gorder = JSON-lijst g1–g7; standaard g1…g7 */
   window.__p53gorder=function(){ var D=['g1','g2','g3','g4','g5','g6','g7'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-gorder')||'null'); }catch(e){}
     if(!Array.isArray(v)) return D; v=v.filter(function(g,i){ return D.indexOf(g)>=0&&v.indexOf(g)===i; }); D.forEach(function(g){ if(v.indexOf(g)<0) v.push(g); }); return v; };
+  /* Settings › Muscle groups aan/uit (op vraag van Tom, 18 okt): localStorage p53-goff = JSON-lijst van VERBORGEN groepen g1–g7 (Gym en Home); standaard alles aan, minstens één blijft aan */
+  window.__p53goff=function(){ var D=['g1','g2','g3','g4','g5','g6','g7'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-goff')||'[]'); }catch(e){}
+    if(!Array.isArray(v)) return []; v=v.filter(function(g,i){ return D.indexOf(g)>=0&&v.indexOf(g)===i; }); return v.length>=D.length?[]:v; };
   /* niet ingelogd (geen p53-auth): app verbergen tot cloud.js beslist, anders flitst de lijst vóór het inlogscherm (13 okt) */
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
@@ -1253,6 +1256,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .st-order li{position:relative;display:flex;align-items:center;gap:.7rem;min-height:48px;padding:0 .9rem 0 .5rem;background:var(--surface);font:500 15px 'Work Sans',system-ui,sans-serif;color:var(--ink);}
 .st-order .so-n{flex:none;min-width:1.1rem;font:italic 500 20px/1 'Fraunces',Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums;}
 .st-order .gs-drag{flex:none;display:flex;align-items:center;justify-content:center;width:32px;height:44px;color:var(--muted-soft);cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.st-order li{padding-right:0;} .st-order .so-b{flex:1 1 auto;min-width:0;justify-content:flex-start;gap:.7rem;padding:0 .9rem 0 0;}
+.st-order .so-t{flex:1 1 auto;min-width:0;}
+.st-order li.so-off .so-t{color:var(--muted);} /* uitgezette groep (18 okt): naam gedempt, geen nummer */
 .st-order li.dragging{z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.14);border-radius:12px;cursor:grabbing;}
 .st-order li.dragging .gs-drag{color:var(--accent);}
 .st-order:has(li.dragging){overflow:visible;}
@@ -2396,7 +2402,7 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
       <li><strong>Every set counts for the muscles it trains.</strong> The main muscle gets a full set, a muscle that works hard alongside it half a set, a muscle that only helps a quarter. One set of goblet squats = 1 for quads, ½ for glutes, ¼ each for abs, lower back and adductors.</li>
       <li><strong>Sets come from the exercise</strong> (3 × 10 = 3 sets), including your own changes.</li>
       <li><strong>Period.</strong> Last workout, 7 days and 30 days show the total. 90 days and custom periods longer than 30 days show the average per week.</li>
-      <li><strong>Colour is relative.</strong> Your most trained muscle is the darkest; the others are shaded against it. Warm-up and cardio don’t count.</li>
+      <li><strong>Colour is relative.</strong> Your most trained muscle is the darkest; the others are shaded against it. Warm-up and cardio don’t count, except Core activation in the warm-up.</li>
       <li><strong>Suggestions</strong> (the lamp) follow the period you pick: muscles below a weekly minimum (8 sets for large muscles, 3–5 for smaller ones, scaled to the period; for the last workout spread over the workouts you do in a week) and pairs out of balance, such as chest versus back.</li>
     </ul></div>
   </div>
@@ -2510,9 +2516,9 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
       <p class="st-note">Choose Full Body, Upper Body or Lower Body in Gym and Home.</p>
     </div>
     <div class="st-sec" id="stOrderSec">
-      <p class="set-lab" id="stOrderL">Muscle group order</p>
+      <p class="set-lab" id="stOrderL">Muscle groups</p>
       <ul class="st-progs st-order" id="stOrder" aria-labelledby="stOrderL"></ul>
-      <p class="st-note">Drag to set the order of the muscle groups in Gym and Home.</p>
+      <p class="st-note">Show these groups in Gym and Home. Drag to change the order.</p>
       <button type="button" class="st-reset" id="stOrderReset" hidden>Reset to default order</button>
     </div>
     <div class="st-sec">
@@ -2577,16 +2583,26 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
   var ol=document.getElementById('stOrder'), oSec=document.getElementById('stOrderSec'), oRst=document.getElementById('stOrderReset');
   var ODRAG='<span class="gs-drag" aria-hidden="true"><svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor"><path d="M360-160q-33 0-56.5-23.5T280-240q0-33 23.5-56.5T360-320q33 0 56.5 23.5T440-240q0 33-23.5 56.5T360-160Zm240 0q-33 0-56.5-23.5T520-240q0-33 23.5-56.5T600-320q33 0 56.5 23.5T680-240q0 33-23.5 56.5T600-160ZM360-400q-33 0-56.5-23.5T280-480q0-33 23.5-56.5T360-560q33 0 56.5 23.5T440-480q0 33-23.5 56.5T360-400Zm240 0q-33 0-56.5-23.5T520-480q0-33 23.5-56.5T600-560q33 0 56.5 23.5T680-480q0 33-23.5 56.5T600-400ZM360-640q-33 0-56.5-23.5T280-720q0-33 23.5-56.5T360-800q33 0 56.5 23.5T440-720q0 33-23.5 56.5T360-640Zm240 0q-33 0-56.5-23.5T520-720q0-33 23.5-56.5T600-800q33 0 56.5 23.5T680-720q0 33-23.5 56.5T600-640Z"/></svg></span>';
   function gName(g){ var t=document.querySelector('#s-d3 .exgrp[data-grp="'+g+'"] .grp-t'); return t?t.textContent.trim():g; }
-  function renumber(){ if(ol) ol.querySelectorAll('li').forEach(function(li,i){ li.querySelector('.so-n').textContent=i+1; }); }
+  /* nummer enkel bij groepen die aan staan (zoals de groepskoppen in de workout) */
+  function renumber(){ if(!ol) return; var off=window.__p53goff(), i=0; ol.querySelectorAll('li[data-g]').forEach(function(li){ var on=off.indexOf(li.dataset.g)<0; li.querySelector('.so-n').textContent=on?++i:''; }); }
+  var OCK='<span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>';
+  function paintOff(){ if(!ol) return; var off=window.__p53goff(), nOn=7-off.length;
+    ol.querySelectorAll('li[data-g]').forEach(function(li){ var on=off.indexOf(li.dataset.g)<0, b=li.querySelector('.so-b'); li.classList.toggle('so-off',!on);
+      b.setAttribute('aria-checked',String(on)); if(on&&nOn<2) b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); }); }
   function paintOrder(){ if(!ol) return; var go=window.__p53gorder();
     var dom=[].map.call(ol.querySelectorAll('li[data-g]'),function(x){ return x.dataset.g; }).join();
-    if(!ol.querySelector('li.dragging')&&dom!==go.join()) ol.innerHTML=go.map(function(g){ var n=gName(g).replace(/&/g,'&amp;').replace(/</g,'&lt;'); return '<li data-g="'+g+'">'+ODRAG+'<span class="so-n"></span><span class="so-t">'+n+'</span></li>'; }).join('');
-    renumber(); if(oRst) oRst.hidden=go.join()==='g1,g2,g3,g4,g5,g6,g7';
+    if(!ol.querySelector('li.dragging')&&dom!==go.join()) ol.innerHTML=go.map(function(g){ var n=gName(g).replace(/&/g,'&amp;').replace(/</g,'&lt;'); return '<li data-g="'+g+'">'+ODRAG+'<button type="button" class="so-b" role="checkbox" aria-checked="true"><span class="so-n"></span><span class="so-t">'+n+'</span>'+OCK+'</button></li>'; }).join('');
+    paintOff(); renumber(); if(oRst) oRst.hidden=go.join()==='g1,g2,g3,g4,g5,g6,g7';
     var pv=window.__p53progs(); if(oSec) oSec.hidden=pv.indexOf('full')<0&&pv.indexOf('home')<0; }
   function setOrder(go){ try{ if(go&&go.join()!=='g1,g2,g3,g4,g5,g6,g7') localStorage.setItem('p53-gorder',JSON.stringify(go)); else localStorage.removeItem('p53-gorder'); }catch(e){}
     paintOrder(); document.dispatchEvent(new Event('p53-gorder')); prefsPush(); }
   if(ol){ paintOrder(); document.addEventListener('p53-progs',paintOrder);
     if(oRst) oRst.addEventListener('click',function(){ setOrder(null); });
+    /* tik op een groep = tonen/verbergen in Gym en Home (18 okt); minstens één blijft aan */
+    ol.addEventListener('click',function(e){ var b=e.target.closest('.so-b'); if(!b||b.getAttribute('aria-disabled')==='true') return;
+      var g=b.closest('li').dataset.g, off=window.__p53goff(), i=off.indexOf(g); if(i>=0) off.splice(i,1); else off.push(g);
+      try{ if(off.length) localStorage.setItem('p53-goff',JSON.stringify(off)); else localStorage.removeItem('p53-goff'); }catch(x){}
+      paintOff(); renumber(); document.dispatchEvent(new Event('p53-progs')); prefsPush(); });
     (function(){ var it=null, y0=0, st0=0, raf=0, lastY=0, pid=null, moved=false;
       function flip(el,dy){ el.style.transition='none'; el.style.transform='translateY('+dy+'px)'; void el.offsetWidth; el.style.transition='transform .16s ease'; el.style.transform=''; }
       function step(){ if(!it) return;
@@ -2627,7 +2643,7 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
      Pas bij een wijziging gaat de keuze naar de server; een serverversie wint als haar tijd (at) nieuwer is dan de laatste lokale wijziging (localStorage p53-prefs-at). */
   var pCol=null;
   function prefsPush(){ var s=null; try{ s=localStorage.getItem('p53-start'); }catch(e){}
-    var p={pages:window.__p53pagesOff(),progs:window.__p53progs(),wu:window.__p53wuOff(),half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),at:Date.now()};
+    var p={pages:window.__p53pagesOff(),progs:window.__p53progs(),wu:window.__p53wuOff(),half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),goff:window.__p53goff(),at:Date.now()};
     try{ localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){} if(pCol) pCol.doc('prefs').set(p).catch(function(){}); }
   function prefsApply(p){ var la=0; try{ la=+localStorage.getItem('p53-prefs-at')||0; }catch(e){} if(!p||!(p.at>la)) return;
     var A=['full','egym','home','cardio','group'];
@@ -2636,6 +2652,7 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
       if(typeof p.half==='boolean'){ if(p.half) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }
       if(p.tabs==='bar') localStorage.setItem('p53-tabs','bar'); else if(p.tabs==='grouped') localStorage.removeItem('p53-tabs');
       if(Array.isArray(p.gorder)){ if(p.gorder.join()==='g1,g2,g3,g4,g5,g6,g7') localStorage.removeItem('p53-gorder'); else localStorage.setItem('p53-gorder',JSON.stringify(p.gorder)); }
+      if(Array.isArray(p.goff)){ if(p.goff.length) localStorage.setItem('p53-goff',JSON.stringify(p.goff)); else localStorage.removeItem('p53-goff'); }
       if(Array.isArray(p.pages)){ if(p.pages.length) localStorage.setItem('p53-pages-off',JSON.stringify(p.pages)); else localStorage.removeItem('p53-pages-off'); }
       localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){}
     if(typeof pagesApply==='function') pagesApply(); paintProgs(); paintWu(); syncStart(); document.dispatchEvent(new Event('p53-gorder')); document.dispatchEvent(new Event('p53-progs')); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }
@@ -3146,6 +3163,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     'x6-cable-rear-delt-fly':{sa:1,midrug:.5,trap:.25},
     'x7-back-extension':{onderrug:1,bil:.5,ham:.5},
     'x7-dead-bug':{buik:1,schuin:.25},
+    'w0-dead-bug':{buik:1,schuin:.25}, 'w0-bird-dog':{onderrug:1,bil:.5,buik:.25}, /* Core activation in de warm-up telt mee in Balance (18 okt) */
     'x7-pallof-press':{schuin:1,buik:.5},
     'x7-cable-crunch':{buik:1},
     'x8-hammer-curl':{bi:1,oa:.5},
@@ -3207,7 +3225,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   window.__musclesFor=function(k,li){ return musclesFor(k,li); };
   function setsFor(k,li){
     li=li||liFor(k); var t=li&&li.querySelector('.exr-s'); t=t?((t.firstChild&&t.firstChild.nodeType===3)?t.firstChild.textContent:t.textContent):''; /* enkel de eerste tekst: de teller '· 1×' erachter telde anders als '1 set' (14 okt, bij Core Session) */
-    var m=t.match(/(\d+)\s*(?:×|x|rondes|rounds?|sets)/i); return m?Math.min(6,parseInt(m[1],10)):3;
+    var m=t.match(/(\d+)\s*(?:×|x|rondes|rounds?|sets?\b)/i); return m?Math.min(6,parseInt(m[1],10)):3;
   }
   var HISTKEY='fitlog-hist', histCol=null, histReady=false;
   var hist={}; try{ hist=JSON.parse(localStorage.getItem(HISTKEY)||'{}'); }catch(e){}
@@ -3246,7 +3264,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var out=[], seen={}, P=window.__progAll?window.__progAll():{};
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number') return;
       var li=liByNote(p.k), k=li?chkKey(li):p.k;
-      if(!k||(/^(w0|c)-/.test(k)&&k!=='c-core')) return; /* warm-up en cardio tellen niet voor de spieren; Core Session wel (14 okt) */
+      if(!k||(/^(w0|c)-/.test(k)&&!/^(c-core|w0-dead-bug|w0-bird-dog)$/.test(k))) return; /* warm-up en cardio tellen niet voor de spieren; Core Session (14 okt) en Core activation in de warm-up (18 okt) wel */
       var key=k+'|'+(p.d||new Date(p.t).toDateString())+'|'+(p.w||''); if(seen[key]) return; seen[key]=1; /* één training per oefening per workout */
       out.push({k:k,t:p.t,s:setsFor(k,li),m:musclesFor(k,li)});
     });
@@ -5074,7 +5092,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var anchor=rs[0].previousElementSibling;
     /* binnen een groep: supersets achteraan, bij Biceps de onderarmen na de curls; daarbinnen laag + populariteit */
     function cat(li){ var og=li.dataset.og;
-      if(g==='g0') return /^w0-(bike|rowing|incline-walk|cross-trainer|skierg|jump-rope|stair-climber)$/.test(keyOf(li))?0:1; /* Warm-up: eerst cardio, dan mobiliteit/activatie */
+      if(g==='g0'){ var wk=keyOf(li); if(/^w0-(dead-bug|bird-dog)$/.test(wk)) return 2; /* Core activation (op vraag van Tom, 18 okt) */ return /^w0-(bike|rowing|incline-walk|cross-trainer|skierg|jump-rope|stair-climber)$/.test(wk)?0:1; } /* Warm-up: eerst cardio, dan mobiliteit/activatie, dan core */
       if(g==='g8') return /^c-(walk|walkjog|jog|bike|padel)$/.test(keyOf(li))?0:1; /* Cardio: Outdoor / Indoor (op vraag van Tom, 10 okt; HIIT en Core staan sinds 14 okt in Group) */
       if(g==='g4') return og==='g6'?1:0; /* Back: eerst rows (horizontaal), dan pulldowns/pull-ups en bovenrug */
       if(g!=='g7') return 0;
@@ -5089,7 +5107,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(lab){ li.dataset.sub=lab[c]; if(c!==last&&g==='g0'&&lab[c]==='Cardio') last=c; /* warm-up: geen tussenkop 'Cardio', enkel 'Mobility & activation' (op vraag van Tom, 12 okt); data-sub blijft voor de af-logica */
       if(c!==last){ var h=document.createElement('li'); h.className='exsub'; h.dataset.grp=g; h.setAttribute('aria-hidden','true'); h.textContent=lab[c]; anchor.after(h); anchor=h; last=c; } }
       anchor.after(li); anchor=li; }); return rs; }
-  var SUBS={g8:['Outdoor','Indoor'],g0:['Cardio','Mobility & activation'],g4:['Rows','Vertical pull & upper back'],g7:['Biceps','Triceps','Supersets','Forearms']};
+  var SUBS={g8:['Outdoor','Indoor'],g0:['Cardio','Mobility & activation','Core activation'],g4:['Rows','Vertical pull & upper back'],g7:['Biceps','Triceps','Supersets','Forearms']};
   Object.keys(POP).forEach(sortRows);
   apply(); /* tussenkoppen zonder zichtbare oefening verbergen */
   /* onderblad */
@@ -5203,10 +5221,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   document.addEventListener('p53-progs',function(){ var was=cur; layout(); if(cur!==was) set(cur); else apply(); });
   function apply(){
     layout();
-    var hv=hcur(), keep=hv!=='all'?HALF[hv]:SPLIT[cur];
+    var hv=hcur(), keep=hv!=='all'?HALF[hv]:SPLIT[cur], goff=(cur==='full'||cur==='home')&&window.__p53goff?window.__p53goff():[];
     if(hseg){ hseg.hidden=!hon()||!(cur==='full'||cur==='home'); hseg.querySelectorAll('[data-half]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.half===hv?'true':'false'); }); }
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
-      var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0); }); /* warm-up is een eigen keuze */
+      var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0||goff.indexOf(g)>=0); }); /* warm-up is een eigen keuze; uitgezette spiergroepen (Settings › Muscle groups) verborgen */
     /* nummering loopt door over de zichtbare groepen (op vraag van Tom, 12 okt): Upper = 1 Chest, 2 Back …; Lower = 1 Quads, 2 Hamstrings …; warm-up zonder nummer */
     var gnr=0; document.querySelectorAll('#s-d3 .exl > li.exgrp').forEach(function(h){ var n=h.querySelector('.grp-n'); if(n&&h.dataset.grp!=='g0'&&!h.classList.contains('split-off')) n.textContent=++gnr; }); /* warm-up zonder nummer: 1 = eerste groep onder de keuze (op vraag van Tom, 12 okt) */ if(window.__p53listTop) window.__p53listTop();
     document.body.classList.toggle('split-cardio',cur==='cardio'); document.body.classList.toggle('split-group',cur==='group');
