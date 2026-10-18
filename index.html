@@ -1848,28 +1848,29 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 :root{--ink-acc:#E08A62;} /* accent op de --ink-pil: licht thema = lichte terracotta (donkere pil), donker/blauw = gewone accent (lichte pil) */
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--ink-acc:#9A4424;} }
 :root[data-theme="dark"],:root[data-theme="blue"]{--ink-acc:#9A4424;}
-.wo-end:not(.is-start){padding-right:calc(var(--wo-grp-w,0px) + 8px + var(--wo-gap,12px));} /* rechts uitgelijnd, groeit naar links met de chips; vaste afstand tijd → W (op vraag van Tom, 18 okt) */
+.wo-end:not(.is-start){padding-right:calc(var(--wo-grp-w,0px) + 12px + var(--wo-gap,12px));} /* rechts uitgelijnd, groeit naar links met de chips; vaste afstand tijd → W (op vraag van Tom, 18 okt) */
 .wo-end:not(.is-start):active{transform:none;}
 .wo-end:not(.is-start) svg,.note-jump.note-float svg{color:var(--ink-acc);} /* notitie-icoon = kleur van het stopicoon (op vraag van Tom, 18 okt) */
 body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
-.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 8px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:3px;} /* CHIPS (variant B, op vraag van Tom, 18 okt): 8 px van de rand van de pil */
+.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 12px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:6px;} /* CHIPS (variant B, op vraag van Tom, 18 okt): 12 px van de rand van de pil, 6 px tussen de chips */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
-.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:28px;height:44px;padding:0;color:var(--paper);font:italic 500 15px/1 'Fraunces',Georgia,serif;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px */
+.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:28px;height:44px;padding:0;color:var(--paper);font:600 13px/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
 .wo-grp button::after{content:"";position:absolute;left:0;right:0;top:8px;height:28px;border-radius:50%;border:1px solid color-mix(in srgb,var(--paper) 28%,transparent);box-sizing:border-box;}
-.wo-grp button span{position:relative;z-index:1;}
+.wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
 .wo-grp button.d{color:var(--ink);} .wo-grp button.d::after{background:var(--ink-acc);border-color:var(--ink-acc);} /* afgewerkt = gevuld rondje in accent, geen streep */
 .wo-grp button.nx{color:var(--ink-acc);} .wo-grp button.nx::after{border:1.5px solid var(--ink-acc);} /* volgende open groep = accentring */
 
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
 /* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
-body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 8px);}
+body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 12px);}
 html.wo-fit1 .wo-end:not(.is-start) .wo-end-l{display:none;} /* past niet: eerst 'End' weg (stopicoon + tijd blijven) */
-html.wo-fit2{--wo-gap:8px;} html.wo-fit2 .wo-grp{gap:2px;} html.wo-fit2 .wo-grp button{width:25px;} html.wo-fit2 .wo-grp button::after{top:9.5px;height:25px;} html.wo-fit2 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
-html.wo-fit3 .wo-end:not(.is-start) .wo-end-t{display:none;}
-@media (max-width:350px){ body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 8px);} }
+html.wo-fit2{--wo-gap:8px;} html.wo-fit2 .wo-grp{gap:5px;} html.wo-fit2 .wo-grp button{width:26px;} html.wo-fit2 .wo-grp button::after{top:9px;height:26px;} html.wo-fit2 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
+html.wo-fit3 .wo-grp{gap:4px;} html.wo-fit3 .wo-grp button{width:24px;font-size:12.5px;} html.wo-fit3 .wo-grp button::after{top:10px;height:24px;}
+html.wo-fit4 .wo-end:not(.is-start) .wo-end-t{display:none;}
+@media (max-width:350px){ body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 12px);} }
 </style>
 
 <header class="top">
@@ -5811,10 +5812,10 @@ window.__congrats=function(o){
   /* pil past niet links in de kolom → stap voor stap compacter (wo-fit1..3) */
   var H=document.documentElement, fl=document.getElementById('woEnd');
   function fit(){ if(!fl||fl.hidden||fl.classList.contains('is-start')||box.hidden){ H.style.setProperty('--wo-grp-w','0px'); return; }
-    var lvl=0; H.classList.remove('wo-fit1','wo-fit2','wo-fit3');
+    var lvl=0; H.classList.remove('wo-fit1','wo-fit2','wo-fit3','wo-fit4');
     var gut=Math.max(0,(window.innerWidth-Math.min(window.innerWidth,430))/2)+16;
     while(true){ H.style.setProperty('--wo-grp-w',box.offsetWidth+'px');
-      if(fl.getBoundingClientRect().left>=gut-0.5||lvl>=3) break; lvl++; H.classList.add('wo-fit'+lvl); } }
+      if(fl.getBoundingClientRect().left>=gut-0.5||lvl>=4) break; lvl++; H.classList.add('wo-fit'+lvl); } }
   window.__woGrpFit=fit;
   window.addEventListener('resize',fit);
   if(window.ResizeObserver){ var tt=document.getElementById('woEndT'); if(tt) new ResizeObserver(function(){ fit(); }).observe(tt); }
