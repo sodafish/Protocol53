@@ -1853,9 +1853,9 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 /* ── WORKOUT-BALK (variant A, op vraag van Tom, 18 okt): tijdens een workout vervangt een glazen balk op de plaats van de navbar (64 px, zelfde glas) de navbar: links de tijd, rechts de groepen W 1 2 3 …; de End-pil erboven heet weer 'End workout', zonder tijd ── */
 body.wo-live .gnav{display:none;}
 .wo-end:not(.is-start) .wo-end-t{display:none;}
-.wo-end.all-done:not(.is-start){background:#fff;color:var(--accent);} .wo-end.all-done:not(.is-start) svg{color:var(--accent);} /* alles af = witte pil, tekst en vinkje terracotta (op vraag van Tom, 18 okt) */
-@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .wo-end.all-done:not(.is-start){background:var(--ink);} }
-:root[data-theme="dark"] .wo-end.all-done:not(.is-start),:root[data-theme="blue"] .wo-end.all-done:not(.is-start){background:var(--ink);}
+.wo-end.all-done:not(.is-start){background:#fff;color:var(--ink);} .wo-end.all-done:not(.is-start) svg{color:var(--ink);} /* alles af = witte pil, tekst en vinkje zwart (op vraag van Tom, 18 okt) */
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .wo-end.all-done:not(.is-start){background:var(--ink);color:var(--paper);} :root:not([data-theme="light"]) .wo-end.all-done:not(.is-start) svg{color:var(--paper);} }
+:root[data-theme="dark"] .wo-end.all-done:not(.is-start),:root[data-theme="blue"] .wo-end.all-done:not(.is-start){background:var(--ink);color:var(--paper);} :root[data-theme="dark"] .wo-end.all-done:not(.is-start) svg,:root[data-theme="blue"] .wo-end.all-done:not(.is-start) svg{color:var(--paper);}
 .wo-bar{position:fixed;z-index:60;left:0;right:0;bottom:var(--nav-b);display:flex;justify-content:center;padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;translate:0 var(--kb-fix,0px);}
 .wo-bar[hidden]{display:none;}
 .wo-bar-pill{pointer-events:auto;flex:1;min-width:0;max-width:440px;height:64px;box-sizing:border-box;border-radius:32px;padding:0 8px 0 16px;display:flex;align-items:center;gap:12px;}
