@@ -1866,10 +1866,12 @@ body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;
 /* passen (fit in het groepsscript): html.wo-fit1 = smallere cijfers, wo-fit2 = + kleinere afstand tijd → W, wo-fit3 = + tijd weg; enkel als de pil anders voorbij de linkerrand van de kolom loopt */
 /* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
 body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 12px);}
-html.wo-fit1 .wo-end:not(.is-start) .wo-end-l{display:none;} /* past niet: eerst 'End' weg (stopicoon + tijd blijven) */
-html.wo-fit2{--wo-gap:8px;} html.wo-fit2 .wo-grp{gap:5px;} html.wo-fit2 .wo-grp button{width:26px;} html.wo-fit2 .wo-grp button::after{top:9px;height:26px;} html.wo-fit2 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
-html.wo-fit3 .wo-grp{gap:4px;} html.wo-fit3 .wo-grp button{width:24px;font-size:12.5px;} html.wo-fit3 .wo-grp button::after{top:10px;height:24px;}
-html.wo-fit4 .wo-end:not(.is-start) .wo-end-t{display:none;}
+/* passen, 'End' blijft zo lang mogelijk (op vraag van Tom, 18 okt): fit1 = chips 26 px, fit2 = 24 px, fit3 = 22 px, fit4 = 'End' weg, fit5 = tijd weg */
+html.wo-fit1{--wo-gap:8px;} html.wo-fit1 .wo-grp{gap:5px;} html.wo-fit1 .wo-grp button{width:26px;} html.wo-fit1 .wo-grp button::after{top:9px;height:26px;} html.wo-fit1 .wo-end:not(.is-start){padding-left:.85rem;gap:.4rem;}
+html.wo-fit2 .wo-grp{gap:4px;} html.wo-fit2 .wo-grp button{width:24px;font-size:12.5px;} html.wo-fit2 .wo-grp button::after{top:10px;height:24px;}
+html.wo-fit3 .wo-grp button{width:22px;font-size:12px;} html.wo-fit3 .wo-grp button::after{top:11px;height:22px;}
+html.wo-fit4 .wo-end:not(.is-start) .wo-end-l{display:none;}
+html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
 @media (max-width:350px){ body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 12px);} }
 </style>
 
@@ -5812,10 +5814,10 @@ window.__congrats=function(o){
   /* pil past niet links in de kolom → stap voor stap compacter (wo-fit1..3) */
   var H=document.documentElement, fl=document.getElementById('woEnd');
   function fit(){ if(!fl||fl.hidden||fl.classList.contains('is-start')||box.hidden){ H.style.setProperty('--wo-grp-w','0px'); return; }
-    var lvl=0; H.classList.remove('wo-fit1','wo-fit2','wo-fit3','wo-fit4');
+    var lvl=0; H.classList.remove('wo-fit1','wo-fit2','wo-fit3','wo-fit4','wo-fit5');
     var gut=Math.max(0,(window.innerWidth-Math.min(window.innerWidth,430))/2)+16;
     while(true){ H.style.setProperty('--wo-grp-w',box.offsetWidth+'px');
-      if(fl.getBoundingClientRect().left>=gut-0.5||lvl>=4) break; lvl++; H.classList.add('wo-fit'+lvl); } }
+      if(fl.getBoundingClientRect().left>=gut-0.5||lvl>=5) break; lvl++; H.classList.add('wo-fit'+lvl); } }
   window.__woGrpFit=fit;
   window.addEventListener('resize',fit);
   if(window.ResizeObserver){ var tt=document.getElementById('woEndT'); if(tt) new ResizeObserver(function(){ fit(); }).observe(tt); }
