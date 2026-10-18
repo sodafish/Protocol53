@@ -1448,7 +1448,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
   font:600 13px 'Work Sans',system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 20px rgba(0,0,0,.18);
   -webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .25s ease;}
 .wo-end[hidden]{display:none;}
-.wo-end.is-start{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .wo-end.is-start svg{color:var(--paper);} /* Start workout: zelfde verloop als de actieve navbar-knop */
+.wo-end{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .wo-end svg,.wo-end:not(.is-start) svg{color:var(--paper);} /* Start én End workout: zelfde terracotta-verloop (op vraag van Tom, 18 okt; End was --ink) */ /* Start workout: zelfde verloop als de actieve navbar-knop */
 body:not([data-view="workout"]) .wo-end.is-start{display:none;} /* Start enkel op Workout; End op elke pagina */
 .wo-end:active{transform:scale(.96);}
 .wo-end svg{color:var(--accent);}
@@ -1850,17 +1850,17 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 :root[data-theme="dark"],:root[data-theme="blue"]{--ink-acc:#9A4424;}
 .wo-end:not(.is-start){padding-right:calc(var(--wo-grp-w,0px) + 12px + var(--wo-gap,18px));} /* rechts uitgelijnd, groeit naar links met de chips; vaste afstand tijd → W (op vraag van Tom, 18 okt) */
 .wo-end:not(.is-start):active{transform:none;}
-.wo-end:not(.is-start) svg,.note-jump.note-float svg{color:var(--ink-acc);} /* notitie-icoon = kleur van het stopicoon (op vraag van Tom, 18 okt) */
+.note-jump.note-float{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .note-jump.note-float svg{color:var(--paper);} /* notitieknop volgt de pil: altijd terracotta (18 okt) */
 body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
 .wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 12px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:var(--chip-gap,4px);} /* CHIPS (variant B, op vraag van Tom, 18 okt): 12 px van de rand van de pil, 6 px tussen de chips */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
-.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:var(--chip,28px);height:44px;padding:0;color:var(--ink);font:600 max(12px,calc(var(--chip,28px) * .465))/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
-.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((44px - var(--chip,28px)) / 2);height:var(--chip,28px);border-radius:50%;background:var(--paper);box-sizing:border-box;} /* open groep = vol rondje in --paper met cijfer --ink: zwart/wit zoals de navbar (op vraag van Tom, 18 okt; eerst accent) */
+.wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:var(--chip,28px);height:44px;padding:0;color:var(--accent);font:600 max(12px,calc(var(--chip,28px) * .465))/1 'Work Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;} /* tikvlak 44 px hoog, rondje 28 px; Work Sans i.p.v. Fraunces italic: die stond optisch niet in het midden van het rondje (op vraag van Tom, 18 okt) */
+.wo-grp button::after{content:"";position:absolute;left:0;right:0;top:calc((44px - var(--chip,28px)) / 2);height:var(--chip,28px);border-radius:50%;background:var(--paper);box-sizing:border-box;} /* cijfer in accent op het terracotta-verloop (18 okt); open groep = vol rondje in --paper, vroeger cijfer --ink: zwart/wit zoals de navbar (op vraag van Tom, 18 okt; eerst accent) */
 .wo-grp button span{position:relative;z-index:1;display:block;line-height:1;}
 .wo-grp button:active{transform:scale(.92);}
-.wo-grp button.d{color:color-mix(in srgb,var(--paper) 45%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = geen rondje, enkel het gedempte cijfer (op vraag van Tom, 18 okt) */
+.wo-grp button.d{color:color-mix(in srgb,var(--paper) 62%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = geen rondje, enkel het gedempte cijfer (op vraag van Tom, 18 okt) */
 .wo-grp button.d span::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:1.5px;margin-top:-.75px;background:currentColor;border-radius:1px;} /* doorgestreept in de kleur van het cijfer (op vraag van Tom, 18 okt) */
 /* geen aparte markering meer voor de volgende groep (klasse .nx wordt nog gezet, zonder stijl) */
 
