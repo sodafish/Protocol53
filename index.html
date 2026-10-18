@@ -2251,7 +2251,7 @@ html.wo-fit5 .wo-end:not(.is-start) .wo-end-t{display:none;}
     <div class="scroll"><table class="stack">
       <thead><tr><th style="width:22%">Food</th><th style="width:14%">Frequency</th><th style="width:16%">Portion</th><th>Note</th></tr></thead>
       <tbody>
-        <tr class="row-amber"><td>Berries<span class="nut">30–60 kcal <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">100–150 g</td><td>Strawberries, raspberries, blueberries, blackberries. The least sugar of all fruit. Frozen is as good as fresh.</td></tr>
+        <tr class="row-groen"><td>Berries<span class="nut">30–60 kcal <i>/ 100 g</i></span></td><td data-label="Frequency"><span class="badge b-groen">Often</span></td><td data-label="Portion">100–250 g</td><td>Strawberries, raspberries, blueberries, blackberries. The least sugar of all fruit. Frozen is as good as fresh.</td></tr>
         <tr class="row-amber"><td>Apple, pear, citrus, kiwi<span class="nut">45–100 kcal <i>/ piece</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1 to 2 pieces per day</td><td>Whole fruit, not as juice.</td></tr>
         <tr class="row-amber" data-row="banana"><td>Banana<span class="nut">±105 kcal <i>/ piece</i></span></td><td data-label="Frequency"><span class="badge b-amber">Moderate</span></td><td data-label="Portion">1 per day</td><td>The fruit with the most carbohydrates, so best eaten 30–45 minutes before training. Light on the stomach, no added sugar.</td></tr>
       </tbody>
@@ -6046,7 +6046,7 @@ window.__congrats=function(o){
   function stored(v){ try{ return localStorage.getItem(key(v)); }catch(e){ return null; } }
   /* 'Around your workout' (18 okt): eenmalig toevoegen aan een bewaarde (bewerkte) Diet-versie, na 'Protein is the exception'.
      Vlag fitlog-pg-fuel (lokaal) + fuel:1 in cfg/pages, zodat een sectie die Tom zelf wist niet terugkomt. */
-  var FIX='fitlog-pg-fuel', FV=4, FUELV=3, pend=false;
+  var FIX='fitlog-pg-fuel', FV=5, FUELV=3, pend=false;
   function fixed(){ try{ return (+localStorage.getItem(FIX)||0)>=FV; }catch(e){ return false; } }
   function setFixed(){ try{ localStorage.setItem(FIX,String(FV)); }catch(e){} }
   /* Upgrade van een bewaarde Diet-versie naar niveau FV: sectie 'Around your workout' (data-v FUELV), rij Banana (18 okt),
@@ -6065,6 +6065,10 @@ window.__congrats=function(o){
     var CARD=[['.card.c-3','40–50%','±30%'],['.card.c-1','25–35%','±30%'],['.card.c-2','<20%','±40%']];
     CARD.forEach(function(k){ var cd=c.querySelector(k[0]), bg=cd&&cd.querySelector('.big'); if(bg&&bg.textContent.trim()===k[1]){ bg.textContent=k[2]; ch=true;
       if(k[0]==='.card.c-2'){ var ds=cd.querySelector('.dsc'); if(ds&&ds.textContent.trim()==='From vegetables, berries and wholegrain'){ ds.textContent='Vegetables, fruit, wholegrain, potatoes; most around training'; } } } });
+    /* niveau 5 (18 okt): Berries Moderate 100–150 g → Often 100–250 g, enkel als die rij nog zo staat */
+    c.querySelectorAll('tbody tr').forEach(function(tr){ var td=tr.cells[0], bd=tr.querySelector('.badge'), po=tr.cells[2];
+      if(td&&bd&&po&&/^\s*Berries/.test(td.textContent)&&bd.classList.contains('b-amber')&&po.textContent.trim()==='100–150 g'){
+        tr.classList.remove('row-amber'); tr.classList.add('row-groen'); bd.className='badge b-groen'; bd.textContent='Often'; po.textContent='100–250 g'; ch=true; } });
     if(!ch) return h; var d=document.createElement('div'); d.appendChild(c); return d.innerHTML.trim(); }
   PAGES.forEach(function(v){ if(!sec(v)) return; DEF[v]=html(v); var h=stored(v);
     if(v==='voeding'&&!fixed()){ setFixed(); var h2=withFuel(h); if(h2!==h){ h=h2; try{ localStorage.setItem(key(v),h); localStorage.setItem('fitlog-pg-at',String(Date.now())); }catch(e){} pend=true; } }
