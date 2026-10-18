@@ -1852,16 +1852,22 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 .wo-end:not(.is-start):active{transform:none;}
 .wo-end:not(.is-start) svg{color:var(--ink-acc);}
 .wo-end:not(.is-start):active svg,.wo-end:not(.is-start):active .wo-end-l{opacity:.6;}
-.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 8px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:2px;padding-left:6px;}
+.wo-grp{position:fixed;z-index:62;right:calc(var(--app-gut) + 16px + 8px);bottom:calc(var(--nav-b) + 64px + 12px);height:48px;display:flex;align-items:center;gap:2px;padding-left:12px;}
+.wo-grp::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:1px;background:color-mix(in srgb,var(--paper) 18%,transparent);} /* scheidingslijn tussen End en de groepen (variant C) */
 .wo-grp[hidden]{display:none;}
 body:has(#woEnd.is-start) .wo-grp,body:has(#woEnd[hidden]) .wo-grp{display:none;}
 .wo-grp button{appearance:none;position:relative;border:0;background:transparent;width:22px;height:40px;padding:0;color:var(--paper);font:italic 500 18px/1 'Fraunces',Georgia,serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .wo-grp button:active{opacity:.6;}
 .wo-grp button.d{color:color-mix(in srgb,var(--paper) 38%,transparent);}
-.wo-grp button.d::after{content:"";position:absolute;left:3px;right:3px;top:50%;height:1.5px;background:var(--ink-acc);transform:rotate(-28deg);}
+.wo-grp button.d::after{content:"";position:absolute;left:2px;right:2px;top:52%;height:1.5px;background:color-mix(in srgb,var(--paper) 55%,transparent);} /* variant C: horizontale streep (op vraag van Tom, 18 okt) */
 .wo-grp button.nx{color:var(--ink-acc);}
 .wo-grp button.nx::before{content:"";position:absolute;left:6px;right:6px;bottom:5px;height:2px;border-radius:2px;background:var(--ink-acc);}
 @media (max-width:350px){ .wo-grp button{width:19px;font-size:16px;} .wo-grp{gap:1px;} }
+/* met notitieknop rechts (op Workout, als er een notitie is): balk en groepen schuiven 58 px op; 'End' valt weg (stopicoon + tijd blijven), cijfers iets smaller */
+body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 48px + 10px + 8px);gap:1px;padding-left:10px;}
+body[data-view="workout"].has-note .wo-grp button{width:20px;font-size:17px;}
+body[data-view="workout"].has-note .wo-end:not(.is-start) .wo-end-l{display:none;}
+@media (max-width:350px){ .wo-end:not(.is-start) .wo-end-l{display:none;} body[data-view="workout"].has-note .wo-end:not(.is-start) .wo-end-t{display:none;} body[data-view="workout"].has-note .wo-grp{right:calc(var(--app-gut) + 16px + 42px + 8px + 6px);} body[data-view="workout"].has-note .wo-grp button{width:18px;font-size:15px;} }
 </style>
 
 <header class="top">
@@ -5813,7 +5819,7 @@ window.__congrats=function(o){
 /* ---- notitie-knop rechts van de zwevende Start/End workout-pil (enkel op Workout, via CSS): alleen zichtbaar als er iets in de notitie onderaan staat; tik = naar de notitie scrollen ---- */
 (function(){
   var b=document.getElementById('noteJump'), ta=document.getElementById('sessNote'); if(!b||!ta) return;
-  function paint(){ var on=false; /* voorlopig weg (op vraag van Tom, 18 okt: de End-balk is nu volle breedte); was !!ta.value.trim() */ b.hidden=!on; document.body.classList.toggle('has-note',on); }
+  function paint(){ var on=!!ta.value.trim(); b.hidden=!on; document.body.classList.toggle('has-note',on); }
   ['input','change'].forEach(function(ev){ ta.addEventListener(ev,paint); });
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
   var last=null; setInterval(function(){ if(ta.value!==last){ last=ta.value; paint(); } },700);

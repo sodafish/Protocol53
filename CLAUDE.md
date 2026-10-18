@@ -631,9 +631,9 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Opslag: localStorage `p53-goff` = JSON-lijst van VERBORGEN groepen (g1–g7), `window.__p53goff()` in het `<head>`-script; synct via `cfg/prefs` (`goff`). Uitgezet = `split-off` in `apply()` van het split-script (enkel bij full/home), dus nummering loopt door over de zichtbare groepen. In de lijst: uitgezette rij `.so-off` (naam `--muted`, geen nummer). Keuze en metingen van de groep blijven bewaard.
 
 
-## End-balk met groepen (op vraag van Tom, 18 okt; variant A 'Ticker' + onderlijning van C)
+## End-balk met groepen (op vraag van Tom, 18 okt; eerst variant A + onderlijning van C, dezelfde dag naar VARIANT C)
 - Tijdens een workout is `#woEnd` VOLLE BREEDTE (`.wo-end:not(.is-start)`: left/right = `--app-gut` + 16px), label 'End' + tijd (`paintWoBtns`); Start workout blijft de kleine pil rechts.
 - Rechts erover ligt `#woGrp.wo-grp` (eigen fixed laag, z-index 62, zelfde `bottom` en `--kb-fix`): per zichtbare groepskop van de huidige tab een knop (W = warm-up, anders het `.grp-n`-nummer; zonder nummer de eerste letter van de titel, bv. eGym/Cardio). Zichtbaar = geen `split-off`, geen `g-empty`, warm-up niet bij `no-wu`. Fraunces italic 18 px in `--paper`.
-- Gedaan (minstens één `.exr.done` in de groep) = 38% + schuine streep; eerste open groep (`.nx`) = accent + onderlijntje. Accent op de pil = token `--ink-acc` (licht #E08A62, donker/blauw #9A4424, want de pil wisselt van kleur). Ook het stopicoon gebruikt die tint.
+- Gedaan (minstens één `.exr.done` in de groep) = 38% + HORIZONTALE streep in `--paper` 55% (variant C; eerst schuine accentstreep); dunne scheidingslijn `.wo-grp::before` tussen End en de cijfers; eerste open groep (`.nx`) = accent + onderlijntje. Accent op de pil = token `--ink-acc` (licht #E08A62, donker/blauw #9A4424, want de pil wisselt van kleur). Ook het stopicoon gebruikt die tint.
 - Tik op een nummer = naar die groep scrollen (12 px marge); vanop een andere pagina eerst naar Workout. De rest van de balk = End workout zoals altijd. Script `window.__woGrpPaint`, aangeroepen vanuit `paintWoBtns` en bij p53-checks/progs/split/groups/gorder.
-- De notitieknop `#noteJump` is VOORLOPIG UIT (`paint()` in het notitie-script zet `on=false`; code blijft).
+- Notitieknop `#noteJump` staat er weer rechts naast als er een notitie is (`has-note`): balk én `.wo-grp` schuiven 58 px op, 'End' valt dan weg (stopicoon + tijd), cijfers 20 px. ≤ 350 px: 'End' altijd weg, met notitie ook de tijd (anders overlap; gemeten op 320/375/430 met 1:02:35).
