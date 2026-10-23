@@ -6041,13 +6041,21 @@ window.__congrats=function(o){
   pr.style.cssText='position:fixed;left:0;bottom:0;width:1px;height:0;pointer-events:none;visibility:hidden;';
   document.body.appendChild(pr);
   var R=0, cur=0;
+  /* 23 okt (screenshot Tom: balk + End-pil weer halverwege tijdens scrollen): soms houdt iOS ook visualViewport.height ingekort,
+     dan was het verschil 0. Als app op het beginscherm (standalone) verandert de hoogte nooit legitiem (geen Safari-balken), dus onthouden we
+     per oriëntatie de grootste gezonde hoogte (probe zonder toetsenbord) en gebruiken die als echte onderkant. Niet in Safari zelf. */
+  var SA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)), BEST={};
+  function ori(){ return (window.matchMedia&&matchMedia('(orientation: landscape)').matches)?'l':'p'; }
   function fix(){ R=0; var d=0;
-    if(!typing()){ d=Math.round(vv.offsetTop+vv.height-pr.getBoundingClientRect().bottom); if(d<2||d>600) d=0; }
+    if(!typing()){ var pb=pr.getBoundingClientRect().bottom, o=ori(), vis=vv.height;
+      if(SA){ if(vv.offsetTop<1&&Math.abs(vv.height-pb)<2&&pb>(BEST[o]||0)) BEST[o]=pb; vis=Math.max(vis,BEST[o]||0); }
+      d=Math.round(vv.offsetTop+vis-pb); if(d<2||d>600) d=0; }
     if(d!==cur){ cur=d; document.documentElement.style.setProperty('--kb-fix',d+'px'); } }
   function q(){ if(!R) R=requestAnimationFrame(fix); }
   vv.addEventListener('resize',q); vv.addEventListener('scroll',q); window.addEventListener('scroll',q,{passive:true});
   window.addEventListener('resize',q); document.addEventListener('focusin',q,true); document.addEventListener('focusout',function(){ setTimeout(q,80); setTimeout(q,400); },true);
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(q,300); });
+  q(); window.addEventListener('load',q); /* gezonde hoogte meteen bij het openen vastleggen */
 })();
 </script>
 <script>
