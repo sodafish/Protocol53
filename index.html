@@ -37,6 +37,8 @@
   /* Settings › Muscle groups aan/uit (op vraag van Tom, 18 okt): localStorage p53-goff = JSON-lijst van VERBORGEN groepen g1–g7 (Gym en Home); standaard alles aan, minstens één blijft aan */
   window.__p53goff=function(){ var D=['g1','g2','g3','g4','g5','g6','g7'], v=null; try{ v=JSON.parse(localStorage.getItem('p53-goff')||'[]'); }catch(e){}
     if(!Array.isArray(v)) return []; v=v.filter(function(g,i){ return D.indexOf(g)>=0&&v.indexOf(g)===i; }); return v.length>=D.length?[]:v; };
+  /* Settings › Finisher (op vraag van Tom, 23 okt): localStorage p53-fin = '1' → Cardio (g8) als 'Finisher' onderaan Gym; standaard uit */
+  window.__p53finOn=function(){ try{ return localStorage.getItem('p53-fin')==='1'; }catch(e){ return false; } };
   /* niet ingelogd (geen p53-auth): app verbergen tot cloud.js beslist, anders flitst de lijst vóór het inlogscherm (13 okt) */
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
@@ -2601,6 +2603,11 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
       <p class="st-note">Show these groups in Gym and Home. Drag to change the order.</p>
       <button type="button" class="st-reset" id="stOrderReset" hidden>Reset to default order</button>
     </div>
+    <div class="st-sec" id="stFinSec">
+      <p class="set-lab" id="stFinL">Finisher</p>
+      <ul class="st-progs" id="stFin" role="group" aria-labelledby="stFinL"><li><button type="button" role="checkbox" aria-checked="false" id="stFinBtn"><span>Cardio finisher</span><span class="sp-ck" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button></li></ul>
+      <p class="st-note">Show a cardio block at the end of Gym, with its own choice of exercises.</p>
+    </div>
     <div class="st-sec">
       <form class="pf-form" id="pfForm" novalidate>
       <label class="set-lab pf-f">Date of birth<input type="date" id="dobIn"></label>
@@ -2650,6 +2657,12 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
   if(hb){ paintHalf(); document.addEventListener('p53-progs',paintHalf);
     hb.addEventListener('click',function(){ var on=!window.__p53halfOn(); try{ if(on) localStorage.removeItem('p53-half-on'); else localStorage.setItem('p53-half-on','0'); }catch(e){}
       paintHalf(); document.dispatchEvent(new Event('p53-progs')); prefsPush(); }); }
+  /* Settings › Finisher (23 okt): Cardio (g8) onderaan Gym aan/uit; sectie enkel als Gym aan staat */
+  var fb=document.getElementById('stFinBtn'), fsec=document.getElementById('stFinSec');
+  function paintFin(){ if(!fb) return; fb.setAttribute('aria-checked',String(window.__p53finOn())); if(fsec) fsec.hidden=window.__p53progs().indexOf('full')<0; }
+  if(fb){ paintFin(); document.addEventListener('p53-progs',paintFin);
+    fb.addEventListener('click',function(){ var on=!window.__p53finOn(); try{ if(on) localStorage.setItem('p53-fin','1'); else localStorage.removeItem('p53-fin'); }catch(e){}
+      paintFin(); document.dispatchEvent(new Event('p53-progs')); prefsPush(); }); }
   /* Settings › Workout tabs (14 okt): Grouped (pillen + labels) · Single bar (één doorlopende balk); sectie enkel als er minstens twee pillen zouden staan */
   var tSec=document.getElementById('stTabsSec');
   function paintTabs(){ if(!tSec) return; var bar=window.__p53tabsBar(), pv=window.__p53progs();
@@ -2723,7 +2736,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
      Pas bij een wijziging gaat de keuze naar de server; een serverversie wint als haar tijd (at) nieuwer is dan de laatste lokale wijziging (localStorage p53-prefs-at). */
   var pCol=null;
   function prefsPush(){ var s=null; try{ s=localStorage.getItem('p53-start'); }catch(e){}
-    var p={pages:window.__p53pagesOff(),progs:window.__p53progs(),wu:window.__p53wuOff(),half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),goff:window.__p53goff(),at:Date.now()};
+    var p={pages:window.__p53pagesOff(),progs:window.__p53progs(),wu:window.__p53wuOff(),half:window.__p53halfOn(),tabs:window.__p53tabsBar()?'bar':'grouped',gorder:window.__p53gorder(),goff:window.__p53goff(),fin:window.__p53finOn(),at:Date.now()};
     try{ localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){} if(pCol) pCol.doc('prefs').set(p).catch(function(){}); }
   function prefsApply(p){ var la=0; try{ la=+localStorage.getItem('p53-prefs-at')||0; }catch(e){} if(!p||!(p.at>la)) return;
     var A=['full','egym','home','cardio','group'];
@@ -2733,6 +2746,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
       if(p.tabs==='bar') localStorage.setItem('p53-tabs','bar'); else if(p.tabs==='grouped') localStorage.removeItem('p53-tabs');
       if(Array.isArray(p.gorder)){ if(p.gorder.join()==='g1,g2,g3,g4,g5,g6,g7') localStorage.removeItem('p53-gorder'); else localStorage.setItem('p53-gorder',JSON.stringify(p.gorder)); }
       if(Array.isArray(p.goff)){ if(p.goff.length) localStorage.setItem('p53-goff',JSON.stringify(p.goff)); else localStorage.removeItem('p53-goff'); }
+      if(typeof p.fin==='boolean'){ if(p.fin) localStorage.setItem('p53-fin','1'); else localStorage.removeItem('p53-fin'); }
       if(Array.isArray(p.pages)){ if(p.pages.length) localStorage.setItem('p53-pages-off',JSON.stringify(p.pages)); else localStorage.removeItem('p53-pages-off'); }
       localStorage.setItem('p53-prefs-at',String(p.at)); }catch(e){}
     if(typeof pagesApply==='function') pagesApply(); paintProgs(); paintWu(); syncStart(); document.dispatchEvent(new Event('p53-gorder')); document.dispatchEvent(new Event('p53-progs')); window.__p53wuApply(); document.dispatchEvent(new Event('p53-groups')); }
@@ -5071,7 +5085,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function isHome(g){ return window.__split==='home'&&(!g||/^g[0-7]$/.test(g)); } /* Cardio (g8) en eGym (g10) houden hun gewone keuze */
   /* eGym heeft een eigen warm-upkeuze (cfg.eg0; op vraag van Tom, 10 okt): zelfde lijst, apart onthouden; zolang leeg = die van Open Gym */
   function isEgW(g){ return window.__split==='egym'&&g==='g0'; }
-  function on(g){ if(isEgW(g)) return cfg.eg0||cfg.g0||DEF.g0||[]; if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
+  /* Finisher (23 okt): Cardio-rijen op de Gym-tab met een eigen keuze (cfg.fin); zolang leeg = die van de Cardio-tab */
+  function isFin(g){ return window.__split==='full'&&g==='g8'; }
+  function on(g){ if(isFin(g)) return cfg.fin||cfg.g8||DEF.g8||[]; if(isEgW(g)) return cfg.eg0||cfg.g0||DEF.g0||[]; if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
   /* actieve oefeningen per groep over alle actieve programma's (History › Add session; op vraag van Tom, 11 okt) */
   window.__p53active=function(){ var P=window.__p53progs?window.__p53progs():['full','egym','cardio'], r={};
     function add(g,ks){ r[g]=r[g]||[]; (ks||[]).forEach(function(k){ if(r[g].indexOf(k)<0) r[g].push(k); }); }
@@ -5080,9 +5096,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(P.indexOf('home')>=0) G.forEach(function(g){ add(g,((cfg.home&&cfg.home[g])||[]).filter(function(k){ return HOME.indexOf(k)>=0; })); });
     if(P.indexOf('egym')>=0){ add('g0',cfg.eg0||cfg.g0||DEF.g0); add('g10',cfg.g10||DEF.g10); }
     if(P.indexOf('cardio')>=0) add('g8',cfg.g8||DEF.g8);
+    if(P.indexOf('full')>=0&&window.__p53finOn&&window.__p53finOn()) add('g8',cfg.fin||cfg.g8||DEF.g8);
     if(P.indexOf('group')>=0) add('g11',cfg.g11||DEF.g11);
     return r; };
-  function setOn(g,act){ if(isEgW(g)){ cfg.eg0=act; return; } if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
+  function setOn(g,act){ if(isFin(g)){ cfg.fin=act; return; } if(isEgW(g)){ cfg.eg0=act; return; } if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
   document.addEventListener('p53-split',function(){ apply(); if(open) render(); });
   function apply(){
     Object.keys(DEF).forEach(function(g){ var act=on(g); rows(g).forEach(function(li){ li.classList.toggle('ex-off',act.indexOf(keyOf(li))<0); }); });
@@ -5325,7 +5342,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   document.addEventListener('p53-progs',function(){ var was=cur; layout(); if(cur!==was) set(cur); else apply(); });
   function apply(){
     layout();
-    var hv=hcur(), keep=hv!=='all'?HALF[hv]:SPLIT[cur], goff=(cur==='full'||cur==='home')&&window.__p53goff?window.__p53goff():[];
+    var fin=cur==='full'&&!!(window.__p53finOn&&window.__p53finOn()), ft=document.querySelector('#s-d3 .exgrp[data-grp="g8"]'); /* Finisher = Cardio onderaan Gym, ook bij Upper/Lower (Settings › Finisher, 23 okt) */
+    if(ft){ var fn=cur==='full'?'Finisher':'Cardio', ftt=ft.querySelector('.grp-t'), fe=ft.querySelector('.grp-edit'); if(ftt&&ftt.textContent!==fn) ftt.textContent=fn; if(fe) fe.setAttribute('aria-label','Choose exercises for '+fn); }
+    var hv=hcur(), keep=(hv!=='all'?HALF[hv]:SPLIT[cur]).concat(fin?['g8']:[]), goff=(cur==='full'||cur==='home')&&window.__p53goff?window.__p53goff():[];
     if(hseg){ hseg.hidden=!hon()||!(cur==='full'||cur==='home'); hseg.querySelectorAll('[data-half]').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.half===hv?'true':'false'); }); }
     document.querySelectorAll('#s-d3 .exl > li[data-grp]').forEach(function(li){
       var g=li.dataset.grp; li.classList.toggle('split-off',keep.indexOf(g)<0||goff.indexOf(g)>=0); }); /* warm-up is een eigen keuze; uitgezette spiergroepen (Settings › Muscle groups) verborgen */

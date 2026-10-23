@@ -636,6 +636,12 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Opslag: localStorage `p53-goff` = JSON-lijst van VERBORGEN groepen (g1–g7), `window.__p53goff()` in het `<head>`-script; synct via `cfg/prefs` (`goff`). Uitgezet = `split-off` in `apply()` van het split-script (enkel bij full/home), dus nummering loopt door over de zichtbare groepen. In de lijst: uitgezette rij `.so-off` (naam `--muted`, geen nummer). Keuze en metingen van de groep blijven bewaard.
 
 
+## Settings › Finisher (op vraag van Tom, 23 okt)
+- Sectie `#stFinSec` na Muscle groups, één vinkrij 'Cardio finisher' (`#stFinBtn`), enkel zichtbaar als Gym aan staat. STANDAARD UIT. Opslag localStorage `p53-fin`='1', `window.__p53finOn()` in het `<head>`-script; synct via `cfg/prefs` (`fin`).
+- Aan = de Cardio-groep `g8` staat ook onderaan de Gym-tab (`full`, ook bij Upper/Lower): `apply()` van het split-script voegt `g8` toe aan `keep`. Daar heet de kop 'Finisher' (op de Cardio-tab weer 'Cardio'; ook aria-label van het potlood en de titel van het keuzeblad). Geen nummer (zoals Warm-up); chip in de End-balk = 'F'.
+- Eigen oefeningkeuze op de Gym-tab: `cfg.fin` (`isFin(g)` in het groepsscript, naar het voorbeeld van `cfg.eg0`); zolang leeg = de keuze van de Cardio-tab (`cfg.g8`). `__p53active` neemt de finisher mee als Gym aan staat en de finisher aan staat.
+- Zelfde rijen en sleutels (`c-…`), dus minuten tellen vanzelf als cardio (Statistics, maandoverzicht, kalender '+ N min cardio'); `prog()` negeert g8, dus de dag blijft Full/Upper/Lower body.
+
 ## End-balk met groepen (op vraag van Tom, 18 okt; eerst variant A + onderlijning van C, dezelfde dag naar VARIANT C)
 - Tijdens een workout blijft `#woEnd` RECHTS UITGELIJND (volle breedte op vraag van Tom teruggedraaid, 18 okt) en groeit naar links: `padding-right = --wo-grp-w (breedte van .wo-grp, gezet door fit()) + 20px + --wo-gap (16px)` = vaste afstand tijd → W. Label 'End' + tijd. Minder groepen (Upper/Lower, verborgen groepen) = kortere pil.
 - PASSEN (`fit()` in het groepsscript, `window.__woGrpFit`): loopt de pil voorbij de linkerrand van de kolom (`app-gut` + 16), dan stap voor stap `html.wo-fit1` (cijfers 17 px, gap 0) → `wo-fit2` (afstand 10 px, padding links kleiner) → `wo-fit3` (tijd weg). Herberekend bij paint, resize, grootte van `#woEndT` (ResizeObserver: 59:59 → 1:00:00), klassewissel op body (has-note), fonts.ready. Standaard cijfers 20 px breed, gap 1 px.
