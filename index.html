@@ -6044,18 +6044,21 @@ window.__congrats=function(o){
   /* 23 okt (screenshot Tom: balk + End-pil weer halverwege tijdens scrollen): soms houdt iOS ook visualViewport.height ingekort,
      dan was het verschil 0. Als app op het beginscherm (standalone) verandert de hoogte nooit legitiem (geen Safari-balken), dus onthouden we
      per oriëntatie de grootste gezonde hoogte (probe zonder toetsenbord) en gebruiken die als echte onderkant. Niet in Safari zelf. */
-  var SA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)), BEST={};
+  var SA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)), BEST={}, ready=false;
   function ori(){ return (window.matchMedia&&matchMedia('(orientation: landscape)').matches)?'l':'p'; }
   function fix(){ R=0; var d=0;
     if(!typing()){ var pb=pr.getBoundingClientRect().bottom, o=ori(), vis=vv.height;
-      if(SA){ if(vv.offsetTop<1&&Math.abs(vv.height-pb)<2&&pb>(BEST[o]||0)) BEST[o]=pb; vis=Math.max(vis,BEST[o]||0); }
+      /* 23 okt, later (screenshot Tom: balk ±60 pt te laag): bij het opstarten meet iOS soms even de hoogte zonder statusbalk.
+         Daarom enkel onthouden wat ook innerHeight zegt, pas 1,5 s na laden, en BEST enkel gebruiken bij een toetsenbord-groot verschil (> 150 px). */
+      if(SA){ if(ready&&vv.offsetTop<1&&Math.abs(vv.height-pb)<2&&Math.abs(window.innerHeight-pb)<2&&pb>(BEST[o]||0)) BEST[o]=pb;
+        if(BEST[o]&&BEST[o]-pb>150) vis=Math.max(vis,BEST[o]); }
       d=Math.round(vv.offsetTop+vis-pb); if(d<2||d>600) d=0; }
     if(d!==cur){ cur=d; document.documentElement.style.setProperty('--kb-fix',d+'px'); } }
   function q(){ if(!R) R=requestAnimationFrame(fix); }
   vv.addEventListener('resize',q); vv.addEventListener('scroll',q); window.addEventListener('scroll',q,{passive:true});
   window.addEventListener('resize',q); document.addEventListener('focusin',q,true); document.addEventListener('focusout',function(){ setTimeout(q,80); setTimeout(q,400); },true);
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(q,300); });
-  q(); window.addEventListener('load',q); /* gezonde hoogte meteen bij het openen vastleggen */
+  setTimeout(function(){ ready=true; q(); },1500); /* gezonde hoogte vastleggen na het opstarten */
 })();
 </script>
 <script>
