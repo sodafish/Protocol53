@@ -1918,7 +1918,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 body.has-note .note-jump.note-float:not([hidden]){display:inline-flex;}
 body.has-note .wo-end:not(.is-start){right:calc(var(--app-gut) + 16px + 48px + 10px);}
 @media (max-width:350px){ body.has-note .wo-end:not(.is-start){right:calc(var(--app-gut) + 16px + 42px + 8px);} }
-.cf-card.cf-note p{white-space:pre-wrap;text-align:left;max-height:55vh;overflow:auto;-webkit-overflow-scrolling:touch;}
+#nt-sheet .nt-body{white-space:pre-wrap;overflow-wrap:anywhere;font:400 16px/1.55 'Work Sans',system-ui,sans-serif;color:var(--ink);padding-bottom:1.6rem;} /* notitie als onderblad (24 okt) */
 body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 </style>
 
@@ -2613,6 +2613,12 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
   <div class="sheet-grip" aria-hidden="true"></div>
   <div class="sheet-head"><h3 id="sug-t">Suggestions</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="sug-body"></div>
+</div>
+<div class="sheet-bg" id="nt-bg" hidden></div>
+<div class="sheet" id="nt-sheet" role="dialog" aria-modal="true" aria-labelledby="nt-t" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head"><h3 id="nt-t">Notes</h3><button type="button" class="sheet-x" aria-label="Close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="nt-body" id="ntBody"></div>
 </div>
 <div class="sheet-bg" id="st-bg" hidden></div>
 <div class="sheet" id="st-sheet" role="dialog" aria-modal="true" aria-labelledby="st-t" hidden>
@@ -4855,7 +4861,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   }
 
   /* ---------- venster ---------- */
-  var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#et-bg):not(#ebt-bg):not(#egs-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#et-sheet):not(#ebt-sheet):not(#egs-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
+  var bg=document.querySelector('.sheet-bg:not(#pe-bg):not(#et-bg):not(#ebt-bg):not(#egs-bg):not(#more-bg):not(#grp-bg):not(#dob-bg):not(#set-bg):not(#nt-bg)'), sh=document.querySelector('.sheet:not(#pe-sheet):not(#et-sheet):not(#ebt-sheet):not(#egs-sheet):not(#more-sheet):not(#grp-sheet):not(#dob-sheet):not(#set-sheet):not(#nt-sheet)'), bodyEl=sh.querySelector('.sheet-body'), tt=sh.querySelector('#sheet-t');
   var cur=null, lastFocus=null;
   function open(name,btn,over,chartOnly){
     var k=NAMES[name]; if(!k) return; lastFocus=btn;
@@ -6020,9 +6026,14 @@ window.__congrats=function(o){
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
   var last=null; setInterval(function(){ if(ta.value!==last){ last=ta.value; paint(); } },700);
   b.setAttribute('aria-label','Show your notes');
-  b.addEventListener('click',function(){ p53Confirm({title:'Notes',msg:ta.value.trim(),ok:'Edit',no:'Close',cls:'cf-note'}).then(function(y){ if(!y) return;
-    function go(){ jump(); }
-    if(document.body.dataset.view!=='workout'){ var w=document.querySelector('.gnav-i[data-view="workout"]'); if(w) w.click(); setTimeout(go,480); } else go(); }); });
+  /* tik = onderblad 'Notes' zoals de andere bladen (op vraag van Tom, 24 okt; eerst een venster met Edit): sluiten met kruisje, naast tikken, Esc of omlaag vegen */
+  var nsh=document.getElementById('nt-sheet'), nbg=document.getElementById('nt-bg'), nbd=document.getElementById('ntBody'), nOpen=false, nLast=null;
+  function nShow(){ if(nOpen||!nsh) return; nOpen=true; nLast=document.activeElement; nbd.textContent=ta.value.trim(); nsh.scrollTop=0; nbg.hidden=false; nsh.hidden=false;
+    requestAnimationFrame(function(){ nbg.classList.add('on'); nsh.classList.add('on'); }); nsh.querySelector('.sheet-x').focus({preventScroll:true}); }
+  function nHide(){ if(!nOpen) return; nOpen=false; nbg.classList.remove('on'); nsh.classList.remove('on'); setTimeout(function(){ if(!nOpen){ nbg.hidden=true; nsh.hidden=true; } },320); if(nLast&&nLast.focus) nLast.focus({preventScroll:true}); }
+  if(nsh){ nbg.addEventListener('click',nHide); nsh.querySelector('.sheet-x').addEventListener('click',nHide);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&nOpen){ e.stopPropagation(); nHide(); } },true); }
+  b.addEventListener('click',nShow);
   function jump(){
     var h=ta.previousElementSibling&&ta.previousElementSibling.classList.contains('note-head')?ta.previousElementSibling:ta;
     var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';

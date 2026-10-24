@@ -706,7 +706,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 
 ## Notitieknop tijdens de workout (op vraag van Tom, 24 okt; vervangt 'Notitieknop WEER VOORLOPIG UIT')
 - `#noteJump.note-float` (48 px, terracotta, sticky_note-icoon) staat rechts van End workout, enkel TIJDENS een workout (`#woEnd` zonder `is-start`) én als `#sessNote` tekst bevat, op elke pagina (`body.has-note`; End schuift 58 px naar links). Volgt `#woEnd` via MutationObserver + de bestaande input/0,7 s-poll.
-- Tik = `p53Confirm({title:'Notes',msg,ok:'Edit',no:'Close',cls:'cf-note'})` (`p53Confirm` kent nu ook `no` = label van de annuleerknop en `cls` = extra klasse op `.cf-card`); `.cf-note p` = pre-wrap, links uitgelijnd, max 55vh scrollbaar. Edit = naar Workout en zacht naar de notitie scrollen (geen focus: iOS-toetsenbord).
+- Tik = onderblad `#nt-sheet`/`#nt-bg` (op vraag van Tom, 24 okt; vervangt het venster met Edit): `.sheet` met grip, titel 'Notes' + kruisje, tekst in `#ntBody` (`.nt-body`, pre-wrap, 16 px); sluiten met kruisje, naast tikken, Esc of omlaag vegen (generieke sheet-code: scroll-lock + veeg). Staat in de :not()-uitsluitingen van het uitlegblad. `p53Confirm` kent nog wel `no`/`cls` (ongebruikt).
 
 ## Chest: Pec Deck + Seated Fly (op vraag van Tom, 18 okt)
 - `d3-chest-fly-machine` heet op het scherm nu 'Pec Deck Machine' (sleutel ongewijzigd, video `fly` = Gym visual 'Lever Pec Deck Fly': onderarmen tegen de pads); EX.fly-uitleg herschreven voor de pads. NAMES kent beide namen ('Chest Fly Machine' en 'Pec Deck Machine' → `fly`).
