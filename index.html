@@ -1909,7 +1909,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp button:not(.d){color:var(--accent);} .wo-grp button.d{color:color-mix(in srgb,var(--ink) 42%,transparent);} /* afgewerkt = weer grijs, doorgestreept + bolletjes (op vraag van Tom, 24 okt) */
 .wo-grp button.opt:not(.d){color:color-mix(in srgb,var(--ink) 42%,transparent);} /* optioneel = zelfde grijs als afgewerkt; verschil = haakjes vs doorstreept (op vraag van Tom, 24 okt) */ .wo-grp button.opt:not(.d) span{white-space:nowrap;} .wo-grp button.opt:not(.d) span::before{content:"(";} .wo-grp button.opt:not(.d) span::after{content:")";}
 .wo-grp button.opt:not(.d) span::before,.wo-grp button.opt:not(.d) span::after{font-weight:400;font-size:.78em;position:relative;top:-.08em;margin:0 -.02em;}
-.wo-grp button.opt:not(.d){width:calc(var(--chip,26px) + 4px);} /* haakjes: chip 4 px breder (haakjes mogen iets in de tussenruimte vallen), fit() rekent mee */ /* optioneel = gewoon accent tussen dunne haakjes '(F)' (op vraag van Tom, 24 okt) */ /* open groep = accent, optionele open groep = --ink (wit in donker/blauw, zwart in licht); telt niet mee voor 'alles af' (op vraag van Tom, 24 okt) */
+.wo-grp button.opt{width:calc(var(--chip,26px) + 4px);} /* ook afgewerkt: breedte blijft gelijk, niets verschuift (op vraag van Tom, 24 okt) */ /* haakjes: chip 4 px breder (haakjes mogen iets in de tussenruimte vallen), fit() rekent mee */ /* optioneel = gewoon accent tussen dunne haakjes '(F)' (op vraag van Tom, 24 okt) */ /* open groep = accent, optionele open groep = --ink (wit in donker/blauw, zwart in licht); telt niet mee voor 'alles af' (op vraag van Tom, 24 okt) */
 .wo-grp button b{position:absolute;left:0;right:0;top:calc(50% + 13px);color:var(--accent);display:flex;justify-content:center;gap:2px;pointer-events:none;}
 .wo-grp button b u{width:4px;height:4px;border-radius:50%;background:currentColor;} /* bolletjes 4 px (op vraag van Tom, 18 okt; was 3) */
 .wo-grp button b u.pl{width:8px;height:8px;margin-top:-2px;border-radius:0;background:linear-gradient(currentColor,currentColor) center/8px 1.8px no-repeat,linear-gradient(currentColor,currentColor) center/1.8px 8px no-repeat;} /* plusje 8 px (op vraag van Tom, 18 okt) */
@@ -5996,7 +5996,7 @@ window.__congrats=function(o){
   var H=document.documentElement, bar=document.getElementById('woBar');
   function fit(){ H.classList.remove('wo-fit5'); H.style.setProperty('--chip','30px');
     if(!bar||bar.hidden||box.hidden) return;
-    var pill=bar.firstElementChild, n=box.children.length||1, no=box.querySelectorAll('button.opt:not(.d)').length, cs=getComputedStyle(pill), t=pill.querySelector('.wo-bar-t');
+    var pill=bar.firstElementChild, n=box.children.length||1, no=box.querySelectorAll('button.opt').length, cs=getComputedStyle(pill), t=pill.querySelector('.wo-bar-t');
     function size(){ var tw=t&&t.offsetWidth?t.offsetWidth+12:0, room=pill.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-tw; return Math.floor(((room-6*(n-1)-4*no)/n)*2)/2; }
     var c=size(); if(c>=21){ H.style.setProperty('--chip',Math.min(26,c)+'px'); return; }
     H.classList.add('wo-fit5'); H.style.setProperty('--chip',Math.max(20,Math.min(26,size()))+'px'); }
