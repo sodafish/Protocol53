@@ -859,7 +859,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exgrp[data-grp="g8"] .grp-t,.exgrp[data-grp="g11"] .grp-t{position:relative;top:14px;}
 .exgrp[data-grp="g0"] .grp-n{display:none;} .exgrp[data-grp="g0"] .grp-t{position:relative;top:14px;} /* warm-up zonder nummer, titel even hoog als Cardio (op vraag van Tom, 12 okt) */ /* Cardio zonder nummer: titel op dezelfde hoogte als 'Warm-up' op de andere tabs */
 /* optionele groep (Settings › Groups, op vraag van Tom, 24 okt): '(optional)' achter de titel, groep gedimd; aanklikbaar zoals altijd */
-#s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-t::after{content:"(optional)";margin-left:.45em;font:italic 400 13px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--muted);}
+#s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-t::after{content:"(optional)";margin-left:.45em;font:italic 400 13px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:inherit;} /* zelfde gedimde oranje als de titel (op vraag van Tom, 24 okt) */
 #s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-t,#s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-n{color:color-mix(in srgb,var(--accent) 50%,transparent);} /* optioneel: accent, gedimd (op vraag van Tom, 24 okt) */
 #s-d3 .exl > li.g-opt:not(.exgrp):not(.g-opt-act){opacity:.55;transition:opacity .2s ease;}
 #s-d3 .exl > li.g-opt:not(.exgrp):has(input:focus,textarea:focus){opacity:1;} /* enkel tijdens typen; :focus-within hield de rij vol na het aantikken van het vinkje (QA Tom, 24 okt) */
