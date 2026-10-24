@@ -2765,7 +2765,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
         while(dy<0&&(n=it.previousElementSibling)&&n.dataset.g&&-dy>n.offsetHeight/2){ var h2=n.offsetHeight; n.before(it); y0-=h2; dy+=h2; flip(n,-h2); moved=true; renumber(); }
         it.style.transform='translateY('+dy+'px)';
         raf=requestAnimationFrame(step); }
-      ol.addEventListener('pointerdown',function(e){ var g=e.target.closest('.gs-drag'); if(!g||it) return;
+      ol.addEventListener('pointerdown',function(e){ var g=e.target.closest('.gs-drag'); if(!g||it||g.classList.contains('so-fix')) return; /* Warm-up/Finisher: vaste plek */
         e.preventDefault(); it=g.closest('li'); pid=e.pointerId; y0=lastY=e.clientY; st0=sh.scrollTop; moved=false;
         try{ g.setPointerCapture(pid); }catch(x){} it.classList.add('dragging'); raf=requestAnimationFrame(step); });
       ol.addEventListener('pointermove',function(e){ if(it&&e.pointerId===pid){ e.preventDefault(); lastY=e.clientY; } });
