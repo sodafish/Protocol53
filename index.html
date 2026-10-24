@@ -862,7 +862,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 #s-d3 .exgrp.g-opt .grp-t::after{content:"(optional)";margin-left:.45em;font:italic 400 13px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--muted);}
 #s-d3 .exgrp.g-opt .grp-t,#s-d3 .exgrp.g-opt .grp-n{color:var(--muted-soft);}
 #s-d3 .exl > li.g-opt:not(.exgrp){opacity:.55;transition:opacity .2s ease;}
-#s-d3 .exl > li.g-opt:not(.exgrp):focus-within{opacity:1;}
+#s-d3 .exl > li.g-opt:not(.exgrp):has(input:focus,textarea:focus){opacity:1;} /* enkel tijdens typen; :focus-within hield de rij vol na het aantikken van het vinkje (QA Tom, 24 okt) */
 .grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
 .exgrp.grp-done .grp-opt{text-decoration:none;}
 .exsec{list-style:none;display:flex;align-items:center;gap:.8rem;margin-top:2.6rem;padding:.4rem 0;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
@@ -5141,7 +5141,9 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function isEgW(g){ return window.__split==='egym'&&g==='g0'; }
   /* Finisher (23 okt): Cardio-rijen op de Gym-tab met een eigen keuze (cfg.fin); zolang leeg = die van de Cardio-tab */
   function isFin(g){ return window.__split==='full'&&g==='g8'; }
-  function on(g){ if(isFin(g)) return cfg.fin||cfg.g8||DEF.g8||[]; if(isEgW(g)) return cfg.eg0||cfg.g0||DEF.g0||[]; if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
+  /* Finisher = enkel Indoor-cardio (op vraag van Tom, 24 okt: buitencardio past niet na een gymsessie) */
+  var OUTC=/^c-(walk|walkjog|jog|bike|padel)$/; function indoor(ks){ return (ks||[]).filter(function(k){ return !OUTC.test(k); }); }
+  function on(g){ if(isFin(g)) return indoor(cfg.fin||cfg.g8||DEF.g8); if(isEgW(g)) return cfg.eg0||cfg.g0||DEF.g0||[]; if(isHome(g)){ var h=cfg.home&&cfg.home[g]; return (h||[]).filter(function(k){ return HOME.indexOf(k)>=0; }); } return cfg[g]||DEF[g]||[]; }
   /* actieve oefeningen per groep over alle actieve programma's (History › Add session; op vraag van Tom, 11 okt) */
   window.__p53active=function(){ var P=window.__p53progs?window.__p53progs():['full','egym','cardio'], r={};
     function add(g,ks){ r[g]=r[g]||[]; (ks||[]).forEach(function(k){ if(r[g].indexOf(k)<0) r[g].push(k); }); }
@@ -5150,7 +5152,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(P.indexOf('home')>=0) G.forEach(function(g){ add(g,((cfg.home&&cfg.home[g])||[]).filter(function(k){ return HOME.indexOf(k)>=0; })); });
     if(P.indexOf('egym')>=0){ add('g0',cfg.eg0||cfg.g0||DEF.g0); add('g10',cfg.g10||DEF.g10); }
     if(P.indexOf('cardio')>=0) add('g8',cfg.g8||DEF.g8);
-    if(P.indexOf('full')>=0&&window.__p53finOn&&window.__p53finOn()) add('g8',cfg.fin||cfg.g8||DEF.g8);
+    if(P.indexOf('full')>=0&&window.__p53finOn&&window.__p53finOn()) add('g8',indoor(cfg.fin||cfg.g8||DEF.g8));
     if(P.indexOf('group')>=0) add('g11',cfg.g11||DEF.g11);
     return r; };
   function setOn(g,act){ if(isFin(g)){ cfg.fin=act; return; } if(isEgW(g)){ cfg.eg0=act; return; } if(isHome(g)){ cfg.home=cfg.home||{}; cfg.home[g]=act; } else cfg[g]=act; }
@@ -5290,7 +5292,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   function render(){
     var act=on(cur);
     /* volgorde: eerst zonder aandachtspunt, dan met label (Back!, Knees! …), dan gevaarlijk (driehoekje); binnen elke laag op populariteit (POP) */
-    var ordered=rows(cur).filter(function(li){ return !isHome(cur)||HOME.indexOf(keyOf(li))>=0; }); /* al gesorteerd door sortRows; Home: enkel thuisoefeningen */
+    var ordered=rows(cur).filter(function(li){ return (!isHome(cur)||HOME.indexOf(keyOf(li))>=0)&&!(isFin(cur)&&OUTC.test(keyOf(li))); }); /* al gesorteerd door sortRows; Home: enkel thuisoefeningen */
     var lastSub=null;
     list.innerHTML=ordered.map(function(li){ var subH=''; if(li.dataset.sub&&li.dataset.sub!==lastSub){ lastSub=li.dataset.sub; if(!(li.dataset.grp==='g0'&&lastSub==='Cardio')) subH='<li class="gs-sub-h">'+lastSub+'</li>'; }
       return subH+(function(){ var k=keyOf(li), eqp=li.querySelector('.exr-s .exr-eqp'), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;

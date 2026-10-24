@@ -649,6 +649,8 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Warm-up-rij = Gym én Home samen (zet/haalt `full` en `home` in `p53-warmup`). De eGym-warm-up staat apart in sectie `#stWuSec` (label 'eGym', rij 'Warm-up', `li[data-wu=egym]`), enkel als eGym aan staat. Finisher-rij = `p53-fin` (de oude `#stFinSec` is weg).
 - OPTIONEEL: per rij een pil 'Optional' (`.so-opt`, role=switch, absoluut links van het vinkje; verborgen als de groep uit staat). Opslag localStorage `p53-gopt` (JSON-lijst g0–g8), `window.__p53gopt()` in het `<head>`-script, synct via `cfg/prefs` (`gopt`).
 - Workout: `apply()` van het split-script zet `g-opt` op kop + rijen (enkel Gym/Home; g8 enkel op Gym). Kop: '(optional)' via `.grp-t::after` (Work Sans italic 13 px `--muted`, textContent blijft zuiver), titel + nummer `--muted-soft`; rijen opacity .55 (1 bij `:focus-within`). Alles blijft aanklikbaar en telt gewoon mee in de statistieken.
+- Dimmen blijft ook na aantikken van het vinkje: volle opacity enkel bij `:has(input:focus,textarea:focus)` (QA Tom, 24 okt; `:focus-within` hield de rij vol zolang de knop focus had).
+- FINISHER = ENKEL INDOOR (op vraag van Tom, 24 okt): op de Gym-tab filtert `on()` (en het keuzeblad, `__p53active`) de buitencardio weg (`OUTC` = c-walk/walkjog/jog/bike/padel, zelfde lijst als de Outdoor-tussenkop). De Cardio-tab blijft alles tonen.
 - Workout-balk: optionele chip `.opt` = cijfer `--ink` 36%, niet de 'volgende' (`.nx`); telt NIET mee voor 'alles af' (vinkje), tenzij alle zichtbare groepen optioneel zijn.
 
 ## End-balk met groepen (op vraag van Tom, 18 okt; eerst variant A + onderlijning van C, dezelfde dag naar VARIANT C)
