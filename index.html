@@ -860,7 +860,7 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exgrp[data-grp="g0"] .grp-n{display:none;} .exgrp[data-grp="g0"] .grp-t{position:relative;top:14px;} /* warm-up zonder nummer, titel even hoog als Cardio (op vraag van Tom, 12 okt) */ /* Cardio zonder nummer: titel op dezelfde hoogte als 'Warm-up' op de andere tabs */
 /* optionele groep (Settings › Groups, op vraag van Tom, 24 okt): '(optional)' achter de titel, groep gedimd; aanklikbaar zoals altijd */
 #s-d3 .exgrp.g-opt .grp-t::after{content:"(optional)";margin-left:.45em;font:italic 400 13px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--muted);}
-#s-d3 .exgrp.g-opt .grp-t,#s-d3 .exgrp.g-opt .grp-n{color:var(--muted-soft);}
+#s-d3 .exgrp.g-opt .grp-t,#s-d3 .exgrp.g-opt .grp-n{color:color-mix(in srgb,var(--accent) 50%,transparent);} /* optioneel: accent, gedimd (op vraag van Tom, 24 okt) */
 #s-d3 .exl > li.g-opt:not(.exgrp){opacity:.55;transition:opacity .2s ease;}
 #s-d3 .exl > li.g-opt:not(.exgrp):has(input:focus,textarea:focus){opacity:1;} /* enkel tijdens typen; :focus-within hield de rij vol na het aantikken van het vinkje (QA Tom, 24 okt) */
 .grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
@@ -1906,7 +1906,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp button:focus-visible{outline:none;} .wo-grp button:focus-visible::after{box-shadow:0 0 0 2.5px var(--accent);}
 .wo-grp button.d{color:color-mix(in srgb,var(--ink) 42%,transparent);} .wo-grp button.d::after{background:transparent;} /* afgewerkt = gedempt cijfer, doorgestreept, op dezelfde hoogte als de open cijfers (niet meer omhoog, op vraag van Tom, 18 okt); bolletjes eronder */
 .wo-grp button.d span::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:1.5px;margin-top:-.75px;background:currentColor;border-radius:1px;}
-.wo-grp button:not(.d){color:var(--accent);} .wo-grp button.opt:not(.d){color:var(--ink);} /* open groep = accent, optionele open groep = --ink (wit in donker/blauw, zwart in licht); telt niet mee voor 'alles af' (op vraag van Tom, 24 okt) */
+.wo-grp button:not(.d){color:var(--accent);} .wo-grp button.opt:not(.d){color:color-mix(in srgb,var(--accent) 50%,transparent);} /* open groep = accent, optionele open groep = --ink (wit in donker/blauw, zwart in licht); telt niet mee voor 'alles af' (op vraag van Tom, 24 okt) */
 .wo-grp button b{position:absolute;left:0;right:0;top:calc(50% + 13px);color:var(--accent);display:flex;justify-content:center;gap:2px;pointer-events:none;}
 .wo-grp button b u{width:4px;height:4px;border-radius:50%;background:currentColor;} /* bolletjes 4 px (op vraag van Tom, 18 okt; was 3) */
 .wo-grp button b u.pl{width:8px;height:8px;margin-top:-2px;border-radius:0;background:linear-gradient(currentColor,currentColor) center/8px 1.8px no-repeat,linear-gradient(currentColor,currentColor) center/1.8px 8px no-repeat;} /* plusje 8 px (op vraag van Tom, 18 okt) */
