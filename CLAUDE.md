@@ -52,6 +52,7 @@ dan worden alle lokale gegevens (`fitlog-*`, `p53-queue`, `p53-cache`) gewist (`
 - Engelse teksten in JS-strings tussen enkele quotes: gebruik een typografische apostrof (don’t),
   anders breekt de string. Uitzondering: sleutels die exact moeten overeenkomen met schermnamen
   (bv. `"Farmer's Carry"` in `NAMES`).
+- GEEN VUILBAKJE MEER bij de notities (op vraag van Tom, 24 okt): de `.note-erase`-knoppen zijn uit de HTML; wissen = tekst selecteren en verwijderen. Het punt hieronder is de oude werking.
 - Bij elk notitieveld (`#sessNote`, `#cardioNote`, `#dietNote`) staat rechts op de lijn van de titel 'Notes'
   (`.note-head`) een rond vuilbakje (`.note-erase`, alleen icoon, zelfde stijl als `.grp-edit`, met bevestiging); het
   maakt het veld leeg en stuurt een `input`-event zodat de gewone opslag het wissen bewaart.
@@ -701,6 +702,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - Cijfers in de balk 18 px (op vraag van Tom, 18 okt; was 16).
 - Tussen de cijfers 6 px (op vraag van Tom, 18 okt; was 2; `fit()` rekent mee). Gemeten met 8 groepen: 375 px = chips 25,5 px, vanaf 393 px 26 px.
 - Bolletjes: even `--ink` geprobeerd, op vraag van Tom terug naar `--accent` (18 okt).
+- + CARDIO IN END (op vraag van Tom, 24 okt): 'End workout (14 sets / 35m cardio)'; minuten uit het min-veld van afgevinkte cardio: `c-…` (Cardio-tab, Finisher, HIIT/Spin/Boxing; niet core/yoga/pilates/mobility) + warm-up-rijen met `data-sub=Cardio`; ≥ 60 min = '1h 15m'. Enkel cardio = '(45m cardio)'. Past de pil niet in de kolom: eerst 'End' i.p.v. 'End workout', daarna zonder 'cardio'. Herberekend bij elk vinkje en als de notitieknop verschijnt/verdwijnt.
 - SETS IN END (op vraag van Tom, 24 okt): label 'End workout (12 sets)' (`span.wo-end-n`, 400, 70%), gezet in `paintWoBtns`: som van `__setsFor` over de afgevinkte rijen (`checks[chkKey(li)]`), zonder warm-up/cardio (`w0-`/`c-`), Core-les (`c-core`) en eGym wel; 0 sets = enkel 'End workout'. Past op 320 px met notitieknop.
 - END = --INK (op vraag van Tom, 24 okt; VERVANGT 'END ALTIJD WIT' hieronder): End workout-pil `--ink` met tekst + icoon `--paper`: zwart in licht, crème in donker/blauw (zoals het actieve navbar-item). Start blijft terracotta.
 - END ALTIJD WIT (op vraag van Tom, 18 okt): de witte pil (tekst + stop-/vinkje-icoon `--ink`; donker/blauw crème met `--paper`) geldt nu voor elke End workout (`.wo-end:not(.is-start)`), niet enkel bij `.all-done`. Start workout blijft terracotta. Bij alles af wisselt enkel het icoon (stop → vinkje).

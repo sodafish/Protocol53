@@ -2166,7 +2166,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
       <li class="exr ex-off" data-grp="g11" data-key="c-box"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Boxing Fitness</div><div class="exr-s">Bag &amp; pads · 45 min</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="c-box" placeholder="min" aria-label="Boxing Fitness — min"></li>
       <li class="exr ex-off" data-grp="g11" data-key="c-mobility"><button type="button" class="chk" aria-pressed="false" aria-label="Done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button><div class="exr-t"><div class="exr-n">Mobility & Stretch</div><div class="exr-s">Recovery · 30–45 min</div></div><input class="note exr-in" type="text" inputmode="decimal" data-note="c-mobility" placeholder="min" aria-label="Mobility & Stretch — min"></li>
     </ol>
-    <div class="note-head"><label class="sess-note-l" for="sessNote">Notes</label><button type="button" class="note-erase" data-for="sessNote" aria-label="Erase note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></div>
+    <div class="note-head"><label class="sess-note-l" for="sessNote">Notes</label></div>
     <textarea id="sessNote" class="note sess-note" data-note="d3-sessie-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
   </div>
 
@@ -2246,7 +2246,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     </ol>
   </div>
 
-  <div class="note-head"><label class="sess-note-l" for="cardioNote">Notes</label><button type="button" class="note-erase" data-for="cardioNote" aria-label="Erase note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></div>
+  <div class="note-head"><label class="sess-note-l" for="cardioNote">Notes</label></div>
   <textarea id="cardioNote" class="note sess-note" data-note="cardio-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
 </section>
 
@@ -2353,7 +2353,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     </table></div>
   </div>
 
-  <div class="note-head" hidden><label class="sess-note-l" for="dietNote">Notes</label><button type="button" class="note-erase" data-for="dietNote" aria-label="Erase note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg></button></div>
+  <div class="note-head" hidden><label class="sess-note-l" for="dietNote">Notes</label></div>
   <textarea id="dietNote" hidden class="note sess-note" data-note="dieet-notitie" rows="6" placeholder="Write down what you want to remember…"></textarea>
 
 
@@ -3069,7 +3069,17 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var lb=fl.querySelector('.wo-end-l'); if(lb){ lb.textContent=on?'End workout':'Start workout';
         /* 'End workout (12 sets)': sets van de afgevinkte oefeningen in deze workout, zoals Statistics telt (geen warm-up/cardio, Core-les wel; op vraag van Tom, 24 okt) */
         if(on){ var ns=0; document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){ var k=chkKey(li); if(!k||!checks[k]||(/^(w0|c)-/.test(k)&&k!=='c-core')) return; ns+=(window.__setsFor?+window.__setsFor(k,li):0)||0; });
-          if(ns){ var sn=document.createElement('span'); sn.className='wo-end-n'; sn.textContent=' ('+ns+(ns===1?' set)':' sets)'); lb.appendChild(sn); fl.setAttribute('aria-label','End workout, '+ns+(ns===1?' set':' sets')); } } }
+          /* + cardiominuten (op vraag van Tom, 24 okt): Cardio/Finisher-rijen (c-…, zonder core/yoga/pilates/mobility) en de cardio van de warm-up (data-sub Cardio), waarde uit het min-veld */
+          var cm=0; document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){ var k=chkKey(li); if(!k||!checks[k]) return;
+            var cardio=(/^c-/.test(k)&&!/^c-(core|yoga|pilates|mobility)$/.test(k))||(/^w0-/.test(k)&&li.dataset.sub==='Cardio'); if(!cardio) return;
+            var inp=li.querySelector('input.exr-in[placeholder="min"]'); var v=inp?parseFloat(String(inp.value).replace(',','.')):NaN; if(v>0) cm+=v; });
+          cm=Math.round(cm); var cs=cm?(cm>=60?Math.floor(cm/60)+'h'+(cm%60?' '+cm%60+'m':''):cm+'m')+' cardio':'';
+          var parts=[]; if(ns) parts.push(ns+(ns===1?' set':' sets')); if(cs) parts.push(cs);
+          if(parts.length){ var sn=document.createElement('span'); sn.className='wo-end-n'; sn.textContent=' ('+parts.join(' / ')+')'; lb.appendChild(sn); fl.setAttribute('aria-label','End workout, '+parts.join(', '));
+            /* past het niet in de kolom: eerst 'End' i.p.v. 'End workout', dan zonder het woord 'cardio' */
+            var minL=Math.max(0,(window.innerWidth-Math.min(window.innerWidth,430))/2)+16;
+            function over(){ var r=fl.getBoundingClientRect(); return r.width>0&&r.left<minL-.5; }
+            if(over()){ lb.firstChild.nodeValue='End'; if(over()&&cs){ parts[parts.length-1]=cs.replace(' cardio',''); sn.textContent=' ('+parts.join(' / ')+')'; } } } } }
       var ic=fl.querySelector('svg'); if(ic){ delete ic.dataset.ic; fl.classList.remove('all-done'); } if(ic) ic.innerHTML=on?'<rect x="5" y="5" width="14" height="14" rx="2.5"/>':'<path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.2-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/>'; }
     document.body.classList.add('wo-on');
     var bar=document.getElementById('woBar'), was=document.body.classList.contains('wo-live'); if(bar) bar.hidden=!on; document.body.classList.toggle('wo-live',on);
@@ -6025,7 +6035,7 @@ window.__congrats=function(o){
   var b=document.getElementById('noteJump'), ta=document.getElementById('sessNote'); if(!b||!ta) return;
   /* terug (op vraag van Tom, 24 okt): enkel TIJDENS een workout en als er een notitie is, rechts van End workout, op elke pagina; tik = notitie in een venster */
   var we=document.getElementById('woEnd');
-  function paint(){ var on=!!ta.value.trim()&&!!we&&!we.hidden&&!we.classList.contains('is-start'); b.hidden=!on; document.body.classList.toggle('has-note',on); }
+  function paint(){ var on=!!ta.value.trim()&&!!we&&!we.hidden&&!we.classList.contains('is-start'), was=document.body.classList.contains('has-note'); b.hidden=!on; document.body.classList.toggle('has-note',on); if(was!==on&&window.__paintWoBtns) window.__paintWoBtns(); } /* End-label opnieuw passen als de knop verschijnt/verdwijnt */
   if(we) new MutationObserver(paint).observe(we,{attributes:true,attributeFilter:['class','hidden']});
   ['input','change'].forEach(function(ev){ ta.addEventListener(ev,paint); });
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
