@@ -5958,7 +5958,7 @@ window.__congrats=function(o){
   window.__egsOpen=egsOpen;
   window.__renderCal=render;
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
-  document.querySelectorAll('.cal-nav').forEach(function(b){ b.addEventListener('click',function(){
+  document.querySelectorAll('.cal-nav[data-m]').forEach(function(b){ b.addEventListener('click',function(){
     var m=ym.m+(+b.dataset.m), y=ym.y; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } ym={y:y,m:m}; sel=null; render(); }); });
   render();
   if(window.claude&&window.claude.use) window.claude.use('db').then(function(db){ if(!db) return; sCol=db.collection('sess');
