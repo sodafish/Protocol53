@@ -1915,6 +1915,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp button b u.pl{width:8px;height:8px;margin-top:-2px;border-radius:0;background:linear-gradient(currentColor,currentColor) center/8px 1.8px no-repeat,linear-gradient(currentColor,currentColor) center/1.8px 8px no-repeat;} /* plusje 8 px (op vraag van Tom, 18 okt) */
 .note-jump.note-float{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .note-jump.note-float svg{color:var(--paper);} /* notitieknop volgt de pil: altijd terracotta (18 okt) */
 /* notitieknop tijdens de workout op elke pagina, rechts van End workout (op vraag van Tom, 24 okt) */
+.note-jump.note-float,body:has(#woEnd.is-start) .note-jump.note-float{background:var(--ink);} .note-jump.note-float svg,body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);} /* zelfde kleuren als End workout (op vraag van Tom, 24 okt) */
 body.has-note .note-jump.note-float:not([hidden]){display:inline-flex;}
 body.has-note .wo-end:not(.is-start){right:calc(var(--app-gut) + 16px + 48px + 10px);}
 @media (max-width:350px){ body.has-note .wo-end:not(.is-start){right:calc(var(--app-gut) + 16px + 42px + 8px);} }
