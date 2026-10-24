@@ -859,9 +859,9 @@ section[role="tabpanel"]{padding-top:1.4rem;}
 .exgrp[data-grp="g8"] .grp-t,.exgrp[data-grp="g11"] .grp-t{position:relative;top:14px;}
 .exgrp[data-grp="g0"] .grp-n{display:none;} .exgrp[data-grp="g0"] .grp-t{position:relative;top:14px;} /* warm-up zonder nummer, titel even hoog als Cardio (op vraag van Tom, 12 okt) */ /* Cardio zonder nummer: titel op dezelfde hoogte als 'Warm-up' op de andere tabs */
 /* optionele groep (Settings › Groups, op vraag van Tom, 24 okt): '(optional)' achter de titel, groep gedimd; aanklikbaar zoals altijd */
-#s-d3 .exgrp.g-opt .grp-t::after{content:"(optional)";margin-left:.45em;font:italic 400 13px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--muted);}
-#s-d3 .exgrp.g-opt .grp-t,#s-d3 .exgrp.g-opt .grp-n{color:color-mix(in srgb,var(--accent) 50%,transparent);} /* optioneel: accent, gedimd (op vraag van Tom, 24 okt) */
-#s-d3 .exl > li.g-opt:not(.exgrp){opacity:.55;transition:opacity .2s ease;}
+#s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-t::after{content:"(optional)";margin-left:.45em;font:italic 400 13px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--muted);}
+#s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-t,#s-d3 .exgrp.g-opt:not(.g-opt-act) .grp-n{color:color-mix(in srgb,var(--accent) 50%,transparent);} /* optioneel: accent, gedimd (op vraag van Tom, 24 okt) */
+#s-d3 .exl > li.g-opt:not(.exgrp):not(.g-opt-act){opacity:.55;transition:opacity .2s ease;}
 #s-d3 .exl > li.g-opt:not(.exgrp):has(input:focus,textarea:focus){opacity:1;} /* enkel tijdens typen; :focus-within hield de rij vol na het aantikken van het vinkje (QA Tom, 24 okt) */
 .grp-opt{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);border:1.2px solid var(--line);border-radius:999px;padding:.2rem .6rem;align-self:center;}
 .exgrp.grp-done .grp-opt{text-decoration:none;}
@@ -5959,7 +5959,10 @@ window.__congrats=function(o){
   function name(h){ var tt=h.querySelector('.grp-t'); return tt?tt.textContent.trim():''; }
   var sig='', TGT={};
   var EGG={quad:'g1',borst:'g2',ham:'g3',bil:'g3',kuit:'g3',add:'g3',lats:'g4',trap:'g4',midrug:'g4',sz:'g5',sv:'g5',sa:'g5',buik:'g6',schuin:'g6',onderrug:'g6',bi:'g7',tri:'g7',oa:'g7'}; /* hoofdspier → Gym-groep, zoals EGMAP in Strength */
-  function paint(){ var hs=heads(), nx=false;
+  /* optionele groep met minstens één afgevinkte oefening = niet meer gedimd (g-opt-act; op vraag van Tom, 24 okt) */
+  function optAct(){ document.querySelectorAll('#s-d3 .exl > li.exgrp[data-grp]').forEach(function(h){ var a=h.classList.contains('g-opt')&&done(h)>0;
+    if(h.classList.contains('g-opt-act')===a) return; document.querySelectorAll('#s-d3 .exl > li[data-grp="'+h.dataset.grp+'"]').forEach(function(li){ li.classList.toggle('g-opt-act',a); }); }); }
+  function paint(){ optAct(); var hs=heads(), nx=false;
     var raw=[]; TGT={};
     hs.forEach(function(h){ if(h.dataset.grp!=='g10'){ raw.push({g:h.dataset.grp,l:lab(h),n:name(h),c:done(h),o:h.classList.contains('g-opt')}); return; }
       /* eGym: één chip per zichtbare tussenkop (spiergroep) van g10, genummerd zoals de tussenkoppen (CSS-teller) */
