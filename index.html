@@ -5170,7 +5170,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       else if(!empty&&ph) ph.remove(); });
     /* tussenkop (bv. Supersets) verbergen als er geen zichtbare oefening onder staat */
     document.querySelectorAll('#s-d3 .exsub').forEach(function(h){ var n=h.nextElementSibling, vis=false;
-      while(n && n.classList.contains('exr')){ if(!n.classList.contains('ex-off')) vis=true; n=n.nextElementSibling; } h.hidden=!vis; });
+      while(n && n.classList.contains('exr')){ if(!n.classList.contains('ex-off')) vis=true; n=n.nextElementSibling; } h.hidden=!vis||isFin(h.dataset.grp); }); /* Finisher: geen tussenkop 'Indoor' (alles is indoor; op vraag van Tom, 24 okt) */
     /* warm-up: het potlood staat op de regel van de eerste zichtbare tussenkop */
     var fs=null; document.querySelectorAll('#s-d3 .exsub[data-grp="g0"]').forEach(function(h){ h.classList.remove('first-sub'); if(!fs&&!h.hidden) fs=h; }); if(fs) fs.classList.add('first-sub');
     if(window.__progChipsRefresh) window.__progChipsRefresh();
@@ -5294,7 +5294,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     /* volgorde: eerst zonder aandachtspunt, dan met label (Back!, Knees! …), dan gevaarlijk (driehoekje); binnen elke laag op populariteit (POP) */
     var ordered=rows(cur).filter(function(li){ return (!isHome(cur)||HOME.indexOf(keyOf(li))>=0)&&!(isFin(cur)&&OUTC.test(keyOf(li))); }); /* al gesorteerd door sortRows; Home: enkel thuisoefeningen */
     var lastSub=null;
-    list.innerHTML=ordered.map(function(li){ var subH=''; if(li.dataset.sub&&li.dataset.sub!==lastSub){ lastSub=li.dataset.sub; if(!(li.dataset.grp==='g0'&&lastSub==='Cardio')) subH='<li class="gs-sub-h">'+lastSub+'</li>'; }
+    list.innerHTML=ordered.map(function(li){ var subH=''; if(li.dataset.sub&&li.dataset.sub!==lastSub){ lastSub=li.dataset.sub; if(!(li.dataset.grp==='g0'&&lastSub==='Cardio')&&!isFin(cur)) subH='<li class="gs-sub-h">'+lastSub+'</li>'; }
       return subH+(function(){ var k=keyOf(li), eqp=li.querySelector('.exr-s .exr-eqp'), n=li.querySelector('.exr-n').firstChild.textContent.trim(), st=li.querySelector('.exr-s').firstChild.textContent.trim(), wn=li.querySelector('.exr-s .exr-warn'), a=act.indexOf(k)>=0;
       var rk=li.classList.contains('exr-danger')?'<span class="exr-risk" title="Safety first"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z\"/><path d=\"M12 9.5v4.5M12 17.2v.1\"/></svg></span>':'';
       var rib=li.querySelector('.info-b'), nop=rib&&rib.classList.contains('nop')?' nop':'';
