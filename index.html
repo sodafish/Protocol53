@@ -2398,6 +2398,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     <div class="section-title">For your heart</div>
     <div class="tip"><ul>
       <li><strong>30+ g fibre a day.</strong> Legumes or oats every day, plus vegetables, fruit and nuts, and you get there by itself. Fibre lowers your LDL and feeds your gut.</li>
+      <li data-pt="satfat"><strong>Saturated fat under 10% of your calories.</strong> About 20 g a day: the biggest lever for your LDL. Swap butter, cheese and fatty meat for olive oil, nuts and oily fish.</li>
       <li><strong>Salt under 5 g a day.</strong> Most of it comes from bread, cheese, olives and ready-made food, not from the salt shaker. Season with herbs, lemon and pepper.</li>
       <li><strong>No processed meat.</strong> Ham, salami, bacon, sausages: the one meat group that's clearly bad for your heart.</li>
       <li><strong>Oily fish twice a week.</strong> Your main source of omega-3. Don't eat fish? Then an algae oil supplement.</li>
@@ -6138,7 +6139,7 @@ window.__congrats=function(o){
   function stored(v){ try{ return localStorage.getItem(key(v)); }catch(e){ return null; } }
   /* 'Around your workout' (18 okt): eenmalig toevoegen aan een bewaarde (bewerkte) Diet-versie, na 'Protein is the exception'.
      Vlag fitlog-pg-fuel (lokaal) + fuel:1 in cfg/pages, zodat een sectie die Tom zelf wist niet terugkomt. */
-  var FIX='fitlog-pg-fuel', FV=10, FUELV=3, pend=false;
+  var FIX='fitlog-pg-fuel', FV=11, FUELV=3, pend=false;
   function fixed(){ try{ return (+localStorage.getItem(FIX)||0)>=FV; }catch(e){ return false; } }
   function setFixed(){ try{ localStorage.setItem(FIX,String(FV)); }catch(e){} }
   /* Upgrade van een bewaarde Diet-versie naar niveau FV: sectie 'Around your workout' (data-v FUELV), rij Banana (18 okt),
@@ -6168,7 +6169,11 @@ window.__congrats=function(o){
     var k=src.querySelector('[data-sec="kcal"]'); if(k&&!c.querySelector('[data-sec="kcal"]')){ var fu=c.querySelector('[data-sec="fuel"]'), pr=titled(c,/protein is the exception/i);
       if(fu) fu.parentNode.insertBefore(k.cloneNode(true),fu); else if(pr) pr.parentNode.insertBefore(k.cloneNode(true),pr.nextSibling); else c.appendChild(k.cloneNode(true)); }
     var hs=src.querySelector('[data-sec="heart"]'); if(hs&&!c.querySelector('[data-sec="heart"]')){ var me=titled(c,/what you measure/i);
-      if(me) me.parentNode.insertBefore(hs.cloneNode(true),me); else c.appendChild(hs.cloneNode(true)); } }
+      if(me) me.parentNode.insertBefore(hs.cloneNode(true),me); else c.appendChild(hs.cloneNode(true)); }
+    /* niveau 11 (24 okt): punt verzadigd vet in 'For your heart' (na het vezelpunt), enkel als het ontbreekt */
+    var sf=src.querySelector('li[data-pt="satfat"]'), hu=c.querySelector('[data-sec="heart"] ul');
+    if(sf&&hu&&!/saturated/i.test(hu.textContent)){ var f1=[].filter.call(hu.children,function(li){ return /fibre/i.test(li.textContent); })[0];
+      if(f1) hu.insertBefore(sf.cloneNode(true),f1.nextSibling); else hu.insertBefore(sf.cloneNode(true),hu.firstChild); } }
   function withFuel(h){ if(!h) return h;
     var src=document.createElement('template'); src.innerHTML=DEF.voeding||'';
     var t=document.createElement('template'); t.innerHTML=h; var c=t.content, ch=false;
