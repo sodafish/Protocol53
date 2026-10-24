@@ -742,7 +742,7 @@ td:first-child{font-family:'Fraunces',Georgia,serif;font-weight:600;}
   color:transparent;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;
   transition:background-color .2s ease,border-color .2s ease,color .2s ease;}
 .chk:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;}
-.chk[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#000;} /* zwart vinkje (op vraag van Tom, 18 okt; was wit): 3,2:1 op terracotta */
+.chk[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--paper);} /* vinkje = achtergrondkleur, in alle thema's (op vraag van Tom, 24 okt; was zwart in licht) */
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .chk[aria-pressed="true"]{color:var(--paper);} }
 :root[data-theme="dark"] .chk[aria-pressed="true"],:root[data-theme="blue"] .chk[aria-pressed="true"]{color:var(--paper);} /* donker/blauw: donker vinkje op lichte terracotta, ±6:1 */
 .exr.done .exr-n,.exr.done .exr-s{color:var(--muted-soft);}
@@ -1262,7 +1262,7 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .st-progs button{appearance:none;width:100%;display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:48px;padding:0 .9rem;border:0;background:transparent;color:var(--ink);font:500 15px 'Work Sans',system-ui,sans-serif;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .st-progs button small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:1px;}
 .st-progs .sp-ck{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);color:transparent;display:flex;align-items:center;justify-content:center;transition:background-color .2s ease,border-color .2s ease;}
-.st-progs button[aria-checked="true"] .sp-ck{background:var(--accent);border-color:var(--accent);color:#FFFFFF;}
+.st-progs button[aria-checked="true"] .sp-ck{background:var(--accent);border-color:var(--accent);color:var(--paper);} /* vinkje = achtergrondkleur (24 okt) */
 .st-progs button[aria-disabled="true"]{cursor:default;}
 .st-progs button[aria-disabled="true"] .sp-ck{opacity:.55;}
 .st-progs button:active:not([aria-disabled="true"]){background:var(--paper-soft);}
