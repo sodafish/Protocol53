@@ -59,7 +59,7 @@ window.p53Confirm=function(o){
     bg.innerHTML='<div class="cf-card"><h4></h4><p></p><div class="cf-btns"><button type="button" class="cf-no">Cancel</button><button type="button" class="cf-yes"></button></div></div>';
     bg.querySelector('h4').textContent=o.title||'Are you sure?';
     var pEl=bg.querySelector('p'); if(o.msg) pEl.textContent=o.msg; else pEl.remove();
-    var yes=bg.querySelector('.cf-yes'); yes.textContent=o.ok||'OK'; if(o.danger) yes.classList.add('danger');
+    var yes=bg.querySelector('.cf-yes'); yes.textContent=o.ok||'OK'; if(o.danger) yes.classList.add('danger'); if(o.no) bg.querySelector('.cf-no').textContent=o.no; if(o.cls) bg.querySelector('.cf-card').classList.add(o.cls);
     document.body.appendChild(bg);
     requestAnimationFrame(function(){ bg.classList.add('on'); });
     yes.focus({preventScroll:true});
@@ -1911,6 +1911,11 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp button b u{width:4px;height:4px;border-radius:50%;background:currentColor;} /* bolletjes 4 px (op vraag van Tom, 18 okt; was 3) */
 .wo-grp button b u.pl{width:8px;height:8px;margin-top:-2px;border-radius:0;background:linear-gradient(currentColor,currentColor) center/8px 1.8px no-repeat,linear-gradient(currentColor,currentColor) center/1.8px 8px no-repeat;} /* plusje 8 px (op vraag van Tom, 18 okt) */
 .note-jump.note-float{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .note-jump.note-float svg{color:var(--paper);} /* notitieknop volgt de pil: altijd terracotta (18 okt) */
+/* notitieknop tijdens de workout op elke pagina, rechts van End workout (op vraag van Tom, 24 okt) */
+body.has-note .note-jump.note-float:not([hidden]){display:inline-flex;}
+body.has-note .wo-end:not(.is-start){right:calc(var(--app-gut) + 16px + 48px + 10px);}
+@media (max-width:350px){ body.has-note .wo-end:not(.is-start){right:calc(var(--app-gut) + 16px + 42px + 8px);} }
+.cf-card.cf-note p{white-space:pre-wrap;text-align:left;max-height:55vh;overflow:auto;-webkit-overflow-scrolling:touch;}
 body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 </style>
 
@@ -6001,17 +6006,24 @@ window.__congrats=function(o){
     if(document.body.dataset.view!=='workout'){ var w=document.querySelector('.gnav-i[data-view="workout"]'); if(w) w.click(); setTimeout(go,480); } else go(); });
   setTimeout(paint,0);
 })();
-/* ---- notitie-knop rechts van de zwevende Start/End workout-pil (enkel op Workout, via CSS): alleen zichtbaar als er iets in de notitie onderaan staat; tik = naar de notitie scrollen ---- */
+/* ---- notitie-knop rechts van de End workout-pil: enkel tijdens een workout en als er iets in de notitie staat; tik = venster met de notitie (Edit = naar de notitie scrollen) ---- */
 (function(){
   var b=document.getElementById('noteJump'), ta=document.getElementById('sessNote'); if(!b||!ta) return;
-  function paint(){ var on=false; /* voorlopig weg (op vraag van Tom, 18 okt, bij de chips); was !!ta.value.trim() */ b.hidden=!on; document.body.classList.toggle('has-note',on); }
+  /* terug (op vraag van Tom, 24 okt): enkel TIJDENS een workout en als er een notitie is, rechts van End workout, op elke pagina; tik = notitie in een venster */
+  var we=document.getElementById('woEnd');
+  function paint(){ var on=!!ta.value.trim()&&!!we&&!we.hidden&&!we.classList.contains('is-start'); b.hidden=!on; document.body.classList.toggle('has-note',on); }
+  if(we) new MutationObserver(paint).observe(we,{attributes:true,attributeFilter:['class','hidden']});
   ['input','change'].forEach(function(ev){ ta.addEventListener(ev,paint); });
   /* de waarde komt ook uit de opslag/database binnen zonder input-event: even opvolgen */
   var last=null; setInterval(function(){ if(ta.value!==last){ last=ta.value; paint(); } },700);
-  b.addEventListener('click',function(){
+  b.setAttribute('aria-label','Show your notes');
+  b.addEventListener('click',function(){ p53Confirm({title:'Notes',msg:ta.value.trim(),ok:'Edit',no:'Close',cls:'cf-note'}).then(function(y){ if(!y) return;
+    function go(){ jump(); }
+    if(document.body.dataset.view!=='workout'){ var w=document.querySelector('.gnav-i[data-view="workout"]'); if(w) w.click(); setTimeout(go,480); } else go(); }); });
+  function jump(){
     var h=ta.previousElementSibling&&ta.previousElementSibling.classList.contains('note-head')?ta.previousElementSibling:ta;
     var smooth=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
-    window.scrollTo({top:h.getBoundingClientRect().top+window.scrollY-16,behavior:smooth}); });
+    window.scrollTo({top:h.getBoundingClientRect().top+window.scrollY-16,behavior:smooth}); }
   paint();
 })();
 
