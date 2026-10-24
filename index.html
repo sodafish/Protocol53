@@ -1914,6 +1914,7 @@ html.wo-fit5 .wo-bar-t{display:none;} /* past niet: tijd weg (enkel bij heel vee
 .wo-grp button b u{width:4px;height:4px;border-radius:50%;background:currentColor;} /* bolletjes 4 px (op vraag van Tom, 18 okt; was 3) */
 .wo-grp button b u.pl{width:8px;height:8px;margin-top:-2px;border-radius:0;background:linear-gradient(currentColor,currentColor) center/8px 1.8px no-repeat,linear-gradient(currentColor,currentColor) center/1.8px 8px no-repeat;} /* plusje 8 px (op vraag van Tom, 18 okt) */
 .note-jump.note-float{background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#f3b27a));} .note-jump.note-float svg{color:var(--paper);} /* notitieknop volgt de pil: altijd terracotta (18 okt) */
+.wo-end-n{font-weight:400;opacity:.7;white-space:nowrap;} /* '(12 sets)' achter End workout (24 okt) */
 /* notitieknop tijdens de workout op elke pagina, rechts van End workout (op vraag van Tom, 24 okt) */
 .note-jump.note-float,body:has(#woEnd.is-start) .note-jump.note-float{background:var(--ink);} .note-jump.note-float svg,body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);} /* zelfde kleuren als End workout (op vraag van Tom, 24 okt) */
 body.has-note .note-jump.note-float:not([hidden]){display:inline-flex;}
@@ -3065,7 +3066,10 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     var wg=document.getElementById('wdGo'); if(wg) wg.hidden=true; /* End workout enkel rechtsonder (op vraag van Tom) */
     /* zwevende knop rechtsonder: vóór de workout 'Start workout' (enkel op Workout), tijdens de workout 'End workout' + tijd (op vraag van Tom, 10 okt) */
     if(fl){ fl.hidden=false; fl.classList.toggle('is-start',!on); fl.setAttribute('aria-label',on?'End workout':'Start workout');
-      var lb=fl.querySelector('.wo-end-l'); if(lb) lb.textContent=on?'End workout':'Start workout';
+      var lb=fl.querySelector('.wo-end-l'); if(lb){ lb.textContent=on?'End workout':'Start workout';
+        /* 'End workout (12 sets)': sets van de afgevinkte oefeningen in deze workout, zoals Statistics telt (geen warm-up/cardio, Core-les wel; op vraag van Tom, 24 okt) */
+        if(on){ var ns=0; document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){ var k=chkKey(li); if(!k||!checks[k]||(/^(w0|c)-/.test(k)&&k!=='c-core')) return; ns+=(window.__setsFor?+window.__setsFor(k,li):0)||0; });
+          if(ns){ var sn=document.createElement('span'); sn.className='wo-end-n'; sn.textContent=' ('+ns+(ns===1?' set)':' sets)'); lb.appendChild(sn); fl.setAttribute('aria-label','End workout, '+ns+(ns===1?' set':' sets')); } } }
       var ic=fl.querySelector('svg'); if(ic){ delete ic.dataset.ic; fl.classList.remove('all-done'); } if(ic) ic.innerHTML=on?'<rect x="5" y="5" width="14" height="14" rx="2.5"/>':'<path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.2-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/>'; }
     document.body.classList.add('wo-on');
     var bar=document.getElementById('woBar'), was=document.body.classList.contains('wo-live'); if(bar) bar.hidden=!on; document.body.classList.toggle('wo-live',on);
