@@ -1874,7 +1874,7 @@ html.pg-off-voeding .gnav-i[data-view="voeding"],html.pg-off-kracht .gnav-i[data
 /* ── WORKOUT-BALK (variant A, op vraag van Tom, 18 okt): tijdens een workout vervangt een glazen balk op de plaats van de navbar (64 px, zelfde glas) de navbar: links de tijd, rechts de groepen W 1 2 3 …; de End-pil erboven heet weer 'End workout', zonder tijd ── */
 body.wo-live .gnav{display:none;}
 .wo-end:not(.is-start) .wo-end-t{display:none;}
-.wo-end:not(.is-start){background:#fff;color:var(--ink);} .wo-end:not(.is-start) svg{color:var(--ink);} /* End workout = ALTIJD witte pil, tekst en icoon zwart (op vraag van Tom, 18 okt; eerst enkel bij alles af); Start blijft terracotta */
+.wo-end:not(.is-start){background:var(--ink);color:var(--paper);} .wo-end:not(.is-start) svg{color:var(--paper);} /* End workout = pil in --ink (zwart in licht, crème in donker/blauw), tekst + icoon --paper, zoals het actieve navbar-item (op vraag van Tom, 24 okt; 18 okt was licht #fff); Start blijft terracotta */
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .wo-end:not(.is-start){background:var(--ink);color:var(--paper);} :root:not([data-theme="light"]) .wo-end:not(.is-start) svg{color:var(--paper);} }
 :root[data-theme="dark"] .wo-end:not(.is-start),:root[data-theme="blue"] .wo-end:not(.is-start){background:var(--ink);color:var(--paper);} :root[data-theme="dark"] .wo-end:not(.is-start) svg,:root[data-theme="blue"] .wo-end:not(.is-start) svg{color:var(--paper);}
 .wo-bar{position:fixed;z-index:60;left:0;right:0;bottom:var(--nav-b);display:flex;justify-content:center;padding:0 calc(16px + env(safe-area-inset-right,0px)) 0 calc(16px + env(safe-area-inset-left,0px));pointer-events:none;translate:0 var(--kb-fix,0px);}
