@@ -1196,9 +1196,9 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .mon-mo button{position:relative;}
 .mon-mo button.now::before{display:none;content:'';position:absolute;left:50%;top:calc(4px - .7rem);width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--accent);} /* bolletje onder de lijn = vandaag / deze maand (op vraag van Tom, 14 okt); UIT (op vraag van Tom, 14 okt, later: de gekozen maand kleurt al accent) */
 .mon-mo button.sel{color:var(--accent);font-weight:600;}
-.mon-nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:-1.4rem 0 0;font-size:12.5px;color:var(--muted-soft);}
-.mon-nav button{appearance:none;border:0;background:transparent;padding:.3rem 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;}
-.mon-nav button[disabled]{opacity:.35;cursor:default;}
+.mon-nav{display:flex;align-items:center;gap:.6rem;margin:0 0 1.8rem;} /* periodekop History: ‹ 2026 › / ‹ October 2026 › (op vraag van Tom, 24 okt) */
+.mon-nav b{flex:1;text-align:center;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:20px;color:var(--ink);}
+#cal.hv-d .cal-head{display:none;} /* Month: de kop erboven toont de maand al */
 /* Day · Month · Year boven de grafieken (op vraag van Tom, 14 okt): tekst-tabs zoals de periode op Strength */
 .stats>.sv>.hist-per{margin:0 0 1.6rem;} .hist-per[hidden]{display:none!important;} /* enkel Year: tabs weg; display:flex van .stats-per overschreef hidden */
 .stats>.sv>.hist-per button[data-hv]{font-size:13.5px;}
@@ -2186,8 +2186,9 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
       <section class="cal sv" data-sv="cal" id="cal" aria-label="Workout calendar">
         <h2 class="prog-t">History</h2>
         <div class="stats-per hist-per" id="histPer" role="group" aria-label="History view" hidden><button type="button" data-hv="y" aria-pressed="true">Year</button><button type="button" data-hv="d" aria-pressed="false">Month</button></div>
-        <div class="mon" id="calMon" hidden><div id="calMonS"></div>
-          <div class="mon-nav"><button type="button" id="monPrev">‹ Earlier</button><span id="monRange"></span><button type="button" id="monNext">Later ›</button></div>
+        <div class="mon" id="calMon" hidden>
+          <div class="mon-nav"><button type="button" class="cal-nav" id="monPrev" aria-label="Previous"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><b id="monRange" aria-live="polite"></b><button type="button" class="cal-nav" id="monNext" aria-label="Next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div id="calMonS"></div>
         </div>
         <div class="cal-head"><button type="button" class="cal-nav" data-m="-1" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
           <div class="cal-title"><b id="calMonth"></b><span id="calSum"></span></div>
@@ -5806,14 +5807,14 @@ window.__congrats=function(o){
     sc.innerHTML=ROWS.map(function(t){ var k=t[1], mx=1;
       L.forEach(function(r){ if(!r.off) mx=Math.max(mx,MK[k]?r[MK[k]]/60:r[k]); });
       var H=46;
-      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?(cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>')):nf(cs[k]))+'<small>'+(t[2]?t[2]+' ':'')+when+'</small></b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
+      return '<div class="mon-blk one'+(dense?' dense':'')+' mon-n'+'"><div class="mon-hd"><span class="mon-l">'+t[0]+'</span><b>'+(MK[k]?(cs[k].replace(/(\d+)(h|m)/g,'$1<small class="u">$2</small>')):nf(cs[k]))+(t[2]?'<small>'+t[2]+'</small>':'')+'</b></div>'+(anyEg&&EGK[k]?'<p class="mon-key"><i></i>eGym · '+cs[EGK[k]]+' '+(k==='d'?(cs[EGK[k]]===1?'day':'days'):(cs[EGK[k]]===1?'set':'sets'))+'</p>':'')+'<div class="mon-row" style="'+gs+'">'+
         L.map(function(r){ var v=r[k], vl=MK[k]?hrS(r[MK[k]]):v, at=r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"';
           return '<button type="button" class="mon-c'+(r.edge||'')+(r.sel?' sel':'')+(r.run?' run':'')+(r.off?' off':'')+(r[MK[k]||k]?'':' z')+'"'+at+(r.off?' tabindex="-1" disabled':'')+' aria-label="'+r.aria+': '+(MK[k]?r[MK[k]]+' min ':v+' ')+t[0].toLowerCase()+'"><span>'+(r.off?'':vl)+'</span><i style="height:'+(!r.off&&r[MK[k]||k]?Math.max(3,Math.round(H*(MK[k]?r[MK[k]]/60:v)/mx)):0)+'px">'+(EGK[k]&&r[EGK[k]]&&v?'<b style="height:'+Math.round(100*r[EGK[k]]/v)+'%"></b>':'')+'</i></button>'; }).join('')+
         '</div><div class="mon-mo" aria-hidden="true" style="'+gs+'">'+L.map(function(r){ return '<button type="button" tabindex="-1" class="'+(r.sel?'sel':'')+(r.run?' now':'')+'"'+(r.i!=null?' data-i="'+r.i+'"':' data-day="'+r.k+'"')+(r.off?' disabled':'')+'>'+r.lab+'</button>'; }).join('')+'</div></div>'; }).join('');
     sc.querySelectorAll('[data-i]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; ym={y:Math.floor(i/12),m:i%12}; render(); }); });
     sc.querySelectorAll('[data-day]:not([disabled])').forEach(function(b){ b.addEventListener('click',function(){ sel=pick=b.dataset.day; stay=null; render(); }); });
     document.getElementById('monRange').textContent=rng;
-    document.getElementById('monPrev').disabled=prevOff; document.getElementById('monNext').disabled=nextOff; var mnv=document.querySelector('.mon-nav'); if(mnv) mnv.hidden=prevOff&&nextOff; /* Earlier/Later enkel als er minstens twee jaar te zien zijn (op vraag van Tom, 14 okt) */
+    document.getElementById('monPrev').disabled=prevOff; document.getElementById('monNext').disabled=nextOff; var mnv=document.querySelector('.mon-nav'); document.getElementById('cal').classList.toggle('hv-d',hv==='d'); /* Earlier/Later enkel als er minstens twee jaar te zien zijn (op vraag van Tom, 14 okt) */
   }
   /* Earlier/Later en vegen: Month = 6 maanden (kalender springt naar de laatste maand van het nieuwe venster), Day = 1 maand, Year = 1 jaar
      (kalender springt naar december, of naar deze maand in het lopende jaar); nooit vóór de eerste trainingsmaand of voorbij deze maand */
