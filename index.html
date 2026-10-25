@@ -6162,6 +6162,10 @@ window.__congrats=function(o){
     clearTimeout(T); T=setTimeout(function(){ nudge(); setTimeout(nudge,350); },60); },true);
   var vv=window.visualViewport; if(vv) vv.addEventListener('resize',function(){ if(!typing()&&vv.height>=window.innerHeight-1) nudge(); });
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(nudge,250); });
+  /* 25 okt: bij het verlaten van de app een open invulveld sluiten (blur = 'change', de waarde wordt dus bewaard). Anders bleef het veld na
+     terugkeren 'in focus' zonder toetsenbord: typing() was dan waar, waardoor nudge en het vangnet niets deden en de balk halverwege bleef. */
+  function leave(){ if(typing()){ try{ document.activeElement.blur(); }catch(e){} } }
+  document.addEventListener('visibilitychange',function(){ if(document.hidden) leave(); }); window.addEventListener('pagehide',leave);
   /* Vangnet (16 okt, screenshot Tom: navbar hing weer halverwege tijdens een workout): meet met een onzichtbare vaste probe (bottom:0)
      waar iOS de onderkant van de layout-viewport denkt te hebben, vergelijk met de echte zichtbare onderkant (visualViewport) en schuif
      de vaste onderelementen het verschil omlaag via --kb-fix (CSS `translate`, botst niet met transform bij :active). Niet tijdens typen. */
@@ -6175,18 +6179,27 @@ window.__congrats=function(o){
      per oriëntatie de grootste gezonde hoogte (probe zonder toetsenbord) en gebruiken die als echte onderkant. Niet in Safari zelf. */
   var SA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)), BEST={}, ready=false;
   function ori(){ return (window.matchMedia&&matchMedia('(orientation: landscape)').matches)?'l':'p'; }
+  /* 25 okt (screenshot Tom: workout-balk + End-pil weer halverwege na even naar een andere app en terug): als iOS de app in de achtergrond
+     afsluit en herstart, start de webview soms meteen met de ingekorte (toetsenbord)hoogte en kende BEST nooit een gezonde waarde.
+     Daarom de gezonde hoogte ook bewaren (localStorage, per oriëntatie + schermmaat) als terugval voor een nieuwe sessie. */
+  function key(o){ return 'p53-vh-'+o+'-'+screen.width+'x'+screen.height; }
+  function stored(o){ try{ var v=+localStorage.getItem(key(o)); return (v>0&&v<=Math.max(screen.width,screen.height)+1)?v:0; }catch(e){ return 0; } }
+  function keep(o,v){ try{ localStorage.setItem(key(o),String(v)); }catch(e){} }
   function fix(){ R=0; var d=0;
     if(!typing()){ var pb=pr.getBoundingClientRect().bottom, o=ori(), vis=vv.height;
       /* 23 okt, later (screenshot Tom: balk ±60 pt te laag): bij het opstarten meet iOS soms even de hoogte zonder statusbalk.
          Daarom enkel onthouden wat ook innerHeight zegt, pas 1,5 s na laden, en BEST enkel gebruiken bij een toetsenbord-groot verschil (> 150 px). */
-      if(SA){ if(ready&&vv.offsetTop<1&&Math.abs(vv.height-pb)<2&&Math.abs(window.innerHeight-pb)<2&&pb>(BEST[o]||0)) BEST[o]=pb;
-        if(BEST[o]&&BEST[o]-pb>150) vis=Math.max(vis,BEST[o]); }
+      if(SA){ if(ready&&vv.offsetTop<1&&Math.abs(vv.height-pb)<2&&Math.abs(window.innerHeight-pb)<2&&pb>(BEST[o]||0)){ BEST[o]=pb; keep(o,pb); }
+        var ref=BEST[o]||stored(o); if(ref&&ref-pb>150) vis=Math.max(vis,ref); }
       d=Math.round(vv.offsetTop+vis-pb); if(d<2||d>600) d=0; }
     if(d!==cur){ cur=d; document.documentElement.style.setProperty('--kb-fix',d+'px'); } }
   function q(){ if(!R) R=requestAnimationFrame(fix); }
   vv.addEventListener('resize',q); vv.addEventListener('scroll',q); window.addEventListener('scroll',q,{passive:true});
   window.addEventListener('resize',q); document.addEventListener('focusin',q,true); document.addEventListener('focusout',function(){ setTimeout(q,80); setTimeout(q,400); },true);
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(q,300); });
+  /* terug in de app: iOS werkt de viewport pas na een tijdje bij, dus een paar keer opnieuw meten */
+  function back(){ [300,800,1600].forEach(function(t){ setTimeout(q,t); }); }
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) back(); });
+  window.addEventListener('pageshow',back); window.addEventListener('focus',back);
   setTimeout(function(){ ready=true; q(); },1500); /* gezonde hoogte vastleggen na het opstarten */
 })();
 </script>
