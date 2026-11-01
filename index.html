@@ -1978,6 +1978,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 /* verhoog-/verlaag-signaal op het kg-veld (1 nov) */
 #s-d3 .exr > .rep-sig{justify-self:end;align-self:center;margin:-40px -7px 0 0;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--paper);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2;box-shadow:0 0 0 2px var(--paper);}
 #s-d3 .exr > .rep-sig[hidden]{display:none;}
+#s-d3 .exr > .rep-sig[data-d="down"]{background:var(--neg);} /* omlaag = rood (op vraag van Tom, 1 nov) */
 #s-d3 .exr.rep-bw > .rep-sig{grid-column:-2 / -1;grid-row:1;}
 #s-d3 .exr.rep-open > .rep-sig{box-shadow:0 0 0 2px var(--paper-soft);}
 #s-d3 .note.rep-in.rep-carry,.rep-cell.carry .rep-u span{color:var(--muted-soft);font-weight:500;} /* reps van vorige keer, nog niet bevestigd (1 nov) */
