@@ -1960,6 +1960,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 #s-d3 .exr.rep-on .rep-txt{display:inline;}
 .rep-dots i{display:block;width:7px;height:7px;border-radius:50%;box-sizing:border-box;border:1.3px solid var(--muted-soft);}
 .rep-dots i.on{background:var(--accent);border-color:var(--accent);}
+#s-d3 .note.rep-in.rep-carry,.rep-cell.carry .rep-u span{color:var(--muted-soft);font-weight:500;} /* reps van vorige keer, nog niet bevestigd (1 nov) */
 #s-d3 .exr.rep-on.rep-bw > .exr-in,#s-d3 .exr.rep-on.rep-bw > .exr-u{display:none!important;}
 .rep-bw0{display:none;}
 #s-d3 .exr.rep-on.rep-bw > .rep-bw0{display:flex;grid-column:-2 / -1;grid-row:1;align-self:center;align-items:center;justify-content:center;gap:3px;box-sizing:border-box;height:44px;border-radius:10px;
@@ -6485,18 +6486,27 @@ window.__congrats=function(o){
       var cur=todayR(M.note), txt=lastTxt(M,R.rg);
       while(M.ins.length>n) M.grid.removeChild(M.ins.pop().parentNode);
       while(M.ins.length<n){ var i=document.createElement('input'); i.type='text'; i.className='note rep-in'; i.setAttribute('inputmode','numeric'); i.setAttribute('pattern','[0-9]*'); i.autocomplete='off';
-        (function(i){ i.addEventListener('input',function(){ unit(i); changed(R,M); }); i.addEventListener('focus',function(){ openRow(R); });
+        (function(i){ i.addEventListener('input',function(){ carry(i,false); unit(i); changed(R,M); }); i.addEventListener('focus',function(){ openRow(R); if(i.classList.contains('rep-carry')) setTimeout(function(){ try{ i.select(); }catch(e){} },0); }); /* overgenomen getal: selecteren, dan overschrijft typen het */
           i.addEventListener('click',function(e){ e.stopPropagation(); }); i.addEventListener('keydown',function(e){ e.stopPropagation(); }); })(i);
         var c=document.createElement('span'); c.className='rep-cell'; var u=document.createElement('span'); u.className='rep-u'; u.setAttribute('aria-hidden','true');
         u.innerHTML='<span></span><small>reps</small>'; c.appendChild(i); c.appendChild(u); M.grid.appendChild(c); M.ins.push(i); }
       M.grid.style.gridTemplateColumns='repeat('+n+',minmax(0,1fr))';
       M.ins.forEach(function(i,x){ i.setAttribute('aria-label',(M.name||nameOf(li))+' — set '+(x+1)+', reps');
         i.placeholder=M.prev&&typeof M.prev[x]==='number'?fmt(M.prev[x]):'reps';
-        if(document.activeElement!==i) i.value=cur[x]||''; unit(i); });
+        if(document.activeElement!==i){ var tv=num(cur[x])!=null?cur[x]:'', pv=M.prev&&typeof M.prev[x]==='number'?fmt(M.prev[x]):'';
+          i.value=tv||pv; carry(i,!tv&&!!pv); } unit(i); }); /* reps van vorige keer ingevuld maar gedempt tot je ze aanpast of afvinkt (op vraag van Tom, 1 nov) */
       if(M.lab) M.lab.innerHTML='<b>'+esc(M.name)+'</b>'+(txt?' · '+txt:'');
       lastOne=txt; });
     if(R.mains.length===1) R.last.innerHTML=lastOne?'Last · '+lastOne:'Not logged yet';
   }
+  function carry(i,on){ i.classList.toggle('rep-carry',on); if(i.parentNode) i.parentNode.classList.toggle('carry',on); }
+  /* afvinken accepteert de overgenomen reps: ze worden de reps van vandaag (zwart) */
+  function commit(R){ R.mains.forEach(function(M){ if(!M.ins.some(function(i){ return i.classList.contains('rep-carry'); })) return;
+      M.ins.forEach(function(i){ carry(i,false); });
+      RS[M.note]={d:today(),r:M.ins.map(function(i){ return i.value.trim(); }),at:Date.now()}; saveLocal(); clearTimeout(timers[M.note]);
+      var e=RS[M.note]; if(col) col.doc('reps--'+M.note).set({d:e.d,r:e.r,updatedAt:e.at}).catch(function(){});
+      record(R,M); });
+    paintSum(R); }
   function unit(i){ var u=i.nextSibling; if(u&&u.firstChild) u.firstChild.textContent=i.value.trim(); } /* 'reps' klein achter een ingevuld getal, zoals 'kg' (op vraag van Tom, 1 nov) */
   function prevPaint(){ pane.querySelectorAll('.rep-prev').forEach(function(x){ x.classList.remove('rep-prev'); });
     pane.querySelectorAll('.exr.rep-open').forEach(function(li){ var p=li.previousElementSibling; while(p&&!p.getClientRects().length) p=p.previousElementSibling; if(p) p.classList.add('rep-prev'); }); }
@@ -6515,7 +6525,7 @@ window.__congrats=function(o){
     if(!was){ build(R); R.li.classList.add('rep-open'); openedAt=Date.now(); }
     var dy=R.li.getBoundingClientRect().top-y0; if(Math.abs(dy)>1) window.scrollBy(0,dy); }
   function changed(R,M){
-    var td=today(), r=M.ins.map(function(i){ return i.value.trim(); });
+    var td=today(), r=M.ins.map(function(i){ return i.classList.contains('rep-carry')?'':i.value.trim(); }); /* overgenomen = nog niet bevestigd */
     RS[M.note]={d:td,r:r,at:Date.now()}; saveLocal(); paintSum(R);
     clearTimeout(timers[M.note]);
     timers[M.note]=setTimeout(function(){
@@ -6530,7 +6540,7 @@ window.__congrats=function(o){
   }
   /* afvinken zonder reps in elke set: de eerste lege set oplichten en focussen (rij klapt open) */
   window.__repNeed=function(li){ var R=li&&li.__rep; if(!R||!check(R)) return null; /* alle rep-rijen (ook kg en supersets): afvinken pas als elke set reps heeft (QA Tom, 1 nov) */
-    openRow(R); var e=null; R.mains.some(function(M){ e=M.ins.filter(function(i){ return num(i.value)==null; })[0]||null; return !!e; }); return e; };
+    openRow(R); var e=null; R.mains.some(function(M){ e=M.ins.filter(function(i){ return num(i.value)==null; })[0]||null; return !!e; }); if(!e) commit(R); return e; };
   function paintAll(){ ROWS.forEach(function(R){ if(!check(R)) return; var f=filled(R); if(f||R.li.classList.contains('rep-open')){ build(R); if(f) R.li.classList.add('rep-open'); } }); }
   pane.querySelectorAll('.exr').forEach(setup);
   pane.addEventListener('click',function(e){
