@@ -764,7 +764,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   transparant (zelfde regels als `.exr-u`); `unit(i)` werkt de laag bij. (3) Geen lijn boven een open rij: klasse `rep-prev` (border transparant) op het vorige ZICHTBARE element (rij, tussenkop `.exsub` of groepskop), gezet door `prevPaint()` (MutationObserver op class/hidden in `#s-d3`, negeert wijzigingen die enkel `rep-prev` zijn). Eerst `li:has(+ .exr.rep-open)`: werkte vaak niet, want de directe buur is dikwijls een verborgen `ex-off`-rij (QA Tom).
   'Last · …' blijft (Tom twijfelde, liet het staan).
 - 0 KG BIJ LICHAAMSGEWICHT (op vraag van Tom, 1 nov): `rep-bw`-rijen krijgen op de plaats van het (verborgen) hoofdveld een grijs vak `span.rep-bw0`
-  '0 kg' (zelfde maat/rand als het kg-veld, opacity .45, niet bewerkbaar, `aria-hidden`; tik = gewone rijtik = openklappen). Zo staat er in elke krachtrij rechts een vak.
+  '–' (was '0 kg', op vraag van Tom, 1 nov, later) (zelfde maat/rand als het kg-veld, opacity .45, niet bewerkbaar, `aria-hidden`; tik = gewone rijtik = openklappen). Zo staat er in elke krachtrij rechts een vak.
 - AFVINKEN VRAAGT REPS IN ELKE SET (QA Tom, 1 nov; vervangt 'enkel bij lichaamsgewicht'): in de vinkje-code eerst het kg-veld (zoals altijd; verborgen hoofdveld van
   `rep-bw` telt niet mee, filter `getClientRects`), daarna `__repNeed(li)`: elke `rep-on`-rij (kg, lichaamsgewicht, supersets: alle velden van beide) moet in elke set
   een getal hebben; anders klapt de rij open en licht de eerste lege set op (`.need` + focus). Een overgeslagen set = 0 invullen. Uitvinken kan altijd.

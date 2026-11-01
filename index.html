@@ -6503,7 +6503,7 @@ window.__congrats=function(o){
     if(sl){ var after=ft&&ft.nodeType===3?ft.nextSibling:sl.firstChild; sl.insertBefore(R.dots,after); sl.insertBefore(R.txt,after); } /* na de eerste tekst: die blijft firstChild */
     if(mains.length>1) li.classList.add('rep-ss');
     if(mains.length===1&&R.mains[0].bw){ li.classList.add('rep-bw');
-      var z=document.createElement('span'); z.className='rep-bw0'; z.setAttribute('aria-hidden','true'); z.innerHTML='0<small>kg</small>'; li.appendChild(z); } /* lichaamsgewicht: grijs '0 kg'-vak op de plaats van het kg-veld (op vraag van Tom, 1 nov) */
+      var z=document.createElement('span'); z.className='rep-bw0'; z.setAttribute('aria-hidden','true'); z.textContent='–'; li.appendChild(z); } /* lichaamsgewicht: grijs vak met '–' (was '0 kg', op vraag van Tom, 1 nov) op de plaats van het kg-veld (op vraag van Tom, 1 nov) */
     li.__rep=R; ROWS.push(R); check(R); return R;
   }
   function check(R){ R.rg=range(R.li); R.li.classList.toggle('rep-on',!!R.rg); if(!R.rg) R.li.classList.remove('rep-open'); else paintSum(R); paintSig(R); return !!R.rg; }
