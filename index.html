@@ -3064,7 +3064,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var on=!checks[k];
       /* afvinken kan alleen met een waarde: leeg veld (nog nooit ingevuld) → veld oplichten en focussen */
       if(on){ var empty=[].filter.call(b.closest('.exr').querySelectorAll('.exr-in'),function(x){ return x.type!=='hidden'&&!/\d/.test(x.value); }); /* een getal nodig, anders geen meting */
-        if(window.__repNeed){ var rn=window.__repNeed(b.closest('.exr')); if(rn) empty=[rn]; } /* reps-rij (lichaamsgewicht): afvinken pas met reps van vandaag; anders de eerste lege set oplichten */
+        empty=empty.filter(function(x){ return x.getClientRects().length; }); /* verborgen hoofdveld (lichaamsgewicht) telt niet: de reps beslissen */
+        if(!empty.length&&window.__repNeed){ var rn=window.__repNeed(b.closest('.exr')); if(rn) empty=[rn]; } /* rep-rij: eerst het kg-veld, dan elke set reps; anders de eerste lege set oplichten */
         if(empty.length){ empty.forEach(function(x){ x.classList.remove('need'); void x.offsetWidth; x.classList.add('need'); });
           empty[0].focus(); setTimeout(function(){ empty.forEach(function(x){ x.classList.remove('need'); }); },1600); return; } } if(on) checks[k]=true; else delete checks[k];
       if(on&&window.__woRun) window.__woRun(true);
@@ -6513,9 +6514,9 @@ window.__congrats=function(o){
       if(mx!=null&&num(M.inp.value)!==mx){ M.inp.value=fmt(mx); M.inp.dispatchEvent(new Event('input',{bubbles:true})); return; } }
     if(R.li.classList.contains('done')&&window.__progRecord) window.__progRecord(M.inp);
   }
-  /* afvinken van een reps-rij zonder reps van vandaag: de eerste lege set oplichten (het hoofdveld is verborgen en houdt de vorige waarde) */
-  window.__repNeed=function(li){ var R=li&&li.__rep; if(!R||!li.classList.contains('rep-bw')||!check(R)||filled(R)) return null;
-    openRow(R); var M=R.mains[0]; return M.ins.filter(function(i){ return !i.value.trim(); })[0]||M.ins[0]||null; };
+  /* afvinken zonder reps in elke set: de eerste lege set oplichten en focussen (rij klapt open) */
+  window.__repNeed=function(li){ var R=li&&li.__rep; if(!R||!check(R)) return null; /* alle rep-rijen (ook kg en supersets): afvinken pas als elke set reps heeft (QA Tom, 1 nov) */
+    openRow(R); var e=null; R.mains.some(function(M){ e=M.ins.filter(function(i){ return num(i.value)==null; })[0]||null; return !!e; }); return e; };
   function paintAll(){ ROWS.forEach(function(R){ if(!check(R)) return; var f=filled(R); if(f||R.li.classList.contains('rep-open')){ build(R); if(f) R.li.classList.add('rep-open'); } }); }
   pane.querySelectorAll('.exr').forEach(setup);
   pane.addEventListener('click',function(e){
