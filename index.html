@@ -1937,8 +1937,9 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .rep-u small{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.01em;}
 .rep-in:not(:focus):not(:placeholder-shown){color:transparent;-webkit-text-fill-color:transparent;}
 .rep-in:not(:focus):not(:placeholder-shown) + .rep-u{display:flex;}
-/* geen lijn boven een open rij (op vraag van Tom, 1 nov) */
-#s-d3 .exl > li:has(+ .exr.rep-open){border-bottom-color:transparent;}
+/* geen lijn boven een open rij (op vraag van Tom, 1 nov): klasse op het vorige ZICHTBARE element (rij, tussenkop of groepskop), gezet in JS (prevPaint),
+   want het directe vorige element is vaak een verborgen (ex-off) rij */
+#s-d3 .exl > li.rep-prev{border-bottom-color:transparent;}
 .note.rep-in{margin:0;width:100%;min-width:0;max-width:none;min-height:44px;border-radius:10px;font:600 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-align:center;padding:.55rem .2rem;font-variant-numeric:tabular-nums;}
 .note.rep-in::placeholder{color:var(--muted-soft);opacity:.55;font-weight:500;}
 #s-d3 .note.rep-in:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));box-shadow:none;}
@@ -6477,6 +6478,13 @@ window.__congrats=function(o){
     if(R.mains.length===1) R.last.innerHTML=lastOne?'Last · '+lastOne:'Not logged yet';
   }
   function unit(i){ var u=i.nextSibling; if(u&&u.firstChild) u.firstChild.textContent=i.value.trim(); } /* 'reps' klein achter een ingevuld getal, zoals 'kg' (op vraag van Tom, 1 nov) */
+  function prevPaint(){ pane.querySelectorAll('.rep-prev').forEach(function(x){ x.classList.remove('rep-prev'); });
+    pane.querySelectorAll('.exr.rep-open').forEach(function(li){ var p=li.previousElementSibling; while(p&&!p.getClientRects().length) p=p.previousElementSibling; if(p) p.classList.add('rep-prev'); }); }
+  function noRp(s){ return (' '+(s||'')+' ').replace(' rep-prev ',' ').trim(); }
+  if(window.MutationObserver) new MutationObserver(function(rs){
+      if(!rs.some(function(r){ return r.attributeName!=='class'||noRp(r.oldValue)!==noRp(r.target.getAttribute('class')); })) return; /* enkel rep-prev gewijzigd: geen lus */
+      clearTimeout(prevPaint.t); prevPaint.t=setTimeout(prevPaint,30); })
+    .observe(pane,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','hidden']}); /* open/dicht, groepen/tabs/split wisselen = andere zichtbare buur */
   function filled(R){ return R.mains.some(function(M){ return !!window.__repsFor(M.note); }); }
   /* QA Tom (1 nov): van het kg-veld van een open rij naar het kg-veld van een rij eronder: de eerste klapte dicht, alles schoof omhoog en de klik
      landde op een andere plek (rij weer dicht). Nu: de aangetikte rij blijft op dezelfde schermhoogte (scrollBy) en een klik vlak na openen sluit niet. */

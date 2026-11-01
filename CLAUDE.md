@@ -762,6 +762,6 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   de lijst schoof omhoog en de klik landde elders (of sloot de net geopende rij). `openRow` houdt de aangetikte rij nu op dezelfde schermhoogte (`scrollBy`
   met het verschil) en een tik op de rij binnen 500 ms na openen (`openedAt`) sluit niet. (2) Rep-velden tonen 'reps' klein achter een ingevuld getal,
   zoals 'kg': elk veld zit in `span.rep-cell` met laag `span.rep-u` (getal + `small` 'reps'), buiten focus en ingevuld zichtbaar, tekst van het veld dan
-  transparant (zelfde regels als `.exr-u`); `unit(i)` werkt de laag bij. (3) Geen lijn boven een open rij: `#s-d3 .exl > li:has(+ .exr.rep-open)` border transparant.
+  transparant (zelfde regels als `.exr-u`); `unit(i)` werkt de laag bij. (3) Geen lijn boven een open rij: klasse `rep-prev` (border transparant) op het vorige ZICHTBARE element (rij, tussenkop `.exsub` of groepskop), gezet door `prevPaint()` (MutationObserver op class/hidden in `#s-d3`, negeert wijzigingen die enkel `rep-prev` zijn). Eerst `li:has(+ .exr.rep-open)`: werkte vaak niet, want de directe buur is dikwijls een verborgen `ex-off`-rij (QA Tom).
   'Last · …' blijft (Tom twijfelde, liet het staan).
 
