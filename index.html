@@ -1413,6 +1413,10 @@ a,button,input,select,textarea,label,.exr{touch-action:manipulation;}
 .pe-list li{display:flex;align-items:center;gap:.8rem;min-height:48px;border-bottom:1px solid var(--line-soft);font-size:15px;}
 .pe-list .pe-d{flex:1;color:var(--muted);}
 .pe-list .pe-v{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.pe-list .pe-v{display:flex;flex-direction:column;align-items:flex-end;line-height:1.25;}
+.pe-list .pe-r{font-size:12px;font-weight:500;color:var(--muted-soft);} /* reps per set (1 nov) */
+.ip-hero:has(.ph-r){flex-wrap:wrap;row-gap:.25rem;}
+.ip-hero .ph-r{flex-basis:100%;font-size:12.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:.15rem;}
 .pe-del{appearance:none;cursor:pointer;width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:var(--muted-soft);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .pe-del:active{background:var(--paper-soft);}
 .pe-list .pe-fill{appearance:none;border:0;background:transparent;padding:.4rem 0;font:inherit;font-size:14px;color:var(--accent);cursor:pointer;}
@@ -2588,6 +2592,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     <p class="section-note"><strong style="font-weight:700;color:var(--text)">How much stronger you’ve become: weight, not sets.</strong></p>
     <div class="tip"><ul>
       <li><strong>Only exercises in kg count,</strong> and each one is compared only with itself: every measurement against the one before.</li>
+      <li><strong>Reps count too.</strong> When both measurements have reps per set, the step is the change in your estimated maximum (weight × (1 + average reps ÷ 30)). So 20 kg for 12 reps is progress over 20 kg for 10, and a heavier weight with fewer reps isn’t a drop. Without reps (older sessions, eGym tests) only the weight counts.</li>
       <li><strong>Your very first measurement doesn’t count.</strong> The first session is mostly learning the movement, so an exercise appears from its third measurement. eGym strength tests count from the first test.</li>
       <li><strong>Period.</strong> 3 months, 1 year, all data or your own dates (calendar button).</li>
       <li><strong>Per exercise:</strong> the change from the first to the latest measurement within the period. Earlier measurements don’t count, so 3 months shows only what you gained in those 3 months; All goes back to your very first test. A lower weight counts as a decline.</li>
@@ -3215,7 +3220,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       if(ins.length===1&&g!=='g0'&&g!=='g8'){ var nt=ins[0].dataset.note, pts=null;
         if(g==='g10'){ if(window.__etestPts) pts=window.__etestPts(nt); }
         else if((ins[0].placeholder||'')==='kg'&&window.__progPts){ pts=window.__progPts(nt).slice(1); }
-        if(pts&&pts.length>1&&pts[0].v>0) pct=Math.round((pts[pts.length-1].v/pts[0].v-1)*100); }
+        if(pts&&pts.length>1&&pts[0].v>0){ var sl=0; for(var j=1;j<pts.length;j++){ var lg=window.__stepLog?window.__stepLog(pts[j-1],pts[j]):(pts[j-1].v>0&&pts[j].v>0?Math.log(pts[j].v/pts[j-1].v):null); if(lg!=null) sl+=lg; } pct=Math.round((Math.exp(sl)-1)*100); } }
       if(pct==null){ if(pe) pe.remove(); }
       else{ if(!pe){ pe=document.createElement('span'); pe.className='cnt-p'; var dt=el.querySelector('.cnt-dot'); el.insertBefore(pe,dt||null); }
         pe.textContent='· '+(pct>0?'+':pct<0?'−':'')+Math.abs(pct)+'%'; pe.classList.toggle('neg',pct<0); }
@@ -3594,11 +3599,17 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
      meting, eerste meting ooit telt niet behalve bij de eGym-krachttest), daarna het (meetkundig) gemiddelde over de oefeningen met een stap.
      notes = invulvelden; → {p: %, n: aantal stapjes, k: aantal oefeningen} of null. */
   var BASEGAP=120*864e5; window.__baseGap=BASEGAP;
+  /* REPS IN STRENGTH (op vraag van Tom, 1 nov): heeft een meting ook reps per set (r), dan telt een stap tussen twee zulke metingen als verschil in
+     geschat maximum (Epley: kg × (1 + gemiddelde reps / 30), reps max. 20), zodat meer reps bij hetzelfde gewicht ook vooruitgang is.
+     Ontbreken de reps bij een van beide (oude metingen, eGym-test), dan zoals altijd het gewicht. Geeft log(b/a) of null. */
+  function e1rm(p){ var r=p&&p.r, s=0, c=0; if(!r||!r.length) return null; r.forEach(function(x){ if(typeof x==='number'&&x>0){ s+=Math.min(x,20); c++; } }); return c&&p.v>0?p.v*(1+s/c/30):null; }
+  function stepLog(a,b){ if(!(a&&b&&a.v>0&&b.v>0)) return null; var ea=e1rm(a), eb=e1rm(b); return ea&&eb?Math.log(eb/ea):Math.log(b.v/a.v); }
+  window.__stepLog=stepLog; window.__e1rm=e1rm;
   function chainPct(notes,from,to){ if(!window.__progPts) return null; var L=[], n=0;
     notes.forEach(function(note){ var isT=/#test$/.test(note), pa=window.__progPts(note), pts=isT?pa:pa.slice(1), sum=0, c=0; /* eerste meting telt niet (behalve bij de eGym-krachttest) */
       for(var i=1;i<pts.length;i++){ if(pts[i].t<from||pts[i].t>to) continue; /* stap telt als ze eindigt in de periode (vertrek mag ervoor liggen) */
         if(pts[i-1].t<from) continue; /* STRIKT (op vraag van Tom, 11 okt): begin én einde van de stap in de periode; 3 Months = enkel wat er de laatste 3 maanden bijkwam, een test van 2024 telt enkel onder All */ /* maar niet meer dan 120 dagen vóór de periode: anders telt bv. bij 3 Months een test van 2 jaar terug als vertrek (op vraag van Tom, 11 okt) */
-        var a=pts[i-1].v, b=pts[i].v; if(!(a>0&&b>0)) continue; sum+=Math.log(b/a); c++; }
+        var lg=stepLog(pts[i-1],pts[i]); if(lg==null) continue; sum+=lg; c++; }
       if(c){ L.push(sum); n+=c; } });
     if(!L.length) return null;
     return {p:(Math.exp(L.reduce(function(a,x){ return a+x; },0)/L.length)-1)*100,n:n,k:L.length}; }
@@ -4012,6 +4023,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     all.sort(function(a,b){ return b.t-a.t; });
     return {k:k,unit:unit,all:all,gaps:gaps.length,perDay:perDay,name:inp?progLabel(inp):k};
   }
+  /* reps per set van een meting (op vraag van Tom, 1 nov): '12 · 12 · 11' */
+  function repsTxt(e){ var r=e&&e.r; if(!r||!r.some(function(x){ return typeof x==='number'; })) return ''; return r.map(function(x){ return typeof x==='number'?fmtV(x):'–'; }).join(' · '); }
   function renderSheet(keepForm){
     if(!peOpen) return;
     var D=peData(), body=peSh.querySelector('.pe-body');
@@ -4023,7 +4036,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var tm=(D.perDay[e.d]>1&&typeof e.w==='number')?' · '+dt.getHours()+':'+('0'+dt.getMinutes()).slice(-2):''; /* twee workouts die dag: uur erbij */
       /* veeg naar links om te verwijderen, zoals in de kalender (op vraag van Tom) */
       return '<li class="cx'+(e.gap?' pe-gap" data-d="'+e.d:'')+'"><div class="cx-row">'+(e.gap?'':'<button type="button" class="cx-edit" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'">Edit</button>')+'<span class="pe-d">'+DAGEN[dt.getDay()].slice(0,3)+' '+dLab(e.t)+' '+dt.getFullYear()+tm+(/^eg-/.test(e.k)?' · '+((e.m||'ecc')==='reg'?'Regular':'Eccentric'):'')+'</span>'+
-        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+'</span>')+'<button type="button" class="cx-del" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'">Delete</button></div></li>';
+        (e.gap?'<button type="button" class="pe-fill" data-d="'+e.d+'">'+(e.seed>1?e.seed+'× · ':'')+'No value · Add</button>':'<span class="pe-v">'+fmtV(e.v)+' '+D.unit+(repsTxt(e)?'<small class="pe-r">'+repsTxt(e)+' reps</small>':'')+'</span>')+'<button type="button" class="cx-del" tabindex="-1" data-id="'+(e.id||e.k+'@'+e.d)+'"'+(e.gap?' data-gap="'+e.rk+'"':'')+' aria-label="Delete measurement of '+dLab(e.t)+'">Delete</button></div></li>';
     }).join('');
     var nm=D.all.length-D.gaps;
     body.innerHTML='<p class="pe-sub">'+(D.all.length?nm+(nm===1?' measurement':' measurements')+(D.gaps?' · '+D.gaps+(D.gaps===1?' session':' sessions')+' without a value':'')+'. Swipe right to edit, left to delete.':'No measurements yet. Add one.')+'</p>'+
@@ -5011,7 +5024,8 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
       var two=li.querySelectorAll('.exr-in[data-note]').length>1, lab=two?(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):S.lab;
       var box=document.createElement('div'); box.className='ip-box';
       box.innerHTML='<p class="ip-t">Your progress'+(lab?' · '+lab:'')+'</p><div class="ip-head"><div class="ip-hero"><span class="ph-v">'+(none?'–':F.v(last.v))+'</span><span class="ph-u">'+unit+'</span><span class="ph-d">'+
-        (none?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(b0.t))+'</span></div>'+
+        (none?'':diff==null?'on '+F.d(last.t):'<b>'+(diff>0?'+':diff<0?'−':'±')+F.v(Math.abs(diff))+' '+unit+'</b> since '+F.d(b0.t))+'</span>'+
+        (last&&last.r&&last.r.some(function(x){ return typeof x==='number'; })?'<span class="ph-r">Last session · '+last.r.map(function(x){ return typeof x==='number'?F.v(x):'–'; }).join(' · ')+' reps</span>':'')+'</div>'+
         '<button type="button" class="prog-edit ip-edit" aria-label="Edit measurements"><svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button></div><div class="ip-chart"></div>';
       /* trainingen die in Coverage meetellen maar geen waarde hebben: vermelden, aanvullen of wissen via het potlood */
       var rk=li.dataset.key||(li.querySelector('[data-note]')||{}).dataset&&li.querySelector('[data-note]').dataset.note, have={}, gaps=0;
@@ -5720,7 +5734,7 @@ window.__congrats=function(o){
         var allx=/#test$/.test(S.k)?window.__progPts(S.k):window.__progPts(S.k).slice(1), pts=allx.filter(function(x){ return x.t>=R.from&&x.t<=R.to; }); if(!pts.length) return;
         var before=null, /* strikt: basis = eerste meting IN de periode (op vraag van Tom, 11 okt; vroeger de laatste vóór de periode) */ /* vertrek vóór de periode: max. 120 dagen ervoor (zoals chainPct) */ first=before||pts[0], last=pts[pts.length-1]; if(first===last) return;
         var unit=inp.placeholder||'kg', d=last.v-first.v;
-        var pct=first.v>0?d/first.v*100:0;
+        var pct=0, ia=pts.indexOf(first); if(first.v>0){ var sl=0; for(var j=ia+1;j<pts.length;j++){ var lg=window.__stepLog?window.__stepLog(pts[j-1],pts[j]):null; if(lg!=null) sl+=lg; } pct=(Math.exp(sl)-1)*100; } /* stap per stap, met reps waar ze er zijn (zoals chainPct) */
         /* één meting = +0 kg · 0%; toename ook in procenten (op vraag van Tom) */
         G.r.push({p:pct,n:pts.length,t:last.t||0,sub:sub,h:'<li><button type="button" data-n="'+esc(name)+'"><span class="pl-n">'+esc(S.nm)+'</span>'+
           '<span class="pl-v">'+pc(pct)+'<em>'+F.v(last.v)+' '+esc(unit)+' · '+(d<0?'−':'+')+F.v(Math.abs(d))+' '+esc(unit)+'</em></span>'+CHEV+'</button></li>'}); n++; });
