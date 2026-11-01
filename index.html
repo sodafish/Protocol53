@@ -1928,8 +1928,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 #s-d3 .exr.rep-on.rep-open > .rep-wrap{display:flex;}
 #s-d3 .exr.rep-on.rep-open .rep-last{display:block;}
 #s-d3 .exr.rep-ss .rep-last{display:none!important;}
-.rep-last,.rep-gl{font-size:12px;font-weight:500;color:var(--muted-soft);margin-top:.2rem;font-variant-numeric:tabular-nums;}
-.rep-gl{margin-top:0;}
+.rep-last,.rep-gl{font-size:12px;font-weight:500;color:var(--muted-soft);font-variant-numeric:tabular-nums;}
 .rep-gl b{font-weight:600;color:var(--muted);}
 .rep-last em,.rep-gl em{font-style:normal;font-weight:600;color:var(--accent);}
 .rep-sets{display:grid;gap:.5rem;}
@@ -6420,11 +6419,11 @@ window.__congrats=function(o){
     var mains=[].filter.call(li.querySelectorAll('.exr-in[data-note]'),function(x){ return x.type!=='hidden'&&/^(kg|reps)$/.test((x.getAttribute('placeholder')||'').trim()); });
     if(!mains.length) return null;
     var R={li:li,mains:[]}, wrap=document.createElement('div'), last=document.createElement('div'), t=li.querySelector('.exr-t');
-    wrap.className='rep-wrap'; last.className='rep-last'; if(t) t.appendChild(last); R.last=last;
+    wrap.className='rep-wrap'; last.className='rep-last'; wrap.appendChild(last); R.last=last; /* in rij 2, niet in .exr-t: anders wordt rij 1 hoger en verspringen vinkje/oog/kg-veld (QA Tom, 1 nov) */
     mains.forEach(function(inp){ var M={inp:inp,note:inp.dataset.note,bw:(inp.getAttribute('placeholder')||'').trim()==='reps',ins:[]}, g=document.createElement('div');
       g.className='rep-g'; if(mains.length>1){ M.lab=document.createElement('div'); M.lab.className='rep-gl'; g.appendChild(M.lab); M.name=(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''); }
       M.grid=document.createElement('div'); M.grid.className='rep-sets'; g.appendChild(M.grid); wrap.appendChild(g); R.mains.push(M);
-      inp.addEventListener('focus',function(){ openRow(R); }); });
+      inp.addEventListener('focus',function(){ openRow(R); }); inp.addEventListener('click',function(){ openRow(R); }); }); /* click ook: had het veld al focus, dan komt er geen focus-event (QA Tom, 1 nov) */
     li.appendChild(wrap);
     if(mains.length>1) li.classList.add('rep-ss');
     if(mains.length===1&&R.mains[0].bw) li.classList.add('rep-bw');

@@ -746,6 +746,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   = dan mag het gewicht omhoog (geen pijltje, op vraag van Tom). Placeholder van elk rep-veld = reps van die set vorige keer, anders 'reps'. Geen meting: 'Not logged yet'.
 - Reps-rijen (lichaamsgewicht, `rep-bw`): hoofdveld + eenheidslaag verborgen; waarde = beste set (via zijn eigen `input`-event, dus logboek + meting zoals altijd,
   sleutel ongewijzigd → grafiek en statistieken lopen door). Afvinken vraagt reps van vandaag (`__repNeed` in de vinkje-code: eerste lege set licht op).
+- `.rep-last` staat BOVENAAN in `.rep-wrap` (rij 2), niet in `.exr-t`: anders werd rij 1 hoger en versprongen vinkje/oog/kg-veld (QA Tom, 1 nov). Het kg-veld opent de rij bij `focus` én `click` (had het al focus, dan kwam er geen focus-event).
 - Supersets (`rep-ss`): per veld een groep met naam (uit aria-label) + 'last'-tekst, geen `.rep-last`.
 - OPSLAG: reps van vandaag in localStorage `fitlog-reps` `{veld:{d,r:[tekst],at}}` + collectie `log`, id `reps--<veld>` `{d,r,updatedAt}` (nieuwste wint;
   andere dag = leeg). In `prog` krijgt de meting van het hoofdveld `r:[getallen]` (null = lege set) via `__repsFor` in `progRecord`; `r` telt mee in de
