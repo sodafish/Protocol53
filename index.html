@@ -1932,6 +1932,13 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .rep-gl b{font-weight:600;color:var(--muted);}
 .rep-last em,.rep-gl em{font-style:normal;font-weight:600;color:var(--accent);}
 .rep-sets{display:grid;gap:.5rem;}
+.rep-cell{position:relative;display:block;min-width:0;}
+.rep-u{position:absolute;inset:0;pointer-events:none;display:none;align-items:center;justify-content:center;gap:3px;font:600 16px 'Work Sans',system-ui,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.rep-u small{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.01em;}
+.rep-in:not(:focus):not(:placeholder-shown){color:transparent;-webkit-text-fill-color:transparent;}
+.rep-in:not(:focus):not(:placeholder-shown) + .rep-u{display:flex;}
+/* geen lijn boven een open rij (op vraag van Tom, 1 nov) */
+#s-d3 .exl > li:has(+ .exr.rep-open){border-bottom-color:transparent;}
 .note.rep-in{margin:0;width:100%;min-width:0;max-width:none;min-height:44px;border-radius:10px;font:600 16px 'Work Sans',system-ui,sans-serif;letter-spacing:0;text-align:center;padding:.55rem .2rem;font-variant-numeric:tabular-nums;}
 .note.rep-in::placeholder{color:var(--muted-soft);opacity:.55;font-weight:500;}
 #s-d3 .note.rep-in:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));box-shadow:none;}
@@ -6455,23 +6462,30 @@ window.__congrats=function(o){
     var li=R.li, n=Math.max(1,Math.min(6,+(window.__setsFor?window.__setsFor(null,li):3)||3)), lastOne='';
     R.mains.forEach(function(M){
       var cur=todayR(M.note), txt=lastTxt(M,R.rg);
-      while(M.ins.length>n) M.grid.removeChild(M.ins.pop());
+      while(M.ins.length>n) M.grid.removeChild(M.ins.pop().parentNode);
       while(M.ins.length<n){ var i=document.createElement('input'); i.type='text'; i.className='note rep-in'; i.setAttribute('inputmode','numeric'); i.setAttribute('pattern','[0-9]*'); i.autocomplete='off';
-        (function(i){ i.addEventListener('input',function(){ changed(R,M); }); i.addEventListener('focus',function(){ openRow(R); });
+        (function(i){ i.addEventListener('input',function(){ unit(i); changed(R,M); }); i.addEventListener('focus',function(){ openRow(R); });
           i.addEventListener('click',function(e){ e.stopPropagation(); }); i.addEventListener('keydown',function(e){ e.stopPropagation(); }); })(i);
-        M.grid.appendChild(i); M.ins.push(i); }
+        var c=document.createElement('span'); c.className='rep-cell'; var u=document.createElement('span'); u.className='rep-u'; u.setAttribute('aria-hidden','true');
+        u.innerHTML='<span></span><small>reps</small>'; c.appendChild(i); c.appendChild(u); M.grid.appendChild(c); M.ins.push(i); }
       M.grid.style.gridTemplateColumns='repeat('+n+',minmax(0,1fr))';
       M.ins.forEach(function(i,x){ i.setAttribute('aria-label',(M.name||nameOf(li))+' — set '+(x+1)+', reps');
         i.placeholder=M.prev&&typeof M.prev[x]==='number'?fmt(M.prev[x]):'reps';
-        if(document.activeElement!==i) i.value=cur[x]||''; });
+        if(document.activeElement!==i) i.value=cur[x]||''; unit(i); });
       if(M.lab) M.lab.innerHTML='<b>'+esc(M.name)+'</b>'+(txt?' · '+txt:'');
       lastOne=txt; });
     if(R.mains.length===1) R.last.innerHTML=lastOne?'Last · '+lastOne:'Not logged yet';
   }
+  function unit(i){ var u=i.nextSibling; if(u&&u.firstChild) u.firstChild.textContent=i.value.trim(); } /* 'reps' klein achter een ingevuld getal, zoals 'kg' (op vraag van Tom, 1 nov) */
   function filled(R){ return R.mains.some(function(M){ return !!window.__repsFor(M.note); }); }
+  /* QA Tom (1 nov): van het kg-veld van een open rij naar het kg-veld van een rij eronder: de eerste klapte dicht, alles schoof omhoog en de klik
+     landde op een andere plek (rij weer dicht). Nu: de aangetikte rij blijft op dezelfde schermhoogte (scrollBy) en een klik vlak na openen sluit niet. */
+  var openedAt=0;
   function openRow(R){ if(!check(R)) return;
+    var y0=R.li.getBoundingClientRect().top, was=R.li.classList.contains('rep-open');
     ROWS.forEach(function(o){ if(o!==R&&o.li.classList.contains('rep-open')&&!filled(o)&&!o.li.contains(document.activeElement)) o.li.classList.remove('rep-open'); });
-    if(!R.li.classList.contains('rep-open')){ build(R); R.li.classList.add('rep-open'); } }
+    if(!was){ build(R); R.li.classList.add('rep-open'); openedAt=Date.now(); }
+    var dy=R.li.getBoundingClientRect().top-y0; if(Math.abs(dy)>1) window.scrollBy(0,dy); }
   function changed(R,M){
     var td=today(), r=M.ins.map(function(i){ return i.value.trim(); });
     RS[M.note]={d:td,r:r,at:Date.now()}; saveLocal(); paintSum(R);
@@ -6494,7 +6508,7 @@ window.__congrats=function(o){
   pane.addEventListener('click',function(e){
     var li=e.target.closest('.exr'), R=li&&li.__rep; if(!R||!li.classList.contains('rep-on')) return;
     if(e.target.closest('input,textarea,button,a,label,select,.eg-last')) return;
-    if(li.classList.contains('rep-open')){ if(!filled(R)) li.classList.remove('rep-open'); } else openRow(R);
+    if(li.classList.contains('rep-open')){ if(!filled(R)&&Date.now()-openedAt>500) li.classList.remove('rep-open'); } else openRow(R);
   });
   /* End workout (timer van aan naar uit): reps van vandaag wissen, rijen dicht; 'Last' toont dan deze workout */
   var lastW=window.__woStart?window.__woStart():0;

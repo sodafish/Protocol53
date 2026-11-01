@@ -758,4 +758,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   via `font-size:0` op `.exr-s` (kinderen terug 12.5 px, `.exr-cnt` 12 px). Rijen zonder rep-rij (tijd, warm-up, cardio, eGym) tonen hun tekst zoals vroeger:
   zo zie je meteen welke rijen open kunnen. `paintSum(R)` in `check()`, bij elke rep-wijziging en na End workout.
   Open rij = band `--paper-soft` (verzonken, was `--surface`: in donker bijna onzichtbaar), velden erop (rep-velden + kg-veld) `--surface`.
+- QA TOM (1 nov, later): (1) van het kg-veld van een open rij naar het kg-veld van een rij eronder klapte die tweede niet open: de eerste rij klapte dicht,
+  de lijst schoof omhoog en de klik landde elders (of sloot de net geopende rij). `openRow` houdt de aangetikte rij nu op dezelfde schermhoogte (`scrollBy`
+  met het verschil) en een tik op de rij binnen 500 ms na openen (`openedAt`) sluit niet. (2) Rep-velden tonen 'reps' klein achter een ingevuld getal,
+  zoals 'kg': elk veld zit in `span.rep-cell` met laag `span.rep-u` (getal + `small` 'reps'), buiten focus en ingevuld zichtbaar, tekst van het veld dan
+  transparant (zelfde regels als `.exr-u`); `unit(i)` werkt de laag bij. (3) Geen lijn boven een open rij: `#s-d3 .exl > li:has(+ .exr.rep-open)` border transparant.
+  'Last · …' blijft (Tom twijfelde, liet het staan).
 
