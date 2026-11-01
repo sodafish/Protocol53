@@ -6004,20 +6004,23 @@ window.__congrats=function(o){
         if(ids){ v=P[ids[ids.length-1]].v; gR[n]=P[ids[ids.length-1]].r||null; } else if(f.type!=='hidden'&&window.__progPts){ var pts=window.__progPts(n); if(pts&&pts.length) v=pts[pts.length-1].v; } /* nieuw: laatste waarde voorstellen */
         gVal[n]=v==null?'':fv(v); }); }); }); }
   function gRender(){ var body=gsh.querySelector('.pe-body'), today=ymd(Date.now());
-    body.innerHTML='<p class="pe-sub">Tick what you did and check the values. Only exercises from your active workouts are listed.</p>'+
+    body.innerHTML='<p class="pe-sub">Tick what you did and check the values. Changes save automatically. Only exercises from your active workouts are listed.</p>'+
       '<div class="ebt-date"><label for="egsD">Date</label><input id="egsD" type="date" value="'+gD+'" max="'+today+'"></div>'+
       gRows().map(function(G){ return '<p class="ebt-h egs-h">'+esc(G.name)+'</p><div class="ebt-list egs-list">'+G.list.map(function(r){ var n=r.li.querySelector('.exr-n'), nm=n?n.firstChild.textContent.trim():r.k;
         var fl=r.fs.filter(function(f){ return f.type!=='hidden'; });
         return '<div class="egs-row'+(gSel[r.k]?' on':'')+(fl.length>1?' two':'')+'" data-k="'+esc(r.k)+'"><button type="button" class="egs-ck" aria-pressed="'+(gSel[r.k]?'true':'false')+'" aria-label="'+esc(nm)+'"><i>'+CKS+'</i></button><span class="egs-n">'+esc(nm)+(r.logged?'<small>Logged</small>':'')+'</span>'+
           fl.map(function(f){ var u=f.placeholder||''; return '<label class="egs-v"><input type="text" inputmode="decimal" autocomplete="off" data-n="'+esc(f.dataset.note)+'" value="'+esc(gVal[f.dataset.note]||'')+'" aria-label="'+esc(f.getAttribute('aria-label')||nm)+'"><span>'+esc(u)+'</span></label>'; }).join('')+
           (window.__repRow?fl.map(function(f){ return window.__repRow(f.dataset.note,gR[f.dataset.note],fl.length>1?'Reps · '+(f.getAttribute('aria-label')||'').replace(/\s+—.*$/,''):'Reps per set'); }).join(''):'')+'</div>'; }).join('')+'</div>'; }).join('')+
-      '<button type="button" class="ebt-save">Save</button><p class="ebt-msg" aria-live="polite"></p>';
-    body.querySelector('#egsD').addEventListener('change',function(e){ var v=e.target.value; if(!/^\d{4}-\d{2}-\d{2}$/.test(v)||v>today) return; gD=v; gPre(); gRender(); });
+      '';
+    body.querySelector('#egsD').addEventListener('change',function(e){ var v=e.target.value; if(!/^\d{4}-\d{2}-\d{2}$/.test(v)||v>today) return; if(gT) gSave(); gD=v; gPre(); gRender(); });
     function setRow(row,on){ var k=row.dataset.k; if(on) gSel[k]=1; else delete gSel[k]; row.classList.toggle('on',on); row.querySelector('.egs-ck').setAttribute('aria-pressed',on?'true':'false'); }
-    body.querySelectorAll('.egs-row').forEach(function(row){ row.querySelector('.egs-ck').addEventListener('click',function(){ var on=!gSel[row.dataset.k]; setRow(row,on);
+    body.querySelectorAll('.egs-row').forEach(function(row){ row.querySelector('.egs-ck').addEventListener('click',function(){ var on=!gSel[row.dataset.k]; setRow(row,on); gSave(); /* autosave (op vraag van Tom, 1 nov) */
         var e=on&&[].filter.call(row.querySelectorAll('input[data-n]'),function(i){ return !i.value.trim(); })[0]; if(e) e.focus(); });
-      row.querySelectorAll('input').forEach(function(i){ i.addEventListener('input',function(){ if(i.dataset.n) gVal[i.dataset.n]=i.value; i.classList.remove('need'); if(i.value.trim()&&!gSel[row.dataset.k]) setRow(row,true); }); }); });
-    body.querySelector('.ebt-save').addEventListener('click',function(){ var had=onDay(gD), P=window.__progAll?window.__progAll():{}, bad=null, ops=[];
+      row.querySelectorAll('input').forEach(function(i){ i.addEventListener('input',function(){ if(i.dataset.n) gVal[i.dataset.n]=i.value; i.classList.remove('need'); if(i.value.trim()&&!gSel[row.dataset.k]) setRow(row,true);
+        clearTimeout(gT); gT=setTimeout(gSave,600); }); i.addEventListener('blur',function(){ if(gT){ clearTimeout(gT); gSave(); } }); }); }); }
+  /* AUTOSAVE (op vraag van Tom, 1 nov; vervangt de Save-knop): bewaart wat klopt, een aangevinkte rij zonder waarde wordt overgeslagen tot ze er een heeft */
+  var gT=0;
+  function gSave(){ clearTimeout(gT); gT=0; if(!gOpen||!gsh) return; var body=gsh.querySelector('.pe-body'), had=onDay(gD), P=window.__progAll?window.__progAll():{}, bad=null, ops=[];
       function num(x){ var m=String(x||'').replace(',','.').match(/\d+(?:\.\d+)?/); return m?parseFloat(m[0]):null; }
       gRows().forEach(function(G){ G.list.forEach(function(r){ var row=body.querySelector('.egs-row[data-k="'+r.k+'"]');
         r.fs.forEach(function(f){ var n=f.dataset.note, ids=had[n]||[], hid=f.type==='hidden';
@@ -6028,12 +6031,11 @@ window.__congrats=function(o){
           if(v==null){ if(!bad&&row) bad=row.querySelector('input[data-n="'+n+'"]'); return; }
           if(!ids.length) ops.push(['add',n,v,rr||null]); else{ var last=ids[ids.length-1];
             if(P[last].v!==v||(rr!==undefined&&JSON.stringify(P[last].r||null)!==JSON.stringify(rr||null))) ops.push(['set',last,v,rr]); } }); }); });
-      if(bad){ bad.classList.add('need'); bad.focus(); var m=body.querySelector('.ebt-msg'); m.textContent='Enter a value for each ticked exercise.'; return; }
       var del=[]; ops.forEach(function(o){ if(o[0]==='del') del=del.concat(o[1]); else if(o[0]==='mark'&&window.__progMark) window.__progMark(o[1],gD);
         else if(o[0]==='add'&&window.__progAdd) window.__progAdd(o[1],gD,o[2],o[3]); else if(o[0]==='set'&&window.__progSetVals) window.__progSetVals([o[1]],[o[2]],null,null,[o[3]]); });
       if(del.length&&window.__progDelIds) window.__progDelIds(del);
-      var p=gD.split('-'); ym={y:+p[0],m:+p[1]-1}; sel=pick=gD; gClose(); render(); }); }
-  function gClose(){ if(!gOpen) return; gOpen=false; gbg.classList.remove('on'); gsh.classList.remove('on');
+      var p=gD.split('-'); ym={y:+p[0],m:+p[1]-1}; sel=pick=gD; }
+  function gClose(){ if(!gOpen) return; if(gT) gSave(); var p=gD.split('-'); ym={y:+p[0],m:+p[1]-1}; sel=pick=gD; setTimeout(render,0); gOpen=false; gbg.classList.remove('on'); gsh.classList.remove('on');
     setTimeout(function(){ if(!gOpen){ gbg.hidden=true; gsh.hidden=true; gsh.querySelector('.pe-body').innerHTML=''; } },320); if(gLast&&gLast.focus) gLast.focus({preventScroll:true}); }
   function egsOpen(d){ gsh=gsh||document.getElementById('egs-sheet'); gbg=gbg||document.getElementById('egs-bg'); if(!gsh) return;
     if(!gsh.__init){ gsh.__init=1; gbg.addEventListener('click',gClose); gsh.querySelector('.sheet-x').addEventListener('click',gClose);
