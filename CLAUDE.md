@@ -565,7 +565,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - KRACHTTOENAME ACHTER N× (op vraag van Tom, 11 okt): in de workoutrij na '· N×' een '· +12%' (`.cnt-p` in `.exr-cnt`, accent; negatief `--neg` met '−'), gezet in `paintCounts` (ververst via `renderStats` bij `p53-prog`, dus ook na een krachttest). Enkel rijen met één kg-veld (geen warm-up g0, cardio g8, supersets). Gewone oefening: tweede meting → laatste (eerste telt niet), dus pas vanaf 3 metingen. eGym: krachttest (`__etestPts`) eerste → laatste, vanaf 2 testen. Altijd over alle data (geen periode), afgerond op hele %. Niet in het keuzeblad.
 - Het keuzeblad toont ook het aantal trainingen ('· N×', zoals in de workout). De i-knop is overal dezelfde tint (de klasse
   `.nop` wordt nog gezet door `markProg` maar heeft geen stijl meer).
-- Geen herhalingsbereiken meer (op vraag van Tom, 10 okt): elke oefening heeft één doel (10, 12 of 15; samengesteld 10, grotere isolatie 12, kleine spieren 15; warm-up idem één getal; 8 bestaat niet meer, op vraag van Tom → 10). Omzetting: 6–10/8–10/5–8/8–12… → 10, 10–12/10–15/8–15 → 12, 12–15/12–20/15–20/10–20 → 15 (Goblet Squat en Incline DB Press → 10). Tijd blijft een bereik (plank-sec, cardio-min, bird dog-hold). Guide › Intensity herschreven: vast doel, verhogen als alle sets het doel halen met ~2 in reserve. Eigen sets/reps van Tom in cfg/sets blijven voorrang hebben. Nieuwe oefening: één getal, geen bereik.
+- VERVANGEN door 'REP-BEREIKEN + REPS PER SET' onderaan (1 nov): oefeningen hebben weer een bereik. (Oud:) Geen herhalingsbereiken meer (op vraag van Tom, 10 okt): elke oefening heeft één doel (10, 12 of 15; samengesteld 10, grotere isolatie 12, kleine spieren 15; warm-up idem één getal; 8 bestaat niet meer, op vraag van Tom → 10). Omzetting: 6–10/8–10/5–8/8–12… → 10, 10–12/10–15/8–15 → 12, 12–15/12–20/15–20/10–20 → 15 (Goblet Squat en Incline DB Press → 10). Tijd blijft een bereik (plank-sec, cardio-min, bird dog-hold). Guide › Intensity herschreven: vast doel, verhogen als alle sets het doel halen met ~2 in reserve. Eigen sets/reps van Tom in cfg/sets blijven voorrang hebben. Nieuwe oefening: één getal, geen bereik.
 - STANDAARD SETS + REPS HERZIEN (op vraag van Tom, 23 okt; vervangt de verdeling 10/12/15 hierboven): SETS per groep: g1–g4 (benen, borst, rug) = 3, g5–g7 (schouders, core, armen) = 2. REPS: 10 = zware vrije gewichten (barbell, smith), lichaamsgewicht-pulls/dips en werk per been of arm; 12 = compound op toestel of met halters (goblet squat, chest press, DB press, rows, pulldowns, shoulder press, hip thrust, DB RDL, close-grip DB press) + grotere isolatie; 15 = kleine spieren. Guide › Intensity zegt hetzelfde ('add a set' i.p.v. 'a fourth set'). Enkel de HTML-standaard; eigen sets/reps in cfg/sets blijven voorrang hebben.
 - Sets & reps per oefening: in het keuzeblad een rond knopje met icoon '123' (Material Symbols, inline SVG 24 px, viewBox bijgesneden tot `120 -840 720 720`, glyph verticaal gecentreerd) (`.gs-set`; standaard lichter, aangepast = gewone tint, zoals de i-knop) opent
   `#set-sheet` (bovenop, klasse `.top`) met stepper Sets (0–10, 0 = geen 'N ×') en tekstveld 'Reps or time', voorbeeld
@@ -577,7 +577,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   ze opent uitleg én progressie. Rond knopje (36 px, zoals `.gs-set`); in de workout vóór het invulveld
   (rij krijgt `.has-info`, grid `2.4rem 1fr 36px 4.2rem`; invulveld smal en helemaal rechts, past '999'/'12,5'/'reps'), in het keuzeblad links van het sets-knopje.
 - Vinkje (`.chk`, 34 px) heeft een groter onzichtbaar tikvlak (`#s-d3 .exr .chk::after`: 14 px boven/onder, 16 px links, 22 px rechts; op vraag van Tom).
-- Tik op een oefeningsrij opent NIETS meer (op vraag van Tom, 8 okt); enkel de oog-knop opent uitleg + grafiek. Het script onderaan `index.html` staat nog
+- (Sinds 1 nov klapt een tik op een krachtrij de rep-rij open, zie 'REP-BEREIKEN + REPS PER SET' onderaan; de uitleg opent nog steeds enkel via het oog.) Tik op een oefeningsrij opent NIETS meer (op vraag van Tom, 8 okt); enkel de oog-knop opent uitleg + grafiek. Het script onderaan `index.html` staat nog
   maar keert meteen terug; `cursor:pointer` op de rij is weg.
 - In het keuzeblad staat naast elke naam de i-knop (`window.__p53info.open`); het uitlegblad komt dan bovenop
   (klasse `.over`, hogere z-index).
@@ -729,3 +729,26 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 
 ## Lateral Raise Machine (op vraag van Tom, 31 okt)
 - Shoulders (g5): NIEUW 'Lateral Raise Machine' (`x5-lateral-raise-machine`, standaard uit, kg, '2 × 15'), rij na Dumbbell Lateral Raise, EX `lateralmachine` (pads tegen de buitenkant van de bovenarmen, ellebogen zijwaarts tot schouderhoogte), video van Tom `img/vid/lateralmachine.mp4` + poster (Gym visual 'Lever Lateral Raise'), in VID, MUSCLES `{sz:1,trap:.25}`, POP.g5 na `d3-cable-lateral-raise`.
+
+## REP-BEREIKEN + REPS PER SET (op vraag van Tom, 1 nov; variant A uit drie voorstellen)
+- BEREIKEN (double progression): elke krachtoefening (g1–g7, kg of reps) heeft weer een bereik in `.exr-s`. kg: 6–10 zware barbell/Smith/gewogen/assisted
+  (incl. Barbell Curl, Assisted Dip/Pull-/Chin-Ups), 8–12 toestel/halter-compound, grotere isolatie en werk per been/arm/kant, 10–15 kleine spieren (was 15;
+  Face Pull 12–15). Reps (lichaamsgewicht) ruimer: Pull-Ups 5–10, Dips 6–12, Jump Squat/Hanging Leg Raise/Bird Dog/Dead Bug 8–12, 12-doelen → 8–15
+  (Superman/Knee Raise 10–15), 15-doelen → 12–20; Push-Ups '3 × 8–15' (was 'to 2 short of failure'), Dead Bug '2 × 8–12 per side'. Supersets '2 rounds × 8–12'.
+  Warm-up, eGym, cardio en tijd/afstand (sec, min, Farmer's Carry 30 m) ongewijzigd. Eigen sets/reps (cfg/sets) blijven voorrang hebben.
+  Guide › Intensity herschreven (bereik, verhogen als alle sets de bovenkant halen). Nieuwe krachtoefening: altijd een bereik.
+- REP-RIJ (script vlak voor `</body>`, CSS-blok 'REPS PER SET'): elke `#s-d3 .exr` in g1–g7 met een `.exr-in` (kg/reps) en een bereik in de eerste tekst
+  (`× 8–12`, niet gevolgd door sec/min/m) krijgt klasse `rep-on` + `.rep-wrap` (raster kolom 2 → laatste, rij 2) en `.rep-last` in `.exr-t`.
+  Aantal velden = `__setsFor(null,li)` (max 6), verdeelt de volle breedte. Dicht = rij zoals vroeger. Open (`rep-open`): tik op de rij (niet op vinkje, oog,
+  velden, knoppen) of focus in het kg-veld; `--surface`-achtergrond, radius 12, 10 px uitgezet. Eén rij tegelijk open; rijen met reps van vandaag blijven open.
+  Nogmaals tikken sluit (enkel als leeg). Het vinkje opent/sluit niets.
+- 'Last · 20 kg · 12 · 12 · 11' = laatste prog-meting, behalve die van de lopende workout (`w` = `__woStart()`); reps ≥ bovenkant bereik in `--accent` (`em`)
+  = dan mag het gewicht omhoog (geen pijltje, op vraag van Tom). Placeholder van elk rep-veld = reps van die set vorige keer, anders 'reps'. Geen meting: 'Not logged yet'.
+- Reps-rijen (lichaamsgewicht, `rep-bw`): hoofdveld + eenheidslaag verborgen; waarde = beste set (via zijn eigen `input`-event, dus logboek + meting zoals altijd,
+  sleutel ongewijzigd → grafiek en statistieken lopen door). Afvinken vraagt reps van vandaag (`__repNeed` in de vinkje-code: eerste lege set licht op).
+- Supersets (`rep-ss`): per veld een groep met naam (uit aria-label) + 'last'-tekst, geen `.rep-last`.
+- OPSLAG: reps van vandaag in localStorage `fitlog-reps` `{veld:{d,r:[tekst],at}}` + collectie `log`, id `reps--<veld>` `{d,r,updatedAt}` (nieuwste wint;
+  andere dag = leeg). In `prog` krijgt de meting van het hoofdveld `r:[getallen]` (null = lege set) via `__repsFor` in `progRecord`; `r` telt mee in de
+  'zelfde meting'-vergelijking. Oude metingen hebben geen `r` (Last toont dan enkel kg). End workout (timer aan → uit, `woCheck` elke 1,5 s) wist de reps van vandaag
+  en sluit de rijen. Reset data wist ook `reps--…` en `fitlog-reps`. `applySets` stuurt `p53-sets` (rep-rij volgt het aantal sets).
+
