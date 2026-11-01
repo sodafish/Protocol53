@@ -764,4 +764,6 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   zoals 'kg': elk veld zit in `span.rep-cell` met laag `span.rep-u` (getal + `small` 'reps'), buiten focus en ingevuld zichtbaar, tekst van het veld dan
   transparant (zelfde regels als `.exr-u`); `unit(i)` werkt de laag bij. (3) Geen lijn boven een open rij: klasse `rep-prev` (border transparant) op het vorige ZICHTBARE element (rij, tussenkop `.exsub` of groepskop), gezet door `prevPaint()` (MutationObserver op class/hidden in `#s-d3`, negeert wijzigingen die enkel `rep-prev` zijn). Eerst `li:has(+ .exr.rep-open)`: werkte vaak niet, want de directe buur is dikwijls een verborgen `ex-off`-rij (QA Tom).
   'Last · …' blijft (Tom twijfelde, liet het staan).
+- 0 KG BIJ LICHAAMSGEWICHT (op vraag van Tom, 1 nov): `rep-bw`-rijen krijgen op de plaats van het (verborgen) hoofdveld een grijs vak `span.rep-bw0`
+  '0 kg' (zelfde maat/rand als het kg-veld, opacity .45, niet bewerkbaar, `aria-hidden`; tik = gewone rijtik = openklappen). Zo staat er in elke krachtrij rechts een vak.
 
