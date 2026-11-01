@@ -1975,6 +1975,11 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .egs-row:has(.xr){flex-wrap:wrap;padding-bottom:.7rem;row-gap:.35rem;}
 .egs-row .xr{padding-left:calc(44px - 8px + .7rem);}
 .egs-row:not(.on) .xr{opacity:.45;}
+/* verhoog-/verlaag-signaal op het kg-veld (1 nov) */
+#s-d3 .exr > .rep-sig{justify-self:end;align-self:center;margin:-40px -7px 0 0;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--paper);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2;box-shadow:0 0 0 2px var(--paper);}
+#s-d3 .exr > .rep-sig[hidden]{display:none;}
+#s-d3 .exr.rep-bw > .rep-sig{grid-column:-2 / -1;grid-row:1;}
+#s-d3 .exr.rep-open > .rep-sig{box-shadow:0 0 0 2px var(--paper-soft);}
 #s-d3 .note.rep-in.rep-carry,.rep-cell.carry .rep-u span{color:var(--muted-soft);font-weight:500;} /* reps van vorige keer, nog niet bevestigd (1 nov) */
 #s-d3 .exr.rep-on.rep-bw > .exr-in,#s-d3 .exr.rep-on.rep-bw > .exr-u{display:none!important;}
 .rep-bw0{display:none;}
@@ -2523,7 +2528,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     <div class="tip"><ul>
       <li><strong>Is it heavy enough?</strong> Stop every working set — not just the last one — when you could still have done about two technically good reps. Choose the weight on your first set and keep it for all sets; with fatigue the last sets may come out a rep or two lower (e.g. 12, 11, 10). That’s fine, as long as every set stays within the range. If you drop below the bottom of the range, it was too heavy or you rested too briefly. If it feels like you could have done five more, it’s too light. On isolation exercises your last set may go to 0–1 in reserve; on the heavy exercises you stay at 2.</li>
       <li><strong>Work within the range.</strong> Each exercise has a rep range: 6–10 for heavy barbell and Smith lifts, 8–12 for machine and dumbbell work and work per leg or arm, 10–15 for small muscles; bodyweight exercises get a wider range. Legs, chest and back get 3 sets; shoulders, core and arms get 2, as they already work hard in your presses and rows. Lighter weight with more reps builds as much muscle as heavier with fewer, as long as you get close to failure. A weight you can move with good form is therefore no compromise, provided you stop with about two reps in reserve.</li>
-      <li><strong>When to increase?</strong> Log your reps per set. Once every set reaches the top of the range with about two reps in reserve, the weight goes up by the smallest step. You’ll drop back towards the bottom of the range; build back up to the top at that weight, then increase again. On bodyweight exercises, go for the top of the range, then pick a harder variation or add weight. Only when that path stalls do you add a set.</li>
+      <li><strong>When to increase?</strong> Log your reps per set. Once every set reaches the top of the range with about two reps in reserve, the weight goes up by the smallest step. You’ll drop back towards the bottom of the range; build back up to the top at that weight, then increase again. A small arrow on the weight field tells you when: up when every set reached the top last time, down when a set fell below the bottom. On bodyweight exercises, go for the top of the range, then pick a harder variation or add weight. Only when that path stalls do you add a set.</li>
       <li><strong>Rest fully.</strong> Two to three minutes on the heavy exercises, ninety seconds on isolation. Resting too briefly makes your next set lighter than intended.</li>
     </ul></div>
   </div>
@@ -6490,7 +6495,7 @@ window.__congrats=function(o){
     mains.forEach(function(inp){ var M={inp:inp,note:inp.dataset.note,bw:(inp.getAttribute('placeholder')||'').trim()==='reps',ins:[]}, g=document.createElement('div');
       g.className='rep-g'; if(mains.length>1){ M.lab=document.createElement('div'); M.lab.className='rep-gl'; g.appendChild(M.lab); M.name=(inp.getAttribute('aria-label')||'').replace(/\s+—.*$/,''); }
       M.grid=document.createElement('div'); M.grid.className='rep-sets'; g.appendChild(M.grid); wrap.appendChild(g); R.mains.push(M);
-      inp.addEventListener('focus',function(){ openRow(R); }); inp.addEventListener('click',function(){ openRow(R); }); }); /* click ook: had het veld al focus, dan komt er geen focus-event (QA Tom, 1 nov) */
+      inp.addEventListener('focus',function(){ openRow(R); }); inp.addEventListener('click',function(){ openRow(R); }); inp.addEventListener('input',function(){ paintSig(R); }); }); /* click ook: had het veld al focus, dan komt er geen focus-event (QA Tom, 1 nov) */
     li.appendChild(wrap);
     var sl=li.querySelector('.exr-s'), ft=sl&&sl.firstChild; R.dots=document.createElement('span'); R.dots.className='rep-dots'; R.dots.setAttribute('aria-hidden','true');
     R.txt=document.createElement('span'); R.txt.className='rep-txt'; R.txt.setAttribute('aria-hidden','true');
@@ -6500,7 +6505,22 @@ window.__congrats=function(o){
       var z=document.createElement('span'); z.className='rep-bw0'; z.setAttribute('aria-hidden','true'); z.innerHTML='0<small>kg</small>'; li.appendChild(z); } /* lichaamsgewicht: grijs '0 kg'-vak op de plaats van het kg-veld (op vraag van Tom, 1 nov) */
     li.__rep=R; ROWS.push(R); check(R); return R;
   }
-  function check(R){ R.rg=range(R.li); R.li.classList.toggle('rep-on',!!R.rg); if(!R.rg) R.li.classList.remove('rep-open'); else paintSum(R); return !!R.rg; }
+  function check(R){ R.rg=range(R.li); R.li.classList.toggle('rep-on',!!R.rg); if(!R.rg) R.li.classList.remove('rep-open'); else paintSum(R); paintSig(R); return !!R.rg; }
+  /* VERHOOG-/VERLAAG-SIGNAAL (op vraag van Tom, 1 nov; variant A): rond bolletje met pijl op de hoek van het kg-veld (bij lichaamsgewicht op het 0 kg-vak).
+     Omhoog = vorige keer haalde elke set de bovenkant van het bereik; omlaag = een set zakte onder de onderkant. Enkel rijen met één veld en een
+     vorige meting met reps. Verdwijnt zodra het kg-veld al hoger (omhoog) of lager (omlaag) staat dan vorige keer. */
+  function paintSig(R){ var M=R.mains[0], dir='';
+    if(R.rg&&R.mains.length===1){ var p=prev(M.note), r=p&&p.r?p.r.filter(function(v){ return typeof v==='number'; }):[];
+      if(r.length){ if(r.every(function(v){ return v>=R.rg.hi; })) dir='up'; else if(r.some(function(v){ return v<R.rg.lo; })) dir='down';
+        if(!M.bw){ var v=num(M.inp.value); if(v!=null&&((dir==='up'&&v>p.v)||(dir==='down'&&v<p.v))) dir=''; } } }
+    var s=R.sig; if(!dir){ if(s) s.hidden=true; return; }
+    if(!s){ s=R.sig=document.createElement('span'); s.className='rep-sig'; s.setAttribute('aria-hidden','true'); R.li.appendChild(s);
+      if(!M.bw){ var cs=getComputedStyle(M.inp), c=cs.gridColumnStart, rr=cs.gridRowStart;
+        s.style.gridColumn=(c&&c!=='auto')?c+' / '+cs.gridColumnEnd:'-2 / -1'; s.style.gridRow=(rr&&rr!=='auto')?rr+' / '+cs.gridRowEnd:'1'; } }
+    s.hidden=false; if(s.dataset.d!==dir){ s.dataset.d=dir;
+      s.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+(dir==='up'?'<path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/>':'<path d="M12 5v14M5.5 12.5 12 19l6.5-6.5"/>')+'</svg>'; }
+    var t=dir==='up'?(M.bw?'Every set hit the top of the range last time: try a harder variation':'Every set hit the top of the range last time: add weight'):(M.bw?'A set fell below the range last time: try an easier variation':'A set fell below the range last time: lower the weight');
+    R.li.setAttribute('data-sig',dir); if(M.inp.getAttribute('aria-description')!==t) M.inp.setAttribute('aria-description',t); }
   /* bolletjes + tekst zonder 'N ×' ('2 rounds ×' bij supersets) */
   function paintSum(R){ if(!R.dots) return; var n=Math.max(1,Math.min(6,+(window.__setsFor?window.__setsFor(null,R.li):3)||3)),
       t=firstText(R.li).replace(/\d+\s*(?:rounds?|rondes|sets?)?\s*×\s*/i,'').trim(), on=[];
