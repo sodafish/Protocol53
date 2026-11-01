@@ -2523,7 +2523,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     <div class="tip"><ul>
       <li><strong>Is it heavy enough?</strong> Stop every working set — not just the last one — when you could still have done about two technically good reps. Choose the weight on your first set and keep it for all sets; with fatigue the last sets may come out a rep or two lower (e.g. 12, 11, 10). That’s fine, as long as every set stays within the range. If you drop below the bottom of the range, it was too heavy or you rested too briefly. If it feels like you could have done five more, it’s too light. On isolation exercises your last set may go to 0–1 in reserve; on the heavy exercises you stay at 2.</li>
       <li><strong>Work within the range.</strong> Each exercise has a rep range: 6–10 for heavy barbell and Smith lifts, 8–12 for machine and dumbbell work and work per leg or arm, 10–15 for small muscles; bodyweight exercises get a wider range. Legs, chest and back get 3 sets; shoulders, core and arms get 2, as they already work hard in your presses and rows. Lighter weight with more reps builds as much muscle as heavier with fewer, as long as you get close to failure. A weight you can move with good form is therefore no compromise, provided you stop with about two reps in reserve.</li>
-      <li><strong>When to increase?</strong> Log your reps per set. Once every set reaches the top of the range with about two reps in reserve, the weight goes up by the smallest step. You’ll drop back towards the bottom of the range; build back up to the top at that weight, then increase again. In the workout, last time’s reps that hit the top of the range are shown in colour. On bodyweight exercises, go for the top of the range, then pick a harder variation or add weight. Only when that path stalls do you add a set.</li>
+      <li><strong>When to increase?</strong> Log your reps per set. Once every set reaches the top of the range with about two reps in reserve, the weight goes up by the smallest step. You’ll drop back towards the bottom of the range; build back up to the top at that weight, then increase again. On bodyweight exercises, go for the top of the range, then pick a harder variation or add weight. Only when that path stalls do you add a set.</li>
       <li><strong>Rest fully.</strong> Two to three minutes on the heavy exercises, ninety seconds on isolation. Resting too briefly makes your next set lighter than intended.</li>
     </ul></div>
   </div>
@@ -6477,7 +6477,7 @@ window.__congrats=function(o){
     pts.forEach(function(p){ if(w&&p.d===td&&(!p.w||p.w===w)) return; if(!best||p.t>best.t) best=p; }); return best; }
   function lastTxt(M,rg){ var p=prev(M.note); M.prev=null; if(!p) return ''; var s=[], hasR=!!(p.r&&p.r.some(function(v){ return typeof v==='number'; }));
     if(!M.bw) s.push(fmt(p.v)+' kg');
-    if(hasR) p.r.forEach(function(v){ if(typeof v==='number') s.push(rg&&v>=rg.hi?'<em>'+fmt(v)+'</em>':fmt(v)); });
+    if(hasR) p.r.forEach(function(v){ if(typeof v==='number') s.push(fmt(v)); }); /* geen kleur meer op sets aan de bovenkant (op vraag van Tom, 1 nov) */
     else if(M.bw) s.push(fmt(p.v)+' reps');
     M.prev=hasR?p.r:null; return s.join(' · '); }
   function setup(li){

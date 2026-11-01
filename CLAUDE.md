@@ -742,8 +742,7 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   Aantal velden = `__setsFor(null,li)` (max 6), verdeelt de volle breedte. Dicht = rij zoals vroeger. Open (`rep-open`): tik op de rij (niet op vinkje, oog,
   velden, knoppen) of focus in het kg-veld; `--surface`-achtergrond, radius 12, 10 px uitgezet. Eén rij tegelijk open; rijen met reps van vandaag blijven open.
   Nogmaals tikken sluit (enkel als leeg). Het vinkje opent/sluit niets.
-- 'Last · 20 kg · 12 · 12 · 11' = laatste prog-meting, behalve die van de lopende workout (`w` = `__woStart()`); reps ≥ bovenkant bereik in `--accent` (`em`)
-  = dan mag het gewicht omhoog (geen pijltje, op vraag van Tom). Placeholder van elk rep-veld = reps van die set vorige keer, anders 'reps'. Geen meting: 'Not logged yet'.
+- 'Last · 20 kg · 12 · 12 · 11' = laatste prog-meting, behalve die van de lopende workout (`w` = `__woStart()`); GEEN kleur meer op reps aan de bovenkant van het bereik (op vraag van Tom, 1 nov; vroeger `em` in `--accent`, ook de zin daarover in Guide › Intensity is weg). Placeholder van elk rep-veld = reps van die set vorige keer, anders 'reps'. Geen meting: 'Not logged yet'.
 - Reps-rijen (lichaamsgewicht, `rep-bw`): hoofdveld + eenheidslaag verborgen; waarde = beste set (via zijn eigen `input`-event, dus logboek + meting zoals altijd,
   sleutel ongewijzigd → grafiek en statistieken lopen door). Afvinken vraagt reps van vandaag (`__repNeed` in de vinkje-code: eerste lege set licht op).
 - `.rep-last` staat BOVENAAN in `.rep-wrap` (rij 2), niet in `.exr-t`: anders werd rij 1 hoger en versprongen vinkje/oog/kg-veld (QA Tom, 1 nov). Het kg-veld opent de rij bij `focus` én `click` (had het al focus, dan kwam er geen focus-event).
