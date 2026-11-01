@@ -6530,11 +6530,21 @@ window.__congrats=function(o){
   function carry(i,on){ i.classList.toggle('rep-carry',on); if(i.parentNode) i.parentNode.classList.toggle('carry',on); }
   /* afvinken accepteert de overgenomen reps: ze worden de reps van vandaag (zwart) */
   function commit(R){ R.mains.forEach(function(M){ if(!M.ins.some(function(i){ return i.classList.contains('rep-carry'); })) return;
+      var was=RS[M.note]?JSON.parse(JSON.stringify(RS[M.note])):null;
       M.ins.forEach(function(i){ carry(i,false); });
-      RS[M.note]={d:today(),r:M.ins.map(function(i){ return i.value.trim(); }),at:Date.now()}; saveLocal(); clearTimeout(timers[M.note]);
+      RS[M.note]={d:today(),r:M.ins.map(function(i){ return i.value.trim(); }),at:Date.now()};
+      R.pre=R.pre||{}; R.pre[M.note]={was:was,at:RS[M.note].at}; /* uitvinken zet dit terug (QA Tom, 1 nov) */ saveLocal(); clearTimeout(timers[M.note]);
       var e=RS[M.note]; if(col) col.doc('reps--'+M.note).set({d:e.d,r:e.r,updatedAt:e.at}).catch(function(){});
       record(R,M); });
     paintSum(R); }
+  /* uitvinken na afvinken: de reps die het vinkje overnam, terug naar vóór het vinkje (weer grijs); wat je daarna zelf aanpaste blijft */
+  function undo(R){ var P=R.pre; R.pre=null; if(!P) return;
+    Object.keys(P).forEach(function(n){ var e=RS[n]; if(!e||e.at!==P[n].at) return;
+      if(P[n].was) RS[n]=P[n].was; else RS[n]={d:today(),r:[],at:Date.now()}; RS[n].at=Date.now();
+      if(col) col.doc('reps--'+n).set({d:RS[n].d,r:RS[n].r||[],updatedAt:RS[n].at}).catch(function(){}); });
+    saveLocal(); build(R); paintSum(R); }
+  pane.addEventListener('click',function(e){ var c=e.target.closest&&e.target.closest('.chk'); if(!c) return; var li=c.closest('.exr'), R=li&&li.__rep; if(!R||!R.pre) return;
+    setTimeout(function(){ if(!li.classList.contains('done')) undo(R); },0); },true); /* capture: de vinkje-code stopt de propagatie */
   function unit(i){ var u=i.nextSibling; if(u&&u.firstChild) u.firstChild.textContent=i.value.trim(); } /* 'reps' klein achter een ingevuld getal, zoals 'kg' (op vraag van Tom, 1 nov) */
   function prevPaint(){ pane.querySelectorAll('.rep-prev').forEach(function(x){ x.classList.remove('rep-prev'); });
     pane.querySelectorAll('.exr.rep-open').forEach(function(li){ var p=li.previousElementSibling; while(p&&!p.getClientRects().length) p=p.previousElementSibling; if(p) p.classList.add('rep-prev'); }); }
