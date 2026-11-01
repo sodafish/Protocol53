@@ -1936,7 +1936,18 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 .note.rep-in::placeholder{color:var(--muted-soft);opacity:.55;font-weight:500;}
 #s-d3 .note.rep-in:focus{outline:none;border-color:color-mix(in srgb,var(--ink) 40%,var(--line));box-shadow:none;}
 .rep-in.need{border-color:var(--accent)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);animation:needShake .4s ease;}
-#s-d3 .exr.rep-on.rep-open{background:var(--surface);border-radius:12px;margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px;border-bottom-color:transparent;}
+#s-d3 .exr.rep-on.rep-open{background:var(--paper-soft);border-radius:12px;margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px;border-bottom-color:transparent;} /* band (verzonken), velden erop in --surface (op vraag van Tom, 1 nov) */
+#s-d3 .exr.rep-on.rep-open .note.rep-in,#s-d3 .exr.rep-on.rep-open .note.exr-in{background:var(--surface);}
+/* SET-BOLLETJES (op vraag van Tom, 1 nov; variant B): de eerste tekst ('3 × 8–12 per leg') blijft in de DOM voor setsFor/applySets/kalender, maar is onzichtbaar
+   (font-size 0 op .exr-s); zichtbaar = bolletjes (één per set, vol = set gelogd vandaag) + '8–12 per leg' */
+#s-d3 .exr.rep-on .exr-s{font-size:0;}
+#s-d3 .exr.rep-on .exr-s > *{font-size:12.5px;}
+#s-d3 .exr.rep-on .exr-s > .exr-cnt{font-size:12px;}
+.rep-dots,.rep-txt{display:none;}
+#s-d3 .exr.rep-on .rep-dots{display:inline-flex;gap:3px;vertical-align:1px;margin-right:.45em;}
+#s-d3 .exr.rep-on .rep-txt{display:inline;}
+.rep-dots i{display:block;width:7px;height:7px;border-radius:50%;box-sizing:border-box;border:1.3px solid var(--muted-soft);}
+.rep-dots i.on{background:var(--accent);border-color:var(--accent);}
 #s-d3 .exr.rep-on.rep-bw > .exr-in,#s-d3 .exr.rep-on.rep-bw > .exr-u{display:none!important;}
 </style>
 
@@ -6425,11 +6436,20 @@ window.__congrats=function(o){
       M.grid=document.createElement('div'); M.grid.className='rep-sets'; g.appendChild(M.grid); wrap.appendChild(g); R.mains.push(M);
       inp.addEventListener('focus',function(){ openRow(R); }); inp.addEventListener('click',function(){ openRow(R); }); }); /* click ook: had het veld al focus, dan komt er geen focus-event (QA Tom, 1 nov) */
     li.appendChild(wrap);
+    var sl=li.querySelector('.exr-s'), ft=sl&&sl.firstChild; R.dots=document.createElement('span'); R.dots.className='rep-dots'; R.dots.setAttribute('aria-hidden','true');
+    R.txt=document.createElement('span'); R.txt.className='rep-txt'; R.txt.setAttribute('aria-hidden','true');
+    if(sl){ var after=ft&&ft.nodeType===3?ft.nextSibling:sl.firstChild; sl.insertBefore(R.dots,after); sl.insertBefore(R.txt,after); } /* na de eerste tekst: die blijft firstChild */
     if(mains.length>1) li.classList.add('rep-ss');
     if(mains.length===1&&R.mains[0].bw) li.classList.add('rep-bw');
     li.__rep=R; ROWS.push(R); check(R); return R;
   }
-  function check(R){ R.rg=range(R.li); R.li.classList.toggle('rep-on',!!R.rg); if(!R.rg) R.li.classList.remove('rep-open'); return !!R.rg; }
+  function check(R){ R.rg=range(R.li); R.li.classList.toggle('rep-on',!!R.rg); if(!R.rg) R.li.classList.remove('rep-open'); else paintSum(R); return !!R.rg; }
+  /* bolletjes + tekst zonder 'N ×' ('2 rounds ×' bij supersets) */
+  function paintSum(R){ if(!R.dots) return; var n=Math.max(1,Math.min(6,+(window.__setsFor?window.__setsFor(null,R.li):3)||3)),
+      t=firstText(R.li).replace(/\d+\s*(?:rounds?|rondes|sets?)?\s*×\s*/i,'').trim(), on=[];
+    R.mains.forEach(function(M){ todayR(M.note).forEach(function(v,i){ if(num(v)!=null) on[i]=1; }); });
+    if(R.txt.textContent!==t) R.txt.textContent=t;
+    var h=''; for(var i=0;i<n;i++) h+='<i'+(on[i]?' class="on"':'')+'></i>'; if(R.dots.innerHTML!==h) R.dots.innerHTML=h; }
   function build(R){
     if(!check(R)) return;
     var li=R.li, n=Math.max(1,Math.min(6,+(window.__setsFor?window.__setsFor(null,li):3)||3)), lastOne='';
@@ -6454,7 +6474,7 @@ window.__congrats=function(o){
     if(!R.li.classList.contains('rep-open')){ build(R); R.li.classList.add('rep-open'); } }
   function changed(R,M){
     var td=today(), r=M.ins.map(function(i){ return i.value.trim(); });
-    RS[M.note]={d:td,r:r,at:Date.now()}; saveLocal();
+    RS[M.note]={d:td,r:r,at:Date.now()}; saveLocal(); paintSum(R);
     clearTimeout(timers[M.note]);
     timers[M.note]=setTimeout(function(){
       var e=RS[M.note]; if(col&&e) col.doc('reps--'+M.note).set({d:e.d,r:e.r,updatedAt:e.at}).catch(function(){});
@@ -6481,7 +6501,7 @@ window.__congrats=function(o){
   function woCheck(){ var w=window.__woStart?window.__woStart():0; if(lastW&&!w) clearToday(); lastW=w; }
   function clearToday(){ var td=today();
     Object.keys(RS).forEach(function(n){ var e=RS[n]; if(e&&e.d===td&&e.r&&e.r.some(Boolean)){ RS[n]={d:td,r:[],at:Date.now()}; if(col) col.doc('reps--'+n).set({d:td,r:[],updatedAt:RS[n].at}).catch(function(){}); } });
-    saveLocal(); ROWS.forEach(function(R){ R.li.classList.remove('rep-open'); }); }
+    saveLocal(); ROWS.forEach(function(R){ R.li.classList.remove('rep-open'); paintSum(R); }); }
   setInterval(woCheck,1500);
   document.addEventListener('p53-checks',function(){ woCheck(); setTimeout(paintAll,0); });
   document.addEventListener('p53-prog',function(){ setTimeout(paintAll,0); });

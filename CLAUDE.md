@@ -752,4 +752,10 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
   andere dag = leeg). In `prog` krijgt de meting van het hoofdveld `r:[getallen]` (null = lege set) via `__repsFor` in `progRecord`; `r` telt mee in de
   'zelfde meting'-vergelijking. Oude metingen hebben geen `r` (Last toont dan enkel kg). End workout (timer aan → uit, `woCheck` elke 1,5 s) wist de reps van vandaag
   en sluit de rijen. Reset data wist ook `reps--…` en `fitlog-reps`. `applySets` stuurt `p53-sets` (rep-rij volgt het aantal sets).
+- SET-BOLLETJES + BAND (op vraag van Tom, 1 nov; variant B uit drie voorstellen A chevron / B bolletjes / C Last altijd zichtbaar): elke `rep-on`-rij toont in `.exr-s`
+  `span.rep-dots` (één `i` per set, 7 px, rand `--muted-soft`; `.on` = vol `--accent` = die set heeft vandaag reps) + `span.rep-txt` = de eerste tekst ZONDER
+  'N ×' / '2 rounds ×' ('8–12 per leg'). De echte eerste tekst blijft firstChild van `.exr-s` (setsFor, applySets, ORIG, kalender, schermlezer) maar is onzichtbaar
+  via `font-size:0` op `.exr-s` (kinderen terug 12.5 px, `.exr-cnt` 12 px). Rijen zonder rep-rij (tijd, warm-up, cardio, eGym) tonen hun tekst zoals vroeger:
+  zo zie je meteen welke rijen open kunnen. `paintSum(R)` in `check()`, bij elke rep-wijziging en na End workout.
+  Open rij = band `--paper-soft` (verzonken, was `--surface`: in donker bijna onzichtbaar), velden erop (rep-velden + kg-veld) `--surface`.
 
