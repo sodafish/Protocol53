@@ -101,11 +101,12 @@ html:not([data-design="instrument"]) .ins-only{display:none!important;}
 :root[data-design="instrument"] .wo-end{background:var(--ink)!important;color:var(--surface)!important;border:0!important;box-shadow:0 6px 18px rgba(22,22,22,.18)!important;border-radius:28px;min-height:52px;padding:0 20px;font:600 15px var(--f-sans)!important;}
 :root[data-design="instrument"] .wo-end{text-transform:none!important;letter-spacing:-.005em!important;}
 :root[data-design="instrument"] .wo-end:not(.is-start){background:var(--surface)!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5px var(--ink),0 6px 18px rgba(22,22,22,.14)!important;}
-:root[data-design="instrument"] .wo-end:not(.is-start) svg{color:var(--ink)!important;}
+:root[data-design="instrument"] .wo-end:not(.is-start){padding:0 8px 0 22px;flex-direction:row-reverse;gap:14px;min-height:56px;}
+:root[data-design="instrument"] .wo-end:not(.is-start) svg{box-sizing:content-box;width:13px;height:13px;padding:13.5px;border-radius:50%;background:var(--ink);color:var(--surface)!important;flex:none;}
 :root[data-design="instrument"] .wo-end.is-start{background:var(--sig)!important;color:var(--ink)!important;padding:0 8px 0 22px;flex-direction:row-reverse;gap:14px;min-height:56px;font-size:16px!important;}
 :root[data-design="instrument"] .wo-end.is-start svg{box-sizing:content-box;width:13px;height:13px;padding:13.5px;border-radius:50%;background:var(--ink);color:var(--sig)!important;}
 :root[data-design="instrument"] .wo-end.all-done{background:var(--ink)!important;color:var(--surface)!important;box-shadow:0 6px 18px rgba(22,22,22,.18)!important;}
-:root[data-design="instrument"] .wo-end.all-done svg{color:var(--sig)!important;}
+:root[data-design="instrument"] .wo-end.all-done svg{background:var(--surface);color:var(--ink)!important;}
 :root[data-design="instrument"] .wo-end-n,:root[data-design="instrument"] .wo-end-n b{color:inherit!important;opacity:.72;}
 :root[data-design="instrument"] .wo-bar-pill{background:var(--ink)!important;box-shadow:0 8px 24px rgba(22,22,22,.2)!important;border-radius:24px!important;height:72px!important;}
 :root[data-design="instrument"] .wo-bar-t{color:var(--surface)!important;}
@@ -158,8 +159,8 @@ html:not([data-design="instrument"]) .ins-only{display:none!important;}
 :root[data-design="instrument"] .rep-cell:not(.carry):has(.rep-in:focus) .rep-in{background:var(--panel)!important;box-shadow:inset 0 0 0 1.5px var(--ink)!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;}
 :root[data-design="instrument"] #s-d3 .note.rep-in.rep-carry,:root[data-design="instrument"] .rep-cell.carry .rep-u span{color:#9E9991!important;}
 /* verhoog-signaal: oranje = doe iets */
-:root[data-design="instrument"] #s-d3 .exr > .rep-sig{background:var(--sig)!important;color:var(--ink)!important;box-shadow:0 0 0 2px var(--surface)!important;}
-:root[data-design="instrument"] #s-d3 .exr > .rep-sig.dn,:root[data-design="instrument"] #s-d3 .exr > .rep-sig[class*="down"]{background:var(--ink)!important;color:var(--surface)!important;}
+:root[data-design="instrument"] #s-d3 .exr > .rep-sig{background:var(--ink)!important;color:var(--surface)!important;box-shadow:0 0 0 2px var(--surface)!important;}
+:root[data-design="instrument"] #s-d3 .exr > .rep-sig[data-d="down"]{background:#C8321E!important;color:var(--surface)!important;}
 /* gewicht-stepper (enkel Instrument, ingevoegd door instrument.js) */
 .ins-step{display:flex;align-items:center;justify-content:space-between;height:64px;border-radius:14px;background:var(--panel);padding:0 6px;}
 .ins-step button{appearance:none;-webkit-appearance:none;border:0;width:52px;height:52px;border-radius:50%;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
