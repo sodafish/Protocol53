@@ -1,4 +1,4 @@
-/* Protocol 53 — INSTRUMENT, het tweede design (op vraag van Tom, 4 nov 2026).
+/* Protocol 53 — INSTRUMENT (tweede design) + FACEPLATE (derde design, data-face),  (op vraag van Tom, 4 nov 2026).
    Keuze: Settings › Appearance › Design (Classic · Instrument), localStorage p53-design, per toestel.
    Dit script voegt de onderdelen toe die enkel in Instrument bestaan (klasse .ins-only, in Classic verborgen):
    Today-kop op Workout, gewicht-stepper in een open rij, spiermatrix op Balance, eindscherm i.p.v. vuurwerk.
@@ -6,6 +6,7 @@
 (function(){
   var R=document.documentElement;
   function on(){ return R.getAttribute('data-design')==='instrument'; }
+  function face(){ return R.hasAttribute('data-face'); }
   var MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   function pad(n){ return (n<10?'0':'')+n; }
@@ -18,12 +19,12 @@
   function setPaint(){
     var c=window.__p53design?window.__p53design():'classic';
     document.querySelectorAll('#stDesign button[data-ds]').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.ds===c?'true':'false'); });
-    var n=document.getElementById('stDesignNote'); if(n) n.hidden=c!=='instrument';
-    document.querySelectorAll('#st-sheet button[data-th]').forEach(function(b){ if(c==='instrument') b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); });
+    var n=document.getElementById('stDesignNote'); if(n) n.hidden=c==='classic';
+    document.querySelectorAll('#st-sheet button[data-th]').forEach(function(b){ if(c!=='classic') b.setAttribute('aria-disabled','true'); else b.removeAttribute('aria-disabled'); });
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('#stDesign button[data-ds]');
-    if(b){ try{ if(b.dataset.ds==='instrument') localStorage.setItem('p53-design','instrument'); else localStorage.removeItem('p53-design'); }catch(x){}
+    if(b){ try{ if(b.dataset.ds!=='classic') localStorage.setItem('p53-design',b.dataset.ds); else localStorage.removeItem('p53-design'); }catch(x){}
       if(window.__p53designApply) window.__p53designApply(); setPaint(); refreshAll(); return; }
     /* Instrument is enkel licht: de themaknoppen doen niets zolang Instrument aan staat */
     var t=e.target.closest&&e.target.closest('#st-sheet button[data-th]');
@@ -48,15 +49,30 @@
     for(var i=0;i<cells;i++){ var d=i-off+1, c='x';
       if(d>=1&&d<=len){ var k=pre+pad(d); c=k===key?('today'+(days[k]?' on':'')):k<key?(days[k]?'on':'off'):''; }
       h+='<i'+(c?' class="'+c+'"':'')+'></i>'; }
-    today.innerHTML=h+'</div>';
+    h+='</div>';
+    if(face()){ /* Faceplate: grote dag + week-dials (sector = sets die dag t.o.v. je beste dag van de laatste 30 dagen) */
+      var best=1, lim=ymd(new Date(now.getTime()-30*864e5)); Object.keys(days).forEach(function(k){ if(k>=lim) best=Math.max(best,(days[k].sets||0)); });
+      var wsets=0, w='';
+      for(var j=0;j<7;j++){ var dd=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+j), kk=ymd(dd), o=days[kk], st=o?(o.sets||0):0, fut=kk>key, isT=kk===key;
+        if(kk<=key) wsets+=st; var f=o?Math.min(1,st?st/best:(o.min?.25:.12)):0;
+        w+='<div><svg width="42" height="42" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="'+(fut?'none':'#F7F6F3')+'" stroke="'+(fut?'#A8A39B':'#161616')+'" stroke-width="1.2"/>'+sector(f)+'</svg><b'+(isT?' class="t"':'')+'>'+dd.getDate()+'</b><i'+(isT?' class="t"':'')+'></i></div>'; }
+      var wk=Math.ceil((((now-new Date(y,0,1))/864e5)+((new Date(y,0,1).getDay()+6)%7)+1)/7);
+      h='<p class="ins-week-h">'+['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()]+'<span>'+now.getDate()+' '+MON[m]+'</span></p>'+
+        '<div class="ins-week-r"><span class="ins-silk k">week '+wk+'</span><span class="ins-silk">'+nWeek+(nWeek===1?' training day':' training days')+' · '+wsets+' sets</span></div>'+
+        '<span class="ins-sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">'+nWeek+' training days this week, '+wsets+' sets.</span>'+
+        '<div class="ins-week" aria-hidden="true">'+w+'</div>'; }
+    today.innerHTML=h;
   }
+  function sector(f){ if(f<=0) return ''; if(f>=.999) return '<circle cx="20" cy="20" r="19" fill="#161616"/>';
+    var a=f*2*Math.PI, x=(20+19*Math.sin(a)).toFixed(2), yy=(20-19*Math.cos(a)).toFixed(2);
+    return '<path d="M20 20 L20 1 A19 19 0 '+(f>.5?1:0)+' 1 '+x+' '+yy+' Z" fill="#161616"/>'; }
   var paintTodayL=later(paintToday,80);
 
   /* ── 3. Gewicht-stepper in een open rij (− / waarde / +), stuurt een gewoon input-event naar het kg-veld ── */
   function kgOf(li){ var a=li.querySelectorAll(':scope > input.note.exr-in'); for(var i=0;i<a.length;i++){ var x=a[i]; if(x.type!=='hidden'&&x.placeholder==='kg') return x; } return null; }
   function num(v){ var m=String(v||'').replace(',','.').match(/-?\d+(\.\d+)?/); return m?parseFloat(m[0]):null; }
   function stepOf(v){ return v!=null&&v<10?1:2.5; }
-  function showVal(st,inp){ var o=st.querySelector('output'); var v=num(inp.value); o.innerHTML=(v==null?'–':String(inp.value).trim())+'<small>kg</small>'; }
+  function showVal(st,inp){ var o=st.querySelector('output'); var v=num(inp.value); var t=String(inp.value).trim(), mm=t.match(/^(-?\d+)([.,]\d+)?$/); o.innerHTML=(v==null?'–':mm?mm[1]+(mm[2]?'<span class="dec">'+mm[2]+'</span>':''):t)+'<small>kg</small>'; }
   function addSteppers(){
     document.querySelectorAll('#s-d3 .exr.rep-on > .rep-wrap').forEach(function(w){
       var li=w.parentNode; if(li.classList.contains('rep-bw')||li.classList.contains('rep-ss')) return;
@@ -68,9 +84,27 @@
           '<button type="button" class="ins-up" aria-label="Raise the weight"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M9 3v12" stroke="currentColor" stroke-width="2"/></svg></button>');
         st.querySelector('.ins-v').style.cssText='box-shadow:none;background:transparent;width:auto;padding:0 8px;border-radius:12px';
         var last=w.querySelector(':scope > .rep-last'); w.insertBefore(st,last?last.nextSibling:w.firstChild); }
-      showVal(st,inp);
+      showVal(st,inp); paintDial(li,w,st);
     });
   }
+  /* Faceplate: range-dial = waar je reps vallen in het bereik (vandaag als ingevuld, anders vorige keer); led = elke set aan de bovenkant */
+  function paintDial(li,w,st){
+    var rt=li.querySelector('.rep-txt'), m=rt&&rt.textContent.match(/(\d+)\s*[–-]\s*(\d+)/); if(!m) return;
+    var lo=+m[1], hi=+m[2], today=[].slice.call(li.querySelectorAll('.rep-cell:not(.carry) .rep-in')).map(function(x){ return num(x.value); }).filter(function(x){ return x!=null; });
+    var lastT=(li.querySelector('.rep-last')||{}).textContent||'', lastR=(lastT.split('·').slice(2).join(' ').match(/\d+/g)||[]).map(Number);
+    var src=today.length?today:lastR, lab=today.length?'today':lastR.length?'last time':'no reps yet';
+    var avg=src.length?src.reduce(function(a,b){ return a+b; },0)/src.length:null, top=src.length&&Math.min.apply(null,src)>=hi;
+    var f=avg==null?0:Math.max(-.15,Math.min(1.15,(avg-lo)/Math.max(1,hi-lo))), ang=(-120+240*f)*Math.PI/180;
+    var px=(32+22*Math.sin(ang)).toFixed(1), py=(32-22*Math.cos(ang)).toFixed(1);
+    var d=w.querySelector(':scope > .ins-dial');
+    if(!d){ d=el('div','ins-dial ins-only ins-face'); w.insertBefore(d,st); }
+    d.innerHTML='<svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Reps '+(avg==null?'none':Math.round(avg*10)/10)+' in a range of '+lo+' to '+hi+'">'+
+      '<g stroke="#161616" stroke-width="1.2"><line x1="8.4" y1="45.6" x2="5" y2="47.6"/><line x1="32" y1="5" x2="32" y2="1"/><line x1="55.6" y1="45.6" x2="59" y2="47.6"/></g>'+
+      '<circle cx="32" cy="32" r="25" fill="#161616"/>'+(avg==null?'':'<line x1="32" y1="32" x2="'+px+'" y2="'+py+'" stroke="#F7F6F3" stroke-width="2.6" stroke-linecap="round"/>')+'<circle cx="32" cy="32" r="3" fill="#F7F6F3"/></svg>'+
+      '<div class="ins-dial-t"><span class="ins-silk">reps · '+lab+' · '+lo+'–'+hi+'</span><b>'+(avg==null?'–':src.join(' · '))+'</b></div>'+
+      '<div class="ins-dial-led'+(top?' on':'')+'"><i></i><span class="ins-silk">'+(top?'add weight':'in range')+'</span></div>';
+  }
+  document.addEventListener('input',function(e){ var t=e.target; if(t&&t.classList&&t.classList.contains('rep-in')){ var li=t.closest('.exr'), w=li&&li.querySelector('.rep-wrap'), st=w&&w.querySelector('.ins-step'); if(st) paintDial(li,w,st); } },true);
   var addSteppersL=later(addSteppers,60);
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('.ins-step button'); if(!b) return;
@@ -159,17 +193,61 @@
   function wrapCongrats(){
     if(!window.__congrats||window.__congrats.__ins) return;
     var orig=window.__congrats;
-    window.__congrats=function(o){ return on()?doneScreen(o):orig(o); }; window.__congrats.__ins=1;
+    window.__congrats=function(o){ return !on()?orig(o):face()?faceDone(o):doneScreen(o); }; window.__congrats.__ins=1;
+  }
+
+  /* ── 6. Faceplate: Strength als dial-raster (uit de groepskoppen van #plList en Whole body #prBody) ── */
+  var sd=null;
+  function paintStr(){
+    var pl=document.getElementById('plList'), sv=pl&&pl.closest('.sv'); if(!sv) return;
+    if(!sd){ sd={h:el('div','ins-sd-h ins-only ins-face'), g:el('div','ins-sd ins-only ins-face')}; var fig=sv.querySelector('.pr-fig')||sv.firstChild; sv.insertBefore(sd.h,fig); sv.insertBefore(sd.g,fig); }
+    if(!face()) return;
+    var hs=[].slice.call(pl.querySelectorAll('li.pl-h')), plist=document.getElementById('plist'), vis=plist&&!plist.hidden&&hs.length;
+    sd.h.hidden=sd.g.hidden=!vis; if(!vis) return;
+    var tb=(document.querySelector('#prBody b')||{}).textContent||'', mm=tb.match(/([+−-]?\d+)([.,]\d+)?%/);
+    sd.h.innerHTML='<b>'+(mm?mm[1]+'<span>'+(mm[2]||'')+'%</span>':'–')+'</b><span class="ins-silk" style="text-align:right;line-height:1.4">whole body<br>'+pl.querySelectorAll('li > button').length+' exercises</span>';
+    var vals=hs.map(function(h){ var t=(h.querySelector('b')||{}).textContent||'', n=parseFloat(t.replace('−','-').replace(/[^\d.-]/g,'')); return isNaN(n)?0:n; }), mx=Math.max.apply(null,vals.concat([10]));
+    sd.g.innerHTML=hs.map(function(h,i){ var name=(h.querySelector('span')||{}).textContent||'', v=vals[i], f=Math.max(0,Math.min(1,v/mx)), a=(-135+270*f)*Math.PI/180, best=v===mx&&v>0;
+      var x=(46+29*Math.sin(a)).toFixed(1), y=(46-29*Math.cos(a)).toFixed(1), tag=/egym/i.test(name)?'E':String(i+1);
+      return '<div><p><span class="tg">'+tag+'</span><span class="ld'+(best?' on':'')+'"></span></p><svg width="92" height="92" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="38" fill="#161616"/><circle cx="'+x+'" cy="'+y+'" r="4" fill="'+(best?'#FF5B1A':'#F7F6F3')+'"/></svg>'+
+        '<p class="b"><span>'+name.replace(/,.*$/,'').replace(/&/g,'&amp;')+'</span><em>'+((h.querySelector('b')||{}).textContent||'')+'</em></p></div>'; }).join('');
+  }
+  var paintStrL=later(paintStr,60);
+
+  /* ── 7. Faceplate-eindscherm: weekring (inkt = eerder deze week, oranje = vandaag, track = vorige week of meer) ── */
+  function faceDone(o){
+    var s=snap||{sets:0,cardio:'',gd:0,gt:0,prog:''}; snap=null;
+    var days={}; try{ days=window.__calDays?window.__calDays():{}; }catch(e){}
+    var now=new Date(), key=ymd(now), mon=new Date(now); mon.setHours(0,0,0,0); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+    var monK=ymd(mon), prevK=ymd(new Date(mon.getTime()-7*864e5)), wk=0, prev=0;
+    Object.keys(days).forEach(function(k){ var n=days[k].sets||0; if(k>=monK&&k<=key) wk+=n; else if(k>=prevK&&k<monK) prev+=n; });
+    var td=s.sets||0; wk=Math.max(wk,td); var before=wk-td, ref=Math.max(prev,wk,1);
+    function arc(a,b){ var r=118,c=160; function p(f){ var t=f*2*Math.PI; return (c+r*Math.sin(t)).toFixed(2)+' '+(c-r*Math.cos(t)).toFixed(2); }
+      if(b-a>=.999) return '<circle cx="160" cy="160" r="118"'; return '<path d="M'+p(a)+' A118 118 0 '+((b-a)>.5?1:0)+' 1 '+p(b)+'"'; }
+    var min=o&&o.min!=null?o.min:null, tm=min==null?'–':min<60?min+'m':Math.floor(min/60)+'h '+pad(min%60)+'m';
+    var ring='<svg class="ins-fd-ring" viewBox="0 0 320 320" role="img" aria-label="'+td+' sets today, '+wk+' this week'+(prev?', '+prev+' last week':'')+'"><circle cx="160" cy="160" r="118" fill="none" stroke="#D9D5CE" stroke-width="64"/>'+
+      (before>0?arc(0,before/ref)+' fill="none" stroke="#161616" stroke-width="64"/>':'')+(td>0?arc(before/ref,wk/ref)+' fill="none" stroke="#FF5B1A" stroke-width="64"/>':'')+'</svg>';
+    var w=el('div','ins-done face','<div class="ins-fd" role="dialog" aria-modal="true" aria-label="Workout done">'+
+      '<div class="ins-fd-h"><div>Session<br>complete<span>'+DAY[now.getDay()]+' '+now.getDate()+' '+MON[now.getMonth()].slice(0,3)+'</span></div><span class="ins-silk" style="text-align:right;line-height:1.4">'+(s.prog?s.prog.toLowerCase()+'<br>':'')+(min!=null?tm:'')+'</span></div>'+ring+
+      '<div class="ins-fd-n"><div><span class="ins-silk">this week'+(prev?' · last '+prev:'')+'</span><b>'+wk+'</b></div><div><span class="ins-silk" style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--sig)"></span>sets today</span><b class="big">'+td+'</b></div></div>'+
+      '<div class="ins-fd-b"><div><button type="button">Balance</button></div><dl><dt class="ins-silk">groups</dt><dd>'+(s.gt?s.gd+' / '+s.gt:'–')+'</dd><dt class="ins-silk">exercises</dt><dd>'+((o&&o.n)||'–')+'</dd><dt class="ins-silk">cardio</dt><dd>'+(s.cardio||'–')+'</dd></dl></div></div>');
+    document.body.appendChild(w); var btn=w.querySelector('button');
+    requestAnimationFrame(function(){ w.classList.add('on'); btn.focus({preventScroll:true}); });
+    function close(){ w.classList.remove('on'); document.removeEventListener('keydown',key2); setTimeout(function(){ w.remove(); },260); }
+    function key2(e){ if(e.key==='Escape'||e.key==='Enter') close(); }
+    w.addEventListener('click',close); document.addEventListener('keydown',key2);
   }
 
   /* ── verversen ── */
-  function refreshAll(){ setPaint(); paintToday(); addSteppers(); paintBal(); }
+  function refreshAll(){ setPaint(); paintToday(); addSteppers(); paintBal(); paintStr(); }
   function boot(){
     wrapCongrats(); refreshAll();
     document.addEventListener('p53-prog',paintTodayL); document.addEventListener('p53-design',refreshAll);
     document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') paintTodayL(); });
     var cg=document.getElementById('calGrid'); if(cg) new MutationObserver(paintTodayL).observe(cg,{childList:true});
     var sl=document.getElementById('statsList'); if(sl) new MutationObserver(paintBalL).observe(sl,{childList:true});
+    var pll=document.getElementById('plList'); if(pll) new MutationObserver(paintStrL).observe(pll,{childList:true});
+    var plx=document.getElementById('plist'); if(plx) new MutationObserver(paintStrL).observe(plx,{attributes:true,attributeFilter:['hidden']});
     var sd=document.getElementById('s-d3'); if(sd) new MutationObserver(function(ms){
       for(var i=0;i<ms.length;i++){ var t=ms[i].target; if(t.closest&&t.closest('.ins-step')) continue; addSteppersL(); return; } }).observe(sd,{childList:true,subtree:true});
     setInterval(function(){ if(on()) paintToday(); },10*60*1000);

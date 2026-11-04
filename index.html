@@ -46,15 +46,15 @@
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
-<script>/* DESIGN Classic · Instrument (op vraag van Tom, 4 nov): localStorage p53-design ('instrument' of weg), per toestel. Instrument = enkel licht, eigen fonts; zie instrument.css/.js */
+<script>/* DESIGN Classic · Instrument · Faceplate (op vraag van Tom, 4 nov): localStorage p53-design ('instrument'/'faceplate' of weg), per toestel. Faceplate = Instrument + data-face. Instrument = enkel licht, eigen fonts; zie instrument.css/.js */
 (function(){
-  window.__p53design=function(){ try{ return localStorage.getItem('p53-design')==='instrument'?'instrument':'classic'; }catch(e){ return 'classic'; } };
+  window.__p53design=function(){ var v=null; try{ v=localStorage.getItem('p53-design'); }catch(e){} return v==='instrument'||v==='faceplate'?v:'classic'; };
   var orig=window.__p53theme;
-  window.__p53theme=function(v){ if(window.__p53design()==='instrument'){ orig('light'); document.querySelectorAll('meta[name=theme-color]').forEach(function(m){ m.setAttribute('content','#E4E1DB'); }); } else orig(v); };
+  window.__p53theme=function(v){ if(window.__p53design()!=='classic'){ orig('light'); document.querySelectorAll('meta[name=theme-color]').forEach(function(m){ m.setAttribute('content','#E4E1DB'); }); } else orig(v); };
   function fonts(){ if(document.getElementById('insFonts')) return; var l=document.createElement('link'); l.id='insFonts'; l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap'; document.head.appendChild(l); }
-  window.__p53designApply=function(){ var r=document.documentElement, t=null; if(window.__p53design()==='instrument'){ r.setAttribute('data-design','instrument'); fonts(); } else r.removeAttribute('data-design');
+  window.__p53designApply=function(){ var r=document.documentElement, t=null; var d=window.__p53design(); if(d!=='classic'){ r.setAttribute('data-design','instrument'); fonts(); } else r.removeAttribute('data-design'); if(d==='faceplate') r.setAttribute('data-face','1'); else r.removeAttribute('data-face');
     try{ t=localStorage.getItem('p53-theme'); }catch(e){} window.__p53theme(t); try{ document.dispatchEvent(new CustomEvent('p53-design')); }catch(e){} };
-  if(window.__p53design()==='instrument'){ document.documentElement.setAttribute('data-design','instrument'); document.documentElement.setAttribute('data-theme','light'); fonts(); }
+  if(window.__p53design()!=='classic'){ document.documentElement.setAttribute('data-design','instrument'); document.documentElement.setAttribute('data-theme','light'); fonts(); if(window.__p53design()==='faceplate') document.documentElement.setAttribute('data-face','1'); }
 })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -2711,8 +2711,8 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
       <p class="set-lab">Appearance</p>
       <div class="st-seg" role="group" aria-label="Appearance"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button><button type="button" data-th="blue">Blue</button></div>
       <p class="set-lab" style="margin-top:1.1rem">Design</p>
-      <div class="st-seg" role="group" aria-label="Design" id="stDesign"><button type="button" data-ds="classic">Classic</button><button type="button" data-ds="instrument">Instrument</button></div>
-      <p class="st-note" id="stDesignNote" hidden>Instrument is light only for now; the theme above applies to Classic.</p>
+      <div class="st-seg" role="group" aria-label="Design" id="stDesign"><button type="button" data-ds="classic">Classic</button><button type="button" data-ds="instrument">Instrument</button><button type="button" data-ds="faceplate">Faceplate</button></div>
+      <p class="st-note" id="stDesignNote" hidden>Instrument and Faceplate are light only for now; the theme above applies to Classic.</p>
     </div>
     <div class="st-sec">
       <p class="set-lab" id="stProgL">Programs</p>
