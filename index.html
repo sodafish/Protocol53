@@ -46,15 +46,15 @@
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
-<script>/* DESIGN Classic · Instrument · Faceplate (op vraag van Tom, 4 nov): localStorage p53-design ('instrument'/'faceplate' of weg), per toestel. Faceplate = Instrument + data-face. Instrument = enkel licht, eigen fonts; zie instrument.css/.js */
+<script>/* DESIGN Classic · Instrument (op vraag van Tom, 4 nov): localStorage p53-design ('instrument' of weg), per toestel. Faceplate is weer weg (een bewaarde 'faceplate' = Classic). Instrument = enkel licht, eigen fonts; zie instrument.css/.js */
 (function(){
-  window.__p53design=function(){ var v=null; try{ v=localStorage.getItem('p53-design'); }catch(e){} return v==='instrument'||v==='faceplate'?v:'classic'; };
+  window.__p53design=function(){ var v=null; try{ v=localStorage.getItem('p53-design'); }catch(e){} return v==='instrument'?v:'classic'; };
   var orig=window.__p53theme;
   window.__p53theme=function(v){ if(window.__p53design()!=='classic'){ orig('light'); document.querySelectorAll('meta[name=theme-color]').forEach(function(m){ m.setAttribute('content','#E4E1DB'); }); } else orig(v); };
   function fonts(){ if(document.getElementById('insFonts')) return; var l=document.createElement('link'); l.id='insFonts'; l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap'; document.head.appendChild(l); }
-  window.__p53designApply=function(){ var r=document.documentElement, t=null; var d=window.__p53design(); if(d!=='classic'){ r.setAttribute('data-design','instrument'); fonts(); } else r.removeAttribute('data-design'); if(d==='faceplate') r.setAttribute('data-face','1'); else r.removeAttribute('data-face');
+  window.__p53designApply=function(){ var r=document.documentElement, t=null; var d=window.__p53design(); if(d!=='classic'){ r.setAttribute('data-design','instrument'); fonts(); } else r.removeAttribute('data-design'); r.removeAttribute('data-face');
     try{ t=localStorage.getItem('p53-theme'); }catch(e){} window.__p53theme(t); try{ document.dispatchEvent(new CustomEvent('p53-design')); }catch(e){} };
-  if(window.__p53design()!=='classic'){ document.documentElement.setAttribute('data-design','instrument'); document.documentElement.setAttribute('data-theme','light'); fonts(); if(window.__p53design()==='faceplate') document.documentElement.setAttribute('data-face','1'); }
+  if(window.__p53design()!=='classic'){ document.documentElement.setAttribute('data-design','instrument'); document.documentElement.setAttribute('data-theme','light'); fonts(); }
 })();
 </script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -1998,6 +1998,41 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
 #s-d3 .exr.rep-on.rep-bw > .rep-bw0{display:flex;grid-column:-2 / -1;grid-row:1;align-self:center;align-items:center;justify-content:center;gap:3px;box-sizing:border-box;height:44px;border-radius:10px;
   border:1px solid var(--line);background:var(--paper-soft);opacity:.45;font:600 16px 'Work Sans',system-ui,sans-serif;color:var(--muted);font-variant-numeric:tabular-nums;}
 #s-d3 .exr.rep-on.rep-bw > .rep-bw0 small{font-size:11.5px;font-weight:500;}
+
+/* ════════════ CLASSIC REFRESH (op vraag van Tom, 4 nov; subtiele elementen uit Instrument, zelfde tokens en fonts) ════════════
+   Enkel Classic (:root zonder data-design). 1) effen accent i.p.v. terracotta-verloop (tabs, Start, notitieknop);
+   2) Start workout in de vorm van Instrument: effen pil, rechts een rond inktvlak met play-icoon in accent;
+   3) licht: navbar en workout-balk = inkt, actieve navbar-knop = papieren toets; 4) Balance-matrix: zie instrument.css/.js (geldt in beide). */
+:root:not([data-design]) .wtabs .pill-ind,:root:not([data-design]) .wtabs button[aria-selected="true"],:root:not([data-design]) .note-jump.note-float,:root:not([data-design]) body:has(#woEnd.is-start) .note-jump.note-float{background:var(--accent)!important;}
+:root:not([data-design]) .wo-end{background:var(--ink)!important;color:var(--paper)!important;}
+:root:not([data-design]) .wo-end.is-start{background:var(--accent)!important;color:var(--paper)!important;flex-direction:row-reverse;gap:14px;min-height:56px;padding:0 8px 0 22px;border-radius:28px;font-weight:600;box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 30%,transparent);}
+:root:not([data-design]) .wo-end.is-start svg{box-sizing:content-box;width:13px;height:13px;padding:13.5px;border-radius:50%;background:var(--ink);color:var(--accent)!important;flex:none;}
+:root:not([data-design])[data-theme="light"] .gnav-pill.glass,:root:not([data-design])[data-theme="light"] .wo-bar-pill.glass{background:var(--ink)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:transparent!important;box-shadow:0 8px 24px rgba(42,29,22,.22)!important;}
+:root:not([data-design])[data-theme="light"] .gnav-pill>.pill-ind{background:var(--paper)!important;}
+:root:not([data-design])[data-theme="light"] .gnav-i{color:color-mix(in srgb,var(--paper) 62%,transparent)!important;}
+:root:not([data-design])[data-theme="light"] .gnav-i[aria-selected="true"]{background:transparent!important;color:var(--ink)!important;}
+:root:not([data-design])[data-theme="light"] .gnav-i:focus-visible{outline-color:var(--accent-soft)!important;}
+:root:not([data-design])[data-theme="light"] .wo-bar-t{color:var(--paper)!important;}
+:root:not([data-design])[data-theme="light"] .wo-bar-t i{background:var(--accent-soft)!important;box-shadow:none!important;}
+:root:not([data-design])[data-theme="light"] .wo-grp button:not(.d){color:var(--paper)!important;}
+:root:not([data-design])[data-theme="light"] .wo-grp button.d,:root:not([data-design])[data-theme="light"] .wo-grp button.opt{color:color-mix(in srgb,var(--paper) 42%,transparent)!important;}
+:root:not([data-design])[data-theme="light"] .wo-grp button b{color:var(--accent-soft)!important;}
+@media (prefers-color-scheme: light){
+:root:not([data-design]):not([data-theme]) .gnav-pill.glass,:root:not([data-design]):not([data-theme]) .wo-bar-pill.glass{background:var(--ink)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:transparent!important;box-shadow:0 8px 24px rgba(42,29,22,.22)!important;}
+:root:not([data-design]):not([data-theme]) .gnav-pill>.pill-ind{background:var(--paper)!important;}
+:root:not([data-design]):not([data-theme]) .gnav-i{color:color-mix(in srgb,var(--paper) 62%,transparent)!important;}
+:root:not([data-design]):not([data-theme]) .gnav-i[aria-selected="true"]{background:transparent!important;color:var(--ink)!important;}
+:root:not([data-design]):not([data-theme]) .gnav-i:focus-visible{outline-color:var(--accent-soft)!important;}
+:root:not([data-design]):not([data-theme]) .wo-bar-t{color:var(--paper)!important;}
+:root:not([data-design]):not([data-theme]) .wo-bar-t i{background:var(--accent-soft)!important;box-shadow:none!important;}
+:root:not([data-design]):not([data-theme]) .wo-grp button:not(.d){color:var(--paper)!important;}
+:root:not([data-design]):not([data-theme]) .wo-grp button.d,:root:not([data-design]):not([data-theme]) .wo-grp button.opt{color:color-mix(in srgb,var(--paper) 42%,transparent)!important;}
+:root:not([data-design]):not([data-theme]) .wo-grp button b{color:var(--accent-soft)!important;}
+}
+/* End workout boven de zwarte balk = lichte pil met inktrand (zoals Instrument) */
+:root:not([data-design])[data-theme="light"] .wo-end:not(.is-start){background:var(--surface)!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5px var(--ink),0 6px 18px rgba(42,29,22,.14)!important;}:root:not([data-design])[data-theme="light"] .wo-end:not(.is-start) svg{color:var(--ink)!important;}
+@media (prefers-color-scheme: light){:root:not([data-design]):not([data-theme]) .wo-end:not(.is-start){background:var(--surface)!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5px var(--ink),0 6px 18px rgba(42,29,22,.14)!important;}:root:not([data-design]):not([data-theme]) .wo-end:not(.is-start) svg{color:var(--ink)!important;}}
+/* ════════════ einde CLASSIC REFRESH ════════════ */
 </style>
 <link rel="stylesheet" href="instrument.css">
 
@@ -2711,8 +2746,8 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
       <p class="set-lab">Appearance</p>
       <div class="st-seg" role="group" aria-label="Appearance"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button><button type="button" data-th="blue">Blue</button></div>
       <p class="set-lab" style="margin-top:1.1rem">Design</p>
-      <div class="st-seg" role="group" aria-label="Design" id="stDesign"><button type="button" data-ds="classic">Classic</button><button type="button" data-ds="instrument">Instrument</button><button type="button" data-ds="faceplate">Faceplate</button></div>
-      <p class="st-note" id="stDesignNote" hidden>Instrument and Faceplate are light only for now; the theme above applies to Classic.</p>
+      <div class="st-seg" role="group" aria-label="Design" id="stDesign"><button type="button" data-ds="classic">Classic</button><button type="button" data-ds="instrument">Instrument</button></div>
+      <p class="st-note" id="stDesignNote" hidden>Instrument is light only for now; the theme above applies to Classic.</p>
     </div>
     <div class="st-sec">
       <p class="set-lab" id="stProgL">Programs</p>
