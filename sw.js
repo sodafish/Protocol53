@@ -1,6 +1,6 @@
 /* Protocol 53 — offline cache. Pagina: eerst netwerk (zo komen updates meteen binnen), anders cache. */
-const VERSION = 'p53-v150';
-const SHELL = ['./', './index.html', './cloud.js', './vendor/supabase.js', './manifest.webmanifest', './icons/app-180.png', './icons/app-192.png', './icons/app-512.png'];
+const VERSION = 'p53-v151';
+const SHELL = ['./', './index.html', './cloud.js', './instrument.css', './instrument.js', './vendor/supabase.js', './manifest.webmanifest', './icons/app-180.png', './icons/app-192.png', './icons/app-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

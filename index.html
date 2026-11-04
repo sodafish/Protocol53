@@ -46,6 +46,17 @@
   try{ if(!localStorage.getItem('p53-auth')) document.documentElement.classList.add('p53-out'); }catch(e){}
   document.addEventListener('DOMContentLoaded',function(){ window.__p53theme(t); }); })();
 </script>
+<script>/* DESIGN Classic · Instrument (op vraag van Tom, 4 nov): localStorage p53-design ('instrument' of weg), per toestel. Instrument = enkel licht, eigen fonts; zie instrument.css/.js */
+(function(){
+  window.__p53design=function(){ try{ return localStorage.getItem('p53-design')==='instrument'?'instrument':'classic'; }catch(e){ return 'classic'; } };
+  var orig=window.__p53theme;
+  window.__p53theme=function(v){ if(window.__p53design()==='instrument'){ orig('light'); document.querySelectorAll('meta[name=theme-color]').forEach(function(m){ m.setAttribute('content','#E4E1DB'); }); } else orig(v); };
+  function fonts(){ if(document.getElementById('insFonts')) return; var l=document.createElement('link'); l.id='insFonts'; l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap'; document.head.appendChild(l); }
+  window.__p53designApply=function(){ var r=document.documentElement, t=null; if(window.__p53design()==='instrument'){ r.setAttribute('data-design','instrument'); fonts(); } else r.removeAttribute('data-design');
+    try{ t=localStorage.getItem('p53-theme'); }catch(e){} window.__p53theme(t); try{ document.dispatchEvent(new CustomEvent('p53-design')); }catch(e){} };
+  if(window.__p53design()==='instrument'){ document.documentElement.setAttribute('data-design','instrument'); document.documentElement.setAttribute('data-theme','light'); fonts(); }
+})();
+</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/app-180.png">
 <link rel="icon" type="image/png" href="icons/app-192.png">
@@ -1988,6 +1999,7 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
   border:1px solid var(--line);background:var(--paper-soft);opacity:.45;font:600 16px 'Work Sans',system-ui,sans-serif;color:var(--muted);font-variant-numeric:tabular-nums;}
 #s-d3 .exr.rep-on.rep-bw > .rep-bw0 small{font-size:11.5px;font-weight:500;}
 </style>
+<link rel="stylesheet" href="instrument.css">
 
 <header class="top">
   <div class="wrap">
@@ -2698,6 +2710,9 @@ body:has(#woEnd.is-start) .note-jump.note-float svg{color:var(--paper);}
     <div class="st-first">
       <p class="set-lab">Appearance</p>
       <div class="st-seg" role="group" aria-label="Appearance"><button type="button" data-th="system">System</button><button type="button" data-th="light">Light</button><button type="button" data-th="dark">Dark</button><button type="button" data-th="blue">Blue</button></div>
+      <p class="set-lab" style="margin-top:1.1rem">Design</p>
+      <div class="st-seg" role="group" aria-label="Design" id="stDesign"><button type="button" data-ds="classic">Classic</button><button type="button" data-ds="instrument">Instrument</button></div>
+      <p class="st-note" id="stDesignNote" hidden>Instrument is light only for now; the theme above applies to Classic.</p>
     </div>
     <div class="st-sec">
       <p class="set-lab" id="stProgL">Programs</p>
@@ -3758,6 +3773,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
   }
   /* ---- Suggestions: welke spieren verdienen de komende trainingen meer aandacht (laatste 30 dagen, omgerekend naar sets per week, gewogen) ---- */
   var SUG_MIN={borst:8,lats:8,midrug:8,quad:8,ham:8,bil:8,sz:5,sa:4,onderrug:3,bi:4,tri:4,buik:4,kuit:4}; /* geen onderarmen, trapezius, schuine buik, adductoren, voorste schouder: die krijgen genoeg mee via andere oefeningen (op vraag van Tom) */
+  window.__p53sug={MLAB:MLAB,SUG_MIN:SUG_MIN}; /* voor de spiermatrix van Instrument (instrument.js) */
   var SUG_PAIRS=[['borst',['lats','midrug'],'Chest','Back'],['quad',['ham'],'Quads','Hamstrings'],['bi',['tri'],'Biceps','Triceps'],['sv',['sa'],'Front delts','Rear delts'],['buik',['onderrug'],'Abs','Lower back']];
   function sugData(){ var B=window.__balState; if(!B){ renderStats(); B=window.__balState; } return B||{sc:{},n:0,spanW:1,perWeek:true}; }
   function exFor(m){ var act=[], off=[];
@@ -6050,6 +6066,7 @@ window.__congrats=function(o){
     requestAnimationFrame(function(){ gbg.classList.add('on'); gsh.classList.add('on'); }); gsh.querySelector('.sheet-x').focus({preventScroll:true}); }
   window.__egsOpen=egsOpen;
   window.__renderCal=render;
+  window.__calDays=data; /* trainingsdagen voor de Today-kop van Instrument */
   document.addEventListener('p53-prog',function(){ setTimeout(render,0); });
   document.querySelectorAll('.cal-nav[data-m]').forEach(function(b){ b.addEventListener('click',function(){
     var m=ym.m+(+b.dataset.m), y=ym.y; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } ym={y:y,m:m}; sel=null; render(); }); });
@@ -6635,5 +6652,6 @@ window.__congrats=function(o){
       if(ch){ saveLocal(); paintAll(); } },function(){}); });
 })();
 </script>
+<script src="instrument.js"></script>
 </body>
 </html>

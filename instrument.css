@@ -1,0 +1,400 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   INSTRUMENT — tweede design (op vraag van Tom, 4 nov 2026)
+   Settings › Appearance › Design: Classic · Instrument (localStorage p53-design, per toestel).
+   Alles hieronder geldt enkel met data-design="instrument" op <html>. Classic blijft onaangeroerd.
+   Regels: warmgrijze behuizing, inkt, één signaaloranje (--sig) enkel voor 'nu / doe'.
+   --accent = inkt in Instrument: elke nadruk van de basisstijl wordt zwart (contrast), oranje zetten we bewust.
+   Enkel licht (een donkere variant volgt later); het head-script forceert data-theme="light".
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* elementen die enkel in Instrument bestaan */
+html:not([data-design="instrument"]) .ins-only{display:none!important;}
+
+/* ── tokens ── */
+:root[data-design="instrument"]{
+  --ink:#161616; --paper:#E4E1DB; --paper-soft:#D9D5CE; --paper-dark:#C9C5BE; --surface:#F7F6F3;
+  --panel:#EFEDE9; --sunken:#D9D5CE; --sig:#FF5B1A; --dot-off:#C5C0B8; --ring:#A8A39B;
+  --muted:#5E5B56; --muted-soft:#7A766F; --line:#C9C5BE; --line-soft:#DDD9D2;
+  --terra:#161616; --terra-soft:#5E5B56; --rood:#161616; --green:#161616; --gold:#161616; --blue:#161616;
+  --diet-mid:#161616; --diet-low:#161616;
+  --glass-rgb:247,246,243; --knob:#F7F6F3; --tabs-solid:#D9D5CE;
+  --f-sans:'Inter Tight',-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  color-scheme:light;
+}
+:root[data-design="instrument"] body[data-tab],:root[data-design="instrument"] body{--accent:#161616;--accent-soft:#5E5B56;--neg:#161616;}
+
+/* ── typografie: één schreefloze + mono, nergens Fraunces/Work Sans ── */
+:root[data-design="instrument"] body,
+:root[data-design="instrument"] button,
+:root[data-design="instrument"] input,
+:root[data-design="instrument"] select,
+:root[data-design="instrument"] textarea{font-family:var(--f-sans)!important;}
+:root[data-design="instrument"] body{background:var(--paper);color:var(--ink);font-size:15px;letter-spacing:-.005em;-webkit-font-smoothing:antialiased;}
+:root[data-design="instrument"] h1,:root[data-design="instrument"] h2,:root[data-design="instrument"] h3,:root[data-design="instrument"] h4,
+:root[data-design="instrument"] .exr-n,:root[data-design="instrument"] .section-title,:root[data-design="instrument"] .superhead,
+:root[data-design="instrument"] .rule .num,:root[data-design="instrument"] .card .big{font-family:var(--f-sans)!important;font-style:normal;}
+:root[data-design="instrument"] .ins-mono,
+:root[data-design="instrument"] .exr-s,
+:root[data-design="instrument"] .rep-last,
+:root[data-design="instrument"] .pg-title,
+:root[data-design="instrument"] .masthead .stamp,
+:root[data-design="instrument"] .set-lab,
+:root[data-design="instrument"] .wd-band,
+:root[data-design="instrument"] .eyebrow,
+:root[data-design="instrument"] .stats-sub,
+:root[data-design="instrument"] .nut,
+:root[data-design="instrument"] #prRange,
+:root[data-design="instrument"] .cal-wd{font-family:var(--f-mono)!important;}
+:root[data-design="instrument"] .ins-lab{font:500 11px/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+
+/* ── kop ── */
+:root[data-design="instrument"] header.top{background:var(--paper);}
+:root[data-design="instrument"] .masthead{padding:1.1rem 0 .2rem;align-items:center;}
+:root[data-design="instrument"] .masthead h1{font-size:17px!important;font-weight:600;letter-spacing:-.02em;line-height:1;gap:.3em;}
+:root[data-design="instrument"] .masthead h1 em{font-size:1em!important;font-style:normal;font-weight:600;color:var(--muted);letter-spacing:-.02em;}
+:root[data-design="instrument"] .hd-set{width:44px;height:44px;border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);}
+:root[data-design="instrument"] .pg-title{order:3;flex-basis:100%;margin:1.4rem 0 0;font:600 34px/1 var(--f-sans)!important;letter-spacing:-.04em;text-transform:none;color:var(--ink);}
+:root[data-design="instrument"] body[data-view="workout"] .pg-title{display:none;}
+:root[data-design="instrument"] .masthead .stamp{order:4;font-size:11px;letter-spacing:.04em;text-transform:none;margin-top:.5rem;}
+:root[data-design="instrument"] .masthead .stamp.warn::before{background:var(--sig);}
+
+/* ── ronde icoonknoppen: 36→44 px raakvlak, haarlijn ── */
+:root[data-design="instrument"] .sheet-x,:root[data-design="instrument"] .grp-edit,:root[data-design="instrument"] .prog-edit,
+:root[data-design="instrument"] .ip-edit,:root[data-design="instrument"] .pe-del,:root[data-design="instrument"] .gs-set,
+:root[data-design="instrument"] .per-edit,:root[data-design="instrument"] .pr-edit,:root[data-design="instrument"] .pl-chart,
+:root[data-design="instrument"] .cal-nav,:root[data-design="instrument"] .sug-btn{border:0!important;box-shadow:inset 0 0 0 1px var(--line);background:var(--surface);color:var(--ink);}
+:root[data-design="instrument"] .per-edit.on,:root[data-design="instrument"] .pr-edit.on{box-shadow:inset 0 0 0 1.5px var(--ink);}
+:root[data-design="instrument"] .sug-btn{background:var(--sig);box-shadow:none;color:var(--ink);}
+:root[data-design="instrument"] .info-b{color:var(--muted);}
+
+/* ── segmenten: één familie (programma-tabs, Full/Upper/Lower, Statistics-tabs, Settings, Front/Back) ── */
+:root[data-design="instrument"] .wtabs{background:transparent!important;border:0!important;box-shadow:none!important;padding:0;}
+:root[data-design="instrument"] #stabs.wtabs,:root[data-design="instrument"] .st-seg,:root[data-design="instrument"] .bal-seg,
+:root[data-design="instrument"] #wdHalf.wd-half,:root[data-design="instrument"] .wd-pill{background:var(--sunken)!important;border:0!important;border-radius:22px!important;padding:4px!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+:root[data-design="instrument"] .wtabs button,:root[data-design="instrument"] .st-seg button,:root[data-design="instrument"] .bal-seg button,
+:root[data-design="instrument"] #wdHalf button,:root[data-design="instrument"] .wd-pill button{min-height:36px;border-radius:18px!important;background:transparent!important;color:var(--muted)!important;font:500 14px var(--f-sans)!important;letter-spacing:-.005em;box-shadow:none!important;}
+:root[data-design="instrument"] .wtabs button[aria-selected="true"],:root[data-design="instrument"] .st-seg button[aria-pressed="true"],
+:root[data-design="instrument"] .bal-seg button[aria-pressed="true"],:root[data-design="instrument"] #wdHalf button[aria-selected="true"],
+:root[data-design="instrument"] .wd-pill button[aria-selected="true"]{color:var(--ink)!important;font-weight:600!important;}
+:root[data-design="instrument"] .wtabs .pill-ind,:root[data-design="instrument"] .wd-pill>.pill-ind,:root[data-design="instrument"] #wdHalf .pill-ind{background:var(--surface)!important;border-radius:18px!important;box-shadow:0 1px 0 rgba(22,22,22,.14)!important;border:0!important;}
+:root[data-design="instrument"] .st-seg button[aria-pressed="true"],:root[data-design="instrument"] .bal-seg button[aria-pressed="true"]{background:var(--surface)!important;box-shadow:0 1px 0 rgba(22,22,22,.14)!important;}
+:root[data-design="instrument"] #wdHalf button[aria-selected="true"]:not(:has(~ .pill-ind)){background:var(--surface)!important;box-shadow:0 1px 0 rgba(22,22,22,.14)!important;}
+/* programma-tabs: label in mono boven de pil, geen band eronder */
+:root[data-design="instrument"] .wd-tabs{gap:6px!important;align-items:flex-end;}
+:root[data-design="instrument"] .wd-blk{background:transparent!important;border-radius:0!important;}
+:root[data-design="instrument"] .wd-band{order:-1!important;height:auto!important;padding:0 6px 6px!important;text-align:left!important;font-size:10px!important;font-weight:500!important;letter-spacing:.06em!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .wd-blk .wd-pill{margin-bottom:0!important;}
+:root[data-design="instrument"] .wd-tabs>.pill-ind{display:none!important;}
+
+/* ── navbar: effen toets, label met bolletje (geen glas, geen iconen) ── */
+:root[data-design="instrument"] .glass{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:0!important;box-shadow:inset 0 0 0 1px var(--line),0 8px 24px rgba(22,22,22,.08)!important;}
+:root[data-design="instrument"] .gnav-pill{height:72px;border-radius:24px;padding:0 8px;}
+:root[data-design="instrument"] .gnav-pill>.pill-ind{display:none!important;}
+:root[data-design="instrument"] .gnav-i{border-radius:16px;background:transparent!important;color:var(--muted)!important;gap:7px;font:500 13px var(--f-sans)!important;}
+:root[data-design="instrument"] .gnav-i svg{display:none;}
+:root[data-design="instrument"] .gnav-i::before{content:"";width:6px;height:6px;border-radius:50%;background:transparent;}
+:root[data-design="instrument"] .gnav-i span{font:inherit!important;letter-spacing:-.005em;}
+:root[data-design="instrument"] .gnav-i[aria-selected="true"]{color:var(--ink)!important;font-weight:600!important;}
+:root[data-design="instrument"] .gnav-i[aria-selected="true"]::before{background:var(--sig);}
+
+/* ── Start / End workout en de live balk ── */
+:root[data-design="instrument"] .wo-end{background:var(--ink)!important;color:var(--surface)!important;border:0!important;box-shadow:0 6px 18px rgba(22,22,22,.18)!important;border-radius:28px;min-height:52px;padding:0 20px;font:600 15px var(--f-sans)!important;}
+:root[data-design="instrument"] .wo-end{text-transform:none!important;letter-spacing:-.005em!important;}
+:root[data-design="instrument"] .wo-end:not(.is-start){background:var(--surface)!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5px var(--ink),0 6px 18px rgba(22,22,22,.14)!important;}
+:root[data-design="instrument"] .wo-end:not(.is-start) svg{color:var(--ink)!important;}
+:root[data-design="instrument"] .wo-end.is-start{background:var(--sig)!important;color:var(--ink)!important;padding:0 8px 0 22px;flex-direction:row-reverse;gap:14px;min-height:56px;font-size:16px!important;}
+:root[data-design="instrument"] .wo-end.is-start svg{box-sizing:content-box;width:13px;height:13px;padding:13.5px;border-radius:50%;background:var(--ink);color:var(--sig)!important;}
+:root[data-design="instrument"] .wo-end.all-done{background:var(--ink)!important;color:var(--surface)!important;box-shadow:0 6px 18px rgba(22,22,22,.18)!important;}
+:root[data-design="instrument"] .wo-end.all-done svg{color:var(--sig)!important;}
+:root[data-design="instrument"] .wo-end-n,:root[data-design="instrument"] .wo-end-n b{color:inherit!important;opacity:.72;}
+:root[data-design="instrument"] .wo-bar-pill{background:var(--ink)!important;box-shadow:0 8px 24px rgba(22,22,22,.2)!important;border-radius:24px!important;height:72px!important;}
+:root[data-design="instrument"] .wo-bar-t{color:var(--surface)!important;}
+:root[data-design="instrument"] .wo-bar-t i{background:var(--sig)!important;box-shadow:none!important;}
+:root[data-design="instrument"] #woBarT{font:500 19px var(--f-mono)!important;color:var(--surface)!important;letter-spacing:0;}
+:root[data-design="instrument"] .wo-grp button{color:var(--surface)!important;font:500 16px var(--f-mono)!important;}
+:root[data-design="instrument"] .wo-grp button.nx span{color:var(--sig);}
+:root[data-design="instrument"] .wo-grp button.d span,:root[data-design="instrument"] .wo-grp button.opt span{color:#8A867F!important;}
+:root[data-design="instrument"] .wo-grp button b,:root[data-design="instrument"] .wo-grp button b u{color:var(--sig)!important;}
+:root[data-design="instrument"] .wo-grp button b u{background-color:var(--sig);}
+:root[data-design="instrument"] .note-jump.note-float{background:var(--ink)!important;}
+
+/* ── workoutlijst: groepen als genummerde secties, oefeningen als toetsen ── */
+:root[data-design="instrument"] #s-d3 .exl{border-top:0!important;}
+:root[data-design="instrument"] .exgrp{border:0!important;border-top:2px solid var(--ink)!important;margin-top:1.6rem;padding:.55rem 0 .45rem!important;display:flex;align-items:center;gap:12px;
+  font:600 22px/1.1 var(--f-sans)!important;letter-spacing:-.025em!important;text-transform:none!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .exl > .exgrp.list-top,:root[data-design="instrument"] .exl > .exgrp:first-child{margin-top:.4rem;}
+:root[data-design="instrument"] .exgrp .grp-n{font:500 13px var(--f-mono)!important;color:var(--muted)!important;letter-spacing:0;min-width:1.4em;background:none!important;border:0!important;width:auto!important;height:auto!important;}
+:root[data-design="instrument"] .exgrp .grp-n:not(:empty)::before{content:"0";}
+:root[data-design="instrument"] .exgrp .grp-t{font:inherit!important;color:inherit!important;letter-spacing:inherit!important;text-transform:none!important;flex:1;}
+:root[data-design="instrument"] .exsub{font:500 11px var(--f-mono)!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)!important;border:0!important;padding:.9rem 0 .4rem!important;}
+:root[data-design="instrument"] #s-d3 .exr{background:var(--surface);border:0!important;border-radius:12px;margin:0 0 6px!important;padding:12px 12px 12px 10px!important;box-shadow:none;}
+:root[data-design="instrument"] #s-d3 .exr.rep-prev{border-color:transparent!important;}
+:root[data-design="instrument"] .exr-n{font-size:16px!important;font-weight:600!important;letter-spacing:-.015em;line-height:1.2!important;color:var(--ink);}
+:root[data-design="instrument"] .exr-s,:root[data-design="instrument"] .exr-s > *{font-size:12px;font-weight:500!important;letter-spacing:.01em!important;color:var(--muted);}
+:root[data-design="instrument"] #s-d3 .exr-s:has(.rep-dots){font-size:0!important;}
+:root[data-design="instrument"] .exr-s .rep-txt,:root[data-design="instrument"] .exr-s .exr-cnt{font:500 12px var(--f-mono)!important;}
+:root[data-design="instrument"] .rep-dots i{width:8px!important;height:8px!important;border:0!important;box-shadow:inset 0 0 0 1.2px var(--ring);background:transparent;}
+:root[data-design="instrument"] .rep-dots i.on{background:var(--ink)!important;box-shadow:none;}
+/* vinkje: open ring in inkt, gedaan = vol inkt */
+:root[data-design="instrument"] .chk{width:40px!important;height:40px!important;border:0!important;background:transparent!important;box-shadow:inset 0 0 0 1.5px var(--ink);color:transparent!important;}
+:root[data-design="instrument"] .chk[aria-pressed="true"]{background:var(--ink)!important;box-shadow:none;color:var(--surface)!important;}
+/* invulvelden als cel */
+:root[data-design="instrument"] .note.exr-in,:root[data-design="instrument"] .note.rep-in{background:var(--panel)!important;border:0!important;box-shadow:inset 0 0 0 1px var(--line)!important;border-radius:10px!important;color:var(--ink);font:600 16px var(--f-sans)!important;font-variant-numeric:tabular-nums;}
+:root[data-design="instrument"] .note.exr-in:focus,:root[data-design="instrument"] .note.rep-in:focus{box-shadow:inset 0 0 0 1.5px var(--ink)!important;outline:none!important;}
+:root[data-design="instrument"] .exr-u small,:root[data-design="instrument"] .rep-u small{font:500 11px var(--f-mono)!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .exr-in.need,:root[data-design="instrument"] .rep-in.need{box-shadow:inset 0 0 0 2px var(--sig)!important;}
+/* open rij = bedieningspaneel */
+:root[data-design="instrument"] #s-d3 .exr.rep-on.rep-open{background:var(--surface)!important;margin:0 0 6px!important;padding:14px 12px 14px 10px!important;border-radius:16px!important;box-shadow:inset 0 0 0 1.5px var(--ink)!important;}
+:root[data-design="instrument"] #s-d3 .exr.rep-on.rep-open .note.rep-in,:root[data-design="instrument"] #s-d3 .exr.rep-on.rep-open .note.exr-in{background:var(--panel)!important;}
+:root[data-design="instrument"] #s-d3 .exr > .rep-wrap{gap:.7rem!important;}
+:root[data-design="instrument"] .rep-last{font-size:12px!important;color:var(--muted)!important;letter-spacing:.01em;}
+:root[data-design="instrument"] .rep-sets{gap:8px!important;}
+:root[data-design="instrument"] .note.rep-in{min-height:64px!important;font-size:26px!important;letter-spacing:-.03em!important;border-radius:12px!important;}
+:root[data-design="instrument"] .rep-u span{font:600 26px var(--f-sans)!important;letter-spacing:-.03em;}
+/* set met reps van vandaag = zwarte cel; overgenomen = grijs; leeg = haarlijn */
+:root[data-design="instrument"] .rep-cell:not(.carry):has(.rep-in:not(:placeholder-shown)) .rep-in{background:var(--ink)!important;box-shadow:none!important;}
+:root[data-design="instrument"] .rep-cell:not(.carry):has(.rep-in:not(:placeholder-shown)) .rep-u span{color:var(--surface)!important;}
+:root[data-design="instrument"] .rep-cell:not(.carry):has(.rep-in:not(:placeholder-shown)) .rep-u small{color:#A8A39B!important;}
+:root[data-design="instrument"] .rep-cell:not(.carry):has(.rep-in:focus) .rep-in{background:var(--panel)!important;box-shadow:inset 0 0 0 1.5px var(--ink)!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;}
+:root[data-design="instrument"] #s-d3 .note.rep-in.rep-carry,:root[data-design="instrument"] .rep-cell.carry .rep-u span{color:#9E9991!important;}
+/* verhoog-signaal: oranje = doe iets */
+:root[data-design="instrument"] #s-d3 .exr > .rep-sig{background:var(--sig)!important;color:var(--ink)!important;box-shadow:0 0 0 2px var(--surface)!important;}
+:root[data-design="instrument"] #s-d3 .exr > .rep-sig.dn,:root[data-design="instrument"] #s-d3 .exr > .rep-sig[class*="down"]{background:var(--ink)!important;color:var(--surface)!important;}
+/* gewicht-stepper (enkel Instrument, ingevoegd door instrument.js) */
+.ins-step{display:flex;align-items:center;justify-content:space-between;height:64px;border-radius:14px;background:var(--panel);padding:0 6px;}
+.ins-step button{appearance:none;-webkit-appearance:none;border:0;width:52px;height:52px;border-radius:50%;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.ins-step button:active{transform:scale(.95);background:var(--sunken);}
+.ins-step output{display:flex;align-items:baseline;gap:6px;font:600 38px/1 var(--f-sans);letter-spacing:-.045em;color:var(--ink);font-variant-numeric:tabular-nums;}
+.ins-step output small{font:500 12px var(--f-mono);letter-spacing:.02em;color:var(--muted);}
+/* lege groep, plusknop */
+:root[data-design="instrument"] .gx-plus{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);}
+:root[data-design="instrument"] .gx-empty{border-color:var(--ring)!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .cx-add{border:0!important;box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent;color:var(--ink)!important;border-radius:24px!important;min-height:48px;font:600 15px var(--f-sans)!important;}
+:root[data-design="instrument"] .note.sess-note{background:var(--surface)!important;border:0!important;box-shadow:inset 0 0 0 1px var(--line)!important;border-radius:12px!important;}
+:root[data-design="instrument"] .sess-note-l{font:500 11px var(--f-mono)!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)!important;}
+
+/* ── Today-kop (Workout, ingevoegd door instrument.js) ── */
+.ins-today{margin:.6rem 0 1.6rem;}
+.ins-today-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
+.ins-today-n{font:600 148px/.78 var(--f-sans);letter-spacing:-.06em;margin-left:-6px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.ins-today-d{display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding-bottom:2px;font:600 22px/1.1 var(--f-sans);letter-spacing:-.02em;}
+.ins-today-d span + span{font-weight:500;color:var(--muted);}
+.ins-today .ins-lab{margin-top:14px;}
+.ins-cal{margin-top:20px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px 6px;justify-items:center;}
+.ins-cal b{font:500 10px var(--f-mono);letter-spacing:.06em;color:var(--muted);}
+.ins-cal b.t{color:var(--ink);}
+.ins-cal i{display:block;width:100%;max-width:42px;aspect-ratio:1;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ring);}
+.ins-cal i.x{box-shadow:none;}
+.ins-cal i.on{background:var(--ink);box-shadow:none;}
+.ins-cal i.off{background:var(--dot-off);box-shadow:none;}
+.ins-cal i.today{background:var(--sig);box-shadow:none;}
+.ins-cal i.today.on{box-shadow:inset 0 0 0 4px var(--sig),inset 0 0 0 30px var(--ink);}
+
+/* ── bladen, vensters ── */
+:root[data-design="instrument"] .sheet{background:var(--panel)!important;border-radius:24px 24px 0 0!important;box-shadow:0 -1px 0 var(--line)!important;}
+:root[data-design="instrument"] .sheet-head h3{font:600 28px/1.05 var(--f-sans)!important;letter-spacing:-.035em;}
+:root[data-design="instrument"] #grp-sheet .sheet-head,:root[data-design="instrument"] #st-sheet .sheet-head{background:var(--panel)!important;}
+:root[data-design="instrument"] .sheet-grip{background:var(--line)!important;}
+:root[data-design="instrument"] .sheet-bg,:root[data-design="instrument"] [id$="-bg"].on{background:rgba(22,22,22,.38)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+:root[data-design="instrument"] .cf-bg{background:rgba(22,22,22,.38)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+:root[data-design="instrument"] .cf-card{background:var(--panel)!important;border-radius:20px!important;border:0!important;box-shadow:0 12px 40px rgba(22,22,22,.2)!important;}
+:root[data-design="instrument"] .cf-card h4{font:600 22px var(--f-sans)!important;letter-spacing:-.025em;}
+:root[data-design="instrument"] .cf-btns button{border-radius:24px!important;min-height:48px;font:600 15px var(--f-sans)!important;border:0!important;}
+:root[data-design="instrument"] .cf-no{background:var(--sunken)!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .cf-yes{background:var(--ink)!important;color:var(--surface)!important;}
+
+/* ── Settings ── */
+:root[data-design="instrument"] .set-lab{font-size:11px!important;font-weight:500!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)!important;}
+:root[data-design="instrument"] .st-note{color:var(--muted);font-size:13px;}
+:root[data-design="instrument"] .st-progs{background:var(--surface)!important;border:0!important;border-radius:16px!important;}
+:root[data-design="instrument"] .st-progs li + li{border-top:1px solid var(--line-soft)!important;}
+:root[data-design="instrument"] .st-progs button{min-height:52px;font:500 15px var(--f-sans)!important;}
+:root[data-design="instrument"] .st-progs button small{font:500 10px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+/* vinkrondje → schakelaar */
+:root[data-design="instrument"] .st-progs .sp-ck{position:relative;width:52px!important;height:30px!important;flex:none;border-radius:15px!important;border:0!important;background:var(--sunken)!important;color:transparent!important;}
+:root[data-design="instrument"] .st-progs .sp-ck svg{display:none;}
+:root[data-design="instrument"] .st-progs .sp-ck::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--surface);box-shadow:0 1px 0 rgba(22,22,22,.18);transition:left .18s ease,background .18s ease;}
+:root[data-design="instrument"] .st-progs button[aria-checked="true"] .sp-ck{background:var(--ink)!important;}
+:root[data-design="instrument"] .st-progs button[aria-checked="true"] .sp-ck::after{left:25px;background:var(--sig);box-shadow:none;}
+:root[data-design="instrument"] .so-opt{font:500 10px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;border:0!important;box-shadow:inset 0 0 0 1px var(--ring);background:transparent!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .so-opt[aria-checked="true"]{background:var(--ink)!important;color:var(--surface)!important;box-shadow:none;}
+:root[data-design="instrument"] .app-tools button{border:0!important;border-radius:24px!important;min-height:48px;font:600 15px var(--f-sans)!important;box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .app-tools button:first-child{background:var(--ink)!important;color:var(--surface)!important;box-shadow:none;}
+:root[data-design="instrument"] #resetData{background:var(--sunken)!important;box-shadow:none;}
+:root[data-design="instrument"] .st-seg button[aria-disabled="true"]{opacity:.35;}
+:root[data-design="instrument"] .pf-f input,:root[data-design="instrument"] .sheet input[type=date]{font:500 15px var(--f-mono)!important;background:var(--surface)!important;border:0!important;box-shadow:inset 0 0 0 1px var(--line)!important;border-radius:10px!important;}
+
+/* ── Statistics ── */
+:root[data-design="instrument"] .stats-per{gap:0!important;}
+:root[data-design="instrument"] .stats-per button:not(.per-edit):not(.pr-edit){border:0!important;border-radius:0!important;background:transparent!important;box-shadow:inset 0 -1px 0 var(--line);color:var(--muted)!important;font:500 12px var(--f-mono)!important;letter-spacing:.02em;min-height:44px;padding:0 .3rem!important;}
+:root[data-design="instrument"] .stats-per button[aria-pressed="true"]:not(.per-edit):not(.pr-edit){box-shadow:inset 0 -2px 0 var(--ink);color:var(--ink)!important;}
+:root[data-design="instrument"] .stats-per .per-edit,:root[data-design="instrument"] .stats-per .pr-edit{margin-left:8px;}
+:root[data-design="instrument"] .stats-sub{font-size:12px!important;letter-spacing:.01em;color:var(--muted)!important;}
+/* spierlijst (Figure-weergave) */
+:root[data-design="instrument"] .stats-list .sl-b{background:var(--sunken)!important;}
+:root[data-design="instrument"] .stats-list .sl-b i{background:var(--ink)!important;}
+:root[data-design="instrument"] .stats-list .sl-v{font-family:var(--f-mono);font-size:12px;}
+/* spiermatrix (instrument.js) */
+.ins-bal-head{display:flex;align-items:flex-end;justify-content:space-between;margin:1.4rem 0 .2rem;}
+.ins-bal-n{font:600 112px/.8 var(--f-sans);letter-spacing:-.06em;margin-left:-5px;font-variant-numeric:tabular-nums;}
+.ins-bal-u{display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding-bottom:2px;font:600 17px/1.15 var(--f-sans);letter-spacing:-.015em;}
+.ins-bal-u span + span{font-weight:500;font-size:15px;color:var(--muted);}
+.ins-bal-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 10px;}
+.ins-key{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.ins-key span{display:flex;gap:6px;align-items:center;font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.ins-key i{width:9px;height:9px;border-radius:50%;background:var(--ink);}
+.ins-key i.r{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink);}
+.ins-vseg{display:flex;background:var(--sunken);border-radius:16px;padding:3px;flex:none;}
+.ins-vseg button{appearance:none;border:0;background:transparent;border-radius:13px;min-height:32px;padding:0 12px;font:500 12px var(--f-sans);color:var(--muted);cursor:pointer;}
+.ins-vseg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 0 rgba(22,22,22,.14);}
+.ins-mx{list-style:none;margin:0;padding:6px 14px;background:var(--surface);border-radius:16px;}
+.ins-mx li{display:grid;grid-template-columns:minmax(0,118px) 1fr 44px;align-items:center;column-gap:8px;min-height:36px;}
+.ins-mx li + li{border-top:1px solid var(--paper);}
+.ins-mx .n{display:flex;align-items:center;gap:7px;font:500 14px var(--f-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ins-mx .n::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:transparent;}
+.ins-mx li.low .n{font-weight:600;}
+.ins-mx li.low .n::before{background:var(--sig);}
+.ins-mx .d{display:flex;gap:4px;min-width:0;overflow:hidden;}
+.ins-mx .d i{flex:none;width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line-soft);}
+.ins-mx .d i.on{background:var(--ink);box-shadow:none;}
+.ins-mx .d i.h{background:linear-gradient(90deg,var(--ink) 50%,transparent 50%);box-shadow:inset 0 0 0 1.5px var(--ink);}
+.ins-mx .d i.t{box-shadow:inset 0 0 0 1.5px var(--ink);}
+.ins-mx .v{font:500 12px var(--f-mono);text-align:right;font-variant-numeric:tabular-nums;}
+.ins-mx li.zero .n,.ins-mx li.zero .v{color:var(--muted);}
+.ins-sug{appearance:none;border:0;width:100%;text-align:left;margin-top:12px;background:var(--sig);color:var(--ink);border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;font:600 20px var(--f-sans);letter-spacing:-.025em;-webkit-tap-highlight-color:transparent;}
+.ins-sug small{display:block;margin-top:4px;font:500 13px/1.35 var(--f-sans);letter-spacing:0;}
+.ins-sug b{font:500 11px var(--f-mono);letter-spacing:.06em;flex:none;}
+.ins-sug:active{transform:scale(.98);}
+.ins-sug.ok{background:var(--surface);}
+html[data-design="instrument"] body:not(.ins-fig) #statsFig,
+html[data-design="instrument"] body:not(.ins-fig) #statsList,
+html[data-design="instrument"] body:not(.ins-fig) .stats-subrow .sug-btn{display:none!important;}
+html[data-design="instrument"] body.ins-fig .ins-mx,html[data-design="instrument"] body.ins-fig .ins-sug{display:none!important;}
+/* Suggestions-blad */
+:root[data-design="instrument"] .sug-bar{background:var(--sunken)!important;}
+:root[data-design="instrument"] .sug-bar i{background:var(--ink)!important;}
+:root[data-design="instrument"] .sug-h{font:500 11px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)!important;}
+/* figuren (Balance/Strength): spiervlakken in inkt i.p.v. accent */
+:root[data-design="instrument"] .bal-pct{font-family:var(--f-sans)!important;font-weight:600;letter-spacing:-.03em;}
+:root[data-design="instrument"] .bal-pct.has{fill:var(--ink)!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .bal-lab{font-family:var(--f-mono)!important;}
+:root[data-design="instrument"] .bal-ln{stroke:var(--ink)!important;}
+/* Strength-lijst */
+:root[data-design="instrument"] .pl-h{border-top:2px solid var(--ink)!important;border-bottom:0!important;padding-top:.55rem!important;font:600 22px var(--f-sans)!important;letter-spacing:-.025em;color:var(--ink)!important;}
+:root[data-design="instrument"] .pl-h *{font-family:var(--f-sans)!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .pl-sh{font:500 11px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)!important;}
+:root[data-design="instrument"] .pl-list li{border-color:var(--line)!important;}
+:root[data-design="instrument"] #prRange{font-size:12px!important;letter-spacing:.01em;}
+:root[data-design="instrument"] .pr-tot{font:600 64px/.9 var(--f-sans)!important;letter-spacing:-.055em!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .pl-empty{background:var(--surface)!important;border:0!important;border-radius:16px!important;}
+/* History */
+:root[data-design="instrument"] .mon-c i,:root[data-design="instrument"] .mon-c i b{background-color:var(--ink)!important;background-image:none!important;border-radius:5px 5px 0 0!important;}
+:root[data-design="instrument"] .mon-c.run i{background-image:repeating-linear-gradient(135deg,var(--ink) 0 2px,transparent 2px 5px)!important;background-color:transparent!important;box-shadow:inset 0 0 0 1.5px var(--ink);}
+:root[data-design="instrument"] .mon-c.sel i{background-color:var(--sig)!important;background-image:none!important;box-shadow:none;}
+:root[data-design="instrument"] .mon-c.sel *{color:var(--ink)!important;}
+:root[data-design="instrument"] #monRange{font:600 22px var(--f-sans)!important;letter-spacing:-.025em;}
+:root[data-design="instrument"] .mon-mo button,:root[data-design="instrument"] .mon-ax,:root[data-design="instrument"] .mon-c em,:root[data-design="instrument"] .mon-c span{font-family:var(--f-mono)!important;}
+:root[data-design="instrument"] .mon-h,:root[data-design="instrument"] .mon-l{font:500 11px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)!important;}
+:root[data-design="instrument"] .mon-big,:root[data-design="instrument"] .mon-v b{font-family:var(--f-sans)!important;font-weight:600;letter-spacing:-.035em;}
+:root[data-design="instrument"] .cal-head{border-top:2px solid var(--ink);padding-top:.55rem;}
+:root[data-design="instrument"] #calMonth{font:600 22px var(--f-sans)!important;letter-spacing:-.025em;}
+:root[data-design="instrument"] #calSum{font:500 11px var(--f-mono)!important;letter-spacing:.04em;color:var(--muted);}
+:root[data-design="instrument"] .cal-grid{gap:8px 4px!important;}
+:root[data-design="instrument"] .cal-wd{font-size:10px!important;letter-spacing:.06em;color:var(--muted)!important;}
+:root[data-design="instrument"] .cal-d{width:44px;height:44px;justify-self:center;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line);font:500 12px var(--f-mono)!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .cal-d.out{box-shadow:none;}
+:root[data-design="instrument"] .cal-d i{display:none!important;}
+:root[data-design="instrument"] .cal-d.on{background:var(--ink)!important;box-shadow:none;color:var(--surface)!important;}
+:root[data-design="instrument"] .cal-d.today{background:var(--sig)!important;box-shadow:none;color:var(--ink)!important;}
+:root[data-design="instrument"] .cal-d.fut{box-shadow:inset 0 0 0 1px var(--line-soft);color:var(--muted-soft)!important;}
+:root[data-design="instrument"] .cal-d[aria-pressed="true"],:root[data-design="instrument"] .cal-d.sel{box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--ink)!important;}
+:root[data-design="instrument"] .cal-day{background:var(--surface);border-radius:16px;padding:14px 16px!important;margin-top:16px;}
+
+/* ── Diet & Guide ── */
+:root[data-design="instrument"] .superhead{font:500 11px var(--f-mono)!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)!important;border:0!important;}
+:root[data-design="instrument"] .section-title{font:600 22px/1.15 var(--f-sans)!important;letter-spacing:-.025em!important;text-transform:none!important;color:var(--ink)!important;border:0!important;border-top:2px solid var(--ink)!important;padding-top:.55rem!important;}
+:root[data-design="instrument"] .section-title.sub{font-size:20px!important;}
+:root[data-design="instrument"] .section-note{color:var(--muted);}
+:root[data-design="instrument"] .rules{border:0!important;background:transparent!important;}
+:root[data-design="instrument"] .rule{display:grid!important;grid-template-columns:64px 1fr;align-items:center;min-height:60px;border:0!important;border-top:1px solid var(--line)!important;background:transparent!important;padding:6px 0!important;}
+:root[data-design="instrument"] .rule .num{font:600 40px/1 var(--f-sans)!important;letter-spacing:-.05em!important;color:var(--ink)!important;background:none!important;border:0!important;width:auto!important;height:auto!important;}
+:root[data-design="instrument"] .rule .num::before{content:"0";}
+:root[data-design="instrument"] .rule .txt{font:600 18px/1.2 var(--f-sans)!important;letter-spacing:-.02em;color:var(--ink)!important;}
+:root[data-design="instrument"] .cards{gap:8px!important;}
+:root[data-design="instrument"] .card{background:var(--surface)!important;border:0!important;border-radius:14px!important;box-shadow:none!important;}
+:root[data-design="instrument"] .card .big{font:600 34px/1 var(--f-sans)!important;letter-spacing:-.05em!important;color:var(--ink)!important;}
+:root[data-design="instrument"] .card .lbl{font:500 10px var(--f-mono)!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)!important;}
+:root[data-design="instrument"] #p-voeding .card.c-1{background:var(--ink)!important;}
+:root[data-design="instrument"] #p-voeding .card.c-1 .big,:root[data-design="instrument"] #p-voeding .card.c-1 .dsc,:root[data-design="instrument"] #p-voeding .card.c-1 .per{color:var(--surface)!important;}
+:root[data-design="instrument"] #p-voeding .card.c-1 .lbl{color:#A8A39B!important;}
+:root[data-design="instrument"] table.stack,:root[data-design="instrument"] table.stack tbody,:root[data-design="instrument"] .scroll{background:transparent!important;border:0!important;}
+:root[data-design="instrument"] table.stack tbody tr{background:var(--surface)!important;border:0!important;border-radius:14px;box-shadow:none!important;}
+:root[data-design="instrument"] table.stack tr[class*="row-"]{border-left:0!important;}
+:root[data-design="instrument"] table.stack tr[class*="row-"]::before,:root[data-design="instrument"] table.stack tr[class*="row-"] td:first-child::before{display:none!important;}
+:root[data-design="instrument"] table.stack td{border-color:var(--paper)!important;}
+:root[data-design="instrument"] table.stack td:first-child{font-weight:600;}
+:root[data-design="instrument"] table.stack thead th{font:500 10px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)!important;background:transparent!important;border-color:var(--line)!important;}
+:root[data-design="instrument"] #p-voeding .nut{background:transparent!important;padding:0!important;font-size:11px!important;font-weight:500!important;color:var(--muted)!important;letter-spacing:0;}
+/* frequentie = bolletjesschaal: ●●● Often · ●●○ Moderate · ●○○ Occasionally (geen kleur meer) */
+:root[data-design="instrument"] .badge{background:transparent!important;color:var(--muted)!important;border:0!important;padding:0!important;display:inline-flex!important;align-items:center;gap:7px;font:500 11px var(--f-mono)!important;letter-spacing:.02em!important;text-transform:none!important;white-space:normal;}
+:root[data-design="instrument"] .badge::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;margin-right:22px;background:var(--ink);box-shadow:11px 0 0 0 var(--ink),22px 0 0 0 var(--ink);}
+:root[data-design="instrument"] .badge.b-amber::before{box-shadow:11px 0 0 0 var(--ink),22px 0 0 -0px transparent,22px 0 0 0 transparent;}
+:root[data-design="instrument"] .badge.b-amber::after,:root[data-design="instrument"] .badge.b-rood::after{content:"";order:-1;}
+:root[data-design="instrument"] .badge.b-amber::before{box-shadow:11px 0 0 0 var(--ink),22px 0 0 0 var(--surface),22px 0 0 1.2px var(--ring);}
+:root[data-design="instrument"] .badge.b-rood::before{box-shadow:11px 0 0 0 var(--surface),11px 0 0 1.2px var(--ring),22px 0 0 0 var(--surface),22px 0 0 1.2px var(--ring);}
+/* Guide */
+:root[data-design="instrument"] .tip{background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;}
+:root[data-design="instrument"] .tip ul{list-style:none;padding:0!important;margin:0!important;counter-reset:ins;}
+:root[data-design="instrument"] .tip li{position:relative;padding:12px 0 12px 36px!important;border-top:1px solid var(--line);counter-increment:ins;line-height:1.45;}
+:root[data-design="instrument"] .tip li::before{content:counter(ins)!important;position:absolute!important;left:0;top:13px!important;width:auto!important;height:auto!important;background:none!important;border-radius:0!important;font:500 12px var(--f-mono)!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .tip li strong,:root[data-design="instrument"] .tip b{font-weight:600;color:var(--ink);}
+:root[data-design="instrument"] .tip .h,:root[data-design="instrument"] .tip b.h{font:500 11px var(--f-mono)!important;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)!important;}
+:root[data-design="instrument"] .pg-edit,:root[data-design="instrument"] .ed-add{border-radius:24px!important;}
+
+/* ── eindscherm (vervangt het vuurwerk in Instrument) ── */
+.ins-done{position:fixed;inset:0;z-index:200;background:var(--sig);color:var(--ink);display:flex;justify-content:center;opacity:0;transition:opacity .25s ease;}
+.ins-done.on{opacity:1;}
+.ins-done-in{width:100%;max-width:var(--app-w,430px);box-sizing:border-box;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 40px) 20px calc(env(safe-area-inset-bottom) + 20px);}
+.ins-done-k{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;}
+.ins-done-dots{margin-top:28px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:340px;}
+.ins-done-dots i{aspect-ratio:1;border-radius:50%;background:rgba(22,22,22,.14);transform:scale(.4);opacity:0;transition:transform .35s cubic-bezier(.2,.9,.3,1.3),opacity .2s ease,background .2s ease;}
+.ins-done.on .ins-done-dots i{transform:scale(1);opacity:1;}
+.ins-done-dots i.on{background:var(--ink);}
+.ins-done h2{margin:auto 0 0;font:600 62px/.9 var(--f-sans);letter-spacing:-.05em;}
+.ins-done p{margin:8px 0 0;font:500 21px/1.25 var(--f-sans);letter-spacing:-.02em;}
+.ins-done-grid{margin-top:26px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1.5px solid var(--ink);}
+.ins-done-grid div{padding:12px 0;display:flex;flex-direction:column;gap:4px;}
+.ins-done-grid span{font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;}
+.ins-done-grid b{font:600 24px var(--f-sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.ins-done button{appearance:none;border:0;margin-top:20px;min-height:60px;border-radius:30px;background:var(--ink);color:var(--surface);font:600 17px var(--f-sans);cursor:pointer;}
+@media (prefers-reduced-motion:reduce){ .ins-done,.ins-done-dots i{transition:none;} }
+
+/* ── inlogscherm ── */
+:root[data-design="instrument"] #p53-login{background:var(--paper)!important;}
+:root[data-design="instrument"] #p53-login .lg-card{background:var(--panel)!important;border:0!important;border-radius:24px!important;box-shadow:none!important;}
+:root[data-design="instrument"] #p53-login h1{font:600 56px/.9 var(--f-sans)!important;letter-spacing:-.05em;}
+:root[data-design="instrument"] #p53-login input{background:var(--surface)!important;border:0!important;box-shadow:inset 0 0 0 1px var(--line)!important;border-radius:10px!important;}
+:root[data-design="instrument"] #p53-login .lg-main{background:var(--sig)!important;color:var(--ink)!important;border:0!important;border-radius:28px!important;min-height:56px;font:600 16px var(--f-sans)!important;}
+
+/* ── algemene focusring ── */
+:root[data-design="instrument"] :focus-visible{outline-color:var(--ink)!important;}
+
+/* ── vangnet typografie: nergens nog Fraunces/Work Sans of cursief; labels in mono ── */
+:root[data-design="instrument"] *{font-family:var(--f-sans)!important;}
+:root[data-design="instrument"] .ins-lab,:root[data-design="instrument"] .ins-cal b,:root[data-design="instrument"] .ins-key span,:root[data-design="instrument"] .ins-mx .v,
+:root[data-design="instrument"] .ins-done-k,:root[data-design="instrument"] .ins-done-grid span,:root[data-design="instrument"] .ins-step output small,:root[data-design="instrument"] .ins-sug b,
+:root[data-design="instrument"] .exr-u small,:root[data-design="instrument"] .rep-u small,:root[data-design="instrument"] .exr-s *,:root[data-design="instrument"] .rep-last *,
+:root[data-design="instrument"] #woBarT,:root[data-design="instrument"] .wo-grp button,:root[data-design="instrument"] .wo-grp button *,:root[data-design="instrument"] .badge,
+:root[data-design="instrument"] .so-opt,:root[data-design="instrument"] .so-opt *,:root[data-design="instrument"] .so-n,:root[data-design="instrument"] .pr-lab span,:root[data-design="instrument"] .pr-lab small,
+:root[data-design="instrument"] .stats-per button:not(.per-edit):not(.pr-edit),:root[data-design="instrument"] .cal-d,:root[data-design="instrument"] .cal-d *,
+:root[data-design="instrument"] .mon-mo button,:root[data-design="instrument"] .sug-h,:root[data-design="instrument"] .cx-h,:root[data-design="instrument"] .exsub,
+:root[data-design="instrument"] .exgrp .grp-n,:root[data-design="instrument"] .st-progs button small,:root[data-design="instrument"] thead th,:root[data-design="instrument"] .card .lbl,
+:root[data-design="instrument"] .tip li::before,:root[data-design="instrument"] .pl-sh,:root[data-design="instrument"] .sess-note-l,:root[data-design="instrument"] .mon-h,:root[data-design="instrument"] .mon-l{font-family:var(--f-mono)!important;}
+:root[data-design="instrument"] .so-n,:root[data-design="instrument"] .masthead h1 em,:root[data-design="instrument"] .cg h2 em{font-style:normal!important;}
+:root[data-design="instrument"] .so-n{color:var(--muted)!important;font-size:12px!important;font-weight:500!important;}
+:root[data-design="instrument"] .rule .txt,:root[data-design="instrument"] .pl-v,:root[data-design="instrument"] .pl-v *,:root[data-design="instrument"] .pl-h b{text-transform:none!important;}
+:root[data-design="instrument"] .pr-lab span,:root[data-design="instrument"] .pr-lab small{font-size:11px!important;letter-spacing:.06em!important;color:var(--muted)!important;}
+:root[data-design="instrument"] .ins-step output{font-family:var(--f-sans)!important;}
+.ins-sug[hidden],.ins-today[hidden]{display:none!important;}
+:root[data-design="instrument"] .wrap,:root[data-design="instrument"] main.wrap{padding-left:calc(16px + env(safe-area-inset-left))!important;padding-right:calc(16px + env(safe-area-inset-right))!important;}
