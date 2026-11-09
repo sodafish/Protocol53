@@ -801,3 +801,8 @@ De spierlijst (`#statsList`, balkjes) blijft de sets per spier; kleur in de lijs
 - End workout = zelfde vorm als Start (op vraag van Tom, 4 nov; Classic én Instrument): 56 px, rond vlak 40 px rechts met het stop-vierkant (bij alles af het vinkje). Classic donker: pil `--ink`, rondje `--paper` met icoon `--ink`; Classic licht: lichte pil met inktrand, rondje `--ink` met icoon `--surface`. Instrument: rondje inkt (bij alles af: zwarte pil, rondje surface).
 - VERHOOG-SIGNAAL ZWART (op vraag van Tom, 4 nov): `.rep-sig` omhoog = `--ink` (zwart in licht, wit/crème in donker) met pijl `--paper`; omlaag blijft `--neg` (rood). Instrument: omhoog inkt, omlaag `#C8321E` (want `--neg` is daar inkt). Vervangt 'omhoog = --accent' in VERHOOG-/VERLAAG-SIGNAAL.
 - Balance-spiermatrix (zie INSTRUMENT punt 3) geldt nu OOK in Classic: de elementen zijn geen `.ins-only` meer, de CSS heeft Classic-terugvallen (`var(--sig,var(--accent))`, `--sig-on` = `--paper` in Classic / inkt in Instrument, Work Sans; groot getal Fraunces). Matrix · Figure blijft (`p53-ins-fig`). Strength blijft zoals het was.
+
+## REP-BEREIKEN 10–15 (op vraag van Tom, 9 nov)
+- Alle kg-krachtoefeningen in g1–g7 staan op 10–15 (supersets '2 rounds × 10–15'), behalve squats en deadlift-varianten (naam bevat 'Squat' of 'Deadlift') en Weighted Pull-Ups: 8–12.
+  Vervangt de kg-verdeling 6–10 / 8–12 / 10–15 uit 'REP-BEREIKEN + REPS PER SET' (1 nov). Lichaamsgewicht (reps), warm-up, eGym, cardio en tijd/afstand ongewijzigd.
+  Reden: Tom traint liever lichter met meer reps; hypertrofie is gelijk zolang sets dicht bij falen eindigen. Guide › Intensity en › Rest aangepast. Nieuwe kg-oefening: 10–15 (squat/deadlift: 8–12).
