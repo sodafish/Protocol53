@@ -3190,7 +3190,7 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     if(fl){ fl.hidden=false; fl.classList.toggle('is-start',!on); fl.setAttribute('aria-label',on?'End workout':'Start workout');
       var lb=fl.querySelector('.wo-end-l'); if(lb){ lb.textContent=on?'End workout':'Start workout'; /* weer voluit: de notitieknop ernaast is weg (op vraag van Tom, 24 okt) */
         /* 'End workout (12 sets)': sets van de afgevinkte oefeningen in deze workout, zoals Statistics telt (geen warm-up/cardio, Core-les wel; op vraag van Tom, 24 okt) */
-        if(on){ var ns=0; document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){ var k=chkKey(li); if(!k||!checks[k]||(/^(w0|c)-/.test(k)&&k!=='c-core')) return; ns+=(window.__setsFor?+window.__setsFor(k,li):0)||0; });
+        if(on){ var ns=0; document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){ var k=chkKey(li); if(!k||!checks[k]||(/^(w0|c)-/.test(k)&&k!=='c-core')) return; ns+=(window.__setsDone?+window.__setsDone(k,li,[].map.call(li.querySelectorAll('.exr-in[data-note]'),function(x){ return window.__repsFor?window.__repsFor(x.dataset.note):null; })):window.__setsFor?+window.__setsFor(k,li):0)||0; }); /* sets met 0 reps tellen niet (10 nov) */
           /* + cardiominuten (op vraag van Tom, 24 okt): Cardio/Finisher-rijen (c-…, zonder core/yoga/pilates/mobility) en de cardio van de warm-up (data-sub Cardio), waarde uit het min-veld */
           var cm=0; document.querySelectorAll('#s-d3 .exl > li.exr').forEach(function(li){ var k=chkKey(li); if(!k||!checks[k]) return;
             var cardio=(/^c-/.test(k)&&!/^c-(core|yoga|pilates|mobility)$/.test(k))||(/^w0-/.test(k)&&li.dataset.sub==='Cardio'); if(!cardio) return;
@@ -3539,6 +3539,14 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     li=li||liFor(k); var t=li&&li.querySelector('.exr-s'); t=t?((t.firstChild&&t.firstChild.nodeType===3)?t.firstChild.textContent:t.textContent):''; /* enkel de eerste tekst: de teller '· 1×' erachter telde anders als '1 set' (14 okt, bij Core Session) */
     var m=t.match(/(\d+)\s*(?:×|x|rondes|rounds?|sets?\b)/i); return m?Math.min(6,parseInt(m[1],10)):3;
   }
+  /* GEDANE SETS (op vraag van Tom, 10 nov): heeft een meting reps per set (r), dan tellen enkel de sets met reps > 0
+     (0 of leeg = overgeslagen set). Zonder reps: het geplande aantal (setsFor). rs = lijst r-arrays (supersets: per veld), het hoogste telt. */
+  function setsDone(k,li,rs){ var best=null;
+    (rs||[]).forEach(function(r){ if(!Array.isArray(r)||!r.some(function(v){ return v!=null&&v!==''; })) return;
+      var c=r.filter(function(v){ return +v>0; }).length; if(best==null||c>best) best=c; });
+    return best==null?setsFor(k,li):Math.min(6,best);
+  }
+  window.__setsDone=function(k,li,rs){ return setsDone(k,li,rs); };
   var HISTKEY='fitlog-hist', histCol=null, histReady=false;
   var hist={}; try{ hist=JSON.parse(localStorage.getItem(HISTKEY)||'{}'); }catch(e){}
   function saveHistLocal(){ try{ localStorage.setItem(HISTKEY,JSON.stringify(hist)); }catch(e){} }
@@ -3577,10 +3585,11 @@ window.p53Swipe=function(box,onDel,onEdit){ var W=98, st=null, openRow=null; /* 
     Object.keys(P).forEach(function(id){ var p=P[id]; if(!p||typeof p.v!=='number') return;
       var li=liByNote(p.k), k=li?chkKey(li):p.k;
       if(!k||(/^(w0|c)-/.test(k)&&k!=='c-core')) return; /* warm-up en cardio tellen niet voor de spieren; Core Session wel (14 okt) */
-      var key=k+'|'+(p.d||new Date(p.t).toDateString())+'|'+(p.w||''); if(seen[key]) return; seen[key]=1; /* één training per oefening per workout */
-      out.push({k:k,t:p.t,s:setsFor(k,li),m:musclesFor(k,li)});
+      var key=k+'|'+(p.d||new Date(p.t).toDateString())+'|'+(p.w||''); /* één training per oefening per workout */
+      if(seen[key]){ var e=seen[key]; e.rs.push(p.r); e.s=setsDone(k,li,e.rs); return; } /* superset: hoogste aantal gedane sets */
+      var ev={k:k,t:p.t,s:setsDone(k,li,[p.r]),m:musclesFor(k,li),rs:[p.r]}; seen[key]=ev; out.push(ev);
     });
-    return out;
+    return out.filter(function(e){ delete e.rs; return e.s>0; }); /* alle sets 0 = oefening niet gedaan */
   }
   document.addEventListener('p53-prog',function(){ renderStats(); });
   document.addEventListener('p53-groups',function(){ setTimeout(renderStats,0); }); /* oefening aan/uit: callouts op de Progress-figuur bijwerken */
@@ -5877,11 +5886,15 @@ window.__congrats=function(o){
           if(li.dataset.sub==='Cardio'&&wn&&wn.placeholder==='min'&&p.v>0){ var wo=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0,items:{}}, wx=k+'|'+(p.w||''); if(!wo.ex[wx]){ wo.ex[wx]=1; wo.min+=p.v; } } }
         return; }
       var o=days[p.d]=days[p.d]||{ex:{},sets:0,ws:{},min:0,items:{}}, w=p.w||''; o.ws[w]=o.ws[w]||{}; if(li&&li.dataset.grp) o.ws[w][li.dataset.grp]=1; var ek=k+'|'+w;
-      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||'',m:/^eg-/.test(p.k)?(p.m||'ecc'):null}; (it.ids=it.ids||[]).push(id); } /* oefeningenlijst onder de dag */
-      if(o.ex[ek]) return; o.ex[ek]=1;
+      if(li){ var it=o.items[ek]=o.items[ek]||{li:li,f:{}}, inp=li.querySelector('.exr-in[data-note="'+p.k+'"]'); it.f[p.k]={v:p.v,u:(inp&&inp.placeholder)||'',m:/^eg-/.test(p.k)?(p.m||'ecc'):null,r:p.r}; (it.ids=it.ids||[]).push(id); } /* oefeningenlijst onder de dag */
+      if(o.ex[ek]){ /* superset: tweede veld kan meer gedane sets hebben (10 nov) */
+        if(o.sv&&o.sv[ek]&&window.__setsDone){ var S=o.sv[ek]; S.rs.push(p.r); var nv=+window.__setsDone(k,li,S.rs)||0; if(nv!==S.n){ o.sets+=nv-S.n; if(S.eg) o.egs=(o.egs||0)+nv-S.n; S.n=nv; } }
+        return; }
+      o.ex[ek]=1;
       if(li&&li.dataset.grp==='g11'){ o.gmin=(o.gmin||0)+(+p.v||0); if(/^c-(hiit|spin|box)$/.test(k)) o.min+=(+p.v||0); } /* cardio-lessen tellen ook als cardio (14 okt); Core, Yoga, Pilates, Mobility niet */ /* Group (14 okt): minuten; HIIT telt ook als cardio, Core Session niet */
       else if(/^c-/.test(k)) o.min+=(+p.v||0); /* cardio: minuten i.p.v. sets */
-      else{ var sv=window.__setsFor?(+window.__setsFor(k,li)||0):3; o.sets+=sv; if(li&&li.dataset.grp==='g10') o.egs=(o.egs||0)+sv; } }); /* egs = sets van eGym (maandoverzicht) */
+      else{ var sv=window.__setsDone?(+window.__setsDone(k,li,[p.r])||0):window.__setsFor?(+window.__setsFor(k,li)||0):3, eg=!!(li&&li.dataset.grp==='g10'); o.sets+=sv; if(eg) o.egs=(o.egs||0)+sv; /* sets met 0 reps tellen niet (10 nov) */
+        o.sv=o.sv||{}; o.sv[ek]={n:sv,rs:[p.r],eg:eg}; } }); /* egs = sets van eGym (maandoverzicht) */
     return days;
   }
   /* programma per workout, afgeleid uit de groepen met een meting: enkel cardio = Cardio; enkel g2/g4/g5/g7 = Upper body;
@@ -6014,7 +6027,7 @@ window.__congrats=function(o){
         var ks=[].map.call(it.li.querySelectorAll('.exr-in[data-note]'),function(x){ return x.dataset.note; }).filter(function(q){ return it.f[q]; });
         var EG=nm==='eGym', u=ks.length?it.f[ks[0]].u:'', val=EG?'':ks.map(function(q){ return fv(it.f[q].v); }).join(' / ')+(u?' '+u:''); /* eGym: enkel 'getraind', geen gewicht of methode (op vraag van Tom, 11 okt) */
         var sx=it.li.querySelector('.exr-s'), reps=(nm==='Cardio'||nm==='Group'||nm==='Warm-up')?'':(sx&&sx.firstChild&&sx.firstChild.nodeType===3?sx.firstChild.textContent.replace(/[·\s]+$/,'').trim():''); reps=(reps.split('·').map(function(x){ return x.trim(); }).filter(function(x){ return /\d/.test(x); })[0]||'').replace(/\s*\(.*$/,''); /* kort: enkel het stuk met sets/reps (supersets: '2 rounds × 10–15') */
-        if(nm==='Warm-up'){} /* warm-up telt niet mee */ else if(nm==='Cardio'||nm==='Group') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsFor?(+window.__setsFor(k,it.li)||0):3;
+        if(nm==='Warm-up'){} /* warm-up telt niet mee */ else if(nm==='Cardio'||nm==='Group') tot+=ks.reduce(function(a,q){ return a+(+it.f[q].v||0); },0); else tot+=window.__setsDone?(+window.__setsDone(k,it.li,ks.map(function(q){ return it.f[q].r; }))||0):window.__setsFor?(+window.__setsFor(k,it.li)||0):3; /* sets met 0 reps tellen niet (10 nov) */
         EXI.push({ids:it.ids||[],name:name,ks:ks,f:it.f,u:u,li:it.li});
         return '<li class="cx"><div class="cx-row">'+('<button type="button" class="cx-edit" data-i="'+(EXI.length-1)+'" tabindex="-1">Edit</button>')+'<span class="cx-n">'+esc(name)+'</span><em>'+(reps?'<i>'+esc(reps)+(val?' · ':'')+'</i>':'')+esc(val)+'</em><button type="button" class="cx-del" data-i="'+(EXI.length-1)+'" tabindex="-1">Delete</button></div></li>'; }).join('');
       var lab=nm; if(nm==='Gym'){ /* Open Gym · Upper / Lower / Full Body, afgeleid uit de groepen (core telt neutraal; op vraag van Tom) */
@@ -6639,7 +6652,7 @@ window.__congrats=function(o){
     var dy=R.li.getBoundingClientRect().top-y0; if(Math.abs(dy)>1) window.scrollBy(0,dy); }
   function changed(R,M){
     var td=today(), r=M.ins.map(function(i){ return i.classList.contains('rep-carry')?'':i.value.trim(); }); /* overgenomen = nog niet bevestigd */
-    RS[M.note]={d:td,r:r,at:Date.now()}; saveLocal(); paintSum(R);
+    RS[M.note]={d:td,r:r,at:Date.now()}; saveLocal(); paintSum(R); if(window.__paintWoBtns) window.__paintWoBtns(); /* End-label: sets met 0 reps tellen niet (10 nov) */
     clearTimeout(timers[M.note]);
     timers[M.note]=setTimeout(function(){
       var e=RS[M.note]; if(col&&e) col.doc('reps--'+M.note).set({d:e.d,r:e.r,updatedAt:e.at}).catch(function(){});
