@@ -6592,7 +6592,7 @@ window.__congrats=function(o){
   /* bolletjes + tekst zonder 'N ×' ('2 rounds ×' bij supersets) */
   function paintSum(R){ if(!R.dots) return; var n=Math.max(1,Math.min(6,+(window.__setsFor?window.__setsFor(null,R.li):3)||3)),
       t=firstText(R.li).replace(/\d+\s*(?:rounds?|rondes|sets?)?\s*×\s*/i,'').trim(), on=[];
-    R.mains.forEach(function(M){ todayR(M.note).forEach(function(v,i){ if(num(v)!=null) on[i]=1; }); });
+    R.mains.forEach(function(M){ todayR(M.note).forEach(function(v,i){ if(num(v)>0) on[i]=1; }); }); /* 0 reps = overgeslagen set: bolletje leeg (10 nov) */
     if(R.txt.textContent!==t) R.txt.textContent=t;
     var h=''; for(var i=0;i<n;i++) h+='<i'+(on[i]?' class="on"':'')+'></i>'; if(R.dots.innerHTML!==h) R.dots.innerHTML=h; }
   function build(R){
